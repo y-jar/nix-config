@@ -2,12 +2,14 @@
 {
   imports = [
     # The other configs (Will need to set up other Default.nixs for easir useage)
-    ../desktop/sway.nix      # Pulls in your Sway config
-    ./shell/zsh.nix		     # Pulls my zsh config
+    # UI pull
+	./ui-bin/default.nix
+	# Shell
+    ./zsh.nix
     # App Module Paths
-    ./apps/foot.nix 		     # Pulls in terminal/font settings
-    ./apps/nvim.nix 		     # Pulls the nvim config (this is under heavy questioning)
-    ./git-user.nix # for github shitt
+    ./foot.nix 		     # Pulls in terminal/font settings
+    ./nvim.nix 		     # Pulls the nvim config (this is under heavy questioning)
+    ./git.nix # for github shitt
   ];
 
   home.username = "jar";
@@ -15,6 +17,8 @@
   
   # Font enable
   fonts.fontconfig.enable = true;
+
+  # ==========================User pkgs in Home=============================
   # My PACKAGES, How epic, just be sure to add pkgs. before each package name <3
   # Note, if commented out, it means they are managed elsewhere
   home.packages = [
@@ -29,6 +33,8 @@
 	#pkgs.neovim
 	pkgs.ranger
 	pkgs.btop
+	pkgs.cowsay
+	pkgs.lazygit # for kool github viewing
 	
 	# Tools General
 	pkgs.grim # for general screenshots
@@ -39,6 +45,14 @@
 	# Fonts / General Personal Visuals
 	pkgs.fastfetch
 	pkgs.nerd-fonts.intone-mono 
+	pkgs.swww
+
+	# SHELL / DE makin'
+	pkgs.waybar	# good status bar
+	pkgs.wofi	# app launcher
+	pkgs.wl-clipboard # good cliboard manager
+	pkgs.xdg-utils   # opening links and such
+	pkgs.pavucontrol # audio control
   ];
 
   home.stateVersion = "25.11";

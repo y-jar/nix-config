@@ -1,26 +1,31 @@
 {
-  description = "Jar's Modular NixOS Config";
+  description = "Main Config Flake";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    # THis is where one can chanage the version of the os
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
+
+    # places home manager
     home-manager = {
-      url = "github:nix-community/home-manager";
+      url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs: {
-    # This MUST match your 'networking.hostName'
+    # NOTE This MUST match your 'networking.hostName'
     nixosConfigurations.yil-jar = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = { inherit inputs; };
       modules = [
-        ./hosts/yil-jar/default.nix # The system entry
+        ./hosts/default.nix # The system entry
         home-manager.nixosModules.home-manager {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
-          home-manager.users.jar = import ./modules/home/default.nix;
-          home-manager.backupFileExtension = "backup"; # for files that dont work when rebuilding, it will just back them up so it can do it correctly
+          home-manager.users.jar = import ./modules-jar/home-jar/default.nix;
+          home-manager.backupFileExtension = "backup"; 
+          # ^^for files that dont work when rebuilding, 
+          #   it will just back them up so it can do it correctly
         }
       ];
     };
