@@ -1,10 +1,10 @@
-{ pkgs, ... }:
+{ pkgs, lib, hostnm, ... }:
 
 {
   networking = {
     # NOTE: If hostname is changed, be sure to match it on flake.nix and in the shell alias in 
     # 	~/nix-config/modules/home/shell/zsh.nix
-    hostName = "yil-jar"; # add / choose your hostname
+    hostName = "${hostnm}"; # add / choose your hostname from the flake.nix
     networkmanager.enable = true;
     
     # for dns issues i keep running into

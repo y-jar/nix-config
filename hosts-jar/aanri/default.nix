@@ -9,7 +9,7 @@
   
   # this is where everything gets called
   imports = [
-    ./hardware-config.nix
-    ../modules-jar/sys-bin/default.nix
+    ./hardware-configuration.nix
+    ../../modules-jar/sys-bin/default.nix
   ];
 }
