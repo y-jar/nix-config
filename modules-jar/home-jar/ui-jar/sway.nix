@@ -62,7 +62,7 @@ in {
       home.packages = with pkgs; [
         wofi           # App Launcher
         swww           # Wallpaper manager
-        swaynag-waiter # Better version of swaynag
+        swaynag # Better version of swaynag
         grim           # Screenshots (Sway specific tools)
         slurp          # Drag Screenshots
       ];
