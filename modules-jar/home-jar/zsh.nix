@@ -13,16 +13,25 @@
     	nrs = "sudo nixos-rebuild switch --flake ~/nix-config#yil-jar"; # actual building
         nrt = "sudo nixos-rebuild test --flake ~/nix-config#yil-jar"; # testing
     	nfu = "nix flake update ~/nix-config";
-    	nclean = "sudo nix-collect-garbage -d";
+	# Heavy clean up and optimize
+	nix-c = "sudo nix-collect-garbage -d && nix-collect-garbage -d && nix-store --optimize";
+	nix-cs = "sudo nix-env --profile /nix/var/nix/profiles/system --delete-generations +5 && nix-env --delete-generations +5 && nix-collect-garbage && nix-store --optimize";
+	# basic switch and clean
+	nrs-ncs = "nrs && nix-cs"; # reocmended after confirming a complete stable system
 
 	# Main nix + github aliases:
-	# The "I'm back" command
 	nix-sync = "cd ~/nix-config && git pull && nrs";
-	  
-	# The "I'm done" command
 	nix-save = "cd ~/nix-config && git add . && git commit -m 'Syncing changes' && git push origin main";
 
-    	# Testing & Utility
+	# creates the dirs i use from a gist in github
+	dir-init = "curl -sL https://gist.githubusercontent.com/y-jar/263b0b56aefd3a2952f45c5123672f5f/raw/build-jar.sh | bash";
+
+	# ````````````````````Wallpapers````````````````````````````
+	# Clones your wallpapers into the correct folder
+	wall-pull = "git clone https://github.com/y-jar/wall-bin.git ~/pic-jar/wall-bin";
+    	wall-sync = "cd ~/pic-jar/wall-bin && git pull && cd -";
+
+	# Testing & Utility
   	conf = "cd ~/nix-config && nvim";
   	ls = "ls --color=auto";
   	grep = "grep --color=auto";
