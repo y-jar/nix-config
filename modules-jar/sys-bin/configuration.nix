@@ -43,6 +43,9 @@
 
    # FONTS
    nerd-fonts.intone-mono
+
+   # WM
+   niri
   ];
 
 
