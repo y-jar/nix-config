@@ -1,0 +1,8 @@
+{ pkgs, desktop, ... }:
+{
+  imports = [
+    # App Module Paths
+    ./foot.nix 		     # Pulls in terminal/font settings
+    ./nvim.nix 		     # Pulls the nvim config (this is under heavy questioning)
+  ];
+}

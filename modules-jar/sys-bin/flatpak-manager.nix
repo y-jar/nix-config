@@ -21,10 +21,6 @@
     config.common.default = "*"; # Uses available portals for everything
   };
 
-  # STEAM FIX: This is the important part!
-  # It installs the 'udev rules' so controllers are recognized
-  hardware.steam-hardware.enable = true;
-
   # This allows Flatpak to mount the filesystems it needs for installation
   boot.supportedFilesystems = [ "fuse" ];
   environment.systemPackages = [ pkgs.fuse3 pkgs.polkit_gnome ];

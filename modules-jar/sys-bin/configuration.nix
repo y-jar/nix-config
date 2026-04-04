@@ -2,9 +2,7 @@
 { config, lib, pkgs, ... }:
 
 {
-  # ===========================================Nix In A Jar=================================================
-  
-
+  # =======================================NIXOS=================================================
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -16,24 +14,35 @@
   # =======================================USERS===============================================
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.jar = {
+  #           ^^^-[Ensure this is the username of the system, this is  ]
+  #               [  also used in other areas like home-jar/default.nix]
    isNormalUser = true;
    shell = pkgs.zsh; # makes user explicitly use zsh
    extraGroups = [ "wheel" "video" "input" "networkmanager" ]; # Enable ‘sudo’ for the user.
-  }; # note for pkgs we do that within the home.nix now for more general stuff
-
+  }; # note for pkgs we do that within the nix-config/modules-jar/home-jar/default.nix now
 
 
   # ==================================Packages :)========================================
   # List packages installed in system profile.
   # use https://search.nixos.org/ to find more packages (and options).
   environment.systemPackages = with pkgs; [
-   # here is were i put my basic packages for the base system :3
-   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+   # APPS
+   vim
+   neovim
+   kitty # incase foot doesnt work for root
+
+   # TOOLS
    wget
    curl
    git
    unzip
    tree
+   fastfetch
+   btop
+   vscodium
+
+   # FONTS
+   nerd-fonts.intone-mono
   ];
 
 
@@ -46,6 +55,8 @@
   # OR just use this for additinal settings
   services.pipewire = {
     enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
     pulse.enable = true;
   };
 
@@ -61,8 +72,13 @@
   services.gnome.gnome-keyring.enable = true; # Helps store passwords/settings
 
 
-  # ==================================================================================
-    # Or disable the firewall altogether.
+
+  # =====================================Other=============================================
+  # STEAM FIX: This is the important part!
+  # It installs the 'udev rules' so controllers are recognized
+  hardware.steam-hardware.enable = true;
+
+  # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
   # Copy the NixOS configuration file and link it from the resulting system

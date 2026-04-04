@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, hostnm, ... }:
 
 {
   programs.zsh = {
@@ -10,8 +10,8 @@
     # EPIC ALIASES
     shellAliases = {
     	# The Big Three for Configs in nix
-    	nrs = "sudo nixos-rebuild switch --flake ~/nix-config#yil-jar"; # actual building
-        nrt = "sudo nixos-rebuild test --flake ~/nix-config#yil-jar"; # testing
+    	nrs = "sudo nixos-rebuild switch --flake ~/nix-config#${hostnm}"; # actual building
+        nrt = "sudo nixos-rebuild test --flake ~/nix-config#${hostnm}"; # testing
     	nfu = "nix flake update ~/nix-config";
 	# Heavy clean up and optimize
 	nix-c = "sudo nix-collect-garbage -d && nix-collect-garbage -d && nix-store --optimize";

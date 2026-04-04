@@ -61,3 +61,13 @@ Why I built it this way
 I wanted the system to be "breathable." By using imports = [ ... ] in a central default.nix, I can comment out a single line to disable an entire part of my desktop (like Sway) without deleting the code. It's built for experimentation.
 
 Don't forget: Always git add README.md if you make big changes here so the documentation lives and dies with the code version. You will thank me ME
+
+to update the repositories
+```
+cd ~/nix-config/
+nix flake update
+```
+to update the system after updating the repos
+```
+sudo 
+```

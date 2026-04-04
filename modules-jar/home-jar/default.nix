@@ -9,9 +9,10 @@
     # Shell
     ./zsh.nix
 
-    # App Module Paths
-    ./foot.nix 		     # Pulls in terminal/font settings
-    ./nvim.nix 		     # Pulls the nvim config (this is under heavy questioning)
+    # APP CONFIGS
+    ./app-bin/default.nix
+
+    # GIT SETTINGS
     ./git.nix # for github shitt
   ];
 
@@ -25,37 +26,37 @@
 
   # ==========================User pkgs in Home=============================
   # My PACKAGES, How epic, just be sure to add pkgs. before each package name <3
-  # Note, if commented out, it means they are managed elsewhere
-  home.packages = [
-	# General Apps
-	pkgs.firefox
-	pkgs.mpv # for video playback
-	pkgs.kdePackages.dolphin # gui file manager if i need it.
-	pkgs.gnome-software # the app store to solve my woes surrounding flatpaks
-
-	# TUIs / tools in terminal 
-	#pkgs.neovim
-	pkgs.ranger
-	pkgs.btop
-	pkgs.cowsay
-	pkgs.lazygit # for kool github viewing
+  # Note, check home-jar/app-bin/ for apps, there might be some that arnt showing up here
+  home.packages = with pkgs; [
+	# APPs
+	firefox
+	mpv # for video playback
+	kdePackages.dolphin # gui file manager if i need it.
+	ranger # tui file explorer
+  nautilus # gnome' file manager
+	kdePackages.kate # kde's file editor
+	gnome-software # the app store to solve my woes surrounding flatpaks
+	vscodium # editor
+	obs-studio
 	
-	# Tools General
-	#pkgs.grim # for general screenshots
-	#pkgs.slurp # for that drag screenshot
-	pkgs.polkit_gnome # for a weird thing for some flatpak thing
-	pkgs.gh # for github login
-	
-	# Fonts / General Personal Visuals
-	pkgs.fastfetch
-	pkgs.nerd-fonts.intone-mono 
-	#pkgs.swww
 
-	# SHELL / DE makin'
-	#pkgs.waybar	# good status bar
-	#pkgs.wofi	# app launcher
-	pkgs.wl-clipboard # good cliboard manager
-	pkgs.xdg-utils   # opening links and such
-	pkgs.pavucontrol # audio control
+	# TUIs / TOOLS
+	cowsay
+	lazygit # for kool github viewing
+	polkit_gnome # for a weird thing for some flatpak thing
+	gh # for github login
+  pavucontrol # audio control
+
+  # FOR NIRI
+  mako # ?
+  gnome-keyring
+  xdg-desktop-portal-gtk
+  xdg-desktop-portal-gnome
+  fuzzel
+  kdePackages.polkit-kde-agent-1
+  xwayland-satellite
+  alacritty
+	wl-clipboard # good cliboard manager
+	xdg-utils   # opening links and such
   ];
 }
