@@ -16,5 +16,6 @@
     # 
     ./v412loopback.nix
     ./flatpak-manager.nix
+    ./fonts.nix # loads main fonts i use
   ];
 }

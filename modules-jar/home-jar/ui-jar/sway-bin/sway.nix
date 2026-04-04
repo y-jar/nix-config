@@ -6,7 +6,7 @@ let
 in {
   # imports the sway-waybar so it doesnt have conflicts
   imports = [
-      ./sway-bin/sway-waybar.nix # Epic waybar for sway.
+      ./sway-waybar.nix # Epic waybar for sway.
   ];
 
   config = lib.mkMerge [

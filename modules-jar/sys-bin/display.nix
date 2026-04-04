@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, hostnm, ... }:
 
 {
 	services.displayManager.sddm.enable = true;
@@ -10,7 +10,7 @@
   # forces apps to use wayland if otherwise
   environment.sessionVariables = {
   	NIXOS_OZONE_WL = "1";
-  	XDG_CURRENT_DESKTOP = "sway";
+  	XDG_CURRENT_DESKTOP = "${hostnm}";
   };
 
   # enable portal for apps in sandboxes

@@ -42,7 +42,7 @@
    vscodium
 
    # FONTS
-   nerd-fonts.intone-mono
+   #nerd-fonts.intone-mono
 
    # WM
    niri
