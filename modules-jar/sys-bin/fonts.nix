@@ -1,6 +1,7 @@
 { pkgs, ...}:
 {
     fonts.packages = with pkgs; [
-        (nerd-fonts.override { fonts = [ "IntoneMono" ]; })
-    ];
+    # ADD FONTS HERE, then add Return Name After 
+    nerd-fonts.intone-mono # RN: IntoneMono Nerd Font
+  ];
 }
