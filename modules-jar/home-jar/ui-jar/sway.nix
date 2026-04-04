@@ -23,7 +23,7 @@ in {
           # ======================== Vars ============================
           modifier = "Mod4"; 
           terminal = "${pkgs.foot}/bin/foot"; 
-          menu = "${pkgs.wofi}/bin/wofi --show drun"; 
+          menu = "${pkgs.wofi}/bin/wofi --show drun";
 
           # ===================== Keybindings =========================
           keybindings = lib.mkOptionDefault {
@@ -53,6 +53,11 @@ in {
         # Nice settings but idk the var names
         extraConfig = ''
           hide_edge_borders smart
+
+	  input "type:touchpad" {
+	  	tap enabled
+		natural_scroll enabled
+	  }
         '';
       };
     }

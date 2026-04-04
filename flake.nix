@@ -20,7 +20,7 @@
 
 	# NOTE: change this to the hostName you want, the presets i made are:
 	# 	yil-jar, 'calender', cold-flip, or aanri
-	chosenHost = "nixos"; # this mainly affects the window manager sub option, making sure screen stuff works.
+	chosenHost = "yil-jar"; # this mainly affects the window manager sub option, making sure screen stuff works.
 
 
   #=============================================Outputs====================================================
