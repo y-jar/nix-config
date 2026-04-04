@@ -5,7 +5,7 @@
     enable = true;
     settings = {
       main = {
-        font = "IntoneMono Nerd Font:size=11";
+        font = "IntoneMono Nerd Font\:size=11";
         pad = "15x15"; # Adds some breathing room inside the window
       };
 
