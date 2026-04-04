@@ -1,11 +1,11 @@
-{ pkgs, hostnm, ... }:
+{ pkgs, hostnm, desktop, ... }:
 
 {
 	services.displayManager.sddm.enable = true;
 	services.displayManager.sddm.wayland.enable = true;
 
-	# perms or som shi, i broke the config at this time #tty :(
-	programs.sway.enable = true;
+	# sets the wm /DE, if this dont work, expect a fun time #tty time :(
+	programs.${desktop}.enable = true;
   # Wayland enviroment vars
   # forces apps to use wayland if otherwise
   environment.sessionVariables = {
