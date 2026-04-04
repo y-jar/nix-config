@@ -37,7 +37,9 @@
 	kdePackages.kate # kde's file editor
 	gnome-software # the app store to solve my woes surrounding flatpaks
 	vscodium # editor
-	obs-studio
+	obs-studio # good video software
+  gnome-usage # resource monitor
+  gnome-boxes # VM manager i like
 	
 
 	# TUIs / TOOLS

@@ -30,6 +30,8 @@
    vim
    neovim
    kitty # incase foot doesnt work for root
+   vscodium
+   zed-editor
 
    # TOOLS
    wget
@@ -39,7 +41,7 @@
    tree
    fastfetch
    btop
-   vscodium
+   fzf
 
    # FONTS
    #nerd-fonts.intone-mono
