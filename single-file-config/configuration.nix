@@ -82,11 +82,38 @@
     description = "jar";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
-      # apps
-      kdePackages.kate
-      bazaar
-      steam
-      librewolf
+      # APPs
+      firefox
+      mpv # for video playback
+      kdePackages.dolphin # gui file manager if i need it.
+      ranger # tui file explorer
+      nautilus # gnome' file manager
+      kdePackages.kate # kde's file editor
+      gnome-software # the app store to solve my woes surrounding flatpaks
+      vscodium # editor
+      obs-studio # good video software
+      gnome-usage # resource monitor
+      gnome-boxes # VM manager i like
+      
+
+      # TUIs / TOOLS
+      cowsay
+      lazygit # for kool github viewing
+      polkit_gnome # for a weird thing for some flatpak thing
+      gh # for github login
+      pavucontrol # audio control
+
+      # FOR NIRI
+      mako # ?
+      gnome-keyring
+      xdg-desktop-portal-gtk
+      xdg-desktop-portal-gnome
+      fuzzel
+      kdePackages.polkit-kde-agent-1
+      xwayland-satellite
+      alacritty
+      wl-clipboard # good cliboard manager
+      xdg-utils   # opening links and such
     ];
   };
 
