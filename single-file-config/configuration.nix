@@ -1,25 +1,23 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
+# THIS IS A OPTINAL ROUTE:
+# this is meant for me if i dont want to use the larger config 
+
+#==============================================================
 
 { config, pkgs, ... }:
 
 {
+  #============================BASIC STARTING INFO==================================
+  # IMPORTS:
   imports =
-    [ # Include the results of the hardware scan.
+    [
+      # HARDWARE
       ./hardware-configuration.nix
     ];
 
-  # Bootloader.
+  # BOOTLOADER:
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "/dev/vda";
   boot.loader.grub.useOSProber = true;
-
-  networking.hostName = "nixos"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Enable networking
-  networking.networkmanager.enable = true;
 
   # Set your time zone.
   time.timeZone = "America/New_York";
@@ -39,6 +37,8 @@
     LC_TIME = "en_US.UTF-8";
   };
 
+  #==============================DISPLAY / UX================================
+
   # Enable the X11 windowing system.
   # You can disable this if you're only using the Wayland session.
   services.xserver.enable = true;
@@ -53,9 +53,18 @@
     variant = "";
   };
 
+  # enable portal for apps in sandboxes
+	xdg.portal = {
+		enable = true;
+		wlr.enable = true; # Specifically for wlroots-based managers like Sway
+		extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+		config.common.default = "*";
+	};
+
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
+  #=============================SOUND=================================
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
@@ -64,17 +73,9 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
   };
 
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
-
+  #==============================USER & PKGS================================
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.jar = {
     isNormalUser = true;
@@ -89,14 +90,15 @@
     ];
   };
 
+  # MANUAL APPS:
   # Install firefox.
   programs.firefox.enable = true;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
+  # SYSTEM PKGS:
+  # To search, run: "$ nix search wget"
   environment.systemPackages = with pkgs; [
      #
 
@@ -120,31 +122,42 @@
      nerd-fonts.intone-mono
   ];
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
+  #============================NETWORKING==================================
+  # This is where you would configutr my networking
+  networking = {
+    hostName = "nixos";
+    networkmanager.enable = true;
+    
+    # for dns issues i keep running into
+    nameservers = [ 
+    	"8.8.8.8" # google
+	"1.1.1.1" # Coudflare
+    ]; 
 
-  # List services that you want to enable:
+    # Configure network proxy if necessary
+    #proxy.default = "http://user:password@proxy:port/";
+    #proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
+    # firewall shii
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [ 53317 ]; # LocalSend
+      allowedUDPPorts = [ 53317 5353 ]; # LocalSend + mDNS
+      
+      # For KDE Connect / Phone integration Un comment if needed
+      allowedTCPPortRanges = [ { from = 53317; to = 53320; } ];
+      allowedUDPPortRanges = [ { from = 1714; to = 1764; } ];
+    };
+  };
 
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
+  # for the dynamic seaching that other distros use.
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+    openFirewall = true;
+  };
 
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "25.11"; # Did you read the comment?
+  #============================OTHERS TO BE SORTED==================================
+  system.stateVersion = "25.11";
 
 }

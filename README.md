@@ -1,24 +1,28 @@
-Nix-in-a-Jar (yil-jar)
+# Guide
 
-This is my NixOS evolution. I moved away from the standard /etc/nixos mess to a modular Flake setup in my home directory. It’s cleaner, version-controlled, and actually makes sense.
-System Map
+---
 
+## Intro
 
-# Emergency Recovery
-# If I break the config so bad I can't boot, I just pick an 
-# older generation at the boot menu to roll back instantly.
+Hello! This is my NixOS config! The reason i started doing this was i wanted to learn more about it after finding out about some of it's core design princibles (i fuck with it alot). And after dipping my toes in it i found that i adore how it works, and similar to my neovim config, my goal is to make it my personal platform and hopefully not have to configure it often afterwards (which i have reached for Neovim). 
+
+Learning from neovim is that i need to find a place to stop for this config and say "i can do what i want with my pc and it can grow when needed". And once i reach that, i will most certainly slow down on my config and just do touchups here and here. Anyone is welcome to fork or just watch my progress as i break things.
+
+> NOTE For Viewers:
+> I do not follow standared methods when it comes to learning and developing, so when you see alot 
+> of progress or little, and then see me forgetting, just know i am learning, im just 
+> a scatter-brain within a jar `<3`
+
+---
+
+## Dev Section <3
+This is where i put my plans and everything else. <3
 
 Dev Notes & Goals
 
 Current State:
 
-   - [x] Migrated from /etc/nixos to ~/nix-config.
-
-   - [x] Modularized Zsh and Terminal configs using .nix.
-
-   - [x] Fonts now work
-   
-   - [x] groundwork for WMs are set up
+- This 
 
 Short-term Goals:
 
