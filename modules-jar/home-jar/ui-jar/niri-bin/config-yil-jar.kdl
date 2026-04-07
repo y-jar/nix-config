@@ -87,23 +87,12 @@ input {
 // Find more information on the wiki:
 // https://yalter.github.io/niri/Configuration:-Outputs
 // Remember to uncomment the node by removing "/-"!
-// Main Center Monitor
-/-output "DP-3" {
-    mode "2560x1440"
+
+// Main Monitor for laptop
+output "eDP-1" {
+    mode "1920x1080@60.001"
+    scale 1
     position x=0 y=0
-}
-
-// Side Monitor (Right)
-/-output "HDMI-A-1" {
-    mode "1920x1080"
-    position x=2560 y=10
-}
-
-// Bottom Monitor (Below DP-3)
-/-output "DP-2" {
-    mode "1920x1080"
-    scale 1.25
-    position x=0 y=1440
 }
 
 
@@ -358,8 +347,9 @@ binds {
     // TERMINAL
     Mod+Return hotkey-overlay-title="[E]nter a Terminal" { spawn "foot"; }
     // LAUNCHER
-    // Mod+D hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel";}
-    Mod+D hotkey-overlay-title="[D]isplay Noctalia Launcher" { spawn "qs" "ipc" "-c" "noctalia-shell" "call" "launcher" "toggle"; }
+    // Mod+D hotkey-overlay-title="[D]isplay Launcher" { spawn "fuzzel";}
+    //Mod+D hotkey-overlay-title="[D]isplay Launcher" { spawn "qs" "ipc" "-c" "noctalia-shell" "call" "launcher" "toggle"; }
+    Mod+D hotkey-overlay-title="[D]isplay Launcher" { spawn "anyrun";}
     // LOCK-SCREEN
     Mod+Alt+L hotkey-overlay-title="[L]ock the Screen" { spawn "swaylock"; }
     // BROWSER

@@ -15,9 +15,13 @@
     ];
 
   # BOOTLOADER:
-  boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/vda";
-  boot.loader.grub.useOSProber = true;
+  # boot.loader.grub.enable = true;
+  # boot.loader.grub.device = "/dev/vda";
+  # boot.loader.grub.useOSProber = true;
+
+  # Use the systemd-boot EFI boot loader.
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
 
   # Set your time zone.
   time.timeZone = "America/New_York";
@@ -120,6 +124,11 @@
   # MANUAL APPS:
   # Install firefox.
   programs.firefox.enable = true;
+
+  # For Steam
+  # STEAM FIX: This is the important part!
+  # It installs the 'udev rules' so controllers are recognized
+  hardware.steam-hardware.enable = true;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
