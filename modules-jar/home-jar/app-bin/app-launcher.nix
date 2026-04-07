@@ -9,7 +9,7 @@
 		    hideIcons = false;
 		    ignoreExclusiveZones = false;
 		    layer = "overlay";
-		    hideOnBlur = true;
+		    #hideOnBlur = true;
 		    closeOnClick = true;
 		    showResultsImmediately = true;
 		    maxEntries = 5;
