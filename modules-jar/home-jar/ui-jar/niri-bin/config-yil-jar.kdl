@@ -347,9 +347,9 @@ binds {
     // TERMINAL
     Mod+Return hotkey-overlay-title="[E]nter a Terminal" { spawn "foot"; }
     // LAUNCHER
-    // Mod+D hotkey-overlay-title="[D]isplay Launcher" { spawn "fuzzel";}
+    Mod+D hotkey-overlay-title="[D]isplay Launcher" { spawn "fuzzel";}
     //Mod+D hotkey-overlay-title="[D]isplay Launcher" { spawn "qs" "ipc" "-c" "noctalia-shell" "call" "launcher" "toggle"; }
-    Mod+D hotkey-overlay-title="[D]isplay Launcher" { spawn "anyrun";}
+    //Mod+D hotkey-overlay-title="[D]isplay Launcher" { spawn "anyrun";}
     // LOCK-SCREEN
     Mod+Alt+L hotkey-overlay-title="[L]ock the Screen" { spawn "swaylock"; }
     // BROWSER
