@@ -14,7 +14,7 @@
     ./networking.nix # firewall and app specific netoworking fixes
     ./display.nix # Sets up DE / WMs + other related stuff
     ./login-manager.nix # Sets up and enables a login screen like sddm
-    ./virtualization.nix # [WIP] Enables the use of VMs
+    #./virtualization.nix # [WIP] Enables the use of VMs
     # 
     ./v412loopback.nix # Enables the Camera OBS Option
     ./flatpak-manager.nix # flatpack settings / fixes
