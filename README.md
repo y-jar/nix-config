@@ -13,6 +13,10 @@ Learning from neovim is that i need to find a place to stop for this config and 
 > of progress or little, and then see me forgetting, just know i am learning, im just 
 > a scatter-brain within a jar `<3`
 
+### My Overall Goal
+
+With this config, i am wanting this so fuction kinda like a atomic desktop to where i the user doesnt have to worry about breaking things and updates are almost always stable, whilst me the user able to tinker more so than compared to a standard atomic desktop. So with this goal, i am not leaning to a system that will constantly change config-wise, more so, it will change user-wise. I want to be able to linux, but i want my system to be locked but with my key to discourage changing.
+
 ---
 
 ## Dev Section <3
@@ -22,15 +26,15 @@ Dev Notes & Goals
 
 Current State:
 
-- This 
+- Has a basic niri config, with working keybinds, minus wallpaper management
+- Flatpack management for apps like local send and any other app one would want
+- Obs with v412 thingy
+- zsh
+- a mini config file for users who just want to run a single file config
 
-Short-term Goals:
+Goals:
 
-   - [ ] Modularize further: Add a default.nix to every sub-directory in modules/. This will let me import a whole folder (e.g., ./modules/desktop) instead of listing every single file in the home brain.
-
-   - [ ] Sway Polish: Move keybindings out of the system level and into modules/desktop/sway.nix.
-
-   - [ ] Bar config: Set up Waybar with custom CSS.
+- 
 
 Code Snippets for Later:
 Nix

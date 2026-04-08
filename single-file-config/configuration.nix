@@ -14,7 +14,7 @@
       ./hardware-configuration.nix
     ];
 
-  # BOOTLOADER:
+  # BOOTLOADER Use what is generated:
   # boot.loader.grub.enable = true;
   # boot.loader.grub.device = "/dev/vda";
   # boot.loader.grub.useOSProber = true;
