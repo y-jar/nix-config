@@ -1,9 +1,6 @@
 { pkgs, hostnm, desktop, ... }:
 
 {
-	services.displayManager.sddm.enable = true;
-	services.displayManager.sddm.wayland.enable = true;
-
 	# sets the wm /DE, if this dont work, expect a fun time #tty time :(
 	services.desktopManager.plasma6.enable = (desktop == "plasma");
 	programs.niri.enable = (desktop == "niri");
@@ -34,7 +31,7 @@
 		kdePackages.gwenview
 		kdePackages.kcalc
 		
-		# Crucial for Plasma 6 to handle your custom fonts/icons
+		# Crucial for Plasma 6 to handle custom fonts/icons
 		kdePackages.qtstyleplugin-kvantum 
 	] else if (desktop == "niri") then [
 		swaybg

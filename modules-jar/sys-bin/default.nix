@@ -13,6 +13,7 @@
     ./configuration.nix
     ./networking.nix
     ./display.nix
+    ./login-manager.nix
     # 
     ./v412loopback.nix
     ./flatpak-manager.nix
