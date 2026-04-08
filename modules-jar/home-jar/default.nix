@@ -28,28 +28,51 @@
   # My PACKAGES, How epic, just be sure to add pkgs. before each package name <3
   # Note, check home-jar/app-bin/ for apps, there might be some that arnt showing up here
   home.packages = with pkgs; [
-		# APPs
+		# ====APPs====
+    #
+    # Browsers
 		firefox
-		mpv # for video playback
-		ranger # tui file explorer
-		nautilus # gnome' file manager
-		gnome-software # the app store to solve my woes surrounding flatpaks
-		vscodium # editor
-		obs-studio # good video software
-		gnome-usage # resource monitor
-		gnome-boxes # VM manager i like
+    librewolf # prefered browser
 
-		# TUIs / TOOLS
+		mpv # for video playback
+
+    # File Explorers
+		nautilus # gnome' file manager
+    ranger # tui file explorer
+
+    # App[Stores]
+		gnome-software # a good appstore
+    bazaar # another good app store
+		
+    # APPs[Folding]
+    # Text Editors
+    vscodium # editor
+    zed-editor # good text editor
+    qownnotes # markdown app editor
+    obsidian # non-opensourse notetaking app
+    libreoffice # documents writer
+    # Creation
+    blender
+		gnome-usage # resource monitor
+    # Video APPs
+    obs-studio # good video software
+
+    # APPs[Entertainment]
+    # Gaming
+    steam # for gaming
+    heroic # gaming
+    # Chat
+    discord # coms
+    # Media
+    blanket # background noises
+    lollypop # music player[might change]
+
+    # Unsorteds
 		cowsay
 		lazygit # for kool github viewing
 		polkit_gnome # for a weird thing for some flatpak thing
 		gh # for github login
 		pavucontrol # audio control
-
-		# FOR NIRI
-		
-  ];
-
-  # APP LAUNCHER
-  
+    nwg-look  # The best tool for Wayland/Niri GTK styling if it is needed		
+  ];  
 }

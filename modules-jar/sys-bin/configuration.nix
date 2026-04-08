@@ -4,8 +4,8 @@
 {
   # =======================================NIXOS=================================================
   # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  # boot.loader.systemd-boot.enable = true;
+  # boot.loader.efi.canTouchEfiVariables = true;
 
   # Set what timeZone you want
   time.timeZone = "America/New_York";
@@ -18,7 +18,8 @@
   #               [  also used in other areas like home-jar/default.nix]
    isNormalUser = true;
    shell = pkgs.zsh; # makes user explicitly use zsh
-   extraGroups = [ "wheel" "video" "input" "networkmanager" ]; # Enable ‘sudo’ for the user.
+   # add groups:
+   extraGroups = [ "wheel" "video" "input" "networkmanager" "libvirtd" ];
   }; # note for pkgs we do that within the nix-config/modules-jar/home-jar/default.nix now
 
 
@@ -30,10 +31,7 @@
    vim
    neovim
    kitty # incase foot doesnt work for root
-   vscodium
-   zed-editor
    kdePackages.dolphin
-
 
    # TOOLS
    wget

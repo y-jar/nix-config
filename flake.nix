@@ -23,6 +23,8 @@
 	# BEFORE YOU USE THIS CONFIG: change this to the hostName you want, the presets i made are:
   # DEFAULT [if i dont know or anyone else]:
   # nixos [note, swap out the hardwareconfig file with the one within the /etc/nixos/.. dir]
+  # VIRTUAL MECHINE OPTION[bios]
+  #   vmo
   # OTHER HOSTNAMES [More will be added as i go]:
   # 	yil-jar, 'calender', cold-flip, aanri, skarka-0
 	chosenHost = "yil-jar"; # this mainly affects the window manager sub option, making sure screen stuff works.

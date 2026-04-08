@@ -1,4 +1,4 @@
-# Guide
+# NixOS Jar
 
 ---
 
@@ -19,10 +19,20 @@ With this config, i am wanting this so fuction kinda like a atomic desktop to wh
 
 ---
 
+## Set Up Guide
+
+### i
+### ii
+### iii
+### iiii
+
+---
+
 ## Dev Section <3
+
 This is where i put my plans and everything else. <3
 
-Dev Notes & Goals
+### Dev Notes & Goals
 
 Current State:
 
@@ -36,7 +46,11 @@ Goals:
 
 - 
 
-Code Snippets for Later:
+---
+
+
+
+## Snippets for Later
 Nix
 
 # To add a default.nix in a new module folder:
@@ -46,10 +60,6 @@ Nix
     ./file2.nix
   ];
 }
-
-Why I built it this way
-
-I wanted the system to be "breathable." By using imports = [ ... ] in a central default.nix, I can comment out a single line to disable an entire part of my desktop (like Sway) without deleting the code. It's built for experimentation.
 
 Don't forget: Always git add README.md if you make big changes here so the documentation lives and dies with the code version. You will thank me ME
 

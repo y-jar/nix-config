@@ -10,13 +10,14 @@
   # this is where everything gets called
   imports = [
     # Main Sys
-    ./configuration.nix
-    ./networking.nix
-    ./display.nix
-    ./login-manager.nix
+    ./configuration.nix # loads main contents of the system
+    ./networking.nix # firewall and app specific netoworking fixes
+    ./display.nix # Sets up DE / WMs + other related stuff
+    ./login-manager.nix # Sets up and enables a login screen like sddm
+    ./virtualization.nix # [WIP] Enables the use of VMs
     # 
-    ./v412loopback.nix
-    ./flatpak-manager.nix
-    ./fonts.nix # loads main fonts i use
+    ./v412loopback.nix # Enables the Camera OBS Option
+    ./flatpak-manager.nix # flatpack settings / fixes
+    ./fonts.nix # loads System fonts [refer if ricing]
   ];
 }
