@@ -14,12 +14,17 @@
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs: 
   let
+  #=====================================MAKE CHANGES HERE==============================================
   	# NOTE: Change this to whatever WMs/DEs you have in the default within ./modules-jar/home-jar/ui-bin/default.nix
-  	# current listed options sway[waybar], niri[custom]
-  	chosenDesktop = "niri";
+  	# current listed options[has to be named the pkg]:
+    #  sway[waybar], niri[workin progress], plasma[comes with basic apps with]
+  	chosenDesktop = "plasma";
 
-	# NOTE: change this to the hostName you want, the presets i made are:
-	# 	yil-jar, 'calender', cold-flip, or aanri
+	# BEFORE YOU USE THIS CONFIG: change this to the hostName you want, the presets i made are:
+  # DEFAULT [if i dont know or anyone else]:
+  # nixos [note, swap out the hardwareconfig file with the one within the /etc/nixos/.. dir]
+  # OTHER HOSTNAMES [More will be added as i go]:
+  # 	yil-jar, 'calender', cold-flip, aanri, skarka-0
 	chosenHost = "yil-jar"; # this mainly affects the window manager sub option, making sure screen stuff works.
 
 

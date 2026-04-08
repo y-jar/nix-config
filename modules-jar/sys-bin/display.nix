@@ -24,12 +24,18 @@
 	#===============================WM / DE Dependant apps=====================================
 	environment.systemPackages = with pkgs; 
 	if (desktop == "plasma") then [
-		# KDE Specific Apps
-		kdePackages.dolphin
-		kdePackages.spectacle
-		kdePackages.ark
-		kdePackages.gwenview
-		kdePackages.kcalc
+		# System & Resources
+    kdePackages.plasma-systemmonitor
+    kdePackages.filelight
+    kdePackages.kcalc
+
+    # Management & Utils
+    kdePackages.dolphin
+    kdePackages.ark
+    kdePackages.dolphin-plugins
+    kdePackages.spectacle
+    kdePackages.gwenview
+    kdePackages.okular
 		
 		# Crucial for Plasma 6 to handle custom fonts/icons
 		kdePackages.qtstyleplugin-kvantum 
