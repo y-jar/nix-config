@@ -31,10 +31,8 @@
 		# APPs
 		firefox
 		mpv # for video playback
-		kdePackages.dolphin # gui file manager if i need it.
 		ranger # tui file explorer
 		nautilus # gnome' file manager
-		kdePackages.kate # kde's file editor
 		gnome-software # the app store to solve my woes surrounding flatpaks
 		vscodium # editor
 		obs-studio # good video software

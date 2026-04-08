@@ -32,6 +32,8 @@
    kitty # incase foot doesnt work for root
    vscodium
    zed-editor
+   kdePackages.dolphin
+
 
    # TOOLS
    wget

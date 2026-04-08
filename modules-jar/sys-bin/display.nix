@@ -30,12 +30,13 @@
     kdePackages.kcalc
 
     # Management & Utils
-    kdePackages.dolphin
     kdePackages.ark
     kdePackages.dolphin-plugins
     kdePackages.spectacle
     kdePackages.gwenview
     kdePackages.okular
+		kdePackages.kate # kde's file editor
+
 		
 		# Crucial for Plasma 6 to handle custom fonts/icons
 		kdePackages.qtstyleplugin-kvantum 
