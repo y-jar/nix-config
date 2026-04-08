@@ -5,7 +5,7 @@
 	services.displayManager.sddm.wayland.enable = true;
 
 	# sets the wm /DE, if this dont work, expect a fun time #tty time :(
-	services.displayManager.plasma6.enable = (desktop == "plasma");
+	services.desktopManager.plasma6.enable = (desktop == "plasma");
 	programs.niri.enable = (desktop == "niri");
 	programs.sway.enable = (desktop == "sway");
 
@@ -37,9 +37,17 @@
 		# Crucial for Plasma 6 to handle your custom fonts/icons
 		kdePackages.qtstyleplugin-kvantum 
 	] else if (desktop == "niri") then [
-		fuzzel
-		waybar
 		swaybg
-		xwayland-satellite # Useful for running X11 apps in Niri
+		waybar # the bar
+		mako # ?
+		gnome-keyring
+		xdg-desktop-portal-gtk
+		xdg-desktop-portal-gnome
+		fuzzel # app launcher
+		kdePackages.polkit-kde-agent-1
+		xwayland-satellite
+		alacritty
+		wl-clipboard # good cliboard manager
+		xdg-utils   # opening links and such
 	] else [];
 }

@@ -49,17 +49,7 @@
 		pavucontrol # audio control
 
 		# FOR NIRI
-		waybar # the bar
-		mako # ?
-		gnome-keyring
-		xdg-desktop-portal-gtk
-		xdg-desktop-portal-gnome
-		fuzzel # app launcher
-		kdePackages.polkit-kde-agent-1
-		xwayland-satellite
-		alacritty
-		wl-clipboard # good cliboard manager
-		xdg-utils   # opening links and such
+		
   ];
 
   # APP LAUNCHER
