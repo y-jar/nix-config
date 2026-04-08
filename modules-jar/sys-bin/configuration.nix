@@ -10,6 +10,9 @@
   # Set what timeZone you want
   time.timeZone = "America/New_York";
 
+  # NOTE: at a point i ran into a weird zsh error, run this if commands dont work
+  #export PATH=/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin:$HOME/.local/bin:$PATH 
+  programs.zsh.enable = true;
    
   # =======================================USERS===============================================
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -27,13 +30,15 @@
   # List packages installed in system profile.
   # use https://search.nixos.org/ to find more packages (and options).
   environment.systemPackages = with pkgs; [
-   # APPS
-   vim
-   neovim
+   # [base]
+   vim # text editor
+   neovim # text editor
+
+   # [apps]
    kitty # incase foot doesnt work for root
    kdePackages.dolphin
 
-   # TOOLS
+   # [cl/tui tools]]
    wget
    curl
    git
@@ -43,10 +48,7 @@
    btop
    fzf
 
-   # FONTS
-   #nerd-fonts.intone-mono
-
-   # WM
+   # [WM]
    niri
   ];
 
@@ -54,20 +56,6 @@
   # ==================List services=========================
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
-  
-  # Enable sound.
-  # services.pulseaudio.enable = true;
-  # OR just use this for additinal settings
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  };
-
-  # NOTE: at a point i ran into a weird zsh error, run this if commands dont work
-  #export PATH=/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin:$HOME/.local/bin:$PATH 
-  programs.zsh.enable = true;
 
   # Enables nix-ld to run unpatched binaries (like in my neovim config)
   # acts as a compatability thing, if this has an issue, or i dont like it, SHUT OFF HEHEHE
@@ -82,6 +70,9 @@
   # STEAM FIX: This is the important part!
   # It installs the 'udev rules' so controllers are recognized
   hardware.steam-hardware.enable = true;
+
+  # Allow unfree packages
+  nixpkgs.config.allowUnfree = true;
 
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;

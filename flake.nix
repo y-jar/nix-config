@@ -10,9 +10,12 @@
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # flatpak method to install via nix
+    #nix-flatpak.url = "github:gmodena/nix-flatpak";
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs: 
+  outputs = { self, nixpkgs, home-manager, nix-flatpak, ... }@inputs: 
   let
   #=====================================MAKE CHANGES HERE==============================================
   	# NOTE: Change this to whatever WMs/DEs you have in the default within ./modules-jar/home-jar/ui-bin/default.nix
@@ -73,6 +76,9 @@
           home-manager.users.jar = import ./modules-jar/home-jar/default.nix;
           home-manager.backupFileExtension = "backup"; # backups stuff if conflicting
         } # end of home manager
+
+        # method for installing flatpaks declareitivly*
+        #nix-flatpak.nixosModules.nix-flatpak
       ]; # end of modules
     }; # end of nixosConfigurations
   }; # end of output `in`
