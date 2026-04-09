@@ -56,6 +56,17 @@ You will need to check the boot options within `/etc/nixos/configuration.nix` (i
 
 ### iii
 
+**Make your Host Name Changes:**
+For the last step to work this needs to be changed to your picking at this section within `flake.nix`.
+*(Pick the hostname you picked for the steps before):* `tyun`, `vmo`, `cold-flip`, `calender`, `aanri` *Or others that was made for their own systems*
+```nix
+  #=====================================MAKE CHANGES HERE==============================================
+  chosenDesktop = "plasma";
+	chosenHost = "yilyonix"; # this mainly affects the window manager sub option, making sure screen stuff works.
+```
+
+### iV
+
 **Initialize Git Jar:**
 *(needed so flakes work)*
 ```bash
@@ -63,7 +74,7 @@ cd ~/nix-config
 git add .
 ```
 
-### iiii
+### V
 
 **Switch System Configs**
 *(the switch)*

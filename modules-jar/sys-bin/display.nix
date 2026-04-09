@@ -36,6 +36,7 @@
     kdePackages.gwenview
     kdePackages.okular
 		kdePackages.kate # kde's file editor
+		kdePackages.sddm-kcm # to manage sddm
 
 		
 		# Crucial for Plasma 6 to handle custom fonts/icons
