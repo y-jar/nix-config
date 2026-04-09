@@ -11,11 +11,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # flatpak method to install via nix
+    # flatpak method to install via nix [be sure to add it to `outputs = {}`]
     #nix-flatpak.url = "github:gmodena/nix-flatpak";
   };
 
-  outputs = { self, nixpkgs, home-manager, nix-flatpak, ... }@inputs: 
+  outputs = { self, nixpkgs, home-manager, ... }@inputs: 
   let
   #=====================================MAKE CHANGES HERE==============================================
   	# NOTE: Change this to whatever WMs/DEs you have in the default within ./modules-jar/home-jar/ui-bin/default.nix
@@ -29,8 +29,8 @@
   # VIRTUAL MECHINE OPTION[bios]
   #   vmo
   # OTHER HOSTNAMES [More will be added as i go]:
-  # 	yil-jar, 'calender', cold-flip, aanri, skarka-0
-	chosenHost = "yil-jar"; # this mainly affects the window manager sub option, making sure screen stuff works.
+  # 	yilyonix, 'calender', cold-flip, aanri, tyun
+	chosenHost = "yilyonix"; # this mainly affects the window manager sub option, making sure screen stuff works.
 
 
   #=============================================Outputs====================================================

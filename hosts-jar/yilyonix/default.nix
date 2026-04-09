@@ -12,7 +12,7 @@
     ./hardware-configuration.nix
     ../../modules-jar/sys-bin/default.nix
   ];
-  # Use the systemd-boot EFI boot loader.
+  # add Bootloader options here[from /etc/nixos/configuration.nix]
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 }

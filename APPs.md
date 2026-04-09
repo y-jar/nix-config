@@ -11,5 +11,8 @@ Gaming
 Creation
 - blender
 - krita
+- inkscape
 Secure
 - keepassxc
+Other
+- localsend

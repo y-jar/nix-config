@@ -12,7 +12,6 @@
     	# The Big Three for Configs in nix
     	nrs = "nixos-rebuild switch --sudo --flake ~/nix-config#${hostnm}"; # actual building
       nrt = "nixos-rebuild test --sudo --flake ~/nix-config#${hostnm}"; # testing
-    	nfu = "nix flake update ~/nix-config";
 			# Heavy clean up and optimize
 			nix-c = "sudo nix-collect-garbage -d && nix-collect-garbage -d && nix-store --optimize";
 			nix-cs = "sudo nix-env --profile /nix/var/nix/profiles/system --delete-generations +5 && nix-env --delete-generations +5 && nix-collect-garbage && nix-store --optimize";

@@ -11,6 +11,7 @@ dirs=(
 	"cask-jar/mound-cask-jar"
 	"doc-jar/par-jar"
 	"doc-jar/writing-jar"
+	"doc-jar/notes-jar"
 	"key-bin"
 	"mound-jar"
 	"music-jar"

@@ -26,7 +26,7 @@
   }; # note for pkgs we do that within the nix-config/modules-jar/home-jar/default.nix now
 
 
-  # ==================================Packages :)========================================
+  # ==================================System Packages========================================
   # List packages installed in system profile.
   # use https://search.nixos.org/ to find more packages (and options).
   environment.systemPackages = with pkgs; [
@@ -37,6 +37,7 @@
    # [apps]
    kitty # incase foot doesnt work for root
    kdePackages.dolphin
+   keepassxc # [passwordmgr]
 
    # [cl/tui tools]]
    wget
@@ -50,6 +51,9 @@
 
    # [WM]
    niri
+
+   # [Virtual Mechines]
+   gnome-boxes
   ];
 
 

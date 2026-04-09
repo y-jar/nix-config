@@ -12,4 +12,5 @@
     ./hardware-configuration.nix
     ../../modules-jar/sys-bin/default.nix
   ];
+  # add Bootloader options here[from /etc/nixos/configuration.nix]
 }
