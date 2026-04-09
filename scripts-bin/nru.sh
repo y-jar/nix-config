@@ -7,7 +7,7 @@ echo "Starting Stonepoem Update for host: $CURRENT_HOST"
 
 # Update the lock file
 echo "Updating flake inputs..."
-cd ~/nix-config && nix flake update --sudo
+cd ~/nix-config && nix flake update
 
 # Apply the update using the dynamic hostname
 echo "Rebuilding system configuration..."
