@@ -115,6 +115,17 @@ Apps Can be installed via the built in app stores, or via configuring the config
 - **App Stores (Ideal in my choice)**
   - Go to bazaar, pick an app, install and run `:)`
 
+### How do I Update My System / Apps?
+Depending on what, this can be done in two ways: `flatpak app updates`, or `system & system app updates`.
+
+- **Apps On Flathub or Is a Flatpak**
+  - Go in the appstore of your choice, navigate to updates, click update.
+- **Apps in system And System**
+  - > You would run this after a period of time, or making a change to the config.
+  - Run `cd ~/nix-config` then run `git add .` so the command below can work `:)`
+  - Run `nru` (refer to `./scripts-bin/nru.sh` for how to do it manually)
+- 
+
 ---
 
 
