@@ -48,6 +48,11 @@
    fastfetch
    btop
    fzf
+   psmisc        # Provides killall
+   pciutils      # Provides lspci (great for checking that 6700XT)
+   usbutils      # Provides lsusb
+   htop          # Better than top
+   killall
 
    # [gaming]
    mangohud # for huds

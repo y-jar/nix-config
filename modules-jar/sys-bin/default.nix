@@ -11,6 +11,7 @@
   imports = [
     # Main Sys
     ./configuration.nix # loads main contents of the system
+    ./nix-settings.nix # Loads settings for nix ie. buffer size for downloads
     ./networking.nix # firewall and app specific netoworking fixes
     ./audio.nix # [WIP] handles audio
     ./display.nix # Sets up DE / WMs + other related stuff

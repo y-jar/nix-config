@@ -9,17 +9,26 @@
 	# Wayland enviroment vars
 	# forces apps to use wayland if otherwise
 	environment.sessionVariables = {
-		NIXOS_OZONE_WL = "1";
-		XDG_CURRENT_DESKTOP = "${hostnm}";
-	};
+        NIXOS_OZONE_WL = "1";
+        XDG_CURRENT_DESKTOP = if (desktop == "plasma") then "KDE" 
+                              else if (desktop == "niri") then "niri" 
+                              else if (desktop == "sway") then "sway" 
+                              else "wlroots";
+    };
 
 	# enable portal for apps in sandboxes
 	xdg.portal = {
-		enable = true;
-		wlr.enable = true; # Specifically for wlroots-based managers like Sway
-		extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-		config.common.default = "*";
-	};
+        enable = true;
+        extraPortals = if (desktop == "plasma") 
+                       then [ pkgs.kdePackages.xdg-desktop-portal-kde ]
+                       else [ pkgs.xdg-desktop-portal-gnome pkgs.xdg-desktop-portal-gtk ];
+        config = {
+			common.default = [ "kde" ];
+			kde = {
+				default = [ "kde" ];
+		};
+};
+    };
 
 	#===============================WM / DE Dependant apps=====================================
 	environment.systemPackages = with pkgs; 
