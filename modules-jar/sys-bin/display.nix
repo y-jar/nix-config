@@ -1,4 +1,4 @@
-{ pkgs, hostnm, desktop, ... }:
+{ pkgs, lib, hostnm, desktop, ... }:
 
 {
 	# sets the wm /DE, if this dont work, expect a fun time #tty time :(
@@ -18,17 +18,17 @@
 
 	# enable portal for apps in sandboxes
 	xdg.portal = {
-        enable = true;
-        extraPortals = if (desktop == "plasma") 
-                       then [ pkgs.kdePackages.xdg-desktop-portal-kde ]
-                       else [ pkgs.xdg-desktop-portal-gnome pkgs.xdg-desktop-portal-gtk ];
-        config = {
-			common.default = [ "kde" ];
-			kde = {
-				default = [ "kde" ];
+		enable = true;
+		extraPortals = if (desktop == "plasma") 
+					then [ pkgs.kdePackages.xdg-desktop-portal-kde ]
+					else [ pkgs.xdg-desktop-portal-gnome pkgs.xdg-desktop-portal-gtk ];
+		config = lib.mkForce {
+		common.default = [ "kde" ];
+		kde = {
+			default = [ "kde" ];
 		};
-};
-    };
+		};
+	};
 
 	#===============================WM / DE Dependant apps=====================================
 	environment.systemPackages = with pkgs; 

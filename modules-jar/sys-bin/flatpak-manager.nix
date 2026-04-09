@@ -1,28 +1,18 @@
 { pkgs, ... }:
 
 {
-  # Enable the underlying Flatpak services and visual things
   services.flatpak.enable = true;
-  services.packagekit.enable = true; # for some sec questions some apps might need
-  services.dbus.enable = true; # Ensures apps can talk to the system for things like notifications
-  fonts.fontDir.enable = true; # This makes sure Flatpaks can see the fonts you installed via Nix
+  services.packagekit.enable = true;
+  services.dbus.enable = true;
+  fonts.fontDir.enable = true;
 
-  # THE PASSWORD POPUP (Polkit)
-  # This allows Bazaar to ask the system for permission to install things
   security.polkit.enable = true;
-  
-  # Essential for Wayland/Sway. This lets Flatpaks chat to the system system... hopefully..
-  # goodness this is annoying
-  xdg.portal = {
-    enable = true;
-    wlr.enable = true; # Specifically for Sway
-    extraPortals = [ pkgs.xdg-desktop-portal-gtk ]; # Standard fallback
-    config.common.default = "*"; # Uses available portals for everything
-  };
 
-  # This allows Flatpak to mount the filesystems it needs for installation
+  # Portal is handled by display.nix based on desktop choice
+  xdg.portal.enable = true; # just ensure it's on, display.nix configures the rest
+
   boot.supportedFilesystems = [ "fuse" ];
-  environment.systemPackages = [ pkgs.fuse3 pkgs.polkit_gnome ];  
+  environment.systemPackages = [ pkgs.fuse3 pkgs.polkit_gnome ];
 
   # Auto-add Flathub (The "App Store" source, VERY NICE
   # 	Kus i be forgetting it everytime)
