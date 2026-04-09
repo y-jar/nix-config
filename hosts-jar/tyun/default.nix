@@ -15,4 +15,13 @@
   # add Bootloader options here[from /etc/nixos/configuration.nix]
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+
+  # ensures gaming is good
+  programs.gamemode.enable = true;
+
+  # 
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+  };
 }

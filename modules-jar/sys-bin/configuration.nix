@@ -84,7 +84,6 @@
 
   # Improve performance by allowing games to request CPU priority
   security.rtkit.enable = true;
-  services.gamemode.enable = true;
 
 
   # =====================================Other=============================================
