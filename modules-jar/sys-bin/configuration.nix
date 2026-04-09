@@ -49,6 +49,11 @@
    btop
    fzf
 
+   # [gaming]
+   mangohud # for huds
+   protonup-qt # installer for proton vers
+   vulkan-tools # for gpu ensurence
+
    # [WM]
    niri
 
@@ -69,11 +74,21 @@
   services.gnome.gnome-keyring.enable = true; # Helps store passwords/settings
 
 
-
-  # =====================================Other=============================================
-  # STEAM FIX: This is the important part!
+  #===============================Gaming Fixes / tweeks========================================
+  
+  # Support for controllers
+  hardware.xpadneo.enable = true; # for Xbox controllers
+  services.udev.packages = [ pkgs.game-devices-udev-rules ];
   # It installs the 'udev rules' so controllers are recognized
   hardware.steam-hardware.enable = true;
+
+  # Improve performance by allowing games to request CPU priority
+  security.rtkit.enable = true;
+  services.gamemode.enable = true;
+
+
+  # =====================================Other=============================================
+  
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
