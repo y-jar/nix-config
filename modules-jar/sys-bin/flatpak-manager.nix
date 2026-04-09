@@ -28,9 +28,9 @@
   # 	Kus i be forgetting it everytime)
   # This runs a script on activation so you don't have to run the 
   # 'flatpak remote-add' command manually.
-  system.activationScripts.flatpak-repo = {
-    text = ''
-      ${pkgs.flatpak}/bin/flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-    '';
-  };
+  # system.activationScripts.flatpak-repo = {
+  #   text = ''
+  #     ${pkgs.flatpak}/bin/flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+  #   '';
+  # };
 }

@@ -3,11 +3,11 @@
 # Grab the current hostname
 CURRENT_HOST=$(hostname)
 
-echo "Starting Stonepoem Update for host: $CURRENT_HOST"
+echo "Starting Update for host: $CURRENT_HOST"
 
 # Update the lock file
 echo "Updating flake inputs..."
-cd ~/nix-config && nix flake update
+cd ~/nix-config && sudo nix --extra-experimental-features 'nix-command flakes' flake update
 
 # Apply the update using the dynamic hostname
 echo "Rebuilding system configuration..."
