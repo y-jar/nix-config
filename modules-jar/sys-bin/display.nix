@@ -6,6 +6,9 @@
 	programs.niri.enable = (desktop == "niri");
 	programs.sway.enable = (desktop == "sway");
 
+	# tweeks
+	programs.kdeconnect.enable = false; # rule out interference
+
 	# Wayland enviroment vars
 	# forces apps to use wayland if otherwise
 	environment.sessionVariables = {
