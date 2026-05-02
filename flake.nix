@@ -18,11 +18,6 @@
   outputs = { self, nixpkgs, home-manager, ... }@inputs: 
   let
   #=====================================MAKE CHANGES HERE==============================================
-  	# NOTE: Change this to whatever WMs/DEs you have in the default within ./modules-jar/home-jar/ui-bin/default.nix
-  	# current listed options[has to be named the pkg]:
-    #  sway[waybar], niri[workin progress], plasma[comes with basic apps with]
-  	chosenDesktop = "plasma";
-
 	# BEFORE YOU USE THIS CONFIG: change this to the hostName you want, the presets i made are:
   # DEFAULT [if i dont know or anyone else]:
   # nixos [note, swap out the hardwareconfig file with the one within the /etc/nixos/.. dir]
@@ -43,7 +38,6 @@
       #special arguments to pass to modules that need them.
       specialArgs = { 
       	inherit inputs;
-        desktop = chosenDesktop;
         hostnm = chosenHost;
       };
 
@@ -68,7 +62,6 @@
           #                                                 [Arg you want for a specific file]
           home-manager.extraSpecialArgs = {
             inherit inputs; # no clue on what
-            desktop = chosenDesktop; # this sets the arg so we can just change the de/WM in the let block.
             hostnm = chosenHost; # sets the hostname for home-manager
           };
 

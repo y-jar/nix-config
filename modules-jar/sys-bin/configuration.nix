@@ -36,8 +36,10 @@
 
    # [apps]
    kitty # incase foot doesnt work for root
-   kdePackages.dolphin
    keepassxc # [passwordmgr]
+
+  #  [theme/optional]
+  catppuccin-sddm
 
    # [cl/tui tools]]
    wget
@@ -58,9 +60,6 @@
    mangohud # for huds
    protonup-qt # installer for proton vers
    vulkan-tools # for gpu ensurence
-
-   # [WM]
-   niri
 
    # [Virtual Mechines]
    gnome-boxes
