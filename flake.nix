@@ -52,6 +52,8 @@
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
 
+          home-manager.backupFileExtension = "backup"; # backups stuff if conflicting
+
           # [extraSpecialArgs] passes vars or modules as specialArgs to home-manager modules that call req them.
           #   Ex: { pkgs, desktop, ...}: We pulled 'desktop'
           # EXTRA NOTE: if an arg is passed, and something needs it, all preceeding nodes must pull it
@@ -67,7 +69,6 @@
 
           # sets the main user home Entry so we can use stuff
           home-manager.users.jar = import ./modules-jar/home-jar/default.nix;
-          home-manager.backupFileExtension = "backup"; # backups stuff if conflicting
         } # end of home manager
 
         # method for installing flatpaks declareitivly*
