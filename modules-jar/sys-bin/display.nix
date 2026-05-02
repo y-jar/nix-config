@@ -37,6 +37,11 @@
     kdePackages.kate
     kdePackages.sddm-kcm           # manage SDDM from within Plasma settings
     kdePackages.qtstyleplugin-kvantum
+    kdePackages.plasma-keyboard
+    kdePackages.plasma-thunderbolt
+    kdePackages.plasma-activities-stats
+    kdePackages.plasma-activities
+    kdePackages.kdeplasma-addons
 
 		# [niri reqs]
 		swaybg
