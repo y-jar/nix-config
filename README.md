@@ -167,6 +167,9 @@ Nix
 
 
 to update the system AFTER Switching
+
+> NOTE: Please reboot before updating `:)`
+
 ```bash/zsh
 nru
 ```
