@@ -40,6 +40,7 @@
 
   #  [theme/optional]
   catppuccin-sddm
+  waypaper # use for setting wallpapers for WMs
 
    # [cl/tui tools]]
    wget
