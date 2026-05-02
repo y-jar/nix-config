@@ -25,7 +25,6 @@
 
   # Font enable
   fonts.fontconfig.enable = true;
-  home-manager.backupFileExtension = "backup";
 
   # ==========================User Packages=============================
   # My PACKAGES, How epic, just be sure to add pkgs. before each package name <3
