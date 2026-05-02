@@ -44,6 +44,8 @@
 
    # [cl/tui tools]]
    wget
+   fcitx5 # for typing in japanese?
+   fcitx5-mozc # other japan language sturff
    curl
    git
    unzip
@@ -56,6 +58,8 @@
    usbutils      # Provides lsusb
    htop          # Better than top
    killall
+   tldr
+   fd # 
 
    # [gaming]
    mangohud # for huds
