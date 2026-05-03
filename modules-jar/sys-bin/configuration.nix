@@ -37,6 +37,7 @@
    # [apps]
    kitty # incase foot doesnt work for root
    keepassxc # [passwordmgr]
+   lmstudio # for those who want to use AI
 
   #  [theme/optional]
   catppuccin-sddm
