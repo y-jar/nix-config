@@ -100,7 +100,7 @@
         };
 
         "custom/power" = {
-          format = "";
+          format = "⏻";
           tooltip = false;
           on-click = "fuzzel --dmenu <<<$'Shutdown\nRestart\nSleep\nLogout' | xargs -I{} bash -c 'case \"{}\" in Shutdown) poweroff;; Restart) reboot;; Sleep) systemctl suspend;; Logout) niri msg action quit;; esac'";
         };
