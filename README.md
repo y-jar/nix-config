@@ -1,4 +1,4 @@
-# NixOS Jar
+# NixOS Jar *(YEN26.5.2)*
 By Park(ME)!
 
 ---
@@ -61,9 +61,9 @@ For the last step to work this needs to be changed to your picking at this secti
 *(Pick the hostname you picked for the steps before):* `tyun`, `vmo`, `cold-flip`, `calender`, `aanri` *Or others that was made for their own systems*
 ```nix
   #=====================================MAKE CHANGES HERE==============================================
-  chosenDesktop = "plasma";
 	chosenHost = "yilyonix"; # this mainly affects the window manager sub option, making sure screen stuff works.
 ```
+> NOTE, when adding your own hostname, be aware to add the respective `hosts-jar/HOSTNAME/default.nix` to the config, or it will NOT work. *(you can just copy `hosts-jar/nixos/default.nix` to get it to work)*
 
 ### iV
 

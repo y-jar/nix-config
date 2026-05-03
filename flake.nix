@@ -44,6 +44,8 @@
       # 
       modules = [
         # The system entry, uses the picked host for the dir name
+        # WARNING READ BEFORE LEAVING: Will give an error if hostname doesnt have a default.nix within it's own hosts-jar directory
+        # to add your own, just make a new dir within hosts-jar and copy /nixos/default.nix into your new dir so it will not give an error
         ./hosts-jar/${chosenHost}/default.nix
 
         # manages and outputs settings for home-manager
