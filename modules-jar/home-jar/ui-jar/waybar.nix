@@ -20,7 +20,7 @@
 
         "custom/folders" = {
           format = "󰉋";
-          on-click = "thunar ~"; # Or your preferred file manager
+          on-click = "dolphin ~"; # Or your preferred file manager
           tooltip = true;
           tooltip-format = "Open Home Directory";
         };
