@@ -3,18 +3,19 @@
     services.displayManager.sddm = {
         enable = true;
         wayland.enable = true;
-        # theme = "catppuccin-mocha";
+        theme = "catppuccin-mocha"; # comes from pkgs.catppuccin-sddm
+        # Options: catppuccin-latte / catppuccin-frappe / catppuccin-macchiato / catppuccin-mocha
 
-        # settings = {
-        #   Theme = {
-        #     Current = "layan";
-        #     CursorTheme = "breeze_cursors";
-        #     Font = "Noto Sans,10,-1,5,50,0,0,0,0,0";
-        #   };
-        #   Users = {
-        #     MaximumUid = 60000;
-        #     MinimumUid = 1000;
-        #   };
-        # };
+        # settings for sddm
+        settings = {
+          Theme = {
+            Background = "/etc/nixos-wallpaper/wallpick.webp";
+          };
+        };
+    };
+
+    # copy wallpick.webp into the built system
+    environment.etc."nixos-wallpaper/wallpick.webp" = {
+        source = ./wallpick.webp; # MY WALLPAPR :P
     };
 }
