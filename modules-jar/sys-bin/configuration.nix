@@ -58,7 +58,7 @@
    btop
    fzf # fuzzy finder
    psmisc        # Provides killall
-   pciutils      # Provides lspci (great for checking that 6700XT)
+   pciutils      # Provides lspci
    usbutils      # Provides lsusb
    htop          # Better than top
    killall

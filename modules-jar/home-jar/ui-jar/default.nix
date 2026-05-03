@@ -5,5 +5,6 @@
     imports = [
         ./niri-bin/default.nix
         # ./sway-bin/default.nix
+        ./waybar.nix
      ];
 }

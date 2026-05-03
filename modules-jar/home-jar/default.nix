@@ -57,14 +57,14 @@
     # [Entertainment]
     # -[Gaming](done through flatpack mostly)
     #heroic
-    #steam
+    steam
     #prismlauncher
     protonplus
     # -[Chat](done through flatpack mostly)
     #discord
     # -[Media](done through flatpack mostly)
     mpv # for video playback
-    #blanket # Background noises
+    blanket # Background noises
 
     # ====Unsorteds====
 		cowsay
