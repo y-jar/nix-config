@@ -358,7 +358,8 @@ binds {
     // SETTINGS LAUNCHER
     Mod+S hotkey-overlay-title="Toggle Noctalia [S]ettings" { spawn "qs" "ipc" "-c" "noctalia-shell" "call" "settings" "toggle"; }
     // FILE-EXPLORER
-    Mod+E hotkey-overlay-title="Open File [E]xplorer" { spawn "nautilus"; }
+    Mod+E hotkey-overlay-title="Open File [E]xplorer" { spawn "dolphin"; }
+    Mod+A hotkey-overlay-title="Open [A]pp Store" { spawn "bazaar"; }
     // PH
     // PH
 
