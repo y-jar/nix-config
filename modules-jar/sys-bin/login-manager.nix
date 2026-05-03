@@ -3,7 +3,7 @@
     services.displayManager.sddm = {
         enable = true;
         wayland.enable = true;
-        theme = "catppuccin-mocha"; # comes from pkgs.catppuccin-sddm
+        theme = "catppuccin-mocha-mauve"; # comes from pkgs.catppuccin-sddm
         # Options: catppuccin-latte / catppuccin-frappe / catppuccin-macchiato / catppuccin-mocha
 
         # settings for sddm
@@ -12,6 +12,8 @@
             Background = "/etc/nixos-wallpaper/wallpick.webp";
           };
         };
+        # make the theme visible to SDDM
+        extraPackages = [ pkgs.catppuccin-sddm ]; 
     };
 
     # copy wallpick.webp into the built system
