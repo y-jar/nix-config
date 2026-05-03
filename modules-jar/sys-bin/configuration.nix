@@ -38,22 +38,25 @@
    kitty # incase foot doesnt work for root
    keepassxc # [passwordmgr]
    lmstudio # for those who want to use AI
+   waypaper # use for setting wallpapers for WMs
+   gnome-boxes # virtual mechines
 
   #  [theme/optional]
   catppuccin-sddm
-  waypaper # use for setting wallpapers for WMs
 
    # [cl/tui tools]]
    wget
    fcitx5 # for typing in japanese?
    fcitx5-mozc # other japan language sturff
    curl
-   git
+   git # virsion control
+   jp # json parser
+   zip
    unzip
    tree
    fastfetch
    btop
-   fzf
+   fzf # fuzzy finder
    psmisc        # Provides killall
    pciutils      # Provides lspci (great for checking that 6700XT)
    usbutils      # Provides lsusb
@@ -61,14 +64,13 @@
    killall
    tldr
    fd # 
+   rsync # file copying
+   tmux # terminal multiplexer
 
    # [gaming]
    mangohud # for huds
    protonup-qt # installer for proton vers
    vulkan-tools # for gpu ensurence
-
-   # [Virtual Mechines]
-   gnome-boxes
   ];
 
 
