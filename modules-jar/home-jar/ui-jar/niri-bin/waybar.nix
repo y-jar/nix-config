@@ -11,7 +11,7 @@
 
         modules-left = [ "custom/launcher" "niri/workspaces" ];
         modules-center = [ "custom/title" "niri/window" ];
-        modules-right = [ "cpu" "memory" "disk" "tray" "clock" "custom/power" ];
+        modules-right = [ "cpu" "memory" "disk" "battery" "custom/powerprofile" "tray" "clock" "custom/power" ];
 
         "custom/launcher" = {
           format = "󱓞";
@@ -53,6 +53,42 @@
           tooltip-format = "{used} used out of {total} on {path}";
         };
 
+        "battery" = {
+          interval = 30;
+          states = {
+            warning = 30;
+            critical = 15;
+          };
+          format = "{icon} {capacity}%";
+          format-charging = "󰂄 {capacity}%";
+          format-plugged = "󰚥 {capacity}%";
+          format-icons = [ "󰁺" "󰁻" "󰁼" "󰁽" "󰁾" "󰁿" "󰂀" "󰂁" "󰂂" "󰁹" ];
+          tooltip = true;
+          tooltip-format = ''
+            {timeTo}
+            Drain: {power}W
+            Health: $(cat /sys/class/power_supply/BAT0/capacity_level 2>/dev/null || echo "N/A")
+          '';
+        };
+
+        "custom/powerprofile" = {
+          exec = pkgs.writeShellScript "waybar-powerprofile" ''
+            profile=$(powerprofilesctl get)
+            case $profile in
+              performance)   echo '󰓅 perf' ;;
+              balanced)      echo '󰾅 bal' ;;
+              power-saver)   echo '󰌪 save' ;;
+              *)             echo "? $profile" ;;
+            esac
+          '';
+          interval = 5;
+          on-click = pkgs.writeShellScript "waybar-powerprofile-pick" ''
+            chosen=$(printf 'performance\nbalanced\npower-saver' | fuzzel --dmenu)
+            [ -n "$chosen" ] && powerprofilesctl set "$chosen"
+          '';
+          tooltip = false;
+        };
+
         "tray" = {
           spacing = 8;
           icon-size = 14;
@@ -89,56 +125,86 @@
         background: rgba(30, 30, 46, 0.80);
         border-radius: 8px;
         margin: 4px 4px;
-        padding: 0 8px;
+        padding: 0 4px;
+      }
+
+      /* every direct module child gets its own subtle rounding */
+      .modules-left > widget > *,
+      .modules-center > widget > *,
+      .modules-right > widget > * {
+        border-radius: 6px;
+        padding: 2px 8px;
+        margin: 3px 2px;
       }
 
       #custom-launcher {
         color: #cba6f7;
-        padding: 0 10px;
         font-size: 16px;
       }
 
+      #workspaces {
+        padding: 0;
+        margin: 0 2px;
+      }
+
       #workspaces button {
-        padding: 0 6px;
+        padding: 2px 8px;
+        margin: 3px 2px;
         color: #6c7086;
-        border-radius: 4px;
+        border-radius: 6px;
+        background: transparent;
       }
 
       #workspaces button.active {
         color: #cba6f7;
         background: rgba(203, 166, 247, 0.20);
-        border-radius: 4px;
       }
 
       #custom-title {
         color: #cba6f7;
         font-weight: bold;
-        padding: 0 6px 0 10px;
         letter-spacing: 1px;
       }
 
       #window {
         color: #89b4fa;
-        padding: 0 10px 0 4px;
       }
 
       #cpu {
         color: #a6e3a1;
-        padding: 0 6px;
       }
 
       #memory {
         color: #89b4fa;
-        padding: 0 6px;
       }
 
       #disk {
         color: #f38ba8;
-        padding: 0 6px;
+      }
+
+      #battery {
+        color: #a6e3a1;
+      }
+
+      #battery.warning {
+        color: #f9e2af;
+      }
+
+      #battery.critical {
+        color: #f38ba8;
+      }
+
+      #battery.charging,
+      #battery.plugged {
+        color: #a6e3a1;
+      }
+
+      #custom-powerprofile {
+        color: #fab387;
       }
 
       #tray {
-        padding: 0 8px;
+        padding: 0 6px;
       }
 
       #tray > .passive {
@@ -151,12 +217,10 @@
 
       #clock {
         color: #cdd6f4;
-        padding: 0 8px;
       }
 
       #custom-power {
         color: #f38ba8;
-        padding: 0 10px;
         font-size: 14px;
       }
     '';
