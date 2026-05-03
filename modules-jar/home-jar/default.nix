@@ -57,7 +57,7 @@
     # [Entertainment]
     # -[Gaming](done through flatpack mostly)
     #heroic
-    steam
+    #steam
     #prismlauncher
     protonplus
     # -[Chat](done through flatpack mostly)
