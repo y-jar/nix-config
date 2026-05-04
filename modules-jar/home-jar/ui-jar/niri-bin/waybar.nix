@@ -53,22 +53,40 @@
           tooltip-format = "{used} used out of {total} on {path}";
         };
 
-        "battery" = {
-          interval = 30;
-          states = {
-            warning = 30;
-            critical = 15;
-          };
-          format = "{icon} {capacity}%";
-          format-charging = "󰂄 {capacity}%";
-          format-plugged = "󰚥 {capacity}%";
-          format-icons = [ "󰁺" "󰁻" "󰁼" "󰁽" "󰁾" "󰁿" "󰂀" "󰂁" "󰂂" "󰁹" ];
-          tooltip = true;
-          tooltip-format = ''
-            {timeTo}
-            Drain: {power}W
-            Health: $(cat /sys/class/power_supply/BAT0/capacity_level 2>/dev/null || echo "N/A")
+        # felt lazy with this, thanks AI
+        "custom/battery" = {
+          exec = pkgs.writeShellScript "waybar-battery" ''
+            BAT=/sys/class/power_supply/BAT0
+            capacity=$(cat $BAT/capacity 2>/dev/null || echo "?")
+            status=$(cat $BAT/status 2>/dev/null || echo "?")
+            power=$(cat $BAT/power_now 2>/dev/null || echo "0")
+            energy_full=$(cat $BAT/energy_full 2>/dev/null || echo "1")
+            energy_full_design=$(cat $BAT/energy_full_design 2>/dev/null || echo "1")
+            drain=$(awk "BEGIN {printf \"%.1f\", $power / 1000000}")
+            health=$(awk "BEGIN {printf \"%d\", ($energy_full / $energy_full_design) * 100}")
+            
+            # pick icon based on capacity
+            if [ "$status" = "Charging" ]; then
+              icon="󰂄"
+            elif [ "$capacity" -ge 90 ]; then icon="󰁹"
+            elif [ "$capacity" -ge 80 ]; then icon="󰂂"
+            elif [ "$capacity" -ge 70 ]; then icon="󰂁"
+            elif [ "$capacity" -ge 60 ]; then icon="󰂀"
+            elif [ "$capacity" -ge 50 ]; then icon="󰁿"
+            elif [ "$capacity" -ge 40 ]; then icon="󰁾"
+            elif [ "$capacity" -ge 30 ]; then icon="󰁽"
+            elif [ "$capacity" -ge 20 ]; then icon="󰁼"
+            elif [ "$capacity" -ge 10 ]; then icon="󰁻"
+            else icon="󰁺"
+            fi
+
+            echo "$icon $capacity%"
+            echo "Drain: ''${drain}W | Health: ''${health}% | $status"
           '';
+          interval = 30;
+          return-type = "text";
+          format = "{}";
+          tooltip = true;
         };
 
         "custom/powerprofile" = {
