@@ -5,6 +5,9 @@
 	programs.niri.enable = true;
 	# programs.sway.enable;
 
+  # x support
+  programs.xwayland.enable = true;
+
 	# Wayland enviroment vars
 	# forces apps to use wayland if otherwise
 	# Wayland tweaks (global, good for all sessions)

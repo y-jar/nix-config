@@ -228,6 +228,7 @@ layout {
 //```````````````````````````````````Startups + SHELL(option)```````````````````````````````````````
 // this starts the shell for noctalia-shell using qs as a command. kus it aint a pkg, duh
 spawn-at-startup "qs" "-c" "noctalia-shell"
+spawn-at-startup "xwayland-satellite"
 // spawn-sh-at-startup "qs" "-c" "noctalia-shell"
 
 // wallpaper thing
