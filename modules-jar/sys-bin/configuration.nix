@@ -102,7 +102,7 @@
     extraPackages = with pkgs; [
       # [intel]
       intel-media-driver # iHD — Broadwell+ [my N100 on yilyonix]
-      vaapiIntel # i965 — older Intel fallback
+      intel-vaapi-driver # i965 — older Intel fallback
       intel-compute-runtime # OpenCL for Intel [useful for Blender, Darktable etc]
       intel-ocl # older Intel OpenCL fallback
 
