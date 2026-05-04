@@ -109,7 +109,7 @@
       # [amd]
 
       # [global / fallback]
-      vaapiVdpau # VDPAU via VA-API bridge (helps Nvidia/AMD too)
+      libva-vdpau-driver # VDPAU via VA-API bridge (helps Nvidia/AMD too)
       libvdpau-va-gl # VDPAU OpenGL fallback
       mesa # amd and intel open sourse drivers
       libva-utils # vainfo command. good for debugging VA-API
@@ -130,11 +130,11 @@
     # wine, proton, and any other compatability layer the reqs graphics 
     #   and 32 bit libs
     extraPackages32 = with pkgs.pkgsi686Linux; [
-      vaapiIntel # 32bit Intel for Steam
+      intel-vaapi-driver # 32bit Intel for Steam
       mesa # 32bit mesa for Steam/Wine/Proton
       vulkan-loader # Vulkan ICD loader
       libvdpau-va-gl # VDPAU OpenGL fallback
-      vaapiVdpau # VDPAU via VA-API bridge (helps Nvidia/AMD too)
+      libva-vdpau-driver # VDPAU via VA-API bridge (helps Nvidia/AMD too)
     ];
   };
 
