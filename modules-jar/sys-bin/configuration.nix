@@ -107,7 +107,6 @@
       intel-ocl # older Intel OpenCL fallback
 
       # [amd]
-      RADV # amd's official vulkan driver [alternative to radv in mesa]
 
       # [global / fallback]
       vaapiVdpau # VDPAU via VA-API bridge (helps Nvidia/AMD too)
