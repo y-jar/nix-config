@@ -2,12 +2,10 @@
 { pkgs, hostnm, ...}:
 {
   # import
-  imports = [ 
-    ./waybar.nix
-  ]
+  imports = [ ]
     ++ (if hostnm == "aari" then [ ./niri-aanri.nix ] else [ ])
     ++ (if hostnm == "calender" then [ ./niri-calender.nix ] else [ ])
-    ++ (if hostnm == "cold-flip" then [ ./niri-cold-flip.nix ] else [ ])
+    ++ (if hostnm == "flipped-shark" then [ ./niri-cold-flip.nix ] else [ ])
     ++ (if hostnm == "tyun" then [ ./niri-tyun.nix ] else [ ])
-    ++ (if hostnm == "yilyonix" then [ ./niri-yilyonix.nix ] else [ ./niri-base.nix ]);
+    ++ (if hostnm == "yilyonix" then [ ./niri-yilyonix.nix ] else [ ./niri-base.nix ./waybar.nix ]);
 }

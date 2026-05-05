@@ -24,7 +24,7 @@
   # VIRTUAL MECHINE OPTION[bios]
   #   vmo
   # OTHER HOSTNAMES [More will be added as i go]:
-  # 	yilyonix, 'calender', cold-flip, aanri, tyun
+  # 	yilyonix, 'calender', flipped-shark, aanri, tyun
 	chosenHost = "yilyonix"; # this mainly affects the window manager sub option, making sure screen stuff works.
 
 

@@ -47,7 +47,7 @@ nix-shell -p git
 
 **Switch over hardware config:** *(Please read)*
 > NOTE: Replace 'HOSTNAMEPLACEHOLDER' with your chosen host name.
-> ME: `tyun`, `vmo`, `cold-flip`, `calender`, `aanri`.
+> ME: `tyun`, `vmo`, `flipped-shark`, `calender`, `aanri`.
 ```bash
 cp /etc/nixos/hardware-configuration.nix ~/nix-config/hosts-jar/HOSTNAMEPLACEHOLDER/hardware-configuration.nix
 ```
