@@ -145,7 +145,8 @@ This is where i put my plans and everything else. <3
 
 **Goals:**
 - adding streamlined updating or something, rightnow updating is a bit spooky [ DONE ]
-- actual working configs for 
+- add `gnome` [ DONE ]
+- **actual working configs for these systems**
   - `yilyonix` [In Progress]
   - `tyun`, 
   - `vmo`, 
