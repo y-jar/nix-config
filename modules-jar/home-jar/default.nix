@@ -41,7 +41,6 @@
     ranger # tui file explorer
 
     # [Appstores]
-		gnome-software # a good appstore
     bazaar # another good app store
 		
     # [Folding]
@@ -55,16 +54,17 @@
     kdePackages.kdenlive
 
     # [Entertainment]
-    # -[Gaming](done through flatpack mostly)
-    #heroic
-    #steam
-    #prismlauncher
+    # -[Gaming]
+    #heroic # game launcher
+    #steam # game launcher
+    #prismlauncher # minecraft launcher
     protonplus
-    # -[Chat](done through flatpack mostly)
+    # -[Chat]
     #discord
     # -[Media](done through flatpack mostly)
     mpv # for video playback
     blanket # Background noises
+    quodlibet # media player
 
     # ====Unsorteds====
 		cowsay

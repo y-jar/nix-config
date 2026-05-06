@@ -20,4 +20,8 @@
     environment.etc."nixos-wallpaper/wallpick.webp" = {
         source = ./wallpick.webp; # MY WALLPAPR :P
     };
+    # services.displayManager.gdm = {
+    #   enable = true;
+    #   wayland.enable = true;
+    # }
 }

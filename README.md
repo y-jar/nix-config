@@ -144,9 +144,23 @@ This is where i put my plans and everything else. <3
 - a mini config file for users who just want to run a single file config
 
 **Goals:**
-- adding streamlined updating or something, rightnow updating is a bit spooky
-- actual working configs for `tyun`, `vmo`, `cold-flip`, `calender`, `aanri`.
-- a set up guide `[WORK IN PROGRESS]`.
+- adding streamlined updating or something, rightnow updating is a bit spooky [ DONE ]
+- actual working configs for 
+  - `yilyonix` [In Progress]
+  - `tyun`, 
+  - `vmo`, 
+  - `flipped-shark` [In Progress]
+  - `calender`, 
+  - `aanri`.
+- a set up guide `[DONE]`.
+- **`flipped-shark` Goals**
+  - Battery not being capped at 80. 
+  - increase battery life by 1hr.
+  - fix the missing 10 sensors for `flipped-shark` so the gyro and some other fucntions can work.
+- add gnome as a option.  
+- **Niri Goals**
+  - Better `waybar` or use a prebuilt `qs`
+  - fix rendering issues for `steam` showing up as black.. i have no clue why it's like this
 
 ---
 

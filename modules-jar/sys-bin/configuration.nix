@@ -39,12 +39,11 @@
    keepassxc # [passwordmgr]
    lmstudio # for those who want to use AI
    waypaper # use for setting wallpapers for WMs
-   gnome-boxes # virtual mechines
 
   #  [theme/optional]
   catppuccin-sddm
 
-   # [cl/tui tools]]
+   # [cl/tui tools / resources]]
    wget
    fcitx5 # for typing in japanese?
    fcitx5-mozc # other japan language sturff
@@ -66,11 +65,32 @@
    fd # 
    rsync # file copying
    tmux # terminal multiplexer
+   wine # we all know what this is
 
    # [gaming]
    mangohud # for huds
    protonup-qt # installer for proton vers
-   vulkan-tools # for gpu ensurence
+   #proton-tricks # aperently gone?
+
+   # [image format support]
+  webp-pixbuf-loader # webp support for GTK apps including GNOME
+  libheif # heif/avif support
+  libjxl # jpeg-xl support
+  evince # PDF viewer + thumbnailer
+  poppler-utils # PDF rendering lib
+  poppler
+  ffmpegthumbnailer # video + image thumbnails
+  gdk-pixbuf # Library for image loading and manipulation
+  librsvg # svg support + triggers full pixbuf loader cache rebuild
+  libjpeg # jpeg support
+  libpng # png support (usually present but explicit is safer)
+  libtiff # tiff support
+  ];
+
+  # tell NixOS to include these in the generated pixbuf loaders cache
+  programs.gdk-pixbuf.modulePackages = with pkgs; [
+    librsvg
+    webp-pixbuf-loader
   ];
 
 
@@ -84,6 +104,7 @@
 
   programs.dconf.enable = true; 
   services.gnome.gnome-keyring.enable = true; # Helps store passwords/settings
+  services.tumbler.enable = true; # image stuff
 
 
   #===============================Gaming Fixes / tweeks========================================

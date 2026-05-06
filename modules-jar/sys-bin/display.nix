@@ -2,6 +2,7 @@
 
 {
 	services.desktopManager.plasma6.enable = true;
+  services.desktopManager.gnome.enable = true;
 	programs.niri.enable = true;
 	# programs.sway.enable;
 
@@ -45,6 +46,26 @@
     kdePackages.plasma-activities-stats
     kdePackages.plasma-activities
     kdePackages.kdeplasma-addons
+    kdePackages.bluedevil # Bluedevil adds Bluetooth capabilities to KDE Plasma
+
+    # [gnome companion apps]
+    gnome-software # a good appstore
+    gnome-bluetooth # bluetooth
+    gnome-characters # for inserting chars
+    gnome-maps
+    gnome-chess
+    gnome-music
+    gnome-panel
+    gnome-shell # might not be needed, we'll see
+    gnome-usage
+    gnome-boxes # virtual mechines
+    gnome-common
+    gnome-tweaks
+    gnome-desktop # Library with common API for various GNOME modules
+    gnome-nettool # Collection of networking tools
+    gnome-firmware # might not need, but who knows
+    gnome-extension-manager
+
 
 		# [niri reqs]
 		swaybg
