@@ -33,17 +33,18 @@
    # [base]
    vim # text editor
    neovim # text editor
+   yazi # file manager
 
    # [apps]
    kitty # incase foot doesnt work for root
    keepassxc # [passwordmgr]
-   lmstudio # for those who want to use AI
    waypaper # use for setting wallpapers for WMs
 
   #  [theme/optional]
   catppuccin-sddm
 
    # [cl/tui tools / resources]]
+   tldr # Simplified and community-driven man pages
    wget
    fcitx5 # for typing in japanese?
    fcitx5-mozc # other japan language sturff

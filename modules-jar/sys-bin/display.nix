@@ -1,9 +1,12 @@
 { pkgs, lib, hostnm, ... }:
 
 {
+  # DEs
 	services.desktopManager.plasma6.enable = true;
   services.desktopManager.gnome.enable = true;
+  # WMs
 	programs.niri.enable = true;
+  programs.hyprland.enable = true;
 	# programs.sway.enable;
 
   # x support
@@ -39,7 +42,7 @@
     kdePackages.gwenview
     kdePackages.okular
     kdePackages.kate
-    kdePackages.sddm-kcm           # manage SDDM from within Plasma settings
+    kdePackages.sddm-kcm # manage SDDM from within Plasma settings
     kdePackages.qtstyleplugin-kvantum
     kdePackages.plasma-keyboard
     kdePackages.plasma-thunderbolt
@@ -80,6 +83,13 @@
 		alacritty
 		wl-clipboard # good cliboard manager
 		xdg-utils   # opening links and such
+
+    # [hyprland companion apps]
+    hyprshot # Utility to easily take screenshots in Hyprland using your mouse
+    hyprlandPlugins.hyprscrolling # Hyprland scrolling layout plugin
+    hyprlauncher # A multipurpose and versatile launcher / picker for Hyprland
+    hyprlock # Hyprland's GPU-accelerated screen locking utility
+    hyprsunset # Application to enable a blue-light filter on Hyprland
   ];
 
   # Misc tweaks

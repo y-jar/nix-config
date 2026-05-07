@@ -155,13 +155,13 @@ This is where i put my plans and everything else. <3
   - `aanri`.
 - a set up guide `[DONE]`.
 - **`flipped-shark` Goals**
-  - Battery not being capped at 80. 
-  - increase battery life by 1hr.
-  - fix the missing 10 sensors for `flipped-shark` so the gyro and some other fucntions can work.
-- add gnome as a option.  
+  - Battery not being capped at 80. [ TAKING A BREAK FROM IT ]
+  - increase battery life by 1hr. [ WIP ]
+  - fix the missing 10 sensors for `flipped-shark` so the gyro and some other fucntions can work. [ DONE ]
+- add gnome as a option.  [ DONE ]
 - **Niri Goals**
-  - Better `waybar` or use a prebuilt `qs`
-  - fix rendering issues for `steam` showing up as black.. i have no clue why it's like this
+  - Better `waybar` or use a prebuilt `qs` [ WIP ]
+  - fix rendering issues for `steam` showing up as black.. i have no clue why it's like this 
 
 ---
 

@@ -9,8 +9,10 @@
   
   # this is where everything gets called
   imports = [
-    ./hardware-configuration.nix
-    ../../modules-jar/sys-bin/default.nix
+    ./hardware-configuration.nix # grabs the hardware
+    ../../modules-jar/sys-bin/default.nix # loads the system config
+    #./battery-config.nix # handles my max charge fixs
+    ./hardware-fix.nix
   ];
   # add Bootloader options here[from /etc/nixos/configuration.nix]
   boot.loader.systemd-boot.enable = true;

@@ -39,9 +39,10 @@
     # [File Explorers]
 		nautilus # gnome' file manager
     ranger # tui file explorer
+    xfce.thunar # Xfce file manager
 
     # [Appstores]
-    bazaar # another good app store
+    bazaar # flatpack app store [software center is in display.nix]
 		
     # [Folding]
     # -[Text Editors]
@@ -49,24 +50,28 @@
     zed-editor # good text editor
     qownnotes # markdown app editor
     libreoffice # documents writer
-    # -[Video Oriented]
+    # [graphics]
     obs-studio # good video software
-    kdePackages.kdenlive
+    kdePackages.kdenlive # video editor
+    halftone # Simple app for giving images that pixel-art style
+    krita # Free and open source painting application
+    # [audio]
+    easyeffects # audio mixer
+    qpwgraph # Qt graph manager for PipeWire, similar to QjackCtls
 
     # [Entertainment]
     # -[Gaming]
-    #heroic # game launcher
-    #steam # game launcher
-    #prismlauncher # minecraft launcher
-    protonplus
-    # -[Chat]
-    #discord
-    # -[Media](done through flatpack mostly)
+    #heroic
+    #steam
+    #prismlauncher
+    protonplus # manager and installer for proton versions
+    # -[Media]
     mpv # for video playback
     blanket # Background noises
     quodlibet # media player
 
     # ====Unsorteds====
+    lmstudio # for those who want to use AI
 		cowsay
 		lazygit # for kool github viewing
 		polkit_gnome # for a weird thing for some flatpak thing
