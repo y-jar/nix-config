@@ -2,12 +2,12 @@
 
 {
   # DEs
-	services.desktopManager.plasma6.enable = true;
   services.desktopManager.gnome.enable = true;
+	services.desktopManager.plasma6.enable = true;
   # WMs
 	programs.niri.enable = true;
   programs.hyprland.enable = true;
-	# programs.sway.enable;
+	programs.sway.enable = true;
 
   # x support
   programs.xwayland.enable = true;
@@ -68,6 +68,7 @@
     gnome-nettool # Collection of networking tools
     gnome-firmware # might not need, but who knows
     gnome-extension-manager
+    gnome-disk-utility # for disk util
 
 
 		# [niri reqs]

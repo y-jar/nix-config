@@ -30,62 +30,61 @@
   # List packages installed in system profile.
   # use https://search.nixos.org/ to find more packages (and options).
   environment.systemPackages = with pkgs; [
-   # [base]
-   vim # text editor
-   neovim # text editor
-   yazi # file manager
+    # [base]
+    vim # text editor
+    neovim # text editor
+    yazi # file manager
 
-   # [apps]
-   kitty # incase foot doesnt work for root
-   keepassxc # [passwordmgr]
-   waypaper # use for setting wallpapers for WMs
+    # [apps]
+    kitty # incase foot doesnt work for root
+    keepassxc # [passwordmgr]
+    waypaper # use for setting wallpapers for WMs
 
-  #  [theme/optional]
-  catppuccin-sddm
+    #  [theme/optional]
+    catppuccin-sddm
 
-   # [cl/tui tools / resources]]
-   tldr # Simplified and community-driven man pages
-   wget
-   fcitx5 # for typing in japanese?
-   fcitx5-mozc # other japan language sturff
-   curl
-   git # virsion control
-   jp # json parser
-   zip
-   unzip
-   tree
-   fastfetch
-   btop
-   fzf # fuzzy finder
-   psmisc        # Provides killall
-   pciutils      # Provides lspci
-   usbutils      # Provides lsusb
-   htop          # Better than top
-   killall
-   tldr
-   fd # 
-   rsync # file copying
-   tmux # terminal multiplexer
-   wine # we all know what this is
+    # [cl/tui tools / resources]]
+    tldr # Simplified and community-driven man pages
+    bat # Cat(1) clone with syntax highlighting and Git integration
+    wget
+    curl
+    git # virsion control
+    jp # json parser
+    zip
+    unzip
+    tree
+    fastfetch
+    btop
+    fzf # fuzzy finder
+    psmisc        # Provides killall
+    pciutils      # Provides lspci
+    usbutils      # Provides lsusb
+    htop          # Better than top
+    killall
+    tldr
+    fd # 
+    rsync # file copying
+    tmux # terminal multiplexer
+    wine # we all know what this is
 
-   # [gaming]
-   mangohud # for huds
-   protonup-qt # installer for proton vers
-   #proton-tricks # aperently gone?
+    # [gaming]
+    mangohud # for huds
+    protonup-qt # installer for proton vers
+    #proton-tricks # aperently gone?
 
-   # [image format support]
-  webp-pixbuf-loader # webp support for GTK apps including GNOME
-  libheif # heif/avif support
-  libjxl # jpeg-xl support
-  evince # PDF viewer + thumbnailer
-  poppler-utils # PDF rendering lib
-  poppler
-  ffmpegthumbnailer # video + image thumbnails
-  gdk-pixbuf # Library for image loading and manipulation
-  librsvg # svg support + triggers full pixbuf loader cache rebuild
-  libjpeg # jpeg support
-  libpng # png support (usually present but explicit is safer)
-  libtiff # tiff support
+    # [image format support]
+    webp-pixbuf-loader # webp support for GTK apps including GNOME
+    libheif # heif/avif support
+    libjxl # jpeg-xl support
+    evince # PDF viewer + thumbnailer
+    poppler-utils # PDF rendering lib
+    poppler
+    ffmpegthumbnailer # video + image thumbnails
+    gdk-pixbuf # Library for image loading and manipulation
+    librsvg # svg support + triggers full pixbuf loader cache rebuild
+    libjpeg # jpeg support
+    libpng # png support (usually present but explicit is safer)
+    libtiff # tiff support
   ];
 
   # tell NixOS to include these in the generated pixbuf loaders cache

@@ -15,6 +15,9 @@
 
     # GIT SETTINGS
     ./git.nix # for github shitt
+
+    # OTHER
+    ./human-lang.nix # adding keyboard related things [if fixes need fixes]
   ];
 
   #===============================Base Setup================================
@@ -55,29 +58,32 @@
     kdePackages.kdenlive # video editor
     halftone # Simple app for giving images that pixel-art style
     krita # Free and open source painting application
+    converseen # Batch image converter and resizer
+    fontforge # Font editor
     # [audio]
     easyeffects # audio mixer
     qpwgraph # Qt graph manager for PipeWire, similar to QjackCtls
 
     # [Entertainment]
     # -[Gaming]
-    #heroic
-    #steam
-    #prismlauncher
+    # stuff like! heroic, steam, prismlauncher WOW how awesome me, such a gaymer
     protonplus # manager and installer for proton versions
     # -[Media]
+    
+    mediawriter # Tool to write images files to portable media
     mpv # for video playback
     blanket # Background noises
     quodlibet # media player
 
     # ====Unsorteds====
     lmstudio # for those who want to use AI
+    bottles # Easy-to-use wineprefix manager
+    waydroid # Container-based approach to boot a full Android system on a regular GNU/Linux system
 		cowsay
 		lazygit # for kool github viewing
 		polkit_gnome # for a weird thing for some flatpak thing
 		gh # for github login
 		pavucontrol # audio control
     nwg-look  # The best tool for Wayland/Niri GTK styling if it is needed		
-    gnome-usage # resource monitor
   ];  
 }

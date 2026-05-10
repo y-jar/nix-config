@@ -5,6 +5,7 @@
     # [ltn]
     nerd-fonts.intone-mono # RN: IntoneMono Nerd Font
     comfortaa # Clean and modern font suitable for headings and logos
+    cascadia-code # Monospaced font that includes programming ligatures and is designed to enhance the modern look and feel of the Windows Terminal
 
     # [jp]
     ipaexfont # japanese font

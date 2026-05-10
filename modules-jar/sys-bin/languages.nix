@@ -13,6 +13,7 @@
     rustc
     cargo
     nodejs
+    gcc
     
     # [Technical Writing]
     pandoc
