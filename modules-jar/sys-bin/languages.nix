@@ -14,6 +14,7 @@
     cargo
     nodejs
     gcc
+    go
     
     # [Technical Writing]
     pandoc

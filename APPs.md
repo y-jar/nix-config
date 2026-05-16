@@ -5,9 +5,11 @@
 Media
 - blanket
 - lollypop
+- nocturne (music player)
 Gaming
 - steam
 - heroic
+- hosty (a mc server hoster)
 Creation
 - blender
 - krita

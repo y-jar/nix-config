@@ -17,7 +17,7 @@
     ./git.nix # for github shitt
 
     # OTHER
-    ./human-lang.nix # adding keyboard related things [if fixes need fixes]
+    #./human-lang.nix # adding keyboard related things [if fixes need fixes]
   ];
 
   #===============================Base Setup================================
@@ -60,6 +60,8 @@
     krita # Free and open source painting application
     converseen # Batch image converter and resizer
     fontforge # Font editor
+    coulr # Color box to help developers and designers
+    
     # [audio]
     easyeffects # audio mixer
     qpwgraph # Qt graph manager for PipeWire, similar to QjackCtls
@@ -74,6 +76,9 @@
     mpv # for video playback
     blanket # Background noises
     quodlibet # media player
+
+    fcitx5 # for typing in japanese?
+    fcitx5-mozc # other japan language sturff
 
     # ====Unsorteds====
     lmstudio # for those who want to use AI

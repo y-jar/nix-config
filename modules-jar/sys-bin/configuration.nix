@@ -66,6 +66,8 @@
     rsync # file copying
     tmux # terminal multiplexer
     wine # we all know what this is
+    ntfs3g # for my woes with ntfs
+    subversion # Version control system intended to be a compelling replacement for CVS in the open source community
 
     # [gaming]
     mangohud # for huds
@@ -161,6 +163,14 @@
 
   # Improve performance by allowing games to request CPU priority
   security.rtkit.enable = true;
+
+
+  # supported file systems for them dum dum ntfs
+
+  boot.supportedFilesystems = [ 
+    "fuse"
+    "ntfs"
+  ];
 
 
   # =====================================Other=============================================
