@@ -225,17 +225,27 @@ layout {
 }
 
 
-//```````````````````````````````````Startups + SHELL(option)```````````````````````````````````````
-// this starts the shell for noctalia-shell using qs as a command. kus it aint a pkg, duh
-spawn-at-startup "qs" "-c" "noctalia-shell"
-spawn-at-startup "xwayland-satellite"
-// spawn-sh-at-startup "qs" "-c" "noctalia-shell"
-
-// wallpaper thing
-spawn-at-startup "swww-daemon"
+//```````````````````````````````````STARTUP + SHELL(option)```````````````````````````````````````
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
 
+// this starts the shell for noctalia-shell using qs as a command. kus it aint a pkg, duh
+//spawn-at-startup "qs" "-c" "noctalia-shell"
+spawn-at-startup "xwayland-satellite"
+spawn-at-startup "waybar"
+//
+// WALLPAPER
+//
+spawn-at-startup "swww-daemon"
+// SET wall
+spawn-sh-at-startup "sleep 1 && swww img ~/pic-jar/wall-bin/halftone-ER-ranni-praying.png --transition-type fade --transition-duration 1"
+// Set the regular wallpaper on the backdrop.
+layer-rule {
+    match namespace= "^wallpaper$"
+    place-within-backdrop true
+}
+
+//``````````````````````````````````````````````````````````````````````````````````````````
 hotkey-overlay {
     // Uncomment this line to disable the "Important Hotkeys" pop-up at startup.
     skip-at-startup
@@ -316,17 +326,14 @@ window-rule {
     clip-to-geometry true
 }
 
-layer-rule {
+/-layer-rule {
     match namespace="noctalia-shell"
     // This ensures it doesn't overlap your windows
     block-out-from "screencast" 
 }
 
-// Set the regular wallpaper on the backdrop.
-layer-rule {
-    match namespace="^noctalia-wallpaper*"
-    place-within-backdrop true
-}
+
+
 
 // WINDOW-TRANSPARENCY
 // Make inactive windows semitransparent.
