@@ -2,7 +2,9 @@
 { pkgs, hostnm, ...}:
 {
   # import
-  imports = [ ]
+  imports = [
+    ./waybar.nix
+  ]
     ++ (if hostnm == "aanri" then [ ./niri-aanri.nix ] else [])
     ++ (if hostnm == "calender" then [ ./niri-calender.nix ] else [])
     ++ (if hostnm == "flipped-shark" then [ ./niri-flipped-shark.nix ] else [])

@@ -112,7 +112,7 @@ input {
 // https://yalter.github.io/niri/Configuration:-Layout
 layout {
     // Set gaps around windows in logical pixels.
-    gaps 7
+    gaps 0
 
     // When to center a column when changing focus, options are:
     // - "never", default behavior, focusing an off-screen column will keep at the left
@@ -160,7 +160,7 @@ layout {
         // off
 
         // How many logical pixels the ring extends out from the windows.
-        width 1.2
+        width 0
 
         // Colors can be set in a variety of ways:
         // - CSS named colors: "red"
@@ -241,7 +241,7 @@ spawn-at-startup "swww-daemon"
 spawn-sh-at-startup "sleep 1 && swww img ~/pic-jar/wall-bin/halftone-ER-ranni-praying.png --transition-type fade --transition-duration 1"
 // Set the regular wallpaper on the backdrop.
 layer-rule {
-    match namespace= "^wallpaper$"
+    match namespace="^wallpaper$"
     place-within-backdrop true
 }
 
@@ -597,59 +597,4 @@ binds {
     // The quit action will show a confirmation dialog to avoid accidental exits.
     Mod+Shift+E { quit; }
     Ctrl+Alt+Delete { quit; }
-
-
-    //``````````````````````````TIPS````````````````````````````````
-    // Alternatively, there are commands to move just a single window:
-    // Mod+Shift+Ctrl+Left  { move-window-to-monitor-left; }
-    //
-    // And you can also move a whole workspace to another monitor:
-    // Mod+Shift+Ctrl+Left  { move-workspace-to-monitor-left; }
-    //
-    // Alternatively, there are commands to move just a single window:
-    // Mod+Ctrl+Page_Down { move-window-to-workspace-down; }
-    // 
-    // Alternative commands that move across workspaces when reaching
-    // the first or last window in a column.
-    // Mod+J     { focus-window-or-workspace-down; }
-    // Mod+K     { focus-window-or-workspace-up; }
-    // Mod+Ctrl+J     { move-window-down-or-to-workspace-down; }
-    // Mod+Ctrl+K     { move-window-up-or-to-workspace-up; }
-    // 
-    // Alternatively, there are commands to move just a single window:
-    // Mod+Ctrl+1 { move-window-to-workspace 1; }
-    //
-    // Switches focus between the current and the previous workspace.
-    // Mod+Tab { focus-workspace-previous; }
-    // 
-    // Powers off the monitors. To turn them back on, do any input like
-    // moving the mouse or pressing any other key.
-    // mod+shift+p { power-off-monitors; }
-    //
-    // Similarly, you can bind touchpad scroll "ticks".
-    // Touchpad scrolling is continuous, so for these binds it is split into
-    // discrete intervals.
-    // These binds are also affected by touchpad's natural-scroll, so these
-    // example binds are "inverted", since we have natural-scroll enabled for
-    // touchpads by default.
-    // Mod+TouchpadScrollDown { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.02+"; }
-    // Mod+TouchpadScrollUp   { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.02-"; }
-    //
-    // Actions to switch layouts.
-    // Note: if you uncomment these, make sure you do NOT have
-    // a matching layout switch hotkey configured in xkb options above.
-    // Having both at once on the same hotkey will break the switching,
-    // since it will switch twice upon pressing the hotkey (once by xkb, once by niri).
-    // Mod+Space       { switch-layout "next"; }
-    // Mod+Shift+Space { switch-layout "prev"; }
-    //
-    // Open/close the Overview: a zoomed-out view of workspa    // Actions to switch layouts.
-    // Note: if you uncomment these, make sure you do NOT have
-    // a matching layout switch hotkey configured in xkb options above.
-    // Having both at once on the same hotkey will break the switching,
-    // since it will switch twice upon pressing the hotkey (once by xkb, once by niri).
-    // Mod+Space       { switch-layout "next"; }
-    // Mod+Shift+Space { switch-layout "prev"; }
-    // You can also move the mouse into the top-left hot corner,
-    // or do a four-finger swipe up on a touchpad.
 }
