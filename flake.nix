@@ -17,15 +17,16 @@
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs: 
   let
-  #=====================================MAKE CHANGES HERE==============================================
-	# BEFORE YOU USE THIS CONFIG: change this to the hostName you want, the presets i made are:
-  # DEFAULT [if i dont know or anyone else]:
-  # nixos [note, swap out the hardwareconfig file with the one within the /etc/nixos/.. dir]
-  # VIRTUAL MECHINE OPTION[bios]
-  #   vmo
-  # OTHER HOSTNAMES [More will be added as i go]:
-  # 	yilyonix, 'calender', flipped-shark, aanri, tyun
-	chosenHost = "calender"; # this mainly affects the window manager sub option, making sure screen stuff works.
+    local_host_file = import .local.nix # imports the file that contains my hostname, after an install, find a way to just remove it or something./..
+    #=====================================MAKE CHANGES HERE==============================================
+    # BEFORE YOU USE THIS CONFIG: change this to the hostName you want, the presets i made are:
+    # DEFAULT [if i dont know or anyone else]:
+    # nixos [note, swap out the hardwareconfig file with the one within the /etc/nixos/.. dir]
+    # VIRTUAL MECHINE OPTION[bios]
+    #   vmo
+    # OTHER HOSTNAMES [More will be added as i go]:
+    # 	yilyonix, 'calender', flipped-shark, aanri, tyun
+    chosenHost = local_host_file.chosenHost; # this mainly affects the window manager sub option, making sure screen stuff works.
 
 
   #=============================================Outputs====================================================

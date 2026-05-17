@@ -22,8 +22,6 @@ With this config, i am wanting this to fuction kinda like a atomic desktop to wh
 
 ---
 
-
-
 ## Set Up Guide
 
 Here is where you can follow a basic guide on how to install my config.
@@ -56,14 +54,26 @@ You will need to check the boot options within `/etc/nixos/configuration.nix` (i
 
 ### iii
 
-**Make your Host Name Changes:**
-For the last step to work this needs to be changed to your picking at this section within `flake.nix`.
-*(Pick the hostname you picked for the steps before):* `tyun`, `vmo`, `cold-flip`, `calender`, `aanri` *Or others that was made for their own systems*
-```nix
-  #=====================================MAKE CHANGES HERE==============================================
-	chosenHost = "yilyonix"; # this mainly affects the window manager sub option, making sure screen stuff works.
+**Create your `local.nix`:**
+This file is gitignored and holds your machine-specific hostname so it never conflicts across machines when you (or most likely i) do a push & or pull.
+
+Make the file directly
+```bash
+echo '{ chosenHost = "HOSTNAMEPLACEHOLDER"; }' > ~/nix-config/local.nix
 ```
-> NOTE, when adding your own hostname, be aware to add the respective `hosts-jar/HOSTNAME/default.nix` to the config, or it will NOT work. *(you can just copy `hosts-jar/nixos/default.nix` to get it to work)*
+**Or**
+
+```bash
+cp ~/nix-config/local.example.nix ~/nix-config/local.nix
+```
+Then edit `local.nix` and set your hostname:
+```nix
+{
+  chosenHost = "HOSTNAMEPLACEHOLDER";
+}
+```
+> NOTE: When adding your own hostname, make sure a matching `hosts-jar/HOSTNAME/default.nix` exists, or it will NOT work. *(You can copy `hosts-jar/nixos/default.nix` as a starting point)*
+> And for systems that use newer hardware refer to what i use in hosts-jar/calender/default.nix . I made some changes that might help for some users.
 
 ### iV
 
@@ -90,6 +100,16 @@ nixos-rebuild switch --sudo --flake .#HOSTNAMEPLACEHOLDER
 > NOTE: Please change out `HOSTNAMEPLACEHOLDER` with the name of the system.
 ```bash
 sudo nixos-rebuild test --flake .#HOSTNAMEPLACEHOLDER
+```
+
+---
+
+You'll also want to add a `local.example.nix` to the repo as a template so people know what the file should look like:
+```nix
+# Copy this to local.nix and fill in your hostname
+{
+  chosenHost = "nixos";
+}
 ```
 
 ---
