@@ -104,16 +104,6 @@ sudo nixos-rebuild test --flake .#HOSTNAMEPLACEHOLDER
 
 ---
 
-You'll also want to add a `local.example.nix` to the repo as a template so people know what the file should look like:
-```nix
-# Copy this to local.nix and fill in your hostname
-{
-  chosenHost = "nixos";
-}
-```
-
----
-
 
 
 ## Post install and Switch
