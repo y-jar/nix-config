@@ -1,7 +1,7 @@
 { pkgs, ...}:
 {
     services.displayManager.sddm = {
-        enable = true;
+        enable = false;
         wayland.enable = true;
         theme = "catppuccin-mocha-mauve"; # comes from pkgs.catppuccin-sddm
         # Options: catppuccin-latte / catppuccin-frappe / catppuccin-macchiato / catppuccin-mocha
@@ -17,11 +17,13 @@
     };
 
     # copy wallpick.webp into the built system
-    environment.etc."nixos-wallpaper/wallpick.webp" = {
-        source = ./wallpick.webp; # MY WALLPAPR :P
+    # environment.etc."nixos-wallpaper/wallpick.webp" = {
+    #     source = ./wallpick.webp; # MY WALLPAPR :P
+    # };
+
+    # Gnome's loggin
+    services.displayManager.gdm = {
+      enable = true;
+      wayland = true;
     };
-    # services.displayManager.gdm = {
-    #   enable = true;
-    #   wayland.enable = true;
-    # }
 }
