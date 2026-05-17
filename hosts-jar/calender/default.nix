@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 {
   # imports other modules like:
   # -the hardware configuration for support
@@ -13,4 +13,10 @@
     ../../modules-jar/sys-bin/default.nix
   ];
   # add Bootloader options here[from /etc/nixos/configuration.nix]
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+  
+  boot.initrd.kernelModules = [ "amdgpu" ];
+  # for the latest kernel
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 }

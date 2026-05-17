@@ -130,6 +130,8 @@
       intel-ocl # older Intel OpenCL fallback
 
       # [amd]
+      #amdvlk # AMD's official Vulkan driver [depricated]
+      rocmPackages.clr # ROCm OpenCL for AMD
 
       # [global / fallback]
       libva-vdpau-driver # VDPAU via VA-API bridge (helps Nvidia/AMD too)

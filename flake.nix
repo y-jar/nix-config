@@ -25,7 +25,7 @@
   #   vmo
   # OTHER HOSTNAMES [More will be added as i go]:
   # 	yilyonix, 'calender', flipped-shark, aanri, tyun
-	chosenHost = "flipped-shark"; # this mainly affects the window manager sub option, making sure screen stuff works.
+	chosenHost = "calender"; # this mainly affects the window manager sub option, making sure screen stuff works.
 
 
   #=============================================Outputs====================================================
