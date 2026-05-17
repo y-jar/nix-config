@@ -25,9 +25,17 @@
   home.username = "jar";
   home.homeDirectory = "/home/jar";
   home.stateVersion = "25.11";
-
+  
+  #===============================FONTS&THEME======================================
   # Font enable
   fonts.fontconfig.enable = true;
+  gtk = {
+    enable = false;
+    iconTheme = {
+      name = "Papirus-Dark";
+      package = pkgs.papirus-icon-theme;
+    };
+  };
 
   # ==========================User Packages=============================
   # My PACKAGES, How epic, just be sure to add pkgs. before each package name <3
@@ -44,8 +52,9 @@
     ranger # tui file explorer
     xfce.thunar # Xfce file manager
 
-    # [Appstores]
+    # [app related]
     bazaar # flatpack app store [software center is in display.nix]
+    gearlever # manages app images
 		
     # [Folding]
     # -[Text Editors]
@@ -61,24 +70,39 @@
     converseen # Batch image converter and resizer
     fontforge # Font editor
     coulr # Color box to help developers and designers
-    
+    # [Other Folds]
+    mediawriter # Tool to write images files to portable media
     # [audio]
     easyeffects # audio mixer
     qpwgraph # Qt graph manager for PipeWire, similar to QjackCtls
+    pavucontrol # audio control
+    
 
     # [Entertainment]
     # -[Gaming]
     # stuff like! heroic, steam, prismlauncher WOW how awesome me, such a gaymer
     protonplus # manager and installer for proton versions
     # -[Media]
-    
-    mediawriter # Tool to write images files to portable media
-    mpv # for video playback
     blanket # Background noises
     quodlibet # media player
+    mpv # for video playback
+    
 
+    # [My Cursors! / Icons! / +!]
+    #[cursors]
+    bibata-cursors # clean material-style, very popular
+    bibata-cursors-translucent # Translucent Varient of the Material Based Cursor
+    catppuccin-cursors # matches catppuccin theme
+    phinger-cursors # fun colorful ones
+    #[Icons]
+    catppuccin-papirus-folders # papirus but with catppuccin colored folders
+    adwaita-icon-theme # gnome default, good fallback
+    numix-icon-theme-circle # circular icons
+
+    # [keyboard / language]
     fcitx5 # for typing in japanese?
     fcitx5-mozc # other japan language sturff
+
 
     # ====Unsorteds====
     lmstudio # for those who want to use AI
@@ -88,7 +112,7 @@
 		lazygit # for kool github viewing
 		polkit_gnome # for a weird thing for some flatpak thing
 		gh # for github login
-		pavucontrol # audio control
+		
     nwg-look  # The best tool for Wayland/Niri GTK styling if it is needed		
   ];  
 }

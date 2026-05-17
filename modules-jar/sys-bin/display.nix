@@ -3,11 +3,11 @@
 {
   # DEs
   services.desktopManager.gnome.enable = true;
-  services.desktopManager.plasma6.enable = true;
+  #services.desktopManager.plasma6.enable = true;
   # WMs
   programs.niri.enable = true;
   programs.hyprland.enable = true;
-  programs.sway.enable = true;
+  #programs.sway.enable = true;
 
   # x support
   programs.xwayland.enable = true;
@@ -19,14 +19,24 @@
     NIXOS_OZONE_WL = "1"; # nudges Electron/Chrome apps to use Wayland
   };
 
-	# XDG portal — KDE's handles Plasma; gtk fallback covers other sessions
+	# XDG portal: set new defaults for my DEs and WMs
   xdg.portal = {
     enable = true;
     extraPortals = [
       pkgs.kdePackages.xdg-desktop-portal-kde
       pkgs.xdg-desktop-portal-gtk
+      pkgs.xdg-desktop-portal-gnome
+      pkgs.xdg-desktop-portal-wlr
     ];
-    config.common.default = [ "kde" "gtk" ];
+    # Per session portals... should be checking this stuff
+    config = {
+      gnome.default = [ "gnome" "gtk" ];
+      #plasma.default = [ "kde" ];
+      niri.default = [ "wlr" "gtk" ];
+      hyprland.default = [ "wlr" "gtk" ];
+      #sway.default = [ "wlr" "gtk" ];
+      common.default = [ "gtk" ];
+    };
   };
 
 	#===============================WM / DE Dependant apps=====================================
@@ -84,6 +94,7 @@
 		alacritty
 		wl-clipboard # good cliboard manager
 		xdg-utils   # opening links and such
+    xdg-desktop-portal-wlr # xdg-desktop-portal backend for wlroots [trying to fix discord not being able to stream]
 
     # [hyprland companion apps]
     hyprshot # Utility to easily take screenshots in Hyprland using your mouse

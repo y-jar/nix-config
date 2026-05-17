@@ -34,6 +34,7 @@
     vim # text editor
     neovim # text editor
     yazi # file manager
+    comma # run bianaries
 
     # [apps]
     kitty # incase foot doesnt work for root

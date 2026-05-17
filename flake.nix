@@ -17,7 +17,7 @@
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs: 
   let
-    local_host_file = import .local.nix # imports the file that contains my hostname, after an install, find a way to just remove it or something./..
+    local = import ./local.nix; # imports the file that contains my hostname, after an install, find a way to just remove it or something./..
     #=====================================MAKE CHANGES HERE==============================================
     # BEFORE YOU USE THIS CONFIG: change this to the hostName you want, the presets i made are:
     # DEFAULT [if i dont know or anyone else]:
@@ -26,7 +26,7 @@
     #   vmo
     # OTHER HOSTNAMES [More will be added as i go]:
     # 	yilyonix, 'calender', flipped-shark, aanri, tyun
-    chosenHost = local_host_file.chosenHost; # this mainly affects the window manager sub option, making sure screen stuff works.
+    chosenHost = local.chosenHost; # this mainly affects the window manager sub option, making sure screen stuff works.
 
 
   #=============================================Outputs====================================================
