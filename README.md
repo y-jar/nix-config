@@ -61,16 +61,9 @@ Make the file directly
 ```bash
 echo '{ chosenHost = "HOSTNAMEPLACEHOLDER"; }' > ~/nix-config/local.nix
 ```
-**Or**
-
+Then protect it so git never accidentally commits or overwrites your local changes:
 ```bash
-cp ~/nix-config/local.example.nix ~/nix-config/local.nix
-```
-Then edit `local.nix` and set your hostname:
-```nix
-{
-  chosenHost = "HOSTNAMEPLACEHOLDER";
-}
+git update-index --skip-worktree ~/nix-config/local.nix
 ```
 > NOTE: When adding your own hostname, make sure a matching `hosts-jar/HOSTNAME/default.nix` exists, or it will NOT work. *(You can copy `hosts-jar/nixos/default.nix` as a starting point)*
 > And for systems that use newer hardware refer to what i use in hosts-jar/calender/default.nix . I made some changes that might help for some users.
