@@ -13,7 +13,7 @@
     ./configuration.nix # loads main contents of the system
     ./nix-settings.nix # Loads settings for nix ie. buffer size for downloads
     ./networking.nix # firewall and app specific netoworking fixes
-    ./audio.nix # [WIP] handles audio
+    ./audio.nix # [WIP] handles audio [also refers to other audio files]
     ./display.nix # Sets up DE / WMs + other related stuff
     ./login-manager.nix # Sets up and enables a login screen like sddm
     #./virtualization.nix # [WIP] Enables the use of VMs

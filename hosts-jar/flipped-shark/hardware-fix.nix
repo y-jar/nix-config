@@ -25,7 +25,7 @@ in
 
   # enable the IIO Sensor Proxy service [handles iio-sensor-proxy automatically]
   hardware.sensor.iio.enable = true;
-
+  
   # make sure linux-firmware is available
   hardware.enableAllFirmware = true;
 }

@@ -1,4 +1,4 @@
-# NixOS Jar *(YEN26.5.2)*
+# NixOS Jar *(YEN26.5.28)*
 By Park(ME)!
 
 ---
@@ -127,7 +127,7 @@ Depending on what, this can be done in two ways: `flatpak app updates`, or `syst
   - > You would run this after a period of time, or making a change to the config.
   - Run `cd ~/nix-config` then run `git add .` so the command below can work `:)`
   - Run `nru` (refer to `./scripts-bin/nru.sh` for how to do it manually)
-- 
+
 
 ---
 
@@ -140,11 +140,9 @@ This is where i put my plans and everything else. <3
 ### Dev Notes & Goals
 
 **Current State:**
-- Has a basic niri config, with working keybinds, minus wallpaper management
-- Flatpack management for apps like local send and any other app one would want
-- Obs with v412 thingy
-- zsh
-- a mini config file for users who just want to run a single file config
+- basic Configs for DEs and WMs
+- Set of Apps and settings for Background apps
+- 
 
 **Goals:**
 - adding streamlined updating or something, rightnow updating is a bit spooky [ DONE ]
@@ -154,24 +152,40 @@ This is where i put my plans and everything else. <3
   - `tyun`, 
   - `vmo`, 
   - `flipped-shark` [In Progress]
-  - `calender`, 
+  - `calender`, [In Progress]
   - `aanri`.
 - a set up guide `[DONE]`.
 - **`flipped-shark` Goals**
-  - Battery not being capped at 80. [ TAKING A BREAK FROM IT ]
-  - increase battery life by 1hr. [ WIP ]
-  - fix the missing 10 sensors for `flipped-shark` so the gyro and some other fucntions can work. [ DONE ]
-- add gnome as a option.  [ DONE ]
-- **Niri Goals**
-  - Better `waybar` or use a prebuilt `qs` [ WIP ]
-  - fix rendering issues for `steam` showing up as black.. i have no clue why it's like this 
+  - Battery not being capped at 80. `[ TAKING A BREAK FROM IT ]`
+  - increase battery life by 1hr. `[ WIP ]`
+  - fix the missing 10 sensors for `flipped-shark` so the gyro and some other fucntions can work. `[ DONE ]`
+- add gnome as a option.  `[ DONE ]`
+- **Niri Goals** `[ RELAXED - ONGOING ]`
+  - Better `waybar` or use a prebuilt `qs` `[ WIP ]`
+  - fix rendering issues for `steam` showing up as black.. i have no clue why it's like this.
+- **Hyprland Goals** `[ NOT IN PROGRESS ]`
+  - Colors or something... 
+  - make it slay
+  - make custom icons for backdrop
+- **Sway Goals** `[ NOT IN PROGRESS ]`
+  - mm keybinds
+  - fuzzel, and other good apps.
+  - Theming
+- **Audio**
+  - BIG KOOL `[ DONE ]`
 
 ---
 
 
 
 ## Snippets for Later
-Nix
+In case i go insane and forget things...
+
+### Game tweaks
+
+**steam**:
+- for anti-cheat preventing a game to launch but it does support linux, use this: `PROTON_EAC_RUNTIME=1 %command%`
+- for game audio issues..: `PULSE_SINK=game_audio %command%`
 
 # To add a default.nix in a new module folder:
 ```nix

@@ -35,6 +35,10 @@
       name = "Papirus-Dark";
       package = pkgs.papirus-icon-theme;
     };
+    theme = {
+      name = "adw-gtk3";
+      package = pkgs.adw-gtk3;
+    };
   };
 
   # ==========================User Packages=============================
@@ -62,6 +66,10 @@
     zed-editor # good text editor
     qownnotes # markdown app editor
     libreoffice # documents writer
+    onlyoffice-desktopeditors # Office suite that combines text, spreadsheet and presentation editors allowing to create, view and edit local documents
+    buffer # Minimal editing space for all those things that don't need keeping
+
+
     # [graphics]
     obs-studio # good video software
     kdePackages.kdenlive # video editor
@@ -70,18 +78,22 @@
     converseen # Batch image converter and resizer
     fontforge # Font editor
     coulr # Color box to help developers and designers
+    upscaler # Upscale and enhance images
+    upscayl # Free and Open Source AI Image Upscaler
     # [Other Folds]
     mediawriter # Tool to write images files to portable media
     # [audio]
     easyeffects # audio mixer
     qpwgraph # Qt graph manager for PipeWire, similar to QjackCtls
-    pavucontrol # audio control
     
 
     # [Entertainment]
     # -[Gaming]
     # stuff like! heroic, steam, prismlauncher WOW how awesome me, such a gaymer
     protonplus # manager and installer for proton versions
+    protontricks # adds tricks for proton for additional preformance [right now it doesnt work...]
+    steam # gaming app
+    #prismlauncher
     # -[Media]
     blanket # Background noises
     quodlibet # media player
@@ -89,6 +101,7 @@
     
 
     # [My Cursors! / Icons! / +!]
+    nwg-look  # The best tool for Wayland/Niri GTK styling if it is needed		
     #[cursors]
     bibata-cursors # clean material-style, very popular
     bibata-cursors-translucent # Translucent Varient of the Material Based Cursor
@@ -112,7 +125,6 @@
 		lazygit # for kool github viewing
 		polkit_gnome # for a weird thing for some flatpak thing
 		gh # for github login
-		
-    nwg-look  # The best tool for Wayland/Niri GTK styling if it is needed		
+    discord # game social app [Will be depricated!]
   ];  
 }

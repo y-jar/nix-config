@@ -11,9 +11,6 @@
   # Portal is handled by display.nix based on desktop choice
   xdg.portal.enable = true; # just ensure it's on, display.nix configures the rest
 
-  boot.supportedFilesystems = [ "fuse" ];
-  environment.systemPackages = [ pkgs.fuse3 pkgs.polkit_gnome ];
-
   # Auto-add Flathub (The "App Store" source, VERY NICE
   # 	Kus i be forgetting it everytime)
   # This runs a script on activation so you don't have to run the 

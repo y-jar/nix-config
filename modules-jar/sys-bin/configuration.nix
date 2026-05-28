@@ -35,11 +35,13 @@
     neovim # text editor
     yazi # file manager
     comma # run bianaries
+    nh # nix helper
 
     # [apps]
     kitty # incase foot doesnt work for root
     keepassxc # [passwordmgr]
     waypaper # use for setting wallpapers for WMs
+    pavucontrol
 
     #  [theme/optional]
     catppuccin-sddm
@@ -57,18 +59,18 @@
     fastfetch
     btop
     fzf # fuzzy finder
-    psmisc        # Provides killall
-    pciutils      # Provides lspci
-    usbutils      # Provides lsusb
-    htop          # Better than top
+    psmisc # Provides killall
+    pciutils # Provides lspci
+    usbutils # Provides lsusb
+    htop # Better than top
     killall
-    tldr
     fd # 
     rsync # file copying
-    tmux # terminal multiplexer
+    tmux # terminal multiplexer [fuck.. i never used this]
     wine # we all know what this is
     ntfs3g # for my woes with ntfs
     subversion # Version control system intended to be a compelling replacement for CVS in the open source community
+    rar # Utility for RAR archives
 
     # [gaming]
     mangohud # for huds
@@ -118,7 +120,7 @@
   services.udev.packages = [ pkgs.game-devices-udev-rules ];
   # It installs the 'udev rules' so controllers are recognized
   hardware.steam-hardware.enable = true;
-  # graphics + 32bit support for Steam
+  # graphics + 32bit support for Steam[TM]
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
@@ -150,7 +152,7 @@
       gst_all_1.gst-plugins-good
       gst_all_1.gst-plugins-bad
       gst_all_1.gst-plugins-ugly
-      gst_all_1.gst-libav      # ffmpeg bridge for gstreamer
+      gst_all_1.gst-libav # ffmpeg bridge for gstreamer
     ];
     # 32 bit libs for:
     # wine, proton, and any other compatability layer the reqs graphics 
@@ -166,10 +168,7 @@
 
   # Improve performance by allowing games to request CPU priority
   security.rtkit.enable = true;
-
-
   # supported file systems for them dum dum ntfs
-
   boot.supportedFilesystems = [ 
     "fuse"
     "ntfs"
@@ -177,8 +176,6 @@
 
 
   # =====================================Other=============================================
-  
-
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 

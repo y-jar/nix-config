@@ -4,6 +4,7 @@
   # DEs
   services.desktopManager.gnome.enable = true;
   #services.desktopManager.plasma6.enable = true;
+  
   # WMs
   programs.niri.enable = true;
   programs.hyprland.enable = true;
@@ -23,12 +24,12 @@
   xdg.portal = {
     enable = true;
     extraPortals = [
-      pkgs.kdePackages.xdg-desktop-portal-kde
+      # pkgs.kdePackages.xdg-desktop-portal-kde
       pkgs.xdg-desktop-portal-gtk
       pkgs.xdg-desktop-portal-gnome
       pkgs.xdg-desktop-portal-wlr
     ];
-    # Per session portals... should be checking this stuff
+    # Per session portals... should be checking this stuff?
     config = {
       gnome.default = [ "gnome" "gtk" ];
       #plasma.default = [ "kde" ];
@@ -40,7 +41,6 @@
   };
 
 	#===============================WM / DE Dependant apps=====================================
-	# Plasma companion apps
   environment.systemPackages = with pkgs; [
 		# [kde companion apps]
     kdePackages.plasma-systemmonitor
@@ -73,12 +73,17 @@
     gnome-usage
     gnome-boxes # virtual mechines
     gnome-common
-    gnome-tweaks
+    gnome-tweaks # small things like font and scailing issues
     gnome-desktop # Library with common API for various GNOME modules
     gnome-nettool # Collection of networking tools
     gnome-firmware # might not need, but who knows
     gnome-extension-manager
     gnome-disk-utility # for disk util
+    # [gnome-Extensions]
+    # gnomeExtensions.places-status-indicator # little thing for the top left that holds the jumper for the favorited dirs
+    # gnomeExtensions.blur-my-shell # Adds a blur look to different parts of the GNOME Shell, including the top panel, dash and overview.
+    # gnomeExtensions.vitals # A glimpse into your computer's temperature, voltage, fan speed, memory usage, processor load, system resources, network speed and storage stats. This is a one stop shop to monitor all of your vital sensors. Uses asynchronous polling to provide a smooth user experience. Feature requests or bugs? Please use GitHub.
+
 
 
 		# [niri reqs]
