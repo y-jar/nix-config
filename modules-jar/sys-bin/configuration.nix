@@ -41,7 +41,6 @@
     kitty # incase foot doesnt work for root
     keepassxc # [passwordmgr]
     waypaper # use for setting wallpapers for WMs
-    pavucontrol
 
     #  [theme/optional]
     catppuccin-sddm

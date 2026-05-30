@@ -45,30 +45,25 @@
   # My PACKAGES, How epic, just be sure to add pkgs. before each package name <3
   # Note, check home-jar/app-bin/ for apps, there might be some that arnt showing up here
   home.packages = with pkgs; [
-		# ====APPs====
-
-    # [Browsers]
+    # [Base]
 		firefox
     librewolf # prefered browser
+    bazaar # flatpack app store [software center is in display.nix]
+    gearlever # manages app images
 
     # [File Explorers]
 		nautilus # gnome' file manager
     ranger # tui file explorer
-    xfce.thunar # Xfce file manager
-
-    # [app related]
-    bazaar # flatpack app store [software center is in display.nix]
-    gearlever # manages app images
+    xfce.thunar # Xfce file manager    
 		
-    # [Folding]
-    # -[Text Editors]
+    # [Text Editors]
     vscodium # editor
     zed-editor # good text editor
+    helix # Post-modern modal text editor
     qownnotes # markdown app editor
     libreoffice # documents writer
     onlyoffice-desktopeditors # Office suite that combines text, spreadsheet and presentation editors allowing to create, view and edit local documents
     buffer # Minimal editing space for all those things that don't need keeping
-
 
     # [graphics]
     obs-studio # good video software
@@ -80,11 +75,14 @@
     coulr # Color box to help developers and designers
     upscaler # Upscale and enhance images
     upscayl # Free and Open Source AI Image Upscaler
+
     # [Other Folds]
     mediawriter # Tool to write images files to portable media
-    # [audio]
+
+    # [management]
     easyeffects # audio mixer
     qpwgraph # Qt graph manager for PipeWire, similar to QjackCtls
+    pavucontrol # PulseAudio Volume Control
     
 
     # [Entertainment]
