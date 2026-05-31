@@ -143,7 +143,7 @@ This is where i put my plans and everything else. <3
   - `yilyonix` [In Progress]
   - `tyun`, 
   - `vmo`, 
-  - `flipped-shark` [In Progress]
+  - `flipped-shark` [In Progress] 
   - `calender`, [In Progress]
   - `aanri`.
 - a set up guide `[DONE]`.
