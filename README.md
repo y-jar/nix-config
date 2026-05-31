@@ -1,12 +1,6 @@
 # NixOS Jar *(YEN26.5.28)*
 > By Park(ME)!
 
----
-
-
-
-### Intro
-
 Hello! This is my NixOS config! The reason i started doing this was i wanted to learn more about it after finding out about some of it's core design princibles (i fuck with it alot). And after dipping my toes in it i found that i adore how it works, and similar to my neovim config, my goal is to make it my personal platform and hopefully not have to configure it often afterwards (which i have reached for Neovim). 
 
 > NOTE For Viewers:
@@ -174,8 +168,6 @@ This is where i put my plans and everything else. <3
 
 ---
 
-
-
 ## Snippets for Later
 In case i go insane and forget things...
 
@@ -185,7 +177,7 @@ In case i go insane and forget things...
 - for anti-cheat preventing a game to launch but it does support linux, use this: `PROTON_EAC_RUNTIME=1 %command%`
 - for game audio issues..: `PULSE_SINK=game_audio %command%`
 
-# To add a default.nix in a new module folder:
+### Nix forgetfulnes
 ```nix
 { nameofmoduleorpkgtopass, ... }: {
   imports = [
@@ -195,11 +187,10 @@ In case i go insane and forget things...
 }
 ```
 
-
-to update the system AFTER Switching
-
-> NOTE: Please reboot before updating `:)`
-
-```bash/zsh
-nru
+**Commands To remember for basic stuff..**
+```bash
+nrs # swap into new config
+nrt # test into new config
+nru # update, switch, and clean combo
 ```
+> NOTE: Please reboot before updating `:)`

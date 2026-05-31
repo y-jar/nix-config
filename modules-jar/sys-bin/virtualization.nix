@@ -8,4 +8,14 @@
 
   # spice for better guest performance [copy-paste, resizing]
   virtualization.spiceUSBRedirection.enable = true;
+
+  # enable libvirtd
+  virtualisation.libvirtd = {
+      enable = true;
+      qemu = {
+        package = pkgs.qemu_kvm;
+        runAsRoot = true;
+        swtpm.enable = true;
+      };
+  };
 }

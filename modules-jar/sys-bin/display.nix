@@ -9,12 +9,7 @@
   programs.niri.enable = true;
   programs.hyprland.enable = true;
   #programs.sway.enable = true;
-
-  # SHELLs
-  services.wayle = {
-    enable = true;
-  };
-
+  
   # x support
   programs.xwayland.enable = true;
 

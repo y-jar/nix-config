@@ -16,7 +16,7 @@
   };
 
   # hardware 32-bit audio support is enabled globally
-  hardware.pulseaudio = {
+  services.pulseaudio = {
     enable = false;
     support32Bit = true;
   };
