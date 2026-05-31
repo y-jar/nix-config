@@ -14,7 +14,7 @@
   # basic stats
   home.username = "jar";
   home.homeDirectory = "/home/jar";
-  home.stateVersion = "26.05";
+  home.stateVersion = "25.11";
   
   #===============================FONTS&THEME======================================
   # Font enable

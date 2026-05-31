@@ -25,6 +25,6 @@
     # Gnome's GDM
     services.displayManager.gdm = {
       enable = true;
-      wayland = true;
+      # wayland = true;
     };
 }
