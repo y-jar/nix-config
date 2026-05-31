@@ -19,10 +19,7 @@ input {
         // Enable numlock on startup, omitting this setting disables it.
         numlock
     }
-
     //for tablet support..
-
-
     // Next sections include libinput settings.
     // Omitting settings disables them, or leaves them at their default values.
     // All commented-out settings here are examples, not defaults.
@@ -63,14 +60,9 @@ input {
         // Map your drawing tablet to the main center monitor
         map-to-output "DP-2" // just pick which monitor for it.
     }
-
-    // Uncomment this to make the mouse warp to the center of newly focused windows.
-    // warp-mouse-to-focus
-
-    // Focus windows and outputs automatically when moving the mouse into them.
-    // Setting max-scroll-amount="0%" makes it work only on windows already fully on screen.
-    // focus-follows-mouse max-scroll-amount="0%"
 }
+
+
 
 //`````````````````````````````````SCREENS```````````````````````````````````````````
 // You can configure outputs by their name, which you can find
@@ -80,19 +72,19 @@ input {
 // https://yalter.github.io/niri/Configuration:-Outputs
 // Remember to uncomment the node by removing "/-"!
 // Main Center Monitor
-/-output "DP-3" {
+output "DP-3" {
     mode "2560x1440"
     position x=0 y=0
 }
 
 // Side Monitor (Right)
-/-output "HDMI-A-1" {
+output "HDMI-A-1" {
     mode "1920x1080"
     position x=2560 y=10
 }
 
 // Bottom Monitor (Below DP-3)
-/-output "DP-2" {
+output "DP-2" {
     mode "1920x1080"
     scale 1.25
     position x=0 y=1440
@@ -202,12 +194,6 @@ layout {
         // You can also change the shadow color and opacity.
         color "#0007"
     }
-
-    // Struts shrink the area occupied by windows, similarly to layer-shell panels.
-    // You can think of them as a kind of outer gaps. They are set in logical pixels.
-    // Left and right struts will cause the next window to the side to always be visible.
-    // Top and bottom struts will simply add outer gaps in addition to the area occupied by
-    // layer-shell panels and regular gaps.
     struts {
         // left 64
         // right 64
@@ -224,7 +210,7 @@ layout {
 // this starts the shell for noctalia-shell using qs as a command. kus it aint a pkg, duh
 //spawn-at-startup "qs" "-c" "noctalia-shell"
 spawn-at-startup "xwayland-satellite"
-spawn-at-startup "waybar"
+spawn-at-startup "wayle"
 //
 // WALLPAPER
 //
@@ -233,7 +219,7 @@ spawn-at-startup "swww-daemon"
 spawn-sh-at-startup "sleep 1 && swww img ~/pic-jar/wall-bin/halftone-ER-ranni-praying.png --transition-type fade --transition-duration 1"
 // Set the regular wallpaper on the backdrop.
 layer-rule {
-    match namespace= "^wallpaper$"
+    match namespace="^wallpaper$"
     place-within-backdrop true
 }
 
@@ -357,14 +343,15 @@ binds {
     // TERMINAL
     Mod+Return hotkey-overlay-title="[E]nter a Terminal" { spawn "foot"; }
     // LAUNCHER
-    // Mod+D hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel";}
-    Mod+D hotkey-overlay-title="[D]isplay Noctalia Launcher" { spawn "qs" "ipc" "-c" "noctalia-shell" "call" "launcher" "toggle"; }
+    Mod+D hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel";}
+    // Mod+D hotkey-overlay-title="[D]isplay Noctalia Launcher" { spawn "qs" "ipc" "-c" "noctalia-shell" "call" "launcher" "toggle"; }
     // LOCK-SCREEN
     Mod+Alt+L hotkey-overlay-title="[L]ock the Screen" { spawn "swaylock"; }
     // BROWSER
     Mod+B hotkey-overlay-title="Open [B]rowser" { spawn "flatpak" "run" "app.zen_browser.zen"; }
     // SETTINGS LAUNCHER
-    Mod+S hotkey-overlay-title="Toggle Noctalia [S]ettings" { spawn "qs" "ipc" "-c" "noctalia-shell" "call" "settings" "toggle"; }
+    // Mod+S hotkey-overlay-title="Toggle Noctalia [S]ettings" { spawn "qs" "ipc" "-c" "noctalia-shell" "call" "settings" "toggle"; }
+    Mod+S hotkey-overlay-title="Toggle Wayle [S]ettings" { spawn "wayle" "panel" "settings"; }
     // FILE-EXPLORER
     Mod+E hotkey-overlay-title="Open File [E]xplorer" { spawn "nautilus"; }
     Mod+A hotkey-overlay-title="Open [A]pp Store" { spawn "bazaar"; }

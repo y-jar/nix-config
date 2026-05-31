@@ -194,3 +194,8 @@ nrt # test into new config
 nru # update, switch, and clean combo
 ```
 > NOTE: Please reboot before updating `:)`
+
+**When new nixOS version is out**
+1. fix errors presented
+2. when updating, expect a shutdown, just restart and it should be fine
+3. after some adjustemts run a nru whilst in the new NixOS update
