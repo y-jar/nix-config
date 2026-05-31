@@ -9,7 +9,7 @@
 
     # places home manager
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.11";
+      url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -42,7 +42,9 @@
             useUserPackages = true;
             backupFileExtension = "backup"; # backups stuff if conflicting
             extraSpecialArgs = sharedArgs; # shared my args
-            users.jar = import ./modules-jar/home-jar/default.nix; # sets the home Entry
+            users = {
+              jar = import ./modules-jar/home-jar/default.nix; # sets the home Entry for jar
+            };
           };
         } # end of home manager
       ]; # end of modules

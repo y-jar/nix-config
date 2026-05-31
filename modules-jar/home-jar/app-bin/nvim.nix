@@ -12,29 +12,29 @@
 		
 		# Dependancies for my neovim config at y-jar/nvim
 		# adds to PATH, how useful..
-		extraPackages = [
-			# Core Reqs
-			pkgs.git
-			pkgs.gcc # C Shit
-			pkgs.gnumake
-			pkgs.unzip
-			pkgs.wget
-			pkgs.curl
-			pkgs.tree-sitter
+		# extraPackages = [
+		# 	# Core Reqs
+		# 	pkgs.git
+		# 	pkgs.gcc # C Shit
+		# 	pkgs.gnumake
+		# 	pkgs.unzip
+		# 	pkgs.wget
+		# 	pkgs.curl
+		# 	pkgs.tree-sitter
 
-			# Languages / runtimes
-			pkgs.nodejs_22
-			pkgs.python3
-			pkgs.python312Packages.pip
+		# 	# Languages / runtimes
+		# 	pkgs.nodejs_22
+		# 	pkgs.python3
+		# 	pkgs.python312Packages.pip
 			
-			# Telescope / Search
-			pkgs.ripgrep
-			pkgs.fd
+		# 	# Telescope / Search
+		# 	pkgs.ripgrep
+		# 	pkgs.fd
 			
-			# some lsps if not managed or something
-			pkgs.lua-language-server
-			pkgs.nil
-			pkgs.nodePackages.typescript-language-server
-		];
+		# 	# some lsps if not managed or something
+		# 	pkgs.lua-language-server
+		# 	pkgs.nil
+		# 	pkgs.nodePackages.typescript-language-server
+		# ];
 	};
 }

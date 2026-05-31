@@ -50,10 +50,12 @@
     protontricks # adds tricks for proton for additional preformance [right now it doesnt work...]
     steam # gaming app
     #prismlauncher
+
     # -[Media]
     blanket # Background noises
     quodlibet # media player
     mpv # for video playback
+    gapless # Beautiful, fast, fluent, light weight music player written in GTK4
 
     # [My Cursors! / Icons! / +!]
     nwg-look  # The best tool for Wayland/Niri GTK styling if it is needed		

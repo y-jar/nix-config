@@ -9,7 +9,7 @@
   programs.niri.enable = true;
   programs.hyprland.enable = true;
   #programs.sway.enable = true;
-  
+
   # x support
   programs.xwayland.enable = true;
 
@@ -33,7 +33,7 @@
     config = {
       gnome.default = [ "gnome" "gtk" ];
       #plasma.default = [ "kde" ];
-      niri.default = [ "wlr" "gtk" ];
+      niri.default = lib.mkForce [ "wlr" "gtk" ]; # weird... 
       hyprland.default = [ "wlr" "gtk" ];
       #sway.default = [ "wlr" "gtk" ];
       common.default = [ "gtk" ];
@@ -103,7 +103,7 @@
 
     # [hyprland companion apps]
     hyprshot # Utility to easily take screenshots in Hyprland using your mouse
-    hyprlandPlugins.hyprscrolling # Hyprland scrolling layout plugin
+    # hyprlandPlugins.hyprscrolling # Hyprland scrolling layout plugin
     hyprlauncher # A multipurpose and versatile launcher / picker for Hyprland
     hyprlock # Hyprland's GPU-accelerated screen locking utility
     hyprsunset # Application to enable a blue-light filter on Hyprland
