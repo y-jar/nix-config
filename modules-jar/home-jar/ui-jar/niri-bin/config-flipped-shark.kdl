@@ -225,27 +225,26 @@ layout {
 }
 
 
-//```````````````````````````````````Startups + SHELL(option)```````````````````````````````````````
+// =================================STARTUP
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
-// this starts the shell for noctalia-shell using qs as a command. kus it aint a pkg, duh
-//spawn-at-startup "qs" "-c" "noctalia-shell"
-spawn-at-startup "xwayland-satellite"
-spawn-at-startup "waybar"
 
-//
-// WALLPAPER
-//
+// this starts the shell for noctalia-shell using qs as a command. kus it aint a pkg, duh
+spawn-at-startup "noctalia-shell"
+// spawn-at-startup "qs" "-c" "noctalia-shell"
+spawn-at-startup "xwayland-satellite"
+// spawn-at-startup "wayle"
+
+
+// =================================WALL
 spawn-at-startup "swww-daemon"
 // SET wall
-spawn-sh-at-startup "sleep 1 && swww img ~/pic-jar/wall-bin/halftone-ER-ranni-praying.png --transition-type fade --transition-duration 1"
-// Set the regular wallpaper on the backdrop.
-layer-rule {
-    match namespace="^wallpaper$"
-    place-within-backdrop true
-}
+// spawn-sh-at-startup "sleep 1 && swww img ~/pic-jar/wall-bin/halftone-ER-ranni-praying.png --transition-type fade --transition-duration 1"
 
 
+
+
+// ===============================MISC
 hotkey-overlay {
     // Uncomment this line to disable the "Important Hotkeys" pop-up at startup.
     skip-at-startup
@@ -281,9 +280,10 @@ cursor {
     	xcursor-size 48
 }
 
-// ``````````````````````````````````````````````````````````````````````
-// ````````````````````````````Window rules``````````````````````````````
-// ``````````````````````````````````````````````````````````````````````
+
+
+
+// ===========================RULES===============================
 // Window rules let you adjust behavior for individual windows.
 // Find more information on the wiki:
 // https://yalter.github.io/niri/Configuration:-Window-Rules
@@ -350,6 +350,20 @@ window-rule {
     default-floating-position x=10 y=10 relative-to="bottom-right"
 }
 
+// Set the regular wallpaper on the backdrop.
+/-layer-rule {
+    match namespace="^wallpaper$"
+    place-within-backdrop true
+}
+layer-rule {
+  match namespace="^noctalia-backdrop"
+  place-within-backdrop true
+}
+layer-rule {
+  match namespace="^noctalia-overview*"
+  place-within-backdrop true
+}
+
 
 // ``````````````````````````````````````````````````````````````````````````````````````
 // ````````````````````````````````````````The bindings````````````````````````````````````
@@ -362,15 +376,17 @@ binds {
     // TERMINAL
     Mod+Return hotkey-overlay-title="[E]nter a Terminal" { spawn "foot"; }
     // LAUNCHER
-    Mod+D hotkey-overlay-title="[D]isplay Launcher" { spawn "fuzzel";}
-    //Mod+D hotkey-overlay-title="[D]isplay Launcher" { spawn "qs" "ipc" "-c" "noctalia-shell" "call" "launcher" "toggle"; }
-    //Mod+D hotkey-overlay-title="[D]isplay Launcher" { spawn "anyrun";}
+    Mod+Space hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel";}
+    // Mod+D hotkey-overlay-title="[D]isplay Noctalia Launcher" { spawn "qs" "ipc" "-c" "noctalia-shell" "call" "launcher" "toggle"; }
+    // Mod+D hotkey-overlay-title="[D]isplay Noctalia Launcher" { spawn-sh "noctalia msg panel-toggle launcher"; }
+    Mod+D hotkey-overlay-title="[D]isplay Noctalia Launcher" { spawn-sh "noctalia-shell ipc call launcher toggle "; }
     // LOCK-SCREEN
     Mod+Alt+L hotkey-overlay-title="[L]ock the Screen" { spawn "swaylock"; }
     // BROWSER
-    Mod+B hotkey-overlay-title="Open [B]rowser" { spawn "flatpak" "run" "app.zen_browser.zen"; }
+    Mod+B hotkey-overlay-title="Open [B]rowser" { spawn "librewolf"; }
     // SETTINGS LAUNCHER
-    //Mod+S hotkey-overlay-title="Toggle Noctalia [S]ettings" { spawn "qs" "ipc" "-c" "noctalia-shell" "call" "settings" "toggle"; }
+    Mod+S hotkey-overlay-title="Toggle Noctalia [S]ettings" { spawn "qs" "ipc" "-c" "noctalia-shell" "call" "settings" "toggle"; }
+    // Mod+S hotkey-overlay-title="Toggle Wayle [S]ettings" { spawn "wayle" "panel" "settings"; }
     // FILE-EXPLORER
     Mod+E hotkey-overlay-title="Open File [E]xplorer" { spawn "nautilus"; }
     Mod+A hotkey-overlay-title="Open [A]pp Store" { spawn "bazaar"; }
