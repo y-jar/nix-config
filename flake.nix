@@ -10,6 +10,12 @@
     # places home manager
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";
+      inputs.nixpkgs.follows = "nixpkgs"; # locks version to the nixpkgs to reduce duplicate data
+    };
+
+    # noctalia @ https://docs.noctalia.dev/v4/getting-started/nixos/
+    noctalia = {
+      url = "github:noctalia-dev/noctalia-shell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -26,8 +32,7 @@
     nixosConfigurations.${chosenHost} = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux"; # not needed but added (thx tony uses nix btw)
       specialArgs = sharedArgs; # arguments to pass to modules that need them. the `...` in {}:
-
-      # 
+      # the placement
       modules = [
         # The system entry, uses the picked host for the dir name
         # WARNING READ BEFORE LEAVING: Will give an error if hostname doesnt have a default.nix within it's own hosts-jar directory

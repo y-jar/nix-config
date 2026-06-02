@@ -13,7 +13,7 @@
     # [File Explorers]
 		nautilus # gnome' file manager
     ranger # tui file explorer
-    xfce.thunar # Xfce file manager    
+    thunar # Xfce file manager    
 		
     # [Text Editors]
     vscodium # editor
@@ -58,7 +58,7 @@
     gapless # Beautiful, fast, fluent, light weight music player written in GTK4
 
     # [My Cursors! / Icons! / +!]
-    nwg-look  # The best tool for Wayland/Niri GTK styling if it is needed		
+    nwg-look  # The best tool for Wayland/Niri GTK styling if it is needed
     #[cursors]
     bibata-cursors # clean material-style, very popular
     bibata-cursors-translucent # Translucent Varient of the Material Based Cursor
@@ -73,6 +73,9 @@
     fcitx5 # for typing in japanese?
     fcitx5-mozc # other japan language sturff
 
+    # [UI related]
+    noctalia-shell # Sleek and minimal desktop shell thoughtfully crafted for Wayland, built with Quickshell
+    quickshell # Flexbile QtQuick based desktop shell toolkit
 
     # ====Unsorteds====
     lmstudio # for those who want to use AI

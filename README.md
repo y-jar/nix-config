@@ -153,8 +153,9 @@ This is where i put my plans and everything else. <3
   - fix the missing 10 sensors for `flipped-shark` so the gyro and some other fucntions can work. `[ DONE ]`
 - add gnome as a option.  `[ DONE ]`
 - **Niri Goals** `[ RELAXED - ONGOING ]`
-  - Better `waybar` or use a prebuilt `qs` `[ WIP ]`
-  - fix rendering issues for `steam` showing up as black.. i have no clue why it's like this.
+  - Better `waybar` or use a prebuilt `qs` `[ DONE ]`
+  - fix rendering issues for `steam` showing up as black.. i have no clue why it's like this. [ WIP ]
+  - update to latest noctalia `[ WAITING ]`
 - **Hyprland Goals** `[ NOT IN PROGRESS ]`
   - Colors or something... 
   - make it slay

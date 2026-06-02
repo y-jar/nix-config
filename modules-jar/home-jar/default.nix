@@ -20,5 +20,4 @@
   #===============================FONTS&THEME======================================
   # Font enable
   fonts.fontconfig.enable = true;
-  
 }
