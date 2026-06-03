@@ -1,4 +1,4 @@
-<p style="color:#4f587e">NixOS Jar (YEN26.5.28)</p>
+<h1 style="color:#4f587e">NixOS Jar (YEN26.5.28)</h1>
 <ins><small><i>By Park - (ME)!</i></small></ins>
 
 <br>
