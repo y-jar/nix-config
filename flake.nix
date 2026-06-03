@@ -48,12 +48,11 @@
             backupFileExtension = "backup"; # backups stuff if conflicting
             extraSpecialArgs = sharedArgs; # shared my args
             users = {
-              jar = import ./modules-jar/home-jar/default.nix; # sets the home Entry for jar
+              jar = import ./modules-jar/home-jar/home-jar.nix; # sets the home Entry for jar
             };
           };
         } # end of home manager
       ]; # end of modules
     }; # end of nixosConfigurations
-  }; # end of output `in`
+  }; # end of let block
 } # end of flake module
-

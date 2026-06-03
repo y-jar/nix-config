@@ -1,7 +1,9 @@
-# NixOS Jar *(YEN26.5.28)*
-> By Park(ME)!
+<p style="color:#4f587e">NixOS Jar (YEN26.5.28)</p>
+<ins><small><i>By Park - (ME)!</i></small></ins>
 
-Hello! This is my NixOS config! The reason i started doing this was i wanted to learn more about it after finding out about some of it's core design princibles (i fuck with it alot). And after dipping my toes in it i found that i adore how it works, and similar to my neovim config, my goal is to make it my personal platform and hopefully not have to configure it often afterwards (which i have reached for Neovim). 
+<br>
+
+<p align="center">Hello! This is my NixOS config! The reason i started doing this was i wanted to learn more about it after finding out about some of it's core design princibles (i fuck with it alot). And after dipping my toes in it i found that i adore how it works, and similar to my neovim config, my goal is to make it my personal platform and hopefully not have to configure it often afterwards (which i have reached for Neovim). </p>
 
 > NOTE For Viewers:
 > I do not follow standared methods when it comes to learning and developing, so when you see alot 

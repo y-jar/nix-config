@@ -3,28 +3,12 @@
 
 {
   # =======================================NIXOS=================================================
-  # Use the systemd-boot EFI boot loader.
-  # boot.loader.systemd-boot.enable = true;
-  # boot.loader.efi.canTouchEfiVariables = true;
-
   # Set what timeZone you want
   time.timeZone = "America/New_York";
 
   # NOTE: at a point i ran into a weird zsh error, run this if commands dont work
   #export PATH=/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin:$HOME/.local/bin:$PATH 
   programs.zsh.enable = true;
-   
-  # =======================================USERS===============================================
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.jar = {
-  #           ^^^-[Ensure this is the username of the system, this is  ]
-  #               [  also used in other areas like home-jar/default.nix]
-   isNormalUser = true;
-   shell = pkgs.zsh; # makes user explicitly use zsh
-   # add groups:
-   extraGroups = [ "wheel" "video" "input" "networkmanager" "libvirtd" ];
-  }; # note for pkgs we do that within the nix-config/modules-jar/home-jar/default.nix now
-
 
   # ==================================System Packages========================================
   # List packages installed in system profile.

@@ -23,9 +23,6 @@ input {
         numlock
     }
     //for tablet support..
-    // Next sections include libinput settings.
-    // Omitting settings disables them, or leaves them at their default values.
-    // All commented-out settings here are examples, not defaults.
     touchpad {
         // off
         tap
@@ -39,7 +36,6 @@ input {
         // scroll-method "two-finger"
         // disabled-on-external-mouse
     }
-
     mouse {
         // off
         // natural-scroll
@@ -47,7 +43,6 @@ input {
         // accel-profile "flat"
         // scroll-method "no-scroll"
     }
-
     trackpoint {
         // off
         // natural-scroll
@@ -58,7 +53,6 @@ input {
         // scroll-button-lock
         // middle-emulation
     }
-
     tablet {
         // Map your drawing tablet to the main center monitor
         map-to-output "DP-2" // just pick which monitor for it.
@@ -79,13 +73,11 @@ output "DP-3" {
     mode "2560x1440"
     position x=0 y=0
 }
-
 // Side Monitor (Right)
 output "HDMI-A-1" {
     mode "1920x1080"
     position x=2560 y=10
 }
-
 // Bottom Monitor (Below DP-3)
 output "DP-2" {
     mode "1920x1080"
@@ -102,7 +94,6 @@ output "DP-2" {
 layout {
     // Set gaps around windows in logical pixels.
     gaps 7
-
     // When to center a column when changing focus, options are:
     // - "never", default behavior, focusing an off-screen column will keep at the left
     //   or right edge of the screen.
@@ -218,7 +209,6 @@ spawn-at-startup "noctalia-shell"
 spawn-at-startup "xwayland-satellite"
 // spawn-at-startup "wayle"
 
-
 // =================================WALL
 spawn-at-startup "swww-daemon"
 // SET wall
@@ -266,7 +256,7 @@ cursor {
 
 
 
-// ===========================RULES===============================
+// ===========================RULES
 // Window rules let you adjust behavior for individual windows.
 // Find more information on the wiki:
 // https://yalter.github.io/niri/Configuration:-Window-Rules
@@ -564,7 +554,6 @@ binds {
     // set-column-width "100" will make the column occupy 200 physical screen pixels.
     Mod+Minus { set-column-width "-10%"; }
     Mod+Equal { set-column-width "+10%"; }
-
     // Finer height adjustments when in column with other windows.
     Mod+Shift+Minus { set-window-height "-10%"; }
     Mod+Shift+Equal { set-window-height "+10%"; }

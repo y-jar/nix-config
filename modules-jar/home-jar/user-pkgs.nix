@@ -34,6 +34,7 @@
     coulr # Color box to help developers and designers
     upscaler # Upscale and enhance images
     upscayl # Free and Open Source AI Image Upscaler
+    digikam # Photo management application
 
     # [Other Folds]
     mediawriter # Tool to write images files to portable media
@@ -68,10 +69,6 @@
     catppuccin-papirus-folders # papirus but with catppuccin colored folders
     adwaita-icon-theme # gnome default, good fallback
     numix-icon-theme-circle # circular icons
-
-    # [keyboard / language]
-    fcitx5 # for typing in japanese?
-    fcitx5-mozc # other japan language sturff
 
     # [UI related]
     noctalia-shell # Sleek and minimal desktop shell thoughtfully crafted for Wayland, built with Quickshell

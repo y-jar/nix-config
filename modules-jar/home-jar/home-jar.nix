@@ -3,12 +3,12 @@
 {
   #============================Imports================================
   imports = [
-    ./user_pkgs.nix # all the pkgs needed
+    ./user-pkgs.nix # all the pkgs needed
     ./ui-jar/default.nix # Anything user UI related: waybar, niri, hyprland...
-    ./zsh.nix # Shell
     ./app-jar/default.nix # APP CONFIGS
+    ./zsh.nix # Shell
     ./git.nix # GIT SETTINGS
-    ./ui-jar/aplook_mngr.nix # sets my themes and other settings for gtk
+    ./input-methods.nix # KEYBOARD SETTINGS & CONFIGS
   ];
 
   #===============================Base Setup================================
