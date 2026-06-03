@@ -8,7 +8,7 @@
 
   # spice for better guest performance [copy-paste, resizing]
   virtualization.spiceUSBRedirection.enable = true;
-
+  virtualisation
   # enable libvirtd
   virtualisation.libvirtd = {
       enable = true;
