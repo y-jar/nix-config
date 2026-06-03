@@ -168,8 +168,13 @@ This is where i put my plans and everything else. <3
   - Theming
 - **Audio**
   - BIG KOOL `[ DONE ]`
+- **add-ons**
+  - flake parts `[ searching ... ]`
+  - ...
 
 ---
+
+
 
 ## Snippets for Later
 In case i go insane and forget things...
@@ -178,7 +183,8 @@ In case i go insane and forget things...
 
 **steam**:
 - for anti-cheat preventing a game to launch but it does support linux, use this: `PROTON_EAC_RUNTIME=1 %command%`
-- for game audio issues..: `PULSE_SINK=game_audio %command%`
+- for game audio issues..: `PULSE_SINK=game-audio %command%`
+- for games that don't run..: dont play them `:)`
 
 ### Nix forgetfulnes
 ```nix

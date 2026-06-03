@@ -6,12 +6,12 @@
   home.packages = with pkgs; [
     # [Base]
 		firefox
-    librewolf # prefered browser
+    librewolf # Prefered browser; Security focused
     bazaar # flatpack app store [software center is in display.nix]
-    gearlever # manages app images
+    gearlever # Manages app images
 
     # [File Explorers]
-		nautilus # gnome' file manager
+		nautilus # gnome's file manager
     ranger # tui file explorer
     thunar # Xfce file manager    
 		
