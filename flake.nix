@@ -3,8 +3,7 @@
   
   # =========================INPUTS==============================
   inputs = {
-    # THis is where one can chanage the version of the os
-    # linktoothers: 
+    # THis is where one can chanage the version of the pkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
 
     # places home manager
