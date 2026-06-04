@@ -15,6 +15,6 @@ Paste:
 
 **More Documentation**
 <ul style="list-style-type:square;">
-  <li><p><a href="./res/doc-bin/install-guide.md">Install Guide</a></p></li>
+  <li><p><a href="./res/doc-bin/install-guide.md">Install Guide</a></p></li> 
   <li><p><a href="./res/doc-bin/directory-key.md">Full Directory Map</a></p></li> 
 </ul>

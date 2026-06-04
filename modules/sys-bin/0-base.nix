@@ -9,6 +9,7 @@
     ./users.nix # declairs users
     ./networking.nix # anything network related that isnt host specific
     ./security.nix # smart things
+    ./v412loopback.nix # virt cam for apps that need it
     ./fonts.nix # grabs them fonts
     ./gaming.nix # any gaming related fixes that isnt host specific
     #

@@ -28,4 +28,12 @@
   # add Bootloader options here[from /etc/nixos/configuration.nix]
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+
+  # the aliases per system
+  environment.shellAliases = {
+    # nrt = "nh os test ~/nix-config -- --flake ~/nix-config#flipped-jar";
+    # nrs = "nh os switch ~/nix-config -- --flake ~/nix-config#flipped-jar";
+    nrs = "nixos-rebuild switch --sudo --flake ~/nix-config#flipped-jar"; # actual building
+    nrt = "nixos-rebuild test --sudo --flake ~/nix-config#$flipped-jar"; # testing
+  }; # end of shell aliases
 }
