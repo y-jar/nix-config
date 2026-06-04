@@ -56,8 +56,7 @@
     rar # Utility for RAR archives
 
     # [gaming]
-    mangohud # for huds
-    protonup-qt # installer for proton vers
+    
     #proton-tricks # aperently gone?
 
     # [image format support]

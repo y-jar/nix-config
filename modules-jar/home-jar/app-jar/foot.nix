@@ -10,12 +10,9 @@
       };
 
       colors = {
-        # This is a nice "Dark Charcoal" theme
-        background = "1a1b26";
-        foreground = "cfc9c2";
-        
-        # You can also set transparency (0.0 to 1.0)
-        alpha = 0.7; 
+        # background = "1a1b26";
+        # foreground = "cfc9c2";
+        alpha = 0.7; # trans parency
       };
 
       cursor = {

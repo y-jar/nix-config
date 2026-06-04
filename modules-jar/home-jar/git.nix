@@ -12,7 +12,6 @@
 	        init.defaultBranch = "main";
 	        safe.directory = "/home/jar/nix-config"; # Prevents "dubious ownership" errors
 	  };
-	  
 	};
 }
 
