@@ -1,9 +1,8 @@
 {
-  description = "do jars contain flakesQ";
-  
-  # =========================INPUTS==============================
+  # ===========================inputs
   inputs = {
-    # THis is where one can chanage the version of the pkgs
+    # THis is where one can chanage the version of the os
+    # linktoothers:
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
 
     # places home manager
@@ -13,45 +12,68 @@
     };
 
     # noctalia @ https://docs.noctalia.dev/v4/getting-started/nixos/
-    noctalia = {
-      url = "github:noctalia-dev/noctalia-shell";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-  };
+    # noctalia = {
+    #   url = "github:noctalia-dev/noctalia-shell";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
+  }; # end of inputs
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs: 
-  # var block
-  let
-    local = import ./local.nix; # imports the file that contains my hostname, after an install, find a way to just remove it or something./..
-    chosenHost = local.chosenHost; # this mainly affects the window manager sub option, making sure screen stuff works.
-    sharedArgs = { inherit inputs; hostnm = chosenHost; }; # sharedArgs fuynctions as global args
-  in {
-    #=============================================OUTPUTS====================================================
-    # NOTE This MUST match your 'networking.hostName'(networking.nix) @ 'nixosConfigurations.HOSTNAME = ...'
-    nixosConfigurations.${chosenHost} = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux"; # not needed but added (thx tony uses nix btw)
-      specialArgs = sharedArgs; # arguments to pass to modules that need them. the `...` in {}:
-      # the placement
-      modules = [
-        # The system entry, uses the picked host for the dir name
-        # WARNING READ BEFORE LEAVING: Will give an error if hostname doesnt have a default.nix within it's own hosts-jar directory
-        # to add your own, just make a new dir within hosts-jar and copy /nixos/default.nix into your new dir so it will not give an error
-        ./hosts-jar/${chosenHost}/default.nix
-
-        # [home-manager]
-        home-manager.nixosModules.home-manager {
-          # setup
-          home-manager = {
-            useGlobalPkgs = true;
-            useUserPackages = true;
-            backupFileExtension = "backup"; # backups stuff if conflicting
-            extraSpecialArgs = sharedArgs; # shared my args
-            users = {
-              jar = import ./modules-jar/home-jar/home-jar.nix; # sets the home Entry for jar
-            };
+  # ==========================outputs
+  outputs =
+    {
+      self,
+      nixpkgs,
+      home-manager,
+      ...
+    }@inputs:
+    {
+      # from what i understand: this `set` below is declairations of indevidual hosts and loads them..
+      nixosConfigurations = {
+        # ======[]
+        calender = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = {
+            inherit inputs;
+            hostnm = "calender";
           };
-        } # end of home manager
-      ]; # end of modules
-    }; # end of nixosConfigurations
-  }; # end of let block
-} # end of flake module
+          modules = [
+            ./modules/sys-bin/0-base.nix # base system entry
+            ./modules/host-jar/calender/calender.nix # entry system
+          ]; # end of modules
+        }; # end of calender
+        # ======[]
+        flipped-jar = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = {
+            inherit inputs;
+            hostnm = "flipped-jar";
+          };
+          modules = [
+            ./modules/sys-bin/base.nix # base system entry
+            ./modules/host-jar/flipped-jar/flipped-jar.nix # entry system
+          ]; # end of modules
+        }; # end of flipped-jar
+        # ======[]
+        yilyonix = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = {
+            inherit inputs;
+            hostnm = "yilyonix";
+          };
+          modules = [
+            ./modules/sys-bin/base.nix # base system entry
+            ./modules/host-jar/yilyonix/yilyonix.nix # entry system
+          ]; # end of modules
+        }; # end of yilyonix
+        # ======[]
+        # PLACEHOLDER = nixpkgs.lib.nixosSystem {
+        #   system = "x86_64-linux";
+        #   specialArgs = { inherit inputs; };
+        #   modules = [
+        #     ./modules/sys-bin/base.nix # base system entry
+        #     ./modules/host-jar/PLACEHOLDER/PLACEHOLDER.nix # entry system
+        #   ]; # end of modules
+        # }; # end of END OF PLACEHOLDER
+      }; # end of configurations
+    }; # end of outputs
+}
