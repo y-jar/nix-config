@@ -40,8 +40,8 @@
 
   # the aliases per system
   environment.shellAliases = {
-    # nrt = "nh os test ~/nix-config -- --flake ~/nix-config#calender";
-    # nrs = "nh os switch ~/nix-config -- --flake ~/nix-config#calender";
+    nht = "nh os test ~/nix-config -- --flake ~/nix-config#calender";
+    nhs = "nh os switch ~/nix-config -- --flake ~/nix-config#calender";
     nrs = "nixos-rebuild switch --sudo --flake ~/nix-config#calender"; # actual building
     nrt = "nixos-rebuild test --sudo --flake ~/nix-config#$calender"; # testing
   }; # end of shell aliases

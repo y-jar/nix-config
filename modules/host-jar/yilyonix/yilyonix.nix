@@ -26,4 +26,12 @@
   # boot
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+
+  # the aliases per system
+  environment.shellAliases = {
+    nht = "nh os test ~/nix-config -- --flake ~/nix-config#yilyonix"; # same as nrt
+    nhs = "nh os switch ~/nix-config -- --flake ~/nix-config#yilyonix"; # same as nrs
+    nrs = "nixos-rebuild switch --sudo --flake ~/nix-config#yilyonix"; # actual building
+    nrt = "nixos-rebuild test --sudo --flake ~/nix-config#$yilyonix"; # testing
+  }; # end of shell aliases
 }
