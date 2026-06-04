@@ -49,7 +49,7 @@
             hostnm = "flipped-jar";
           };
           modules = [
-            ./modules/sys-bin/base.nix # base system entry
+            ./modules/sys-bin/0-base.nix # base system entry
             ./modules/host-jar/flipped-jar/flipped-jar.nix # entry system
           ]; # end of modules
         }; # end of flipped-jar
@@ -61,7 +61,7 @@
             hostnm = "yilyonix";
           };
           modules = [
-            ./modules/sys-bin/base.nix # base system entry
+            ./modules/sys-bin/0-base.nix # base system entry
             ./modules/host-jar/yilyonix/yilyonix.nix # entry system
           ]; # end of modules
         }; # end of yilyonix
@@ -70,7 +70,7 @@
         #   system = "x86_64-linux";
         #   specialArgs = { inherit inputs; };
         #   modules = [
-        #     ./modules/sys-bin/base.nix # base system entry
+        #     ./modules/sys-bin/0-base.nix # base system entry
         #     ./modules/host-jar/PLACEHOLDER/PLACEHOLDER.nix # entry system
         #   ]; # end of modules
         # }; # end of END OF PLACEHOLDER
