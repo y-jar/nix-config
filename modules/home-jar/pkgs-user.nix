@@ -36,7 +36,7 @@
     buffer # Minimal editing space for all those things that don't need keeping
 
     # [graphics]
-    obs-studio # good video software
+    # obs-studio # good video software
     kdePackages.kdenlive # video editor
     halftone # Simple app for giving images that pixel-art style
     krita # Free and open source painting application

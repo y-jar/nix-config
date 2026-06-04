@@ -17,10 +17,12 @@
       # nix-cs = "sudo nix-env --profile /nix/var/nix/profiles/system --delete-generations +5 && nix-env --delete-generations +5 && nix-collect-garbage && nix-store --optimize";
       # basic switch and clean
       nrs-ncs = "nrs && nix-cs"; # reocmended after confirming a complete stable system
-
       # Main nix + github aliases:
       nix-sync = "cd ~/nix-config && git pull && nrs";
       nix-save = "cd ~/nix-config && git add . && git commit -m 'Syncing changes' && git push origin master";
+      # nix helper
+      nht = "nh os test ~/nix-config#${hostnm}";
+      nhs = "nh os switch ~/nix-config#${hostnm}";
 
       # creates the dirs i use from a gist in github
       jar-init = "curl -sL https://gist.githubusercontent.com/y-jar/263b0b56aefd3a2952f45c5123672f5f/raw/build-jar.sh | bash";
