@@ -26,7 +26,7 @@
     };
   };
 
-  # boot 
+  # boot
   boot = {
     loader = {
       systemd-boot.enable = true;
@@ -40,9 +40,9 @@
 
   # the aliases per system
   environment.shellAliases = {
-    nht = "nh os test ~/nix-config -- --flake ~/nix-config#calender";
-    nhs = "nh os switch ~/nix-config -- --flake ~/nix-config#calender";
-    nrs = "nixos-rebuild switch --sudo --flake ~/nix-config#calender"; # actual building
+    nht = "nh os test ~/nix-config#calender";
+    nhs = "nh os switch ~/nix-config#calender";
+    nrs = "nixos-rebuild switch --sudo --flake ~/nix-config#calender"; # hard building
     nrt = "nixos-rebuild test --sudo --flake ~/nix-config#$calender"; # testing
   }; # end of shell aliases
 }

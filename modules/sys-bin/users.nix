@@ -11,7 +11,8 @@
         "video"
         "input"
         "networkmanager"
-        "libvirtd"
+        "libvirtd" # virt
+        "kvm" # virt
       ];
     };
   }; # end of users declair

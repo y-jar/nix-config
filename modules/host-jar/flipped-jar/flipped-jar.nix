@@ -31,8 +31,8 @@
 
   # the aliases per system
   environment.shellAliases = {
-    nht = "nh os test ~/nix-config -- --flake ~/nix-config#flipped-jar";
-    nhs = "nh os switch ~/nix-config -- --flake ~/nix-config#flipped-jar";
+    nht = "nh os test ~/nix-config#flipped-jar";
+    nhs = "nh os switch ~/nix-config#flipped-jar";
     nrs = "nixos-rebuild switch --sudo --flake ~/nix-config#flipped-jar"; # actual building
     nrt = "nixos-rebuild test --sudo --flake ~/nix-config#$flipped-jar"; # testing
   }; # end of shell aliases

@@ -9,14 +9,14 @@
         cudaSupport = true;
       }
     );
-    
+
     plugins = with pkgs.obs-studio-plugins; [
-      wlrobs
-      obs-backgroundremoval
-      obs-pipewire-audio-capture
-      obs-vaapi #optional AMD hardware acceleration
-      obs-gstreamer
-      obs-vkcapture
+      wlrobs # Obs-studio plugin that allows you to screen capture on wlroots based wayland compositors
+      obs-backgroundremoval # OBS plugin to replace the background in portrait images and video
+      obs-pipewire-audio-capture # Audio device and application capture for OBS Studio using PipeWire
+      obs-vaapi # optional AMD hardware acceleration
+      obs-gstreamer # OBS Studio source, encoder and video filter plugin to use GStreamer elements/pipelines in OBS Studio
+      obs-vkcapture # OBS Linux Vulkan/OpenGL game capture
     ];
   };
 }

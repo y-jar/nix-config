@@ -16,10 +16,12 @@
   programs.dconf.enable = true;
   services.gnome.gnome-keyring.enable = true; # Helps store passwords/settings
   services.tumbler.enable = true; # image stuff
+  programs.evince.enable = true; # Enablilng this native option automatically sets up PDF thumbnailing
 
   # supported file systems for them dum dum ntfs
   boot.supportedFilesystems = [
     "fuse"
     "ntfs"
   ];
+
 }

@@ -9,12 +9,12 @@
     ./users.nix # declairs users
     ./networking.nix # anything network related that isnt host specific
     ./security.nix # smart things
+    ./virtualisation.nix # anything virt related
     ./v412loopback.nix # virt cam for apps that need it
     ./fonts.nix # grabs them fonts
     ./gaming.nix # any gaming related fixes that isnt host specific
     #
     ./display.nix # sets up anything sparkly [niri, gnome..]
-    ./display-pkgs.nix # anything DE or WM asisting pkgs
     ./way-portal.nix # anything portal or wayland related is mostly here
     ./login-manager.nix # surely you know...
     #
@@ -22,7 +22,7 @@
     ./load-scripts.nix # loads any custom scripts
     #
     ./tweaks.nix # This is where any unsorted fixes go
-    ../nix-bin/nix-settings.nix # any nix settings
+    ../nix-bin/default.nix # any nix settings
   ];
   # Set what timeZone you want
   time.timeZone = "America/New_York";
