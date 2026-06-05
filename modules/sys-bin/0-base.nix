@@ -3,8 +3,8 @@
 }:
 {
   imports = [
+    ./0-pkgs-base.nix # ALL SYS LEVEL PKGS
     ./audio.nix # sets up my audio config
-    ./pkgs-base.nix # ALL SYS LEVEL PKGS
     ./power.nix # anything power related
     ./users.nix # declairs users
     ./networking.nix # anything network related that isnt host specific

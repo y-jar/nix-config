@@ -14,21 +14,17 @@
   xdg.portal = {
     enable = true;
     extraPortals = [
-      pkgs.xdg-desktop-portal-gtk
       pkgs.xdg-desktop-portal-gnome
     ];
     # Per session portals... should be checking this stuff?
     config = {
       gnome.default = [ "gnome" ];
-      niri.default = [
-        "gnome"
-        "gtk"
-      ]; # weird...
+      niri.default = [ "gnome" "gtk" ]; # weird... 
       hyprland.default = [
         "gtk"
       ];
       #sway.default = [ "wlr" "gtk" ];
-      common.default = [ "gtk" ];
+      common.default = [ "gnome" ];
     };
   };
 }
