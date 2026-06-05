@@ -71,11 +71,6 @@
     catppuccin-cursors # matches catppuccin theme
     phinger-cursors # fun colorful ones
 
-    #[Icons]
-    catppuccin-papirus-folders # papirus but with catppuccin colored folders
-    adwaita-icon-theme # gnome default, good fallback
-    numix-icon-theme-circle # circular icons
-
     #[UI related]
     noctalia-shell # Sleek and minimal desktop shell thoughtfully crafted for Wayland, built with Quickshell
     tmux # terminal multiplexer [fuck.. i never used this]

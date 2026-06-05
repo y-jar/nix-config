@@ -23,5 +23,8 @@
     "fuse"
     "ntfs"
   ];
-
+  environment.sessionVariables = {
+    NIXOS_OZONE_WL = "1"; # nudges Electron/Chrome apps to use Wayland
+    QT_QPA_PLATFORMTHEME = "gtk2";
+  };
 }

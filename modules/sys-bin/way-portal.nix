@@ -3,13 +3,6 @@
   # x support
   programs.xwayland.enable = true;
 
-  # Wayland enviroment vars
-  # forces apps to use wayland if otherwise
-  # Wayland tweaks (global, good for all sessions)
-  environment.sessionVariables = {
-    NIXOS_OZONE_WL = "1"; # nudges Electron/Chrome apps to use Wayland
-  };
-
   # XDG portal: set new defaults for my DEs and WMs
   xdg.portal = {
     enable = true;
@@ -24,8 +17,14 @@
       gnome.default = [ "gnome" ];
       #plasma.default = [ "kde" ];
       #sway.default = [ "wlr" "gtk" ];
-      niri.default = lib.mkForce [ "wlr" "gtk" ]; # weird... 
-      hyprland.default = [ "wlr" "gtk" ];
+      niri.default = lib.mkForce [
+        "wlr"
+        "gtk"
+      ]; # weird...
+      hyprland.default = [
+        "wlr"
+        "gtk"
+      ];
       common.default = [ "gtk" ];
     };
   };
