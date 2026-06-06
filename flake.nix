@@ -43,7 +43,7 @@
           };
           modules = [
             ./modules/sys-bin # base system entry
-            ./modules/host-jar/calender/calender.nix # entry system
+            ./modules/host-jar/calender # entry system
           ]; # end of modules
         }; # end of calender
         # ======[]
@@ -55,7 +55,7 @@
           };
           modules = [
             ./modules/sys-bin # base system entry
-            ./modules/host-jar/flipped-jar/flipped-jar.nix # entry system
+            ./modules/host-jar/flipped-jar # entry system
           ]; # end of modules
         }; # end of flipped-jar
         # ======[]
@@ -67,7 +67,7 @@
           };
           modules = [
             ./modules/sys-bin # base system entry
-            ./modules/host-jar/yilyonix/yilyonix.nix # entry system
+            ./modules/host-jar/yilyonix # entry system
           ]; # end of modules
         }; # end of yilyonix
         # ======[]

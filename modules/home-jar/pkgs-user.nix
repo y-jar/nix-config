@@ -2,7 +2,6 @@
 {
 
   # ==========================[Enabled User Packages]=====================
-  programs.bazaar.enable = true; # flatpack app store
   programs.foot.enable = true; # my baby
   # ==========================[User Packages]=============================
   home.packages = with pkgs; [
@@ -21,6 +20,7 @@
     keepassxc # [passwordmgr]
 
     # [management]
+    bazaar # flatpack app store / manager
     easyeffects # audio mixer
     qpwgraph # Qt graph manager for PipeWire, similar to QjackCtls
     pavucontrol # PulseAudio Volume Control
@@ -56,7 +56,8 @@
 
     # =======[Entertainment] |>|>|>|>|>|>|>
     #[Gaming]
-    #prismlauncher
+    prismlauncher
+    heroic # Native GOG, Epic, and Amazon Games Launcher for Linux, Windows and Mac
     mangohud # for huds
     protonup-qt # installer for proton vers
 
