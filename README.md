@@ -87,11 +87,6 @@ Paste:
 
 ### Dev Notes & Goals
 
-**Current State:**
-- basic Configs for DEs and WMs
-- Set of Apps and settings for Background apps
-- 
-
 **Goals:**
 - adding streamlined updating or something, rightnow updating is a bit spooky [ DONE ]
 - add `gnome` [ DONE ]
