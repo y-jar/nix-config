@@ -45,7 +45,7 @@ Paste:
 <!-- my intro <3 -->
 <div align="center">
   <p style="max-width: 750px; margin: 0 auto; line-height: 1.6; color: #bcac9b;">
-    Hello! This is my NixOS config! The reason i started doing this was i wanted to learn more about it after finding out about some of it's core design princibles. And after dipping my toes in it i found that i adore how it works, and similar to my neovim config, my goal is to make it my personal platform and hopefully not have to configure it often extextensively afterward.
+    Hello! This is my NixOS config! The reason i started doing this was i wanted to learn more about it after finding out about some of it's core design princibles. And after dipping my toes in it i found that i adore how it works, and similar to my neovim config, my goal is to make it my personal platform and hopefully not have to configure it often extensively afterward.
   </p>
 </div>
 <br>
