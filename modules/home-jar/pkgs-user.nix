@@ -1,16 +1,18 @@
 { pkgs, ... }:
 {
-  # ==========================User Packages=============================
+
+  # ==========================[Enabled User Packages]=====================
+  programs.bazaar.enable = true; # flatpack app store
+  programs.foot.enable = true; # my baby
+  # ==========================[User Packages]=============================
   home.packages = with pkgs; [
     # =======[Ness Jar] |>|>|>|>|>|>|>
     # [Base]
-    firefox
-    librewolf # Prefered browser; Security focused
-    bazaar # flatpack app store [software center is in display.nix]
+    firefox # Web browser for school or work related activities
+    librewolf # Prefered browser; Security focused around my personal data
     kitty # incase foot doesnt work for root
-    foot # my baby
     comma # Runs programs without installing them
-    wine # we all know what this is
+    wine # Wine is a compatibility layer for running Windows programs on Unix-like systems
 
     # [File Explorers]
     nautilus # gnome's file manager
@@ -34,6 +36,7 @@
     qownnotes # markdown app editor
     libreoffice # documents writer
     buffer # Minimal editing space for all those things that don't need keeping
+    obsidian # Powerful knowledge base that works on top of a local folder of plain text Markdown files
 
     # [graphics]
     # obs-studio # good video software

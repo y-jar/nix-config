@@ -2,10 +2,8 @@
 Here is the guide to install the system. Please be sure to read the notes to asure that you know what you are doing.
 
 **Links:**
-
-<lu>
-    <li><p><a href="../../README.md">Back Home</a></p></li>
-</lu>
+- [Back Home](../../README.md)
+- [back to documentation key](./key-key.md)
 
 ## Steps to Follow on a new install
 
@@ -21,7 +19,7 @@ cd ~/nix-config
 **Switch over hardware config:** *(Please read)*
 > NOTE: Replace 'HOSTNAMEPLACEHOLDER' with your chosen host name. <a href="./add-new-config-guide.md">Click here to add a new configuration (host).</a>
 
-> ME: `tyun`, `vmo`, `flipped-jar`, `calender`, `yilyonix`.
+> ME: `flipped-jar`, `calender`, `yilyonix`.
 ```bash
 cp /etc/nixos/hardware-configuration.nix ~/nix-config/modules/hosts-jar/HOSTNAMEPLACEHOLDER/hardware-configuration.nix
 ```
