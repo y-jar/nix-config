@@ -5,7 +5,7 @@
     ./input-methods.nix # KEYBOARD SETTINGS & CONFIGS
     ./pkgs-user.nix # ALL USER PKGS
     ./git.nix # GIT SETTINGS
-    ./gtk.nix # anything in gtk ig
+    ./theming.nix # anything in gtk ig
     ./shell.nix # Loads shell config
   ];
   home = {

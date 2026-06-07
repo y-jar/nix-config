@@ -1,6 +1,7 @@
 {
   # ======[]
   description = "Nix in a Jar"; # a flake for managing my per host nixos configurations
+  # NOTE: This flake is considered minimal, as i only use it for managing my NixOS configurations, not as a mass yoinker
   # ======[]
   # ===========================inputs
   inputs = {

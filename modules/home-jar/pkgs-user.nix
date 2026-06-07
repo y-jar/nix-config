@@ -92,9 +92,8 @@
     tree # Command to produce a depth indented directory listing
 
     # [Academic Project Stack]
-    dotnet-sdk_8 # Core functionality needed to create .NET Core projects, that is shared between Visual Studio and CLI (wrapper) (combined) (wrapper)
-    php # HTML-embedded scripting language
-    mariadb # Enhanced, drop-in replacement for MySQL
+    # php # HTML-embedded scripting language
+    # mariadb # Enhanced, drop-in replacement for MySQL
 
     # [Data / Version Control]
     git # virsion control
@@ -102,6 +101,7 @@
     subversion # Version control system intended to be a compelling replacement for CVS in the open source community
 
     # [Development Essentials]
+    dotnet-sdk_8 # Core functionality needed to create .NET Core projects, that is shared between Visual Studio and CLI (wrapper) (combined) (wrapper)
     gh # for github login
     python315 # latest i can get
     rustc # Safe, concurrent, practical language (wrapper script)

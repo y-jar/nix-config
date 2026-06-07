@@ -5,12 +5,11 @@
     jar = {
       isNormalUser = true;
       shell = pkgs.zsh; # makes user explicitly use zsh
-      # add groups:
       extraGroups = [
-        "wheel"
-        "video"
-        "input"
-        "networkmanager"
+        "wheel" # sudo
+        "video" # video
+        "input" # input
+        "networkmanager" # wifi
         "libvirtd" # virt
         "kvm" # virt
       ];

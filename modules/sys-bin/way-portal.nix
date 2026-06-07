@@ -7,25 +7,25 @@
   xdg.portal = {
     enable = true;
     extraPortals = [
-      # pkgs.kdePackages.xdg-desktop-portal-kde
-      pkgs.xdg-desktop-portal-gtk
-      pkgs.xdg-desktop-portal-gnome
-      pkgs.xdg-desktop-portal-wlr
+      pkgs.xdg-desktop-portal-wlr # niri
+      pkgs.xdg-desktop-portal-hyprland # hyprland
+      pkgs.xdg-desktop-portal-gnome # gnome
+      pkgs.xdg-desktop-portal-gtk # fallback file pickers
     ];
-    # Per session portals... should be checking this stuff?
     config = {
-      gnome.default = [ "gnome" ];
-      #plasma.default = [ "kde" ];
-      #sway.default = [ "wlr" "gtk" ];
-      niri.default = lib.mkForce [
-        "wlr"
+      gnome.default = [
+        "gnome"
         "gtk"
-      ]; # weird...
+      ];
+      niri.default = [
+        "gnome"
+        "gtk"
+      ];
       hyprland.default = [
-        "wlr"
+        "hyprland"
         "gtk"
       ];
       common.default = [ "gtk" ];
-    };
-  };
+    }; # end of config
+  }; # end of xdg.portal
 }
