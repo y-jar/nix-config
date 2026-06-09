@@ -9,7 +9,7 @@
         pad = "15x15"; # Adds some breathing room inside the window
       };
 
-      colors = {
+      colors-dark = {
         # background = "1a1b26";
         # foreground = "cfc9c2";
         alpha = 0.7; # trans parency
