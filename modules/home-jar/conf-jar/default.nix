@@ -6,5 +6,6 @@
     ./obs.nix # obs config
     ./fuzzel.nix # app launcher
     ./hyprland # hyprland config
+    ./mpv.nix # mpv config
   ];
 }

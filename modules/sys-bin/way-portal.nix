@@ -7,18 +7,18 @@
   xdg.portal = {
     enable = true;
     extraPortals = [
+      pkgs.xdg-desktop-portal-gtk # fallback file pickers
+      pkgs.xdg-desktop-portal-gnome # gnome
       pkgs.xdg-desktop-portal-wlr # niri
       pkgs.xdg-desktop-portal-hyprland # hyprland
-      pkgs.xdg-desktop-portal-gnome # gnome
-      pkgs.xdg-desktop-portal-gtk # fallback file pickers
     ];
     config = {
       gnome.default = [
         "gnome"
         "gtk"
       ];
-      niri.default = [
-        "gnome"
+      niri.default = lib.mkForce [
+        "wlr"
         "gtk"
       ];
       hyprland.default = [

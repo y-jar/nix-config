@@ -64,7 +64,6 @@
     #[Media]
     blanket # Background noises
     quodlibet # media player
-    mpv # for video playback
     gapless # Beautiful, fast, fluent, light weight music player written in GTK4 [but no gaps]
     # =======[Entertainment] |>|>|>|>|>|>|>
 
