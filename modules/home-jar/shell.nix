@@ -23,6 +23,8 @@
       ls = "ls --color=auto";
       grep = "grep --color=auto";
       nv = "nvim";
+      cl = "clear";
+      ga = "git add .";
 
       # =========[Extra]
       ff = "fastfetch";

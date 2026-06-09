@@ -3,6 +3,7 @@
 - [install guide](./install-guide.md)
 - [post install](./post-install.md)
 - [To add a new config](./add-new-config-guide.md)
+- [adding-modules](adding-modules.md)
 
 **links to Window Managers and Desktop Environments**
 - [niri documentation](./niri.md)

@@ -7,5 +7,6 @@
     ./fuzzel.nix # app launcher
     ./hyprland # hyprland config
     ./mpv.nix # mpv config
+    ./nvf.nix # nvf config
   ];
 }

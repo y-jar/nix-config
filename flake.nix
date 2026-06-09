@@ -5,12 +5,21 @@
   # ======[]
   # ===========================inputs
   inputs = {
+    # "Nix goes and fetches those repos and locks them in flake.lock. Nothing is "usable" yet, they're just downloaded."
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05"; # this sets the version of nixpkgs to use [I try to keep it up to date]
 
     # grabs home-manager from the nix-community repo
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs"; # locks version to the nixpkgs to reduce duplicate data
+    };
+
+    nvf = {
+      url = "github:NotAShelf/nvf";
+      # You can override the input nixpkgs to follow your system's
+      # instance of nixpkgs. This is safe to do as nvf does not depend
+      # on a binary cache.
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     # noctalia is a NixOS module for managing the Noctalia shell [the pretty bar/shell for niri and hyprland]
@@ -28,9 +37,8 @@
   # ======[]
   outputs =
     {
-      self,
+      self, # the flake output itself, i will most likely not need this.
       nixpkgs,
-      home-manager,
       ...
     }@inputs:
     {
