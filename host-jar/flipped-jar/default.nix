@@ -19,7 +19,7 @@
       inherit hostnm;
     };
     users = {
-      jar = import ../modules/home-jar; # user entry
+      jar = import ../../modules/home-jar; # user entry
     };
   };
 

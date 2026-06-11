@@ -21,7 +21,7 @@
       inherit hostnm;
     };
     users = {
-      jar = import ./modules/home-jar/home.nix; # user entry
+      jar = import ../../modules/home-jar/home.nix; # user entry
     };
   };
 

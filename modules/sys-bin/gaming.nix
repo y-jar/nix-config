@@ -39,7 +39,7 @@
       gst_all_1.gst-plugins-bad
       gst_all_1.gst-plugins-ugly
       gst_all_1.gst-libav # ffmpeg bridge for gstreamer
-    ];
+    ]; 
     # 32 bit libs for:
     # wine, proton, and any other compatability layer the reqs graphics
     #   and 32 bit libs
