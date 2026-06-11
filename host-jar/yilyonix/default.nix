@@ -1,12 +1,11 @@
 {
-  pkgs,
   inputs,
   hostnm,
   ...
 }:
 {
   imports = [
-    ./hardware-configuration.nix # yoink mah hardware
+    ./hardware-configuration.nix
     inputs.home-manager.nixosModules.home-manager # Pulls in home-manager module
   ];
 
@@ -22,9 +21,11 @@
       inherit hostnm;
     };
     users = {
-      jar = import ../../../modules/home-jar/home.nix; # user entry
+      jar = import ./modules/home-jar/home.nix; # user entry
     };
   };
+
+  networking.hostName = "${hostnm}"; # sets hostname
 
   # boot
   boot = {
@@ -32,17 +33,13 @@
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     }; # end of loader
-    initrd.kernelModules = [ "amdgpu" ];
-    kernelPackages = pkgs.linuxPackages_latest;
   }; # end of boot
-
-  networking.hostName = "${hostnm}"; # sets hostname
 
   # the aliases per system
   environment.shellAliases = {
-    nht = "nh os test ~/nix-config#calender";
-    nhs = "nh os switch ~/nix-config#calender";
-    nrs = "nixos-rebuild switch --sudo --flake ~/nix-config#calender"; # hard building
-    nrt = "nixos-rebuild test --sudo --flake ~/nix-config#$calender"; # testing
+    nht = "nh os test ~/nix-config#yilyonix"; # same as nrt
+    nhs = "nh os switch ~/nix-config#yilyonix"; # same as nrs
+    nrs = "nixos-rebuild switch --sudo --flake ~/nix-config#yilyonix"; # actual building
+    nrt = "nixos-rebuild test --sudo --flake ~/nix-config#$yilyonix"; # testing
   }; # end of shell aliases
 }

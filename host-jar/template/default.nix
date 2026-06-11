@@ -17,7 +17,7 @@
       inherit hostnm;
     }; # end of extraSpecialArgs
     users = {
-      jar = import ../../../modules/home-jar/home.nix; # user entry
+      jar = import ./modules/home-jar/home.nix; # user entry
     }; # end of users
   }; # end of home-manager
 

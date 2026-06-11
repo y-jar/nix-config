@@ -15,7 +15,6 @@
 
     # [File Explorers]
     nautilus # gnome's file manager
-    ranger # File manager with minimalistic curses interface
     yazi # Blazing fast terminal file manager written in Rust, based on async I/O
     keepassxc # [passwordmgr]
 
@@ -108,8 +107,8 @@
     nodejs # Event-driven I/O framework for the V8 JavaScript engine
     gcc # GNU Compiler Collection, version 15.2.0 (wrapper script)
     go # Go Programming language
-    nil # Yet another language server for Nix
     nixd # Feature-rich Nix language server interoperating with C++ nix
+    nixfmt # Nix formatter
 
     # [Technical Writing]
     pandoc # Conversion between documentation formats

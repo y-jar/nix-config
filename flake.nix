@@ -52,7 +52,7 @@
           };
           modules = [
             ./modules/sys-bin # base system entry
-            ./modules/host-jar/calender # entry system
+            ./host-jar/calender # entry system
           ]; # end of modules
         }; # end of calender
         # ======[]
@@ -64,7 +64,7 @@
           };
           modules = [
             ./modules/sys-bin # base system entry
-            ./modules/host-jar/flipped-jar # entry system
+            ./host-jar/flipped-jar # entry system
           ]; # end of modules
         }; # end of flipped-jar
         # ======[]
@@ -76,7 +76,7 @@
           };
           modules = [
             ./modules/sys-bin # base system entry
-            ./modules/host-jar/yilyonix # entry system
+            ./host-jar/yilyonix # entry system
           ]; # end of modules
         }; # end of yilyonix
         # ======[]
@@ -87,7 +87,7 @@
         #   };
         #   modules = [
         #     ./modules/sys-bin # base sys entry for all hosts [for per host, system setup is within host-jar/[HOST]/default.nix->Wherever]
-        #     ./modules/host-jar/PLACEHOLDER # config entry directory within host-jar/
+        #     ./host-jar/PLACEHOLDER # config entry directory within host-jar/
         #   ]; # end of modules
         # }; # end of END OF PLACEHOLDER
       }; # end of configurations
