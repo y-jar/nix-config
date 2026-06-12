@@ -52,7 +52,7 @@ Paste:
 
 <!-- Notes for Outsiders -->
 > [!NOTE] for outsiders, the install guide is located in the
-> [install-guide](res/doc-bin/install-guide.md) file. A script will be available soon to
+> [install-guide](resjar/docbin/install-guide.md) file. A script will be available soon to
 > automate the installation process.
 
 > [!IMPORTANT] This config is intended for NixOS users only. And is currently focused on 
