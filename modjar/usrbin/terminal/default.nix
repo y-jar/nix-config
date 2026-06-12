@@ -37,10 +37,10 @@ in
       }; # end of settings
 
       # extra backups
-      extraPackages = with pkgs; [
-        kitty # incase foot doesnt work for root
-        alacritty # terminal emulator
-      ];
     }; # end of programs.foot
+    home.packages = with pkgs; [
+      kitty # incase foot doesnt work for root
+      alacritty # terminal emulator
+    ]; # end of home.packages
   }; # end of config
 }

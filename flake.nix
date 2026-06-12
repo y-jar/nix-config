@@ -42,7 +42,7 @@
             hostnm = "loom";
           }; # end of specialArgs
           modules = [
-            ./modjar/sys-bin # base system entry
+            ./modjar/sysbin # base system entry
             ./hstjar/loom # entry system
           ]; # end of modules
         }; # end of loom
@@ -55,7 +55,7 @@
             hostnm = "calender";
           }; # end of specialArgs
           modules = [
-            ./modjar/sys-bin # base system entry
+            ./modjar/sysbin # base system entry
             ./hstjar/calender # entry system
           ]; # end of modules
         }; # end of calender
@@ -68,7 +68,7 @@
             hostnm = "yilyonix";
           }; # end of specialArgs
           modules = [
-            ./modjar/sys-bin # base system entry
+            ./modjar/sysbin # base system entry
             ./hstjar/yilyonix # entry system
           ]; # end of modules
         }; # end of yilyonix
@@ -81,7 +81,7 @@
             hostnm = "ziiemar";
           }; # end of specialArgs
           modules = [
-            ./modjar/sys-bin # base system entry
+            ./modjar/sysbin # base system entry
             ./hstjar/ziiemar # entry system [configurate in this directory]
             # ^^^^^^          | In this directory is where home-manager configuration is stored
           ]; # end of modules

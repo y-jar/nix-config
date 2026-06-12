@@ -18,27 +18,16 @@ in
   }; # end of options
 
   config = lib.mkIf cfg.enable {
-    programs = {
-      krita = {
-        enable = true;
-      };
-      halftone = {
-        enable = true;
-      };
-      coulr = {
-        enable = true;
-      };
-      blender = {
-        enable = true;
-      };
-    }; # end of programs
-
     # bulk art appstream
     home.packages = with pkgs; [
       upscayl # Free and Open Source AI Image Upscaler
       converseen # Batch image converter and resizer
       fontforge # Font editor
       digikam # Photo management application
+      blender
+      coulr
+      halftone
+      krita
     ];
   }; # end of config
 }

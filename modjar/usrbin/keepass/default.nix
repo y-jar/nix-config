@@ -17,7 +17,7 @@ in
   }; # end of options
 
   config = lib.mkIf cfg.enable {
-    programs.keepass = {
+    programs.keepassxc = {
       enable = true;
     };
   }; # end of config

@@ -5,9 +5,10 @@
   ...
 }:
 let
-  cfg = config.syskey.audio; # shortens config.sysSettings.audio
+  cfg = config.sysSettings.audio; # shortens config.sysSettings.audio
 in
 {
+  imports = [ ./addon.nix ];
   options = {
     sysSettings.audio = {
       enable = lib.mkEnableOption "Enable audio";

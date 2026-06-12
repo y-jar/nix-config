@@ -9,7 +9,7 @@ let
 in
 {
   options = {
-    usrSettings.niri = lib.mkOption {
+    usrSettings.niri.enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
       description = "Enable Niri window manager";

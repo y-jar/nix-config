@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 let
@@ -13,15 +14,15 @@ in
         type = lib.types.bool;
         default = false;
       };
-      kdenlive = lib.mkOption {
+      kdenlive.enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
       }; # end of kdenlive
     }; # end of videoEditors
   }; # end of options
-  config = {
-    programs.kdePackages.kdenlive = {
-      enable = cfg.kdenlive;
-    };
+  config = lib.mkIf cfg.kdenlive.enable {
+    home.packages = with pkgs; [
+      kdePackages.kdenlive # for video editing
+    ]; # end of home.packages
   };
 }

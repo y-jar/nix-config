@@ -2,10 +2,10 @@
 { pkgs, ... }:
 let
   # updates the system, configs, system, and such
-  nru-ito = pkgs.writeShellScriptBin "nru" (builtins.readFile ../../res/scripts-bin/nru.sh);
+  nru-ito = pkgs.writeShellScriptBin "nru" (builtins.readFile ../../../resjar/scripts-bin/nru.sh);
   # This wraps the shell script into a var / pkgs
   bldjar-ito = pkgs.writeShellScriptBin "bldjar" (
-    builtins.readFile ../../res/scripts-bin/build-jar.sh
+    builtins.readFile ../../../resjar/scripts-bin/build-jar.sh
   );
 in
 {

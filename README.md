@@ -80,8 +80,8 @@ Paste:
   - [host jar/](./hstjar): the NixOS host configurations are in here.
 4. [rot jar/](./rotjar): the dir to contain any files that are in rotaion for references, work, etc... Anything in there will not be around for long.
 
-> click [here](resjar/docbin/key-key.md) to see the **Full** directory layout.
+> click [here](resjar/docbin/key-key.md) to see the **Full** Documentation.
 
 ## Dev Section
 <!-- goals / working projects -->
-For anything related to development, please see the [dev section](res/doc-bin/dev-key.md) for more details.
+For anything related to development, please see the [dev section](./resjar/docbin/dev-key.md) for more details.

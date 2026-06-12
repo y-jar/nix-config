@@ -1,49 +1,53 @@
-{ config, lib, ... }:
+{
+  inputs,
+  config,
+  lib,
+  ...
+}:
 
 {
   config = {
     system.stateVersion = "VersionNumber"; # [CHANGE THIS]
+    #            [note, this should be the same as the home manager state version]
     #            [system state version from first install]
     home-manager.users.PLEASECHANGEME_USERNAME.home.stateVersion = "HomeManagerVersionNumber"; # [CHANGE THIS]
     #            [home manager state version from first install]
 
     # Fill this out!
     sysSettings = {
-      # users [list of users to create]
+      # =============[users] [list of users to create]
       users = [ "PLEASECHANGEME_USERNAME" ];
       adminUsers = [ "PLEASECHANGEME_USERNAME" ];
+      # =============[users]^^^
 
-      # experience install
+      # =============[experience install]
       # [pick one or more if you know what you're doing]
       gnome.enable = true; # sets gnome [on by default]
       hyprland.enable = true; # sets hyprland
       niri.enable = true; # sets niri
+      # =============[experience install]^^^
 
-      # hardware
+      # =============[hardware]
       # nvidia.enable = true;
       bluetooth.enable = true; # sets blueman in home packages
+      # [power management]
       tlp.enable = false; # NOTE: mutually exclusive with powerprofiles, pick one
       powerprofiles.enable = true;
       audio = {
         enable = true; # sets audio and adds some apps
         addon.enable = true; # adds my audio setup
       };
-      # printing.enable = true;
+      # =============[hardware]^^^
 
-      # [software]
+      # =============[software]
       flatpak.enable = true; # sets flatpak in the system [still needs to be enabled in user.nix]
       gaming = {
+        drivers.enable = true; # sets gaming drivers
         steam.enable = true; # sets steam
-        prism.enable = true; # sets prismlauncher
-        heroic.enable = true; # sets heroic
       };
       virtcam.enable = true; # sets virtual camera for things like OBS
       virt.enable = true; # sets virtualization and installs virtualization tools
-
-      # [server] - [sets server configurations]
-      # server = {
-      #   enable = true;
-      # };
+      # =============[software]^^^
     }; # end of sysSettings
 
     # set user for git [be sure to replace all instances of USERNAME and NAME

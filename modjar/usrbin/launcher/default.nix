@@ -8,7 +8,7 @@ let
 in
 {
   options = {
-    usrSettings.launcher = lib.mkOption {
+    usrSettings.launcher.enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
     };

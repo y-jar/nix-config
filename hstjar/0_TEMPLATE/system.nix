@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  inputs,
+  config,
+  lib,
+  ...
+}:
 
 {
   config = {
@@ -37,9 +42,8 @@
       # =============[software]
       flatpak.enable = true; # sets flatpak in the system [still needs to be enabled in user.nix]
       gaming = {
+        drivers.enable = true; # sets gaming drivers
         steam.enable = true; # sets steam
-        prism.enable = true; # sets prismlauncher
-        heroic.enable = true; # sets heroic
       };
       virtcam.enable = true; # sets virtual camera for things like OBS
       virt.enable = true; # sets virtualization and installs virtualization tools

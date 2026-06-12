@@ -9,7 +9,7 @@ let
 in
 {
   options = {
-    usrSettings.hyprland = lib.mkEnableOption {
+    usrSettings.hyprland.enable = lib.mkEnableOption {
       description = "Enable Hyprland";
     };
   };

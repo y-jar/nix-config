@@ -10,7 +10,7 @@ in
 {
   options = {
     sysSettings = {
-      virt = lib.mkOption {
+      virt.enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
       }; # end of virt
@@ -24,8 +24,8 @@ in
         swtpm.enable = true; # Allows libvirtd to use swtpm to create an emulated TPM.
         # ovmf.packages = [ pkgs.OVMFFull.fd ]; # Something about `Sample UEFI firmware for QEMU and KVM`
       }; # end of qemu
-      spiceUSBRedirection.enable = true;
     }; # end of virtualisation.libvirtd
+    virtualisation.spiceUSBRedirection.enable = true; # Allows USB redirection via SPICE.
 
     environment.systemPackages = with pkgs; [
       gnome-boxes # Virtual machine manager

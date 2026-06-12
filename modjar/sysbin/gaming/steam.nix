@@ -9,11 +9,11 @@ let
 in
 {
   options = {
-    sysSettings.gaming.steam = lib.mkOption {
+    sysSettings.gaming.steam.enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = "Enables gaming";
-    }; # end of sysSettings.gaming
+      description = "Enables Steam";
+    }; # end of sysSettings.gaming.steam.enable
   }; # end of options
 
   config = lib.mkIf cfg.enable {
@@ -25,10 +25,10 @@ in
       localNetworkGameTransfers.openFirewall = true;
       # extra packages
       extraPackages = with pkgs; [
-        xorg.libXcursor # X Cursor extension
-        xorg.libXi # X Input extension
-        xorg.libXinerama # Xinerama extension
-        xorg.libXScrnSaver # X Screen Saver extension
+        libxcursor # X Cursor extension
+        libxi # X Input extension
+        libxinerama # Xinerama extension
+        libxscrnsaver # X Screen Saver extension
         libpng # PNG image format library
         libpulseaudio # PulseAudio is a free and open-source sound server
         libvorbis # Vorbis audio compression reference implementation
@@ -43,7 +43,7 @@ in
     # sets the steam group to include all users
     users.groups = {
       steam = {
-        members = config.systemSettings.users;
+        members = config.sysSettings.users;
       };
     }; # end of users.groups
     # firewall rules for steam, from

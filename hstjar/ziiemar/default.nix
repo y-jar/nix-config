@@ -6,6 +6,7 @@
 }:
 {
   imports = [
+    inputs.home-manager.nixosModules.home-manager # home-manager module
     ./boot.nix # boot settings
     ./hardware-configuration.nix # hardware configuration
     ./system.nix # loads the system part of the system, root loves me
@@ -18,11 +19,15 @@
     home-manager = {
       useGlobalPkgs = true; # use global pkgs instead of user pkgs
       useUserPackages = true; # use user pkgs instead of global pkgs
+      backupFileExtension = "backup"; # file extension for backups
 
       # args passed to home-manager
       extraSpecialArgs = {
         inherit inputs;
         inherit hostnm;
+        gnomeEnable = config.sysSettings.gnome.enable;
+        hyprlandEnable = config.sysSettings.hyprland.enable;
+        niriEnable = config.sysSettings.niri.enable;
       }; # end of home-manager extraSpecialArgs
     }; # end of home-manager base config
 

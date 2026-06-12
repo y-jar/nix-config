@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 let
@@ -39,8 +40,11 @@ in
     programs.ranger = lib.mkIf rangerCfg.enable {
       enable = true;
     }; # end of programs.ranger
-    programs.nautilus = lib.mkIf nautilusCfg.enable {
-      enable = true;
-    }; # end of programs.nautilus
+    home.packages = lib.mkIf nautilusCfg.enable (
+      with pkgs;
+      [
+        nautilus
+      ]
+    ); # end of home.packages
   };
 }

@@ -1,8 +1,13 @@
-{ config, lib, ... }:
+{
+  inputs,
+  config,
+  lib,
+  ...
+}:
 
 {
   config = {
-    system.stateVersion = "26.05"; # [CHANGE THIS]
+    system.stateVersion = "25.11"; # [CHANGE THIS]
     #            [note, this should be the same as the home manager state version]
     #            [system state version from first install]
     home-manager.users.jar.home.stateVersion = "26.05"; # [CHANGE THIS]
@@ -37,9 +42,8 @@
       # =============[software]
       flatpak.enable = false; # sets flatpak in the system [still needs to be enabled in user.nix]
       gaming = {
+        drivers.enable = true; # sets gaming drivers
         steam.enable = true; # sets steam
-        prism.enable = true; # sets prismlauncher
-        heroic.enable = true; # sets heroic
       };
       virtcam.enable = true; # sets virtual camera for things like OBS
       virt.enable = true; # sets virtualization and installs virtualization tools

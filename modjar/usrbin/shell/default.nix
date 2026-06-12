@@ -10,7 +10,7 @@ in
 {
   # declare option
   options = {
-    usrSettings.shell = lib.mkOption {
+    usrSettings.shell.enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
       description = "Enable zsh shell";

@@ -4,19 +4,12 @@
   pkgs,
   ...
 }:
-let
-  cfg = config.sysSettings.gaming;
-in
 {
   options = {
-    sysSettings.gaming = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enables gaming";
-    }; # end of sysSettings.gaming
+    sysSettings.gaming.drivers.enable = lib.mkEnableOption "gaming drivers";
   }; # end of options
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf config.sysSettings.gaming.drivers.enable {
     # Support for controllers
     hardware.xpadneo.enable = true; # for Xbox controllers
     services.udev.packages = [ pkgs.game-devices-udev-rules ];

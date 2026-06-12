@@ -9,7 +9,7 @@ let
 in
 {
   options = {
-    usrSettings.obs = lib.mkOption {
+    usrSettings.obs.enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
     };

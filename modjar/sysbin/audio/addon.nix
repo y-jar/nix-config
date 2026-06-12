@@ -1,11 +1,11 @@
 { lib, config, ... }:
 let
-  cfg = config.audio.addon;
+  cfg = config.sysSettings.audio.addon;
 in
 {
   # options for the audio addon
   options = {
-    audio.addon = lib.mkEnableOption "My audio setup to enable to disable";
+    sysSettings.audio.addon.enable = lib.mkEnableOption "My audio setup to enable to disable";
   }; # End of Options
 
   # configuration for the audio addon

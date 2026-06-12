@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 let
@@ -8,14 +9,14 @@ let
 in
 {
   options = {
-    usrSettings.ai = lib.mkOption {
+    usrSettings.ai.enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
     };
   };
   config = lib.mkIf cfg.enable {
-    programs.lm-studio = {
-      enable = true;
-    };
+    home.packages = with pkgs; [
+      lmstudio # for ai
+    ]; # end of home.packages
   };
 }

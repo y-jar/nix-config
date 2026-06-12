@@ -9,7 +9,7 @@ let
 in
 {
   options = {
-    usrSettings.japanese = lib.mkOption {
+    usrSettings.japanese.enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
       description = "Enable Japanese input";

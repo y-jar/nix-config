@@ -3,7 +3,6 @@
   config = {
 
     time.timeZone = "America/New_York";
-    system.stateVersion = "25.11"; # keep this the same :)
 
     # Use zsh
     # NOTE: at a point i ran into a weird zsh error, run this if commands dont work
@@ -16,6 +15,8 @@
     # inside here will be things that might need to find a home
     programs.dconf.enable = true; # dconf is a simple key/value storage system that is heavily optimised for reading. This makes it an ideal system for storing user preferences (which are often read but rarely changed). It was created with this use case in mind.
     services.gnome.gnome-keyring.enable = true; # Helps store passwords/settings
+    programs.evince.enable = true; # Enablilng this native option automatically sets up PDF thumbnailing
+    services.tumbler.enable = true; # image stuff
 
     environment.sessionVariables = {
       NIXOS_OZONE_WL = "1"; # nudges Electron/Chrome apps to use Wayland

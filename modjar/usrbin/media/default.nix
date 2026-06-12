@@ -9,7 +9,7 @@ let
 in
 {
   options = {
-    usrSettings.media = lib.mkEnableOption "Enable media";
+    usrSettings.media.enable = lib.mkEnableOption "Enable media";
   };
   config = lib.mkIf cfg.enable {
     # MUSIC VIDEO
@@ -22,10 +22,6 @@ in
         cache-default = 4000000;
       }; # end of config
     }; # end of mpv
-
-    # IMAGES
-    services.tumbler.enable = true; # image stuff
-    programs.evince.enable = true; # Enablilng this native option automatically sets up PDF thumbnailing
 
     # bulk appstream
     home.packages = with pkgs; [

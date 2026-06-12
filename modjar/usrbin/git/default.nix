@@ -9,7 +9,7 @@ let
 in
 {
   options = {
-    usrSettings.git = lib.mkOption {
+    usrSettings.git.enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
       description = "Enable git";
@@ -20,12 +20,14 @@ in
     programs.git = {
       enable = true;
       # set git username and email from usrSettings
-      userName = config.usrSettings.name;
-      userEmail = config.usrSettings.email;
-      extraPackages = with pkgs; [
-        gh # for github login
-        lazygit # for kool github viewing
-      ];
+      settings = {
+        user.name = config.usrSettings.name;
+        user.email = config.usrSettings.email;
+      };
     }; # end of git config
+    home.packages = with pkgs; [
+      gh # for github login
+      lazygit # for kool github viewing
+    ]; # end of home.packages
   }; # end of config
 }

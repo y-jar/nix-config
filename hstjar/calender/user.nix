@@ -1,4 +1,11 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  gnomeEnable,
+  hyprlandEnable,
+  niriEnable,
+  ...
+}:
 
 {
   config = {
@@ -11,9 +18,9 @@
       };
 
       # =========[experience] [pick one or more if you know what you're doing]
-      gnome.enable = config.sysSettings.gnome.enable;
-      hyprland.enable = config.sysSettings.hyprland.enable;
-      niri.enable = config.sysSettings.niri.enable;
+      # gnome.enable = gnomeEnable;
+      hyprland.enable = hyprlandEnable;
+      niri.enable = niriEnable;
       # [epr plus]
       launcher.enable = true; # sets launcher fuzzel
       # =========[experience]^^^
@@ -25,6 +32,7 @@
         enable = false; # sets all editors
         vscodium.enable = true; # sets vscodium
         zed.enable = true; # sets zed
+        obsidian.enable = true; # sets obsidian
       }; # end of editors
       discord.enable = true; # sets discord
       flatpak.enable = false; # sets flatpak and adds bazaar
@@ -35,16 +43,18 @@
       # [media]
       media.enable = true; # sets media tools like mpv
       keepass.enable = true; # sets keepassxc
+      gaming = {
+        prism.enable = true; # sets prismlauncher [minecraft]
+        heroic.enable = true; # sets heroic [gog, epic.. other]
+      }; # end of gaming
       # =========[appstream]^^^
 
       # =========[creative tools]
       art.enable = true; # sets krita, blender +
       # godot.enable = true; # sets godot
       office.enable = true; # sets libreoffice and other apps
-      markdown.enable = true; # sets qownnotes and obsidian
       obs.enable = true; # sets up obs studio
-      kdenlive.enable = true; # sets kdenlive
-      obsidian.enable = true; # sets obsidian
+      videoEditors.kdenlive.enable = true; # sets kdenlive
       # =========[creative tools]^^^
 
       # =========[management]
