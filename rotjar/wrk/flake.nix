@@ -1,0 +1,95 @@
+{
+  # ======[]
+  description = "Nix in a Jar"; # a flake for managing my per host nixos configurations
+  # NOTE: This flake is considered minimal, as i only use it for managing my NixOS configurations, not as a mass yoinker
+  # ======[]
+  # ===========================inputs
+  inputs = {
+    # "Nix goes and fetches those repos and locks them in flake.lock. Nothing is "usable" yet, they're just downloaded."
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05"; # this sets the version of nixpkgs to use [I try to keep it up to date]
+
+    # grabs home-manager from the nix-community repo
+    home-manager = {
+      url = "github:nix-community/home-manager/release-26.05";
+      inputs.nixpkgs.follows = "nixpkgs"; # locks version to the nixpkgs to reduce duplicate data
+    };
+
+    nvf = {
+      url = "github:NotAShelf/nvf";
+      # You can override the input nixpkgs to follow your system's
+      # instance of nixpkgs. This is safe to do as nvf does not depend
+      # on a binary cache.
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # noctalia is a NixOS module for managing the Noctalia shell [the pretty bar/shell for niri and hyprland]
+    # noctalia @ https://docs.noctalia.dev/v4/getting-started/nixos/
+    # noctalia = {
+    #   url = "github:noctalia-dev/noctalia-shell";
+    #   inputs.nixpkgs.follows = "nixpkgs"; # locks version to the nixpkgs to reduce duplicate data
+    # };
+  }; # end of inputs
+
+  # ==========================outputs
+  # ======[]
+  # this is where the actual NixOS configurations are defined
+  # each entry here corresponds to a host-jar/configuration
+  # ======[]
+  outputs =
+    {
+      self, # the flake output itself, i will most likely not need this.
+      nixpkgs,
+      ...
+    }@inputs:
+    {
+      nixosConfigurations = {
+        # ======[]
+        calender = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = {
+            inherit inputs;
+            hostnm = "calender";
+          };
+          modules = [
+            ./modules/sys-bin # base system entry
+            ./host-jar/calender # entry system
+          ]; # end of modules
+        }; # end of calender
+        # ======[]
+        flipped-jar = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = {
+            inherit inputs;
+            hostnm = "flipped-jar";
+          };
+          modules = [
+            ./modules/sys-bin # base system entry
+            ./host-jar/flipped-jar # entry system
+          ]; # end of modules
+        }; # end of flipped-jar
+        # ======[]
+        yilyonix = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = {
+            inherit inputs;
+            hostnm = "yilyonix";
+          };
+          modules = [
+            ./modules/sys-bin # base system entry
+            ./host-jar/yilyonix # entry system
+          ]; # end of modules
+        }; # end of yilyonix
+        # ======[]
+        # PLACEHOLDER = nixpkgs.lib.nixosSystem {
+        #   system = "x86_64-linux";
+        #   specialArgs = { inherit inputs;
+        #     hostnm = "PLACEHOLDER";
+        #   };
+        #   modules = [
+        #     ./modules/sys-bin # base sys entry for all hosts [for per host, system setup is within host-jar/[HOST]/default.nix->Wherever]
+        #     ./host-jar/PLACEHOLDER # config entry directory within host-jar/
+        #   ]; # end of modules
+        # }; # end of END OF PLACEHOLDER
+      }; # end of configurations
+    }; # end of outputs
+}

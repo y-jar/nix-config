@@ -1,0 +1,40 @@
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+let
+  cfg = config.syskey.audio; # shortens config.sysSettings.audio
+in
+{
+  options = {
+    sysSettings.audio = {
+      enable = lib.mkEnableOption "Enable audio";
+    }; # end of sysSettings.audio
+  }; # end of options
+
+  # config to enable audio
+  config = lib.mkIf cfg.enable {
+    services.pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true; # <-- I need this for some games
+      pulse.enable = true; # enables PulseAudio translation
+      jack.enable = true; # enables JACK translation
+    };
+
+    # hardware 32-bit audio support is enabled globally
+    services.pulseaudio = {
+      enable = false;
+      support32Bit = true;
+    };
+
+    environment.systemPackages = with pkgs; [
+      pulseaudioFull # full pulseaudio libs for compatibility
+      easyeffects # audio mixer
+      qpwgraph # Qt graph manager for PipeWire, similar to QjackCtls
+      pavucontrol # PulseAudio Volume Control
+    ];
+  };
+}

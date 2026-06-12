@@ -73,14 +73,15 @@ Paste:
 > [!NOTE] This config is currently in a state of active development.
 
 1. [flake.nix](flake.nix): the main flake file that defines the system and the per-system configurations.
-2. [res/](./resjar): the directory containing all the resource for the config and repository.
-3. [modjar/](./modjar): the directory containing all the NixOS modules. And inside:
-  - [user bin/](./modjar/usrbin): the home-manager dir for user configuration per user
-  - [system bin/](./modjar/sysbin): the NixOS system configuration for **all** configurations.
-  - [host jar/](./hstjar): the NixOS host configurations are in here.
-4. [rot jar/](./rotjar): the dir to contain any files that are in rotaion for references, work, etc... Anything in there will not be around for long.
+2. [res/](./res): the directory containing all the resource for the config and repository.
+3. [modules/](./modules): the directory containing all the NixOS modules. And inside:
+  - [home-jar/](./modules/home-jar): the home manager configuration Directory.
+  - [sys-bin/](./modules/sys-bin): the NixOS system configuration for **all** configurations.
+  - [host-jar/](./modules/host-jar): the NixOS host configurations are in here.
+  - [nix-bin/](./modules/nix-bin): the Nix settings are within here (like experimental features etc..).
+4. [rot-jar/](./rot-jar): the dir to contain any files that are in rotaion for references, work, etc... Anything in there will not be around for long.
 
-> click [here](resjar/docbin/key-key.md) to see the **Full** directory layout.
+> click [here](res/doc-bin/key-key.md) to see the **Full** directory layout.
 
 ## Dev Section
 <!-- goals / working projects -->
