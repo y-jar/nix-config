@@ -39,27 +39,27 @@
       # [file explorers]
       nautilus.enable = true; # sets nautilus
       yazi.enable = true; # sets yazi
-      ranger.enable = true; # sets ranger
+      ranger.enable = false; # sets ranger
       # [media]
       media.enable = true; # sets media tools like mpv
       keepass.enable = true; # sets keepassxc
       gaming = {
-        prism.enable = true; # sets prismlauncher [minecraft]
-        heroic.enable = true; # sets heroic [gog, epic.. other]
+        prism.enable = false; # sets prismlauncher [minecraft]
+        heroic.enable = false; # sets heroic [gog, epic.. other]
       }; # end of gaming
       # =========[appstream]^^^
 
       # =========[creative tools]
-      art.enable = true; # sets krita, blender +
+      art.enable = false; # sets krita, blender +
       # godot.enable = true; # sets godot
       office.enable = true; # sets libreoffice and other apps
-      obs.enable = true; # sets up obs studio
-      kdenlive.enable = true; # sets kdenlive
+      obs.enable = false; # sets up obs studio
+      videoEditors.kdenlive.enable = false; # sets kdenlive
       # =========[creative tools]^^^
 
       # =========[management]
       japanese.enable = true; # sets japanese input
-      ai.enable = true; # sets AI tools like LMstudio
+      ai.enable = false; # sets AI tools like LMstudio
       git.enable = true; # sets git
       bluetooth.enable = true; # sets blueman in home packages
       dev.enable = true; # sets dev tools and basic languages
