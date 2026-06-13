@@ -22,7 +22,7 @@
       hyprland.enable = hyprlandEnable;
       niri.enable = niriEnable;
       # [epr plus]
-      launcher.enable = true; # sets launcher fuzzel
+      launcher.enable = false; # sets launcher fuzzel
       # =========[experience]^^^
 
       # =========[appstream]
@@ -32,14 +32,14 @@
         enable = false; # sets all editors
         vscodium.enable = true; # sets vscodium
         zed.enable = true; # sets zed
-        obsidian.enable = true; # sets obsidian
+        obsidian.enable = false; # sets obsidian
       }; # end of editors
       discord.enable = true; # sets discord
       flatpak.enable = false; # sets flatpak and adds bazaar
       # [file explorers]
       nautilus.enable = true; # sets nautilus
       yazi.enable = true; # sets yazi
-      ranger.enable = true; # sets ranger
+      ranger.enable = false; # sets ranger
       # [media]
       media.enable = true; # sets media tools like mpv
       keepass.enable = true; # sets keepassxc
@@ -54,14 +54,14 @@
       # godot.enable = true; # sets godot
       office.enable = true; # sets libreoffice and other apps
       obs.enable = true; # sets up obs studio
-      kdenlive.enable = true; # sets kdenlive
+      kdenlive.enable = false; # sets kdenlive
       # =========[creative tools]^^^
 
       # =========[management]
       japanese.enable = true; # sets japanese input
-      ai.enable = true; # sets AI tools like LMstudio
+      ai.enable = false; # sets AI tools like LMstudio
       git.enable = true; # sets git
-      bluetooth.enable = true; # sets blueman in home packages
+      bluetooth.enable = false; # sets blueman in home packages
       dev.enable = true; # sets dev tools and basic languages
       # =========[management]^^^
     }; # end of usrSettings

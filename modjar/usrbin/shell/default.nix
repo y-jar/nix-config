@@ -8,7 +8,7 @@ let
   cfg = config.usrSettings.shell;
 in
 {
-  # declare option
+  # declare options for the zsh shell [good to keep this on]
   options = {
     usrSettings.shell.enable = lib.mkOption {
       type = lib.types.bool;
@@ -51,6 +51,7 @@ in
         # ========[util]
 
         # =========[Extra]
+        cs = "cowsay";
         ff = "fastfetch";
         # =========[Extra]
       }; # end of aliases

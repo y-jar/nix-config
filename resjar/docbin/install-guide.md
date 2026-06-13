@@ -7,6 +7,9 @@ Here is the guide to install the system. Please be sure to read the notes to asu
 
 ## Steps to Follow on a new install
 
+> **NOTE:** 
+> This guide assumes your system is of the ones i configured support for. for adding basic support for your system, please see the [add new config guide](./add-new-config-guide.md).
+
 ### i Clone
 Clone The Repo:
 > Run `nix-shell -p git` to install git before
@@ -16,21 +19,25 @@ cd ~/nix-config
 ```
 
 ### ii Grab Hardware & Check Boot
+
 **Switch over hardware config:** *(Please read)*
-> NOTE: Replace 'HOSTNAMEPLACEHOLDER' with your chosen host name. <a href="./add-new-config-guide.md">Click here to add a new configuration (host).</a>
+> NOTE: Replace 'HOSTNAMEPLACEHOLDER' with your chosen host name. 
 
 > ME: `flipped-jar`, `calender`, `yilyonix`.
 ```bash
-cp /etc/nixos/hardware-configuration.nix ~/nix-config/modules/hosts-jar/HOSTNAMEPLACEHOLDER/hardware-configuration.nix
+cp /etc/nixos/hardware-configuration.nix ~/nix-config/hstjar/HOSTNAMEPLACEHOLDER/hardware-configuration.nix
 ```
+
 **Add / Switch Bootloader Options**
-You will need to check the boot options within `/etc/nixos/configuration.nix` (it should be near the top at the `imports` section). And after finding it, copy the lines over to the respective `hosts-jar/HOSTNAME/default.nix` spot you choose in the file
+You will need to check the boot options within `/etc/nixos/configuration.nix` (it should be near the top at the `imports` section). And after finding it, check the lines over to the respective `hstjar/HOSTNAME/boot.nix` spot and make sure the bootloader options are correct or the same as the ones in `configuration.nix` in `/etc/nixos/`.
 
 ### iii
+
 **Do the GIT!**
 ```bash
 cd ~/nix-config && git add .
 ```
+
 ### iv
 **Switch Over!**
 > NOTE: Replace `HOSTNAME` with the Chosen HostName That matches the Name of a `Configuration`
