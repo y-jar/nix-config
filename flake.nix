@@ -25,7 +25,7 @@
         #   system = "x86_64-linux";
         #   specialArgs = {
         #     inherit inputs;
-        #     hostnm = "TEMPLATE";
+        #     hostnm = "TEMPLATE"; # sets HOSTNAME [within, modjar/sysbin/networking/default.nix]
         #   }; # end of specialArgs
         #   modules = [
         #     ./modjar/sys-bin # base system entry
@@ -39,7 +39,7 @@
           system = "x86_64-linux";
           specialArgs = {
             inherit inputs;
-            hostnm = "loom";
+            hostnm = "loom"; # sets HOSTNAME
           }; # end of specialArgs
           modules = [
             ./modjar/sysbin # base system entry
@@ -52,7 +52,7 @@
           system = "x86_64-linux";
           specialArgs = {
             inherit inputs;
-            hostnm = "calender";
+            hostnm = "calender"; # sets HOSTNAME
           }; # end of specialArgs
           modules = [
             ./modjar/sysbin # base system entry
@@ -65,7 +65,7 @@
           system = "x86_64-linux";
           specialArgs = {
             inherit inputs;
-            hostnm = "yilyonix";
+            hostnm = "yilyonix"; # sets HOSTNAME
           }; # end of specialArgs
           modules = [
             ./modjar/sysbin # base system entry
@@ -78,7 +78,7 @@
           system = "x86_64-linux";
           specialArgs = {
             inherit inputs;
-            hostnm = "ziiemar";
+            hostnm = "ziiemar"; # sets HOSTNAME
           }; # end of specialArgs
           modules = [
             ./modjar/sysbin # base system entry

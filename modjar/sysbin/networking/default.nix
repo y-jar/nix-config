@@ -11,7 +11,7 @@
       # NOTE: If hostname is changed, be sure to match it on flake.nix and in the shell alias in
       # 	~/nix-config/modules/home/shell/zsh.nix
       networkmanager.enable = true;
-      hostName = "${hostnm}"; # sets hostname
+      hostName = "${hostnm}"; # sets HOSTNAME
 
       # for dns issues i keep running into
       nameservers = [
