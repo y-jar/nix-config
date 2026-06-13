@@ -14,7 +14,7 @@ Paste:
 <!-- My title Jar <3 -->
 <div align="center">
   <h1 style="color:#d3866d; border-bottom: none; font-size: 2.5em; margin-bottom: 0;">NixOS Jar ❄️</h1>
-  <code style="background-color: #3e3835; color: #e6dbb2; padding: 4px 8px; border-radius: 4px;">Generation: Iler-26.6.4</code>
+  <code style="background-color: #3e3835; color: #e6dbb2; padding: 4px 8px; border-radius: 4px;">Version: Iler-26.6.13</code>
   <p style="margin-top: 10px; color: #8a7a71;"><i>Written by me! [Park / Jar]</i></p>
 </div>
 
