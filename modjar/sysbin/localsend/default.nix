@@ -5,11 +5,11 @@
   ...
 }:
 let
-  cfg = config.usrSettings.localsend;
+  cfg = config.sysSettings.localsend;
 in
 {
   options = {
-    usrSettings.localsend = {
+    sysSettings.localsend = {
       enable = lib.mkOption {
         type = lib.types.bool;
         default = false;

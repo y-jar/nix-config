@@ -1,4 +1,5 @@
 {
+  hostnm,
   ...
 }:
 # NOTE: this will be changes to a more modular layout, for now, this is a simple default config
@@ -10,6 +11,7 @@
       # NOTE: If hostname is changed, be sure to match it on flake.nix and in the shell alias in
       # 	~/nix-config/modules/home/shell/zsh.nix
       networkmanager.enable = true;
+      hostName = "${hostnm}"; # sets hostname
 
       # for dns issues i keep running into
       nameservers = [
