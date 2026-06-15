@@ -1,0 +1,26 @@
+{
+  config,
+  lib,
+  ...
+}:
+{
+  config = lib.mkIf config.usrSettings.editors.nvf.enable {
+    programs.nvf = {
+      settings = {
+        vim = {
+          git.gitsigns = {
+            enable = true;
+            setupOpts = {
+              attach_to_untracked = true;
+              current_line_blame = true;
+              current_line_blame_opts = {
+                delay = 0;
+                virt_text_pos = "eol";
+              };
+            };
+          };
+        }; # end of vim
+      }; # end of settings
+    }; # end of nvf
+  }; # end of config
+}

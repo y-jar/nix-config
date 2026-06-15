@@ -1,0 +1,16 @@
+{
+  config,
+  lib,
+  ...
+}:
+{
+  config = lib.mkIf config.usrSettings.editors.nvf.enable {
+    programs.nvf = {
+      settings = {
+        vim = {
+
+        }; # end of vim
+      }; # end of settings
+    }; # end of nvf
+  }; # end of config
+}
