@@ -25,6 +25,7 @@
     environment.systemPackages = with pkgs; [
       nixd # Feature-rich Nix language server interoperating with C++ nix
       nixfmt # Nix formatter
+      nil # Nix language server
     ];
 
     # options for nix

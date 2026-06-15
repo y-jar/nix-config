@@ -19,6 +19,6 @@ in
   config = lib.mkIf cfg.enable {
     home.packages = [
       pkgs.prismlauncher
-    ];
+    ]; # end of home.packages
   }; # end of config
 }
