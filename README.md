@@ -26,9 +26,9 @@ Paste:
       <img src="https://img.shields.io/badge/NixOS-Official%20Site-5277C3?style=for-the-badge&logo=nixos&logoColor=white" alt="NixOS Official Website"/>
     </a>
     <!-- Repo Size -->
-    <a href="https://github.com/">
+    <!--<a href="https://github.com/">
       <img src="https://img.shields.io/github/repo-size/y-jar/nix-config?style=for-the-badge&logo=github&logoColor=white" alt="Repo Size"/>
-    </a>
+    </a>-->
     <!-- install guide -->
     <a href="./res/doc-bin/install-guide.md">
       <img src="https://img.shields.io/badge/Documentation-Installation%20Guide-d3866d?style=for-the-badge&logo=markdown&logoColor=white" alt="Installation Guide"/>
@@ -65,7 +65,7 @@ Paste:
 </details>
 
 <!-- link to layout -->
-> click [here](res/doc-bin/directory-key.md) to see the **Full** directory layout.
+> click [here](resjar/docbin/directory-key.md) to see the **Full** directory layout.
 
 <!-- My system Configuration information stats -->
 ## System Layout

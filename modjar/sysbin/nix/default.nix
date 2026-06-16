@@ -26,7 +26,7 @@
       nixd # Feature-rich Nix language server interoperating with C++ nix
       nixfmt # Nix formatter
       nil # Nix language server
-    ];
+    ]; # End of environment.systemPackages
 
     # options for nix
     nix.settings = {
@@ -34,7 +34,7 @@
       experimental-features = [
         "nix-command"
         "flakes"
-      ];
+      ]; # End of experimental-features
     }; # end of nix settings
   }; # end of config
 }

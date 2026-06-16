@@ -42,9 +42,14 @@
       # =============[software]
       flatpak.enable = true; # sets flatpak in the system [still needs to be enabled in user.nix]
       gaming = {
-        drivers.enable = true; # sets gaming drivers
-        steam.enable = true; # sets steam
-      };
+        drivers = {
+          enable = true; # sets gaming drivers
+          amd.enable = true; # sets amd drivers
+          intel.enable = false; # sets intel drivers
+          nvidia.enable = false; # sets nvidia drivers [NOT IMPLEMENTED]
+        }; # end of drivers
+        steam.enable = true; # sets steam and associated libraries for gaming, but not more important drivers
+      }; # end of gaming
       virtcam.enable = true; # sets virtual camera for things like OBS
       virt.enable = true; # sets virtualization and installs virtualization tools
       # =============[software]^^^

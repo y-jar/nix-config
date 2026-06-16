@@ -13,6 +13,6 @@ in
   config = lib.mkIf cfg.enable {
     services.power-profiles-daemon = {
       enable = true;
-    };
-  };
+    }; # end of power-profiles-daemon
+  }; # end of config
 }

@@ -8,42 +8,73 @@
 
 ```bash
 .
-├── modules
-│   ├── home-jar
-│   │   └── conf-jar
-│   │       ├── fastfetch
-│   │       │   └── logos-bin
-│   │       └── niri
-│   ├── host-jar
-│   │   ├── calender
-│   │   ├── flipped-jar
-│   │   │   └── firmware
-│   │   └── yilyonix
-│   ├── nix-bin
-│   └── sys-bin
-├── res
-│   ├── doc-bin
-│   └── scripts
-└── rot-jar
-    └── nix-config
-        ├── doc-bin
-        ├── hosts-jar
-        │   ├── aanri
-        │   ├── calender
-        │   ├── flipped-shark
-        │   │   └── firmware
-        │   ├── nixos
-        │   ├── tyun
-        │   ├── vmo
-        │   └── yilyonix
-        ├── modules-jar
-        │   ├── home-jar
-        │   │   ├── app-jar
-        │   │   └── ui-jar
-        │   │       ├── niri-bin
-        │   │       └── sway-bin
-        │   └── sys-bin
-        ├── rot-jar
-        ├── scripts-bin
-        └── single-file-config
+├── hstjar # Host configuration files
+│   ├── 0_TEMPLATE
+│   ├── calender
+│   ├── candle
+│   ├── loom
+│   ├── yilyonix
+│   └── ziiemar
+│       └── firmware
+├── modjar # Module configuration files
+│   ├── sysbin # System configuration files
+│   │   ├── audio
+│   │   ├── bluetooth
+│   │   ├── flatpak
+│   │   ├── fonts
+│   │   ├── gaming
+│   │   ├── gdm
+│   │   ├── gnome
+│   │   ├── hyprland
+│   │   ├── jellyfin
+│   │   ├── localsend
+│   │   ├── networking
+│   │   ├── niri
+│   │   ├── nix
+│   │   ├── portal
+│   │   ├── ppd
+│   │   ├── scripts-to-use
+│   │   ├── security
+│   │   ├── tlp
+│   │   ├── users
+│   │   ├── v412
+│   │   └── virt
+│   └── usrbin # User configuration files
+│       ├── ai
+│       ├── art
+│       ├── bluetooth
+│       ├── browsers
+│       ├── dev
+│       ├── discord
+│       ├── editors
+│       ├── fastfetch
+│       │   └── logos-bin
+│       ├── file-explorers
+│       ├── flatpak
+│       ├── gaming
+│       ├── git
+│       ├── hyprland
+│       │   ├── hl
+│       │   │   └── scripts-bin
+│       │   └── host-inputs
+│       ├── japanese
+│       ├── keepass
+│       ├── launcher
+│       ├── media
+│       ├── niri
+│       │   └── host-specific-inputs-bin
+│       ├── noctalia
+│       ├── nvf-neovim-vim
+│       ├── obs
+│       ├── office
+│       ├── pkgs-dump
+│       ├── shell
+│       ├── terminal
+│       ├── theming
+│       ├── user-info
+│       └── video-editors
+├── resjar # Resource files [docs, nix code, scripts..]
+│   ├── docbin
+│   ├── nix-code
+│   └── scripts-bin
 ```
