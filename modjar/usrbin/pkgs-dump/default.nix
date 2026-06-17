@@ -7,8 +7,8 @@
   home.packages = with pkgs; [
     # =======[Ness Jar] |>|>|>|>|>|>|>
     # [Base]
-    comma # Runs programs without installing them
     wine # Wine is a compatibility layer for running Windows programs on Unix-like systems
+    lynx # text-based web browser
 
     # [management]
     gearlever # Manages app images
@@ -20,10 +20,6 @@
     qownnotes # markdown app editor
     buffer # Minimal editing space for all those things that don't need keeping
     # =======[Folding Jar] |>|>|>|>|>|>|>
-
-    # =======[Entertainment] |>|>|>|>|>|>|>
-
-    # =======[Entertainment] |>|>|>|>|>|>|>
 
     # =======[Looks Jar] |>|>|>|>|>|>|>
     #[cursors]

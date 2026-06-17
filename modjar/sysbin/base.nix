@@ -36,6 +36,7 @@
       neovim # Vim text editor fork focused on extensibility and agility
       vim # text editor
       nh # nix helper
+      comma # Runs programs without installing them
       git # version control
 
       # [Archives & net serv]

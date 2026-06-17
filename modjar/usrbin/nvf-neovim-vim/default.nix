@@ -61,7 +61,7 @@ in
             };
           }; # end of binds.whichKey
 
-          # theme
+          # [theme]
           theme = {
             name = "gruvbox";
             enable = true;
@@ -69,12 +69,12 @@ in
             transparent = true;
           }; # end of vim.theme
 
-          # lsp
+          # [lsp]
           lsp = {
             enable = true;
           }; # end of vim.lsp
 
-          # statusline
+          # [statusline]
           statusline = {
             lualine.enable = true;
             # theme = "auto";
@@ -88,12 +88,13 @@ in
             # };
           }; # end of vim.statusline
 
+          # [treesitter]
           treesitter = {
             enable = true;
             addDefaultGrammars = true;
           }; # end of vim.treesitter
 
-          # luaConfigRC
+          # [luaConfigRC]
           luaConfigRC.example = ''
             vim.api.nvim_create_autocmd("TextYankPost", {
               callback = function()

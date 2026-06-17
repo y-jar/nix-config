@@ -58,7 +58,7 @@
             conceallevel = 2;
             concealcursor = "nc";
 
-            # fold your laundry
+            # fold yo laundry!
             foldmethod = "indent";
             foldlevel = 99;
             foldenable = false;

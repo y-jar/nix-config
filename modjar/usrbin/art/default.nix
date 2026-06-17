@@ -24,10 +24,12 @@ in
       converseen # Batch image converter and resizer
       fontforge # Font editor
       digikam # Photo management application
-      blender
-      coulr
-      halftone
-      krita
-    ];
+      blender # 3D modeling and animation software
+      coulr # Color picker
+      halftone # Halftone effect generator
+      krita # Digital painting and illustration software
+      gimp # GNU Image Manipulation Program
+      inkscape # Vector graphics editor
+    ]; # end of packages
   }; # end of config
 }

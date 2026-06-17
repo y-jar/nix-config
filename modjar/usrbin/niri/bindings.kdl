@@ -1,38 +1,37 @@
 binds {
     // ==========================CORE |>|>|>|>|>|>|>
     // // ==========================CORE |>|>|>|>|>|>|>
-    // HOTKEY-OVERLAY
+    // [HOTKEY-OVERLAY]
     Mod+Shift+Slash { show-hotkey-overlay; }
-    // Binds for all the main apps i like to use and or have a shortcut for basic pc useful
-    // TERMINAL
+    // [TERMINAL]
     Mod+Return hotkey-overlay-title="[E]nter a Terminal" { spawn "foot"; }
-    // LAUNCHER
+    // [LAUNCHER]
     Mod+Space hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel";}
     // Mod+D hotkey-overlay-title="[D]isplay Noctalia Launcher" { spawn "qs" "ipc" "-c" "noctalia-shell" "call" "launcher" "toggle"; }
     // Mod+D hotkey-overlay-title="[D]isplay Noctalia Launcher" { spawn-sh "noctalia msg panel-toggle launcher"; }
     Mod+D hotkey-overlay-title="[D]isplay Noctalia Launcher" { spawn-sh "noctalia-shell ipc call launcher toggle "; }
-    // LOCK-SCREEN
+    // [LOCK-SCREEN]
     Mod+Alt+L hotkey-overlay-title="[L]ock the Screen" { spawn "swaylock"; }
-    // BROWSER
+    // [BROWSER]
     Mod+B hotkey-overlay-title="Open [B]rowser" { spawn "librewolf"; }
-    // SETTINGS LAUNCHER
+    // [SETTINGS LAUNCHER]
     Mod+S hotkey-overlay-title="Toggle Noctalia [S]ettings" { spawn "qs" "ipc" "-c" "noctalia-shell" "call" "settings" "toggle"; }
     // Mod+S hotkey-overlay-title="Toggle Wayle [S]ettings" { spawn "wayle" "panel" "settings"; }
-    // FILE-EXPLORER
+    // [FILE-EXPLORER]
     Mod+E hotkey-overlay-title="Open File [E]xplorer" { spawn "nautilus"; }
     Mod+A hotkey-overlay-title="Open [A]pp Store" { spawn "bazaar"; }
-    // PH
-    // PH
+    // [OTHER APPS]
+    Mod+G hotkey-overlay-title="Open [G]apless" { spawn "g4music"; } // spawns gapless
 
-    // OVERVIEW
+    // [OVERVIEW]
     Mod+Tab repeat=false hotkey-overlay-title="[T]oggle Overview" { toggle-overview; }
-    // CLOSE-WINDOW
+    // [CLOSE-WINDOW]
     Super+Q repeat=false hotkey-overlay-title="[Q]uit Focused Window" { close-window; }
 
-    // SCREENSHOTING
-    Mod+Shift+S { screenshot; }
-    Mod+Ctrl+Shift+S { screenshot-screen; }
-    Alt+Print { screenshot-window; }
+    // [SCREENSHOTING]
+    Mod+Shift+S hotkey-overlay-title="Take [S]creenshot" { screenshot; }
+    Mod+Ctrl+Shift+S hotkey-overlay-title="Take Screenshot of [S]creen" { screenshot-screen; }
+    Mod+Alt+S hotkey-overlay-title="Take [S]creenshot of Window" { screenshot-window; }
 
     // // ==========================CORE |>|>|>|>|>|>|>
     // ==========================CORE |>|>|>|>|>|>|>
