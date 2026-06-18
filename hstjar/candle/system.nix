@@ -7,7 +7,7 @@
 
 {
   config = {
-    system.stateVersion = "26.05"; # [CHANGE THIS]
+    system.stateVersion = "25.11"; # [CHANGE THIS]
     #            [note, this should be the same as the home manager state version]
     #            [system state version from first install]
     home-manager.users.jar.home.stateVersion = "26.05"; # [CHANGE THIS]

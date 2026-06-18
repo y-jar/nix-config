@@ -80,6 +80,20 @@
           ]; # end of modules
         }; # end of ziiemar
 
+        # ========[]
+        candle = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = {
+            inherit inputs;
+            hostnm = "candle"; # sets HOSTNAME [within, modjar/sysbin/networking/default.nix]
+          }; # end of specialArgs
+          modules = [
+            ./modjar/sysbin # base system entry
+            ./hstjar/candle # entry system [configurate in this directory]
+            # ^^^^^^          | In this directory is where home-manager configuration is stored
+          ]; # end of modules
+        }; # end of candle
+
         # ========[^^ paste new config ^^]
       }; # end of configurations
     }; # end of outputs
