@@ -53,6 +53,13 @@
       virtcam.enable = true; # sets virtual camera for things like OBS
       virt.enable = true; # sets virtualization and installs virtualization tools
       # =============[software]^^^
+      # =============[Server]
+      server = {
+        jellyfin = {
+          enable = false; # sets jellyfin server
+          juser = "CHANGEME_USER"; # sets jellyfin user for perms for file access
+        }; # end of jellyfin
+      }; # end of server
     }; # end of sysSettings
 
     # set user for git [be sure to replace all instances of USERNAME and NAME

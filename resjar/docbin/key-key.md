@@ -18,3 +18,4 @@
 - [pipewire & audio documentation](./pipewire&audio-help.md)
 - [nvidia documentation](./nvidia.md)
 - [coloring](./coloring.md)
+- [gaming](./gaming.md)

@@ -62,7 +62,7 @@
       japanese.enable = true; # sets japanese input
       ai.enable = true; # sets AI tools like LMstudio
       git.enable = true; # sets git
-      bluetooth.enable = true; # sets blueman in home packages
+      bluetooth.enable = false; # sets blueman in home packages
       dev.enable = true; # sets dev tools and basic languages
       # =========[management]^^^
     }; # end of usrSettings

@@ -21,7 +21,7 @@
         #     hostnm = "TEMPLATE"; # sets HOSTNAME [within, modjar/sysbin/networking/default.nix]
         #   }; # end of specialArgs
         #   modules = [
-        #     ./modjar/sys-bin # base system entry
+        #     ./modjar/sysbin # base system entry
         #     ./hstjar/TEMPLATE # entry system [configurate in this directory]
         #     # ^^^^^^          | In this directory is where home-manager configuration is stored
         #   ]; # end of modules

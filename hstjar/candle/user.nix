@@ -22,17 +22,18 @@
       hyprland.enable = hyprlandEnable;
       niri.enable = niriEnable;
       # [epr plus]
-      launcher.enable = false; # sets launcher fuzzel
+      launcher.enable = true; # sets launcher fuzzel
       # =========[experience]^^^
 
       # =========[appstream]
       browsers.enable = true; # sets firefox and librewolf [work and personal]
       terminal.enable = true; # sets terminal as foot
       editors = {
-        enable = false; # sets all editors
+        enable = true; # sets all editors
         vscodium.enable = true; # sets vscodium
         zed.enable = true; # sets zed
-        obsidian.enable = false; # sets obsidian
+        obsidian.enable = true; # sets obsidian
+        nvf.enable = true; # sets nvf
       }; # end of editors
       discord.enable = true; # sets discord
       flatpak.enable = false; # sets flatpak and adds bazaar
@@ -50,9 +51,9 @@
       # =========[appstream]^^^
 
       # =========[creative tools]
-      art.enable = true; # sets krita, blender +
+      art.enable = false; # sets krita, blender +
       # godot.enable = true; # sets godot
-      office.enable = true; # sets libreoffice and other apps
+      office.enable = false; # sets libreoffice and other apps
       obs.enable = true; # sets up obs studio
       kdenlive.enable = false; # sets kdenlive
       # =========[creative tools]^^^

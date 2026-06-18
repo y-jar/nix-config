@@ -31,6 +31,14 @@ hl.bind(mainMod .. " + SHIFT + Q",                                        -- shu
     hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"))
 hl.bind("SUPER + SHIFT + ALT + Q", hl.dsp.exec_cmd("hyprctl kill"), { description = "Window: Forcefully zap a window" })
 -- hl.bind(mainMod .. " + Tab", "overview:toggle")                           -- toggle overview
+-- maximizeses a window
+hl.bind("SUPER + M", function()
+    hl.dispatch(hl.dsp.window.fullscreen({ mode = "maximized", action = "toggle" }))
+end)
+-- fullscreen an application
+hl.bind("SUPER + F", function()
+    hl.dispatch(hl.dsp.window.fullscreen({ mode = "fullscreen", action = "toggle" }))
+end)
 
 -- MISCELLANEOUS
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))

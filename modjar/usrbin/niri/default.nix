@@ -6,6 +6,9 @@
 }:
 let
   cfg = config.usrSettings.niri;
+  hostSpecificFile = ./host-inputs + "/${hostnm}.kdl"; # host-specific input
+  targetKdlSource =
+    if builtins.pathExists hostSpecificFile then hostSpecificFile else ./host-inputs/0-unknown.kdl;
 in
 {
   options = {
@@ -25,7 +28,7 @@ in
       "niri/rules.kdl".source = ./rules.kdl;
       "niri/startups.kdl".source = ./startups.kdl;
       # [host specific]
-      "niri/host-inputs.kdl".source = ./host-specific-inputs-bin/${hostnm}.kdl;
+      "niri/host-inputs.kdl".source = targetKdlSource;
     };
   };
 

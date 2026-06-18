@@ -6,7 +6,7 @@
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     }; # end of loader
-    initrd.kernelModules = [ "amdgpu" ];
+    # initrd.kernelModules = [ "amdgpu" ];
     kernelPackages = pkgs.linuxPackages_latest;
     supportedFilesystems = [
       "fuse"

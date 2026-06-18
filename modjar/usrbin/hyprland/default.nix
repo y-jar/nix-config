@@ -5,7 +5,10 @@
   ...
 }:
 let
-  cfg = config.usrSettings.hyprland;
+  cfg = config.usrSettings.hyprland; # hyprland settings
+  hostSpecificFile = ./host-inputs + "/${hostnm}.lua"; # host-specific input
+  targetLUASource =
+    if builtins.pathExists hostSpecificFile then hostSpecificFile else ./host-inputs/0-unknown.lua;
 in
 {
   options = {
@@ -20,7 +23,7 @@ in
     xdg.configFile = {
       "hypr/hyprland.lua".source = ./base.lua; # base linker
       "hypr/hl".source = ./hl; # main config
-      "hypr/host-inputs/input.lua".source = ./host-inputs/${hostnm}.lua; # host-specific inputs
+      "hypr/host-inputs/input.lua".source = targetLUASource; # host-specific inputs
     };
   };
 }
