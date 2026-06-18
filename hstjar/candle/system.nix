@@ -22,9 +22,9 @@
 
       # =============[experience install]
       # [pick one or more if you know what you're doing]
-      gnome.enable = true; # sets gnome [on by default]
-      hyprland.enable = false; # sets hyprland
-      niri.enable = false; # sets niri
+      gnome.enable = false; # sets gnome [on by default]
+      hyprland.enable = true; # sets hyprland
+      niri.enable = true; # sets niri
       # =============[experience install]^^^
 
       # =============[hardware]
