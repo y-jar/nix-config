@@ -55,7 +55,7 @@
       # godot.enable = true; # sets godot
       office.enable = false; # sets libreoffice and other apps
       obs.enable = true; # sets up obs studio
-      kdenlive.enable = false; # sets kdenlive
+      videoEditors.kdenlive.enable = false; # sets kdenlive
       # =========[creative tools]^^^
 
       # =========[management]
