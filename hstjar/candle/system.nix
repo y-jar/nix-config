@@ -58,7 +58,11 @@
       server = {
         jellyfin = {
           enable = false; # sets jellyfin server
+<<<<<<< HEAD
           juser = "candle"; # sets jellyfin user for perms for file access
+=======
+          juser = "jar"; # sets jellyfin user for perms for file access
+>>>>>>> 4f42c58 (uhg)
         }; # end of jellyfin
       }; # end of server
     }; # end of sysSettings
