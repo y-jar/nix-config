@@ -54,6 +54,7 @@ in
 
         # =========[Extra]
         cs = "cowsay";
+        csj = "cowsay IM JAR";
         ff = "fastfetch";
         # =========[Extra]
       }; # end of aliases
