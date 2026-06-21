@@ -9,20 +9,48 @@ let
 in
 {
   config = lib.mkIf cfg.enable {
-    # gtk settings
+    # [pkgs]
+    home.packages = [ pkgs.papirus-folders ];
+
+    # [cursor settings]
+    home.pointerCursor = {
+      name = "catppuccin-${cfg.flavor}-lavender-cursors";
+      package = pkgs.catppuccin-cursors.${cfg.flavor + "Lavender"};
+      gtk.enable = true;
+      size = 24;
+    }; # end of home.pointerCursor
+
+    # [gtk settings]
     gtk = {
       enable = true;
-      colorScheme = "dark";
+
+      # [theme settings]
+      theme = {
+        name = "catppuccin-${cfg.flavor}-${cfg.accent}-standard";
+        package = pkgs.catppuccin-gtk.override {
+          accents = [ cfg.accent ];
+          size = "standard";
+          variant = cfg.flavor;
+        }; # end of package
+      }; # end of theme
+
+      # [icon theme settings]
       iconTheme = {
         name = "Papirus-Dark";
-        package = pkgs.papirus-icon-theme;
-      };
-      theme = {
-        name = "catppuccin-gtk";
-        package = pkgs.catppuccin-gtk;
-      }; # end of theme
+        package = pkgs.catppuccin-papirus-folders.override {
+          flavor = cfg.flavor;
+          accent = cfg.accent;
+        }; # end of package
+      }; # end of iconTheme
+
+      # [linking!]
+      gtk3.extraConfig.gtk-application-prefer-dark-theme = true;
+      # mirrors the gtk3 theme into gtk4/libadwaita apps instead of leaving
+      # them on stock Adwaita (this was the actual bug before)
+      gtk4.theme = config.gtk.theme;
     }; # end of gtk
 
+    # [dconf settings]
     dconf.settings = {
       "org/gnome/desktop/interface" = {
         color-scheme = "prefer-dark";

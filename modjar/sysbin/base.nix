@@ -20,6 +20,8 @@
 
     environment.sessionVariables = {
       NIXOS_OZONE_WL = "1"; # nudges Electron/Chrome apps to use Wayland
+      QT_QPA_PLATFORMTHEME = "qtct";
+      QT_QPA_PLATFORMTHEME_QT6 = "qtct";
     };
 
     # tell NixOS to include these in the generated pixbuf loaders cache

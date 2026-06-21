@@ -1,3 +1,18 @@
+#*/-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Hi, This is the system configuration file for the picked host.
+# If you're new here, just think of it as a checklist to fill out.
+# Things to note:
+# 1. You should change the stateVersion to the version you're using
+# 2. You should change the home-manager state version to the version you're using
+# 3. You should change all PLEASECHANGEME_* placeholders to your actual username
+#   or values.
+# 4. whether or not something is false or true is entirely up to you. enable what
+#    you need!
+#
+# And remember, your configuration is yours to customize.
+# After you're done, head over to ./user.nix to configure your user!
+#*/-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
 {
   inputs,
   config,
@@ -53,21 +68,15 @@
       virtcam.enable = true; # sets virtual camera for things like OBS
       virt.enable = true; # sets virtualization and installs virtualization tools
       # =============[software]^^^
-<<<<<<< HEAD
-=======
 
->>>>>>> 4f42c58 (uhg)
       # =============[Server]
       server = {
         jellyfin = {
           enable = false; # sets jellyfin server
-<<<<<<< HEAD
-          juser = "CHANGEME_USER"; # sets jellyfin user for perms for file access
-=======
           juser = "PLEASECHANGEME_USERNAME"; # sets jellyfin user for perms for file access
->>>>>>> 4f42c58 (uhg)
         }; # end of jellyfin
       }; # end of server
+      # =============[Server]^^^
     }; # end of sysSettings
 
     # set user for git [be sure to replace all instances of USERNAME and NAME

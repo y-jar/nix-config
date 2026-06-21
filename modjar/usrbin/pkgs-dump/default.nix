@@ -30,7 +30,7 @@
     bibata-cursors-translucent # Translucent Varient of the Material Based Cursor
     catppuccin-cursors # matches catppuccin theme
     phinger-cursors # fun colorful ones
-    # =======[Looks Jar] |>|>|>|>|>|>|>
+    # =======[Looks Jar] |>|>|>|>|>|>|>^^^
 
     # =======[Dev Jar] |>|>|>|>|>|>|>
     # [cli / tui / tools]
@@ -42,7 +42,7 @@
     fd # Simple, fast and user-friendly alternative to find
     tree # Command to produce a depth indented directory listing
     cowsay # MOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
-    # =======[Dev Jar] |>|>|>|>|>|>|>
+    # =======[Dev Jar] |>|>|>|>|>|>|>^^^
 
     # ====Unsorteds====
   ]; # end of systemPackages

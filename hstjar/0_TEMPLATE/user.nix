@@ -1,3 +1,15 @@
+#*/-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Hi this is the user configuration file for the picked host.
+#
+# And remember, your configuration is yours to customize.
+# After you're done, head over to ./system.nix to configure your system!
+#
+# Some notes for new systems:
+# 1. try to avoid disabling shell. It's the default shell for most systems.
+# 2. enable and disable only what you need.
+# 3. for hyprland and niri, there are some files you can tweak in modjar/usrbin for
+#   per system configuration. There is an unknown default to prevent issues.
+#*/-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 {
   config,
   pkgs,
