@@ -9,9 +9,12 @@
     # [Base]
     wine # Wine is a compatibility layer for running Windows programs on Unix-like systems
     lynx # text-based web browser
+    popsicle # iso burner
+    kdePackages.isoimagewriter # iso burner
+    caligula # image burner
 
     # [management]
-    gearlever # Manages app images
+    # gearlever # Manages app images
     # =======[Ness Jar] |>|>|>|>|>|>|>
 
     # =======[Folding Jar] |>|>|>|>|>|>|>
@@ -42,6 +45,5 @@
     # =======[Dev Jar] |>|>|>|>|>|>|>
 
     # ====Unsorteds====
-    polkit_gnome # for a weird thing for some flatpak thing
   ]; # end of systemPackages
 }

@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 let
@@ -17,6 +18,10 @@ in
     programs = {
       firefox.enable = true;
       librewolf.enable = true;
-    };
-  };
+    }; # end of programs
+
+    home.packages = with pkgs; [
+      browsh # Browser within a TUI
+    ]; # end of home.packages
+  }; # end of config
 }

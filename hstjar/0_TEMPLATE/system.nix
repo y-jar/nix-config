@@ -23,7 +23,7 @@
       # =============[experience install]
       # [pick one or more if you know what you're doing]
       gnome.enable = true; # sets gnome [on by default]
-      hyprland.enable = true; # sets hyprland
+      hyprland.enable = true; # sets hyprland ~19MiB
       niri.enable = true; # sets niri
       # =============[experience install]^^^
 

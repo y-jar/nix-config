@@ -15,7 +15,7 @@
               config = {
                 header = [
                   "┌───────────────────────────┐"
-                  "│     Welcome back, jar!    │"
+                  "│     Welcome back, jar     │"
                   "└───────────────────────────┘"
                 ];
                 center = [

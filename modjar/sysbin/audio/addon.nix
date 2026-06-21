@@ -62,7 +62,7 @@ in
                 # serves as an input (should connect to the default mic)
                 "capture.props" = {
                   "node.name" = "mic-cap"; # name of the node of the module
-                  "node.passive" = true; # states that the node is considered background unless acted apon
+                  "node.passive" = false; # states that the node is considered background unless acted apon
                   "audio.position" = [
                     "FL"
                     "FR"
@@ -77,7 +77,7 @@ in
                     "FR"
                   ];
                   "stream.dont-remix" = true;
-                  "node.passive" = true;
+                  "node.passive" = false;
                 };
               };
             } # End of mic
@@ -252,6 +252,14 @@ in
             } # end of CHAT mod
           ]; # End of context.modules array
         }; # End of 97-jars block
+        "99-quantum" = {
+          "context.properties" = {
+            "default.clock.quantum" = 1024; # 1024 or 2048
+            "default.clock.min-quantum" = 256;
+            "default.clock.rate" = 48000;
+            "default.clock.allowed-rates" = [ 48000 ];
+          }; # End of context.properties
+        }; # End of 99-quantum block
       }; # End of extraConfig block
     }; # End of pipewire block
   }; # End of Config

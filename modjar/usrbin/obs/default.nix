@@ -14,6 +14,7 @@ in
       default = false;
     };
   };
+
   config = lib.mkIf cfg.enable {
     programs.obs-studio = {
       enable = true;

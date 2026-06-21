@@ -53,7 +53,6 @@
       usbutils # Provides lsusb
       killall # with attribute killall ? Environments:
       ntfs3g # for my woes with ntfs
-      mediawriter # This is the official package name for Fedora Media Writer in nixpkgs
 
       # [image format support]
       webp-pixbuf-loader # webp support for GTK apps including GNOME

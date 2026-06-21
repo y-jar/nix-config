@@ -34,6 +34,8 @@
             "dialout" # dialout access for serial devices
             "video" # video access
             "render" # render access
+            "audio" # audio stuff
+            "realtime" # eh?
           ]
           # if user is in adminUsers, grant wheel and libvirtd access
           ++ (lib.optionals (lib.any (x: x == user) config.sysSettings.adminUsers) [

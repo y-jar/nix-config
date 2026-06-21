@@ -16,7 +16,7 @@ in
       type = lib.types.bool;
       default = false;
       description = "Enable Niri window manager";
-    };
+    }; # end of usrSettings.niri.enable
   }; # end of options
 
   config = lib.mkIf cfg.enable {
@@ -29,7 +29,6 @@ in
       "niri/startups.kdl".source = ./startups.kdl;
       # [host specific]
       "niri/host-inputs.kdl".source = targetKdlSource;
-    };
-  };
-
+    }; # end of xdg.configFile
+  }; # end of config
 }
