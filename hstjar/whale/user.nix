@@ -18,7 +18,7 @@
       };
 
       # =========[experience] [pick one or more if you know what you're doing]
-      gnome.enable = gnomeEnable;
+      # gnome.enable = gnomeEnable;
       hyprland.enable = hyprlandEnable;
       niri.enable = niriEnable;
       # [epr plus]
