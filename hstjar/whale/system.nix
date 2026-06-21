@@ -7,10 +7,10 @@
 
 {
   config = {
-    system.stateVersion = "VersionNumber"; # [CHANGE THIS]
+    system.stateVersion = "26.05"; # [CHANGE THIS]
     #            [note, this should be the same as the home manager state version]
     #            [system state version from first install]
-    home-manager.users.PLEASECHANGEME_USERNAME.home.stateVersion = "HomeManagerVersionNumber"; # [CHANGE THIS]
+    home-manager.users.jar.home.stateVersion = "26.05"; # [CHANGE THIS]
     #            [home manager state version from first install]
 
     # Fill this out!
@@ -40,6 +40,7 @@
       # =============[hardware]^^^
 
       # =============[software]
+      localsend.enable = true;
       flatpak.enable = false; # sets flatpak in the system [still needs to be enabled in user.nix]
       gaming = {
         drivers = {

@@ -55,6 +55,7 @@
       # =============[hardware]^^^
 
       # =============[software]
+      localsend.enable = true; # sets localsend in the system
       flatpak.enable = true; # sets flatpak in the system [still needs to be enabled in user.nix]
       gaming = {
         drivers = {
