@@ -94,6 +94,19 @@
           ]; # end of modules
         }; # end of candle
 
+        # ========[]
+        whale = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = {
+            inherit inputs;
+            hostnm = "whale"; # sets HOSTNAME
+          }; # end of specialArgs
+          modules = [
+            ./modjar/sysbin # base system entry
+            ./hstjar/whale # entry system
+          ]; # end of modules
+        }; # end of whale
+
         # ========[^^ paste new config ^^]
       }; # end of configurations
     }; # end of outputs
