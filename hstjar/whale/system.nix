@@ -61,6 +61,15 @@
           enable = true; # sets jellyfin server
           juser = "jar"; # sets jellyfin user for perms for file access
         }; # end of jellyfin
+        sleepyjar = {
+          enable = false; # sets sleepy service
+          interval = "Fri 03:00:00"; # sets interval for sleepy service
+          # some* options for sleepy service:
+          # daily: reboots every midnight
+          # weekly: reboots every Sunday at midnight
+          # "Fri 03:00:00": reboots every Friday at 3am
+          # "*-*-1,15 02:00:00": reboots on the 1st and 15th of every month at 2am
+        }; # end of sleepyjar
       }; # end of server
       # =============[Server]^^^
     }; # end of sysSettings

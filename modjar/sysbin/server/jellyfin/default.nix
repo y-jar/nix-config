@@ -29,6 +29,7 @@ in
       enable = true;
       openFirewall = true;
       user = cfg.juser;
+      # note: the default port is 8096.
 
       # hardware acceleration
       # hardwareAcceleration = {

@@ -30,11 +30,11 @@ Paste:
       <img src="https://img.shields.io/github/repo-size/y-jar/nix-config?style=for-the-badge&logo=github&logoColor=white" alt="Repo Size"/>
     </a>-->
     <!-- install guide -->
-    <a href="./res/doc-bin/install-guide.md">
+    <a href="./resjar/docbin/install-guide.md">
       <img src="https://img.shields.io/badge/Documentation-Installation%20Guide-d3866d?style=for-the-badge&logo=markdown&logoColor=white" alt="Installation Guide"/>
     </a>
     <!-- directory documentaions -->
-    <a href="./res/doc-bin/directory-key.md">
+    <a href="./resjar/docbin/directory-key.md">
       <img src="https://img.shields.io/badge/Repository-Directory%20Key-8a7a71?style=for-the-badge&logo=git&logoColor=white" alt="Directory Key"/>
     </a>
     <!-- header bottom -->
@@ -61,7 +61,7 @@ Paste:
 
 <!-- current state -->
 <details><summary>Current State</summary>
-  <p>the current state of the config is *mostly* functional, with some missing features and bugs to be fixed.</p>
+  <p>the current state of the config is pretty functional, basic things like theming, user configuration, server setup and other things are integrated</p>
 </details>
 
 <!-- link to layout -->
