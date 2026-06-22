@@ -27,8 +27,8 @@ in
   config = lib.mkIf cfg.enable {
     services.jellyfin = {
       enable = true;
-      openFirewall = true;
-      user = cfg.juser;
+      openFirewall = true; # Open firewall for Jellyfin[8096 and another port]
+      user = cfg.juser; # Jellyfin user
       # note: the default port is 8096.
 
       # hardware acceleration
@@ -41,10 +41,10 @@ in
 
     # packages
     environment.systemPackages = [
-      pkgs.jellyfin
-      pkgs.jellyfin-desktop
-      pkgs.jellyfin-web
-      pkgs.jellyfin-ffmpeg
+      pkgs.jellyfin # Jellyfin Server
+      pkgs.jellyfin-desktop # Jellyfin Desktop Client
+      pkgs.jellyfin-web # Web Client for Jellyfin
+      pkgs.jellyfin-ffmpeg # Complete, cross-platform solution to record, convert and stream audio and video (Jellyfin fork)
     ]; # end of environment.systemPackages
 
     # user

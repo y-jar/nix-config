@@ -17,7 +17,7 @@ in
       name = "catppuccin-${cfg.flavor}-lavender-cursors";
       package = pkgs.catppuccin-cursors.${cfg.flavor + "Lavender"};
       gtk.enable = true;
-      size = 24;
+      size = 36;
     }; # end of home.pointerCursor
 
     # [gtk settings]

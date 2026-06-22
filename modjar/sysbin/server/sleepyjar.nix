@@ -18,13 +18,13 @@ in
         description = ''
           How often the server should reboot.
           Uses systemd calendar expressions (e.g., "daily", "weekly", "*-*-* 04:00:00").
-        '';
+        ''; # end of description
       }; # end of interval
     }; # end of sysSettings.server.sleepyjar
   }; # end of options
 
   config = lib.mkIf cfg.enable {
-    # 1. The Trigger: This tells systemd WHEN to do the action
+    # [This tells systemd WHEN to do the action]
     systemd.timers."periodic-nap" = {
       wantedBy = [ "timers.target" ];
       timerConfig = {

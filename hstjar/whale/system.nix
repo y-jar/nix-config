@@ -62,7 +62,7 @@
           juser = "jar"; # sets jellyfin user for perms for file access
         }; # end of jellyfin
         sleepyjar = {
-          enable = false; # sets sleepy service
+          enable = true; # sets sleepy service
           interval = "Fri 03:00:00"; # sets interval for sleepy service
           # some* options for sleepy service:
           # daily: reboots every midnight
