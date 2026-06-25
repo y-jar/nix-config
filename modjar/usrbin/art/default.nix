@@ -25,6 +25,7 @@ in
       fontforge # Font editor
       digikam # Photo management application
       blender # 3D modeling and animation software
+      blockbench # 3D model editor [mincraft stuff]
       coulr # Color picker
       halftone # Halftone effect generator
       krita # Digital painting and illustration software

@@ -29,6 +29,7 @@ in
 
     environment.systemPackages = with pkgs; [
       gnome-boxes # Virtual machine manager
+      virt-manager # Virtual machine manager
       dnsmasq # DNS server
       phodav # Optional: For file sharing with guest VMs
     ]; # end of environment.systemPackages
