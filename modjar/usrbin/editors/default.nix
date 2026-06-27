@@ -17,10 +17,10 @@ in
     }; # end of editors options
   }; # end of options
 
-  config = {
+  config = lib.mkIf cfg.enable {
     # Install each editor if the master switch is on OR the editor is explicitly enabled
-    programs.vscodium.enable = cfg.enable || cfg.vscodium.enable;
-    programs.zed-editor.enable = cfg.enable || cfg.zed.enable;
-    programs.obsidian.enable = cfg.enable || cfg.obsidian.enable;
+    programs.vscodium.enable = cfg.vscodium.enable;
+    programs.zed-editor.enable = cfg.zed.enable;
+    programs.obsidian.enable = cfg.obsidian.enable;
   }; # end of config
 }

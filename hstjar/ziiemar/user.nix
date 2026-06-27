@@ -29,7 +29,7 @@
       browsers.enable = true; # sets firefox and librewolf [work and personal]
       terminal.enable = true; # sets terminal as foot
       editors = {
-        enable = false; # sets all editors
+        enable = true; # sets all editors
         vscodium.enable = true; # sets vscodium
         zed.enable = true; # sets zed
         obsidian.enable = true; # sets obsidian
