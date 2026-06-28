@@ -26,7 +26,11 @@
       # =========[experience]^^^
 
       # =========[appstream]
-      browsers.enable = true; # sets firefox and librewolf [work and personal]
+      browsers = {
+        enable = true; # sets firefox and librewolf [work and personal]
+        firefox = true; # disables firefox [work]
+        librewolf = true; # enables librewolf [personal] [the default is `true`]
+      }; # end of browsers
       terminal.enable = true; # sets terminal as foot
       editors = {
         enable = true; # sets editors

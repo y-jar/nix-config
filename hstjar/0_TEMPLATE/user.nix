@@ -38,7 +38,11 @@
       # =========[experience]^^^
 
       # =========[appstream]
-      browsers.enable = true; # sets firefox and librewolf [work and personal]
+      browsers = {
+        enable = true; # sets firefox and librewolf [work and personal]
+        firefox = false; # disables firefox [work]
+        librewolf = true; # enables librewolf [personal] [the default is `true`]
+      };
       terminal.enable = true; # sets terminal as foot
       editors = {
         enable = false; # sets all editors
@@ -80,7 +84,7 @@
     }; # end of usrSettings
 
     theming = {
-      enable = false; # sets theme for gtk/qt
+      enable = true; # sets theme for gtk/qt
     }; # end of theming
   }; # end of config
 }

@@ -6,7 +6,7 @@
         enable = true;
         device = "/dev/vda";
         useOSProber = "true";
-        fsIdentifier = "Provided";
+        fsIdentifier = "provided";
       };
     }; # end of loader
     supportedFilesystems = [
