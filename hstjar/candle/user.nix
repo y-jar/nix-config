@@ -32,14 +32,14 @@
         enable = true; # sets all editors
         vscodium.enable = true; # sets vscodium
         zed.enable = true; # sets zed
-        obsidian.enable = true; # sets obsidian
+        obsidian.enable = false; # sets obsidian
         nvf.enable = true; # sets nvf
       }; # end of editors
       discord.enable = true; # sets discord
       flatpak.enable = false; # sets flatpak and adds bazaar
       # [file explorers]
       nautilus.enable = true; # sets nautilus
-      yazi.enable = true; # sets yazi
+      yazi.enable = false; # sets yazi
       ranger.enable = false; # sets ranger
       # [media]
       media.enable = true; # sets media tools like mpv

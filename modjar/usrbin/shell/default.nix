@@ -28,7 +28,7 @@ in
       # guide: https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html
       initContent = ''
         PROMPT='%F{#5F7CB8}%n|%f'
-        RPROMPT='%F{#5F7CB8}%m%f %F{cyan}%*%f'
+        RPROMPT='%F{#5F7CB8}%~ %F{#5F7CB8}%m%f %F{cyan}%*%f'
       '';
 
       # [aliases]

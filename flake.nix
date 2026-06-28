@@ -115,7 +115,8 @@
   inputs = {
     # =====[core parts]
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
-    # nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-25D11.url = "github:nixos/nixpkgs/nixos-25.11";
 
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";
@@ -123,9 +124,14 @@
     }; # End of homemanager
 
     # =====[addons]
+    wall-jar = {
+      url = "github:y-jar/wall-jar"; # [wallpapers i collected]
+      flake = false;
+    }; # end of wall-jar
+    # [nix defined neovim config]
     nvf = {
       url = "github:NotAShelf/nvf";
       inputs.nixpkgs.follows = "nixpkgs";
-    };
+    }; # end of nvf
   }; # end of inputs
 }
