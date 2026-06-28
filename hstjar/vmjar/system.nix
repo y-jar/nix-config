@@ -37,10 +37,10 @@
 
       # =============[experience install]
       # [pick one or more if you know what you're doing]
-      gnome.enable = false; # sets gnome [on by default]
-      hyprland.enable = true; # sets hyprland ~19MiB
-      niri.enable = false; # sets niri
-      cinnamon.enable = true; # sets cinnamon
+      gnome.enable = true; # sets gnome [on by default]
+      hyprland.enable = false; # sets hyprland ~19MiB
+      niri.enable = true; # sets niri
+      cinnamon.enable = false; # sets cinnamon
       # =============[experience install]^^^
 
       # =============[hardware]
