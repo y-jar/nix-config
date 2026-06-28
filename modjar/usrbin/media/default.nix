@@ -13,7 +13,7 @@ in
   };
   config = lib.mkIf cfg.enable {
     # MUSIC VIDEO
-    # ref https://wiki.nixos.org/wiki/MPV
+    # ref: https://wiki.nixos.org/wiki/MPV
     programs.mpv = {
       enable = true;
       config = {
@@ -28,6 +28,6 @@ in
       blanket # Background noises
       quodlibet # media player
       gapless # Beautiful, fast, fluent, light weight music player written in GTK4 [but no gaps]
-    ];
+    ]; # end of packages
   }; # enf of config
 }

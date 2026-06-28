@@ -16,6 +16,7 @@ in
       description = "Enable zsh shell";
     };
   };
+
   config = lib.mkIf cfg.enable {
     programs.zsh = {
       enable = true; # enable zsh shell
