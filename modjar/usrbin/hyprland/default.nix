@@ -18,12 +18,12 @@ in
   };
   # imports = [ ./hyprland.nix ];
 
-  # cconfig
+  # [config]
   config = lib.mkIf cfg.enable {
     xdg.configFile = {
       "hypr/hyprland.lua".source = ./base.lua; # base linker
       "hypr/hl".source = ./hl; # main config
       "hypr/host-inputs/input.lua".source = targetLUASource; # host-specific inputs
-    };
-  };
+    }; # end of xdg.configFile
+  }; # end of config
 }

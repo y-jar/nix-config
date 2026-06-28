@@ -30,6 +30,5 @@ in
       gnome-usage # Nice way to view information about use of system resources, like memory and disk space
       gnome-characters # Simple utility application to find and insert unusual characters
     ]; # end of extraPackages
-
   }; # end of config
 }

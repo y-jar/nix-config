@@ -107,6 +107,19 @@
           ]; # end of modules
         }; # end of whale
 
+        # ========[]
+        vmjar = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = {
+            inherit inputs;
+            hostnm = "vmjar"; # sets HOSTNAME
+          }; # end of specialArgs
+          modules = [
+            ./modjar/sysbin # base system entry
+            ./hstjar/vmjar # entry system
+          ]; # end of modules
+        }; # end of whale
+
         # ========[^^ paste new config ^^]
       }; # end of configurations
     }; # end of outputs

@@ -39,12 +39,18 @@
             to = 53320;
           }
         ]; # end of TCP port ranges
+
         allowedUDPPortRanges = [
           {
             from = 1714;
             to = 1764;
           }
         ]; # end of UDP port ranges
+
+        # [interfaces to trust]
+        trustedInterfaces = [
+          "virbr0" # virtual bridge for vms
+        ];
       }; # end of firewall
     }; # end of networking
 

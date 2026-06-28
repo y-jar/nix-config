@@ -24,6 +24,7 @@ cd ~/nix-config
 > NOTE: Replace 'HOSTNAMEPLACEHOLDER' with your chosen host name. 
 
 > ME: `flipped-jar`, `calender`, `yilyonix`.
+> for VMs: `10r100g`
 ```bash
 cp /etc/nixos/hardware-configuration.nix ~/nix-config/hstjar/HOSTNAMEPLACEHOLDER/hardware-configuration.nix
 ```

@@ -22,6 +22,7 @@ in
       enable = true;
       qemu = {
         swtpm.enable = true; # Allows libvirtd to use swtpm to create an emulated TPM.
+        vhostUserPackages = with pkgs; [ virtiofsd ];
         # ovmf.packages = [ pkgs.OVMFFull.fd ]; # Something about `Sample UEFI firmware for QEMU and KVM`
       }; # end of qemu
     }; # end of virtualisation.libvirtd
