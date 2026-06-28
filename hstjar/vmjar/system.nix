@@ -65,7 +65,7 @@
           intel.enable = false; # sets intel drivers
           nvidia.enable = false; # sets nvidia drivers [NOT IMPLEMENTED]
         }; # end of drivers
-        steam.enable = true; # sets steam and associated libraries for gaming, but not more important drivers
+        steam.enable = false; # sets steam and associated libraries for gaming, but not more important drivers
       }; # end of gaming
       virtcam.enable = false; # sets virtual camera for things like OBS
       virt.enable = true; # sets virtualization and installs virtualization tools
