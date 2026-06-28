@@ -22,29 +22,29 @@
 
 {
   config = {
-    system.stateVersion = "VersionNumber"; # [CHANGE THIS]
+    system.stateVersion = "26.05"; # [CHANGE THIS]
     #            [note, this should be the same as the home manager state version]
     #            [system state version from first install]
-    home-manager.users.PLEASECHANGEME_USERNAME.home.stateVersion = "HomeManagerVersionNumber"; # [CHANGE THIS]
+    home-manager.users.jar.home.stateVersion = "26.05"; # [CHANGE THIS]
     #            [home manager state version from first install]
 
     # Fill this out!
     sysSettings = {
       # =============[users] [list of users to create]
-      users = [ "PLEASECHANGEME_USERNAME" ];
-      adminUsers = [ "PLEASECHANGEME_USERNAME" ];
+      users = [ "jar" ];
+      adminUsers = [ "jar" ];
       # =============[users]^^^
 
       # =============[experience install]
       # [pick one or more if you know what you're doing]
-      gnome.enable = true; # sets gnome [on by default]
+      gnome.enable = false; # sets gnome [on by default]
       hyprland.enable = true; # sets hyprland ~19MiB
-      niri.enable = true; # sets niri
+      niri.enable = false; # sets niri
       # =============[experience install]^^^
 
       # =============[hardware]
       # nvidia.enable = true;
-      bluetooth.enable = true; # sets blueman in home packages
+      bluetooth.enable = false; # sets blueman in home packages
       # [power management]
       tlp.enable = false; # NOTE: mutually exclusive with powerprofiles, pick one
       powerprofiles.enable = true;
@@ -74,7 +74,7 @@
       server = {
         jellyfin = {
           enable = false; # sets jellyfin server
-          juser = "PLEASECHANGEME_USERNAME"; # sets jellyfin user for perms for file access
+          juser = "jar"; # sets jellyfin user for perms for file access
         }; # end of jellyfin
         sleepyjar = {
           enable = false; # sets sleepy service
@@ -91,10 +91,10 @@
 
     # set user for git [be sure to replace all instances of USERNAME and NAME
     #                     with your actual username and name                 ]
-    users.users.PLEASECHANGEME_USERNAME.description = "NAME";
-    home-manager.users.PLEASECHANGEME_USERNAME.usrSettings = {
-      name = "PLEASECHANGEME_NAME";
-      email = "PLEASECHANGEME_EMAIL";
+    users.users.jar.description = "jar";
+    home-manager.users.jar.usrSettings = {
+      name = "jar";
+      email = "jar@ghmail.com";
     };
   }; # end of config
 }
