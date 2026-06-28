@@ -44,7 +44,7 @@ in
     users.groups = {
       steam = {
         members = config.sysSettings.users;
-      };
+      }; # end of steam group
     }; # end of users.groups
     # firewall rules for steam, from
     networking.firewall.allowedTCPPorts = [ 24872 ];

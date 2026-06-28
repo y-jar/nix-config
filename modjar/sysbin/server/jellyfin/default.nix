@@ -31,7 +31,7 @@ in
       user = cfg.juser; # Jellyfin user
       # note: the default port is 8096.
 
-      # hardware acceleration
+      # [hardware acceleration]
       # hardwareAcceleration = {
       #   enable = true;
       #   type = "nvenc";
@@ -39,7 +39,7 @@ in
       # }; # end of hardwareAcceleration
     }; # end of services.jellyfin
 
-    # packages
+    # [packages]
     environment.systemPackages = [
       pkgs.jellyfin # Jellyfin Server
       pkgs.jellyfin-desktop # Jellyfin Desktop Client
@@ -47,8 +47,7 @@ in
       pkgs.jellyfin-ffmpeg # Complete, cross-platform solution to record, convert and stream audio and video (Jellyfin fork)
     ]; # end of environment.systemPackages
 
-    # user
-    # sets the jellyfin group to include all users
+    # [sets the jellyfin group to include all users]
     users.groups = {
       jellyfin = {
         members = config.sysSettings.users;
