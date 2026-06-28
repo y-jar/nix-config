@@ -23,7 +23,7 @@
       #proxy.default = "http://user:password@proxy:port/";
       #proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-      # firewall shii
+      # [firewall shii]
       firewall = {
         enable = true;
         allowedTCPPorts = [ 53317 ]; # LocalSend
@@ -32,7 +32,7 @@
           5353
         ]; # LocalSend + mDNS
 
-        # For KDE Connect / Phone integration Un comment if needed
+        # [For KDE Connect / Phone integration Un comment if needed]
         allowedTCPPortRanges = [
           {
             from = 53317;
@@ -54,7 +54,7 @@
       }; # end of firewall
     }; # end of networking
 
-    # for the dynamic seaching that other distros use.
+    # [for the dynamic seaching that other distros use.]
     services.avahi = {
       enable = true;
       nssmdns4 = true;

@@ -35,6 +35,7 @@
       niri.enable = niriEnable;
       # [epr plus]
       launcher.enable = true; # sets launcher fuzzel
+      addMyWalls.enable = false; # sets my wallpapers [off by default] ~300+mib at the time of adding this
       # =========[experience]^^^
 
       # =========[appstream]
