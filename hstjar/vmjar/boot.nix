@@ -2,12 +2,17 @@
   # boot
   boot = {
     loader = {
-      systemd-boot.enable = true;
-      efi.canTouchEfiVariables = true;
+      grub = {
+        enable = true;
+        device = "/dev/vda";
+        useOSProber = "true";
+        fsIdentifier = "Provided";
+      };
     }; # end of loader
     supportedFilesystems = [
       "fuse"
       "ntfs"
     ];
+    kernelPackages = pkgs.linuxPackages_latest;
   }; # end of boot
 }
