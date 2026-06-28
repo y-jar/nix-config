@@ -40,6 +40,7 @@
       gnome.enable = true; # sets gnome [on by default]
       hyprland.enable = true; # sets hyprland ~19MiB
       niri.enable = true; # sets niri
+      cinnamon.enable = true; # sets cinnamon
       # =============[experience install]^^^
 
       # =============[hardware]
