@@ -63,7 +63,7 @@
         }; # end of jellyfin
         sleepyjar = {
           enable = true; # sets sleepy service
-          interval = "Fri 03:00:00"; # sets interval for sleepy service
+          interval = "daily"; # sets interval for sleepy service
           # some* options for sleepy service:
           # daily: reboots every midnight
           # weekly: reboots every Sunday at midnight
