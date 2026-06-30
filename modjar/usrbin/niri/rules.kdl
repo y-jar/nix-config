@@ -25,7 +25,7 @@ window-rule {
 
 // Example: block out two password managers from screen capture.
 // (This example rule is commented out with a "/-" in front.)
-/-window-rule {
+window-rule {
     match app-id=r#"^org\.keepassxc\.KeePassXC$"#
     match app-id=r#"^org\.gnome\.World\.Secrets$"#
 
@@ -58,6 +58,12 @@ window-rule {
 /-window-rule {
     match is-active=true
     opacity 0.95
+}
+
+// makes sure buffer[app] is floating
+/-window-rule {
+    match app-id="buffer"
+    default-floating-position x=10 y=10
 }
 
 // This Fixes the Cringe Steam Papershit, Thanks to @whisper
