@@ -69,7 +69,7 @@
     users.users.jar.description = "jar";
     home-manager.users.jar.usrSettings = {
       name = "y-jar"; # This is mainly used for my git settings :P
-      email = "park.7qs@gmaiil.com";
+      email = "park.7qs@gmail.com";
     };
   }; # end of config
 }

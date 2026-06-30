@@ -50,7 +50,8 @@ in
         cl = "clear";
         ga = "git add .";
         fcir = "fcitx5-remote -r"; # force reload fcitx5
-        zr = "exec zsh"; # reload zsh
+        rz = "exec zsh"; # reload zsh
+        ns = "nix-shell"; # load dev enviroment
         # ========[util]
 
         # =========[Extra]
