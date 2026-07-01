@@ -37,10 +37,10 @@
 
       # =============[experience install]
       # [pick one or more if you know what you're doing]
+      cinnamon.enable = true; # sets cinnamon
       gnome.enable = true; # sets gnome [on by default]
       hyprland.enable = false; # sets hyprland ~19MiB
-      niri.enable = true; # sets niri
-      cinnamon.enable = false; # sets cinnamon
+      niri.enable = false; # sets niri
       # =============[experience install]^^^
 
       # =============[hardware]
@@ -48,7 +48,7 @@
       bluetooth.enable = false; # sets blueman in home packages
       # [power management]
       tlp.enable = false; # NOTE: mutually exclusive with powerprofiles, pick one
-      powerprofiles.enable = true;
+      powerprofiles.enable = false;
       audio = {
         enable = true; # sets audio and adds some apps
         addon.enable = false; # adds my audio setup
@@ -68,7 +68,10 @@
         steam.enable = false; # sets steam and associated libraries for gaming, but not more important drivers
       }; # end of gaming
       virtcam.enable = false; # sets virtual camera for things like OBS
-      virt.enable = true; # sets virtualization and installs virtualization tools
+      virt = {
+        enable = false; # sets virtualization and installs virtualization tools
+        isInVM = true; # enable if this system is in a vm [virtual mechine]
+      };
       # =============[software]^^^
 
       # =============[Server]
@@ -94,8 +97,8 @@
     #                     with your actual username and name                 ]
     users.users.jar.description = "jar";
     home-manager.users.jar.usrSettings = {
-      name = "jar";
-      email = "jar@ghmail.com";
+      name = "y-jar";
+      email = "park.7qs@gmail.com";
     };
   }; # end of config
 }

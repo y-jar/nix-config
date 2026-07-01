@@ -10,9 +10,15 @@ in
 {
   options = {
     sysSettings = {
-      virt.enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
+      virt = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+        }; # end of enable
+        isInVM = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+        }; # end of isInVM
       }; # end of virt
     }; # end of sysSettings
   }; # end of options

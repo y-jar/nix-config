@@ -48,7 +48,7 @@
       editors = {
         enable = true; # sets all editors
         vscodium.enable = true; # sets vscodium
-        zed.enable = true; # sets zed
+        zed.enable = false; # sets zed
         obsidian.enable = false; # sets obsidian
         nvf.enable = true; # sets nvf config for neovim [~2G]
       }; # end of editors

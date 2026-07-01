@@ -68,7 +68,10 @@
         steam.enable = true; # sets steam and associated libraries for gaming, but not more important drivers
       }; # end of gaming
       virtcam.enable = false; # sets virtual camera for things like OBS
-      virt.enable = true; # sets virtualization and installs virtualization tools
+      virt = {
+        enable = false; # sets virtualization and installs virtualization tools
+        isInVM = false; # enable if this system is in a vm [virtual mechine]
+      }; # end of virt
       # =============[software]^^^
 
       # =============[Server]
