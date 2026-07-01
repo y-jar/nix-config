@@ -32,6 +32,7 @@ pkgs.mkShell {
     echo -e "|   'nht <hostname>' -> Test a system configuration change"
     echo -e "|   'nhc'            -> Clean up older system generations"
     echo -e "|   'chkhrd'         -> Check local storage blocks and partitions"
+    echo -e "|   'ctrl+D' or `exit` -> Exit when you are done!"
     echo -e "|"
     echo -e "| For more Help, refer to:"
     echo -e "|   \e]8;;file://$HOME/nix-config/resjar/docbin/install-guide.md\e\\\\install-guide\e]8;;\e\\\\"
