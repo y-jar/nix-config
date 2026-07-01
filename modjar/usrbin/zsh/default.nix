@@ -1,0 +1,72 @@
+{
+  config,
+  lib,
+  hostnm,
+  ...
+}:
+let
+  cfg = config.usrSettings.shell;
+in
+{
+  # declare options for the zsh shell [good to keep this on]
+  options = {
+    usrSettings.shell.enable = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Enable zsh shell";
+    };
+  };
+
+  config = lib.mkIf cfg.enable {
+    programs.zsh = {
+      enable = true; # enable zsh shell
+      # [addings]
+      enableCompletion = true;
+      autosuggestion.enable = true;
+      syntaxHighlighting.enable = true;
+
+      # [prompt]
+      # guide: https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html
+      initContent = ''
+        PROMPT='%F{#5F7CB8}%n|%f'
+        RPROMPT='%F{#5F7CB8}%~ %F{#5F7CB8}%m%f %F{cyan}%*%f'
+      '';
+
+      # [aliases]
+      shellAliases = {
+        # ========[syst]
+        nht = "nh os test ~/nix-config#${hostnm}"; # base test
+        nhs = "nh os switch ~/nix-config#${hostnm}"; # base switch
+        nhc = "nh clean all --keep 7"; # base cleanup
+        nrs = "nixos-rebuild switch --sudo --flake ~/nix-jar#${hostnm}"; # hard building
+        nrt = "nixos-rebuild test --sudo --flake ~/nix-jar#${hostnm}"; # testing
+        # ========[syst]
+
+        # ========[app aliases]
+        nv = "nvim";
+        zd = "zeditor";
+        code = "codium";
+        yy = "yazi";
+        brw = "browsh"; # TUI based browser
+        # ========[app aliases]
+
+        # ========[util]
+        conf = "cd ~/nix-config && nvim";
+        ls = "ls --color=auto";
+        grep = "grep --color=auto";
+        cl = "clear";
+        ga = "git add .";
+        fcir = "fcitx5-remote -r"; # force reload fcitx5
+        rz = "exec zsh"; # reload zsh
+        ns = "nix-shell"; # load dev enviroment
+        # ========[util]
+
+        # =========[Extra]
+        cs = "cowsay";
+        csj = "cowsay IM JAR";
+        ff = "fastfetch";
+        # =========[Extra]
+      }; # end of aliases
+    }; # end of zsh config
+  }; # end of shell config
+}
