@@ -42,11 +42,17 @@ in
         nrt = "nixos-rebuild test --sudo --flake ~/nix-jar#${hostnm}"; # testing
         # ========[syst]
 
+        # ========[app aliases]
+        nv = "nvim";
+        zd = "zeditor";
+        code = "codium";
+        yz = "yazi";
+        # ========[app aliases]
+
         # ========[util]
         conf = "cd ~/nix-config && nvim";
         ls = "ls --color=auto";
         grep = "grep --color=auto";
-        nv = "nvim";
         cl = "clear";
         ga = "git add .";
         fcir = "fcitx5-remote -r"; # force reload fcitx5

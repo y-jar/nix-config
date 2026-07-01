@@ -25,11 +25,8 @@
     # =======[Folding Jar] |>|>|>|>|>|>|>
 
     # =======[Looks Jar] |>|>|>|>|>|>|>
-    #[cursors]
-    bibata-cursors # clean material-style, very popular
-    bibata-cursors-translucent # Translucent Varient of the Material Based Cursor
+    # [cursors]
     catppuccin-cursors # matches catppuccin theme
-    phinger-cursors # fun colorful ones
     # =======[Looks Jar] |>|>|>|>|>|>|>^^^
 
     # =======[Dev Jar] |>|>|>|>|>|>|>

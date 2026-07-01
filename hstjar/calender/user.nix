@@ -51,7 +51,7 @@
       keepass.enable = true; # sets keepassxc
       gaming = {
         prism.enable = true; # sets prismlauncher [minecraft]
-        heroic.enable = true; # sets heroic [gog, epic.. other]
+        heroic.enable = false; # sets heroic [gog, epic.. other]
       }; # end of gaming
       # =========[appstream]^^^
 

@@ -1,13 +1,19 @@
 # shell.nix
-{ pkgs ? import <nixpkgs> {} }:
-
+{pkgs ? import <nixpkgs> {}}:
 # create a shell enviroment
 pkgs.mkShell {
   buildInputs = with pkgs; [
+    # [stuff]
     pkg-config
     gtk3
     glib
-    cairo
+    cairo #
+
+    # [nix stuff]
+    nixd # Feature-rich Nix language server interoperating with C++ nix
+    nixfmt # Nix formatter
+    alejandra # formatter ~1.7mib
+    nil # Nix language server
 
     # [Get a rustc wrapper that knows where the source is, or use rustup] ~1.65gib
     rustc # Safe, concurrent, practical language (wrapper script)
@@ -20,8 +26,8 @@ pkgs.mkShell {
   RUST_SRC_PATH = "${pkgs.rustPlatform.rustLibSrc}";
 
   # hook: https://nix.dev/manual/nix/2.34/command-ref/nix-shell.html
-  shellHook =
-  ''
+  shellHook = ''
+    exec zsh
     echo "This shell is in ~Jar~"
   '';
 }
