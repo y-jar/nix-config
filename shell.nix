@@ -40,6 +40,9 @@ pkgs.mkShell {
     echo -e "|   \e]8;;file://$HOME/nix-config/README.md\e\\\\README\e]8;;\e\\\\"
     # =============[prompt]
 
+    # [force features so flakes work] [if not there, nh will not work]
+    export NIX_CONFIG="experimental-features = nix-command flakes"
+
     # ================[Functions]
     #[grab hardware]:
     hardto() {
