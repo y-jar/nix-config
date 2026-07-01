@@ -12,12 +12,6 @@ in
 {
   options = {
     usrSettings = {
-      yazi = {
-        enable = lib.mkOption {
-          type = lib.types.bool;
-          default = true;
-        };
-      };
       ranger = {
         enable = lib.mkOption {
           type = lib.types.bool;
@@ -33,10 +27,11 @@ in
     };
   }; # end of options
 
+  imports = [
+    ./yazi.nix
+  ];
+
   config = {
-    programs.yazi = lib.mkIf cfg.enable {
-      enable = true;
-    }; # end of programs.yazi
     programs.ranger = lib.mkIf rangerCfg.enable {
       enable = true;
     }; # end of programs.ranger
