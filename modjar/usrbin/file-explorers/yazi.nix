@@ -18,18 +18,20 @@ in
       enableZshIntegration = true;
       enableBashIntegration = true;
 
-      # Configure the internal rule engines directly via Nix
+      # [settings]
       settings = {
+        # [Define a custom open action alias called "edit"]
         opener = {
-          # Define a custom open action alias called "edit"
           edit = [
             {
               run = "nvim \"$@\"";
               block = true;         # Freezes yazi in the background while editing
               desc = "Open in Neovim";
             }
-          ];
-        };
+          ]; # end of edit
+        }; # end of opener
+
+        # [Open]
         open = {
           rules = [
             # Match markdown documents
@@ -38,11 +40,12 @@ in
             # Match all plain text documents
             { mime = "text/*"; use = "edit"; }
 
-            # Match JSON/KDL configs or generic text/code scripts that don't have explicit mimes
+            # Match text/code scripts that don't have explicit mimes
             { url = "*.json"; use = "edit"; }
             { url = "*.kdl"; use = "edit"; }
             { url = "*.nix"; use = "edit"; }
-          ];
+            { url = "*.rs"; use = "edit"; }
+          ]; # end of rules
         }; # end of open
       }; # end of settings
 
