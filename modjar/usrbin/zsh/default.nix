@@ -38,8 +38,8 @@ in
         nht = "nh os test ~/nix-config#${hostnm}"; # base test
         nhs = "nh os switch ~/nix-config#${hostnm}"; # base switch
         nhc = "nh clean all --keep 7"; # base cleanup
-        nrs = "nixos-rebuild switch --sudo --flake ~/nix-jar#${hostnm}"; # hard building
-        nrt = "nixos-rebuild test --sudo --flake ~/nix-jar#${hostnm}"; # testing
+        nrs = "nixos-rebuild switch --sudo --flake ~/nix-config#${hostnm}"; # hard building
+        nrt = "nixos-rebuild test --sudo --flake ~/nix-config#${hostnm}"; # testing
         # ========[syst]
 
         # ========[app aliases]
