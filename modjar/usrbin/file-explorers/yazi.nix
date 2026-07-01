@@ -16,7 +16,37 @@ in
     programs.yazi = lib.mkIf cfg.enable {
       enable = true;
       enableZshIntegration = true;
+      enableBashIntegration = true;
 
+      # Configure the internal rule engines directly via Nix
+      settings = {
+        opener = {
+          # Define a custom open action alias called "edit"
+          edit = [
+            {
+              run = "nvim \"$@\"";
+              block = true;         # Freezes yazi in the background while editing
+              desc = "Open in Neovim";
+            }
+          ];
+        };
+        open = {
+          rules = [
+            # Match markdown documents
+            { url = "*.md"; use = "edit"; }
+
+            # Match all plain text documents
+            { mime = "text/*"; use = "edit"; }
+
+            # Match JSON/KDL configs or generic text/code scripts that don't have explicit mimes
+            { url = "*.json"; use = "edit"; }
+            { url = "*.kdl"; use = "edit"; }
+            { url = "*.nix"; use = "edit"; }
+          ];
+        }; # end of open
+      }; # end of settings
+
+      # [theme icons]
       theme.icon = {
         dirs = [
           { name = ".config"; text = ""; }
@@ -48,6 +78,8 @@ in
           { name = "Screenshots"; text = ""; }
         ]; # end of dir
       }; # end of theme.icon.dir
+
+      # [Keymaps]
       keymap.manager.prepend_keymap = [
 	        { run = "cd ~/Projects"; on = [ "g" "p" ]; desc = "Go to projects"; }
 	        { run = "cd ~/Screenshots"; on = [ "g" "s" ]; desc = "Go to screenshots"; }
@@ -82,6 +114,7 @@ in
           { run = "undo"; on = [ "u" ]; }
           { run = "redo"; on = [ "<C-r>" ]; }
       ]; # end of keybinds
+
       # [plugins]
       # plugins = {
       #   git = pkgs.yaziPlugins.git;

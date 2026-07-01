@@ -31,6 +31,11 @@ in
   }; # end of options
 
   config = lib.mkIf cfg.enable {
+    # set def app
+    home.sessionVariables = {
+      EDITOR = "nvim";
+      VISUAL = "nvim";
+    };
     programs.nvf = {
       enable = true;
 
