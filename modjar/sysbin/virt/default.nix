@@ -8,6 +8,10 @@ let
   cfg = config.sysSettings.virt;
 in
 {
+  imports = [
+    ./VM.nix # for systems that exit inside a vm
+  ];
+
   options = {
     sysSettings = {
       virt = {
