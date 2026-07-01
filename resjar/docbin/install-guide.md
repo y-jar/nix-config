@@ -18,39 +18,30 @@ git clone https://github.com/y-jar/nix-config.git ~/nix-config
 cd ~/nix-config
 ```
 
-### ii Grab Hardware & Check Boot
-
-**Switch over hardware config:** *(Please read)*
-> NOTE: Replace 'HOSTNAMEPLACEHOLDER' with your chosen host name. 
-
-> ME: `flipped-jar`, `calender`, `yilyonix`.
-> for VMs: `10r100g`
+### ii Run shell & add Hardware
+run `nix-shell` to set up the basic tools for install `[this will also provide some tips for you <3]`
+**Then run**:
 ```bash
-cp /etc/nixos/hardware-configuration.nix ~/nix-config/hstjar/HOSTNAMEPLACEHOLDER/hardware-configuration.nix
+hardto PICKEDHOST # <-- set your host name here [replace PICKEDHOST]
 ```
+
+> **My predefined PICKEDHOST options**: 
+> - `calender`: my main powerstation
+> - `vmjar`: for VMs that need use bios
+> - `yilyonix`: a basic laptop i have `[Very low specs]`
 
 **Add / Switch Bootloader Options**
 You will need to check the boot options within `/etc/nixos/configuration.nix` (it should be near the top at the `imports` section). And after finding it, check the lines over to the respective `hstjar/HOSTNAME/boot.nix` spot and make sure the bootloader options are correct or the same as the ones in `configuration.nix` in `/etc/nixos/`.
 
 ### iii
-
-**Do the GIT!**
-```bash
-cd ~/nix-config && git add .
-```
+If you are adding a new config please go [here](./adding-new-config-guide.md).
 
 ### iv
 **Switch Over!**
 > NOTE: Replace `HOSTNAME` with the Chosen HostName That matches the Name of a `Configuration`
 ```bash
-# switching and commiting
-    nixos-rebuild switch --sudo --flake ~/nix-config#HOSTNAME
-
-# Just testing
-    nixos-rebuild test --sudo --flake ~/nix-config#$HOSTNAME
+nhs HOSTNAME
 ```
-
-And now you are done!.. or is it?
 
 <p><a href="./post-install.md">Click here for post-install Information</a></p> and
 <a href="../../README.md">here for Back Home</a>

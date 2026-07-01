@@ -43,8 +43,9 @@ pkgs.mkShell {
     #[grab hardware]:
     hardto() {
         # [yoinks the hardware-configuration.nix over to the picked host dir in hstjar/]
+        # [if no host is there, it will make a new one]
         if [ -z "$1" ]; then
-            echo -e "\e[1;31mError: You must specify a host target! [e.g., hardto yilyonix]\e[0m"
+            echo -e "\e[1;31m|!!! Error: You must specify a host target! [e.g., hardto yilyonix]\e[0m"
             return 1
         fi
 
@@ -64,7 +65,7 @@ pkgs.mkShell {
                 echo -e "|!!!  Please fill out $1's system.nix and user.nix"
                 echo -e "|!!!  Please copy the template in the flake.nix and set it up for $1"
             else
-                echo -e "\e[1;31mError: Could not find template directory at $template_dir\e[0m"
+                echo -e "\e[1;31m|!!! Error: Could not find template directory at $template_dir\e[0m"
                 return 1
             fi # end of copy
         fi # end of safty check
