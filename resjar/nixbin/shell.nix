@@ -1,33 +1,47 @@
-# shell.nix
+# [shell.nix] This is a TEMPLATE file where other users can
 {pkgs ? import <nixpkgs> {}}:
 # create a shell enviroment
 pkgs.mkShell {
+  # [Install packages here] [refer to: https://search.nixos.org/packages for what pkgs]
   buildInputs = with pkgs; [
-    # [stuff]
-    pkg-config
-    gtk3
-    glib
-    cairo #
+    # [base]
+    neovim # Vim text editor fork focused on extensibility and agility
+    vim # text editor
+    git # version control
+    pkg-config # Tool that allows packages to find out information about other packages (wrapper script)
 
     # [nix stuff]
-    nixd # Feature-rich Nix language server interoperating with C++ nix
-    nixfmt # Nix formatter
-    alejandra # formatter ~1.7mib
-    nil # Nix language server
-
-    # [Get a rustc wrapper that knows where the source is, or use rustup] ~1.65gib
-    rustc # Safe, concurrent, practical language (wrapper script)
-    rust-analyzer # Language server for the Rust language
-    rustfmt # Tool for formatting Rust code according to style guidelines
-    cargo # Downloads your Rust project's dependencies and builds your project
+    # nh # nix helper
+    # nixd # Feature-rich Nix language server interoperating with C++ nix
+    # nixfmt # Nix formatter
+    # alejandra # formatter ~1.7mib
+    # nil # Nix language server
   ]; # end of build inputs
-
-  # [This environment variable tells rust-analyzer exactly where to look]
-  RUST_SRC_PATH = "${pkgs.rustPlatform.rustLibSrc}";
 
   # hook: https://nix.dev/manual/nix/2.34/command-ref/nix-shell.html
   shellHook = ''
-    exec zsh
-    echo "This shell is in ~Jar~"
+    # =============[prompt]
+    echo -e "\e[1;33m====[ Entering Installer Shell for Nix in a Jar ]====\e[0m"
+    echo -e "|"
+    echo -e "|"
+    echo -e "| Extra Commands:"
+    echo -e "|   'nhc'            -> Clean up older system generations"
+    echo -e "|   'chkhrd'         -> Check local storage blocks and partitions"
+    echo -e "|"
+    echo -e "| For more Help, refer to:"
+    echo -e "|   \e]8;;file://$HOME/PATH/TO_FILE_DOT_TXT\e\\\\PLACEHOLDER_NAME\e]8;;\e\\\\"
+    # =============[prompt]
+
+    # ================[Functions]
+
+    # ================[Functions]
+
+    # =======[aliases]
+    #[tools]
+    alias chkhrd="lsblk && fdisk -l"
+    #[extras]
+    alias cl="clear"
+    alias ga="git add ."
+    # =======[aliases]
   '';
 }

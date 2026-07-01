@@ -51,8 +51,11 @@ in
         # ========[app aliases]
 
         # ========[util]
-        conf = "cd ~/nix-config && nvim";
-        ls = "ls --color=auto";
+        ckhrd = "lsblk && fdisk -l";
+        jnconf = "cd ~/nix-config"; # nix config jar [move over into nix config]
+        jkconf = "cd ~/kilnjar"; # kiln jar [my dev / project folder]
+        jkrconf = "cd ~/kilnjar/reposjar"; # kiln jar [my dev / project folder]
+        # ls = "ls";
         grep = "grep --color=auto";
         cl = "clear";
         ga = "git add .";

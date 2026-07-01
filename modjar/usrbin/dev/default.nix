@@ -42,6 +42,6 @@ in
         # [Database GUI (optional but helpful for ERD work)]
         dbeaver-bin # Universal SQL Client for developers, DBA and analysts. Supports MySQL, PostgreSQL, MariaDB, SQLite, and more
       ]
-    );
-  };
+    ); # end of home.packages
+  }; # end of config
 }

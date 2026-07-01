@@ -46,10 +46,10 @@
       };
       terminal.enable = true; # sets terminal as foot
       editors = {
-        enable = false; # sets all editors
+        enable = true; # sets all editors
         vscodium.enable = true; # sets vscodium
         zed.enable = true; # sets zed
-        obsidian.enable = true; # sets obsidian
+        obsidian.enable = false; # sets obsidian
         nvf.enable = true; # sets nvf config for neovim [~2G]
       }; # end of editors
       discord.enable = false; # sets discord
@@ -80,7 +80,7 @@
       ai.enable = false; # sets AI tools like LMstudio
       git.enable = true; # sets git
       bluetooth.enable = false; # sets blueman in home packages
-      dev.enable = false; # sets dev tools and basic languages
+      dev.enable = true; # sets dev tools and basic languages
       # =========[management]^^^
     }; # end of usrSettings
 
