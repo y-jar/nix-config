@@ -34,7 +34,7 @@ hardto PICKEDHOST # <-- set your host name here [replace PICKEDHOST]
 You will need to check the boot options within `/etc/nixos/configuration.nix` (it should be near the top at the `imports` section). And after finding it, check the lines over to the respective `hstjar/HOSTNAME/boot.nix` spot and make sure the bootloader options are correct or the same as the ones in `configuration.nix` in `/etc/nixos/`.
 
 ### iii
-If you are adding a new config please go [here](./adding-new-config-guide.md).
+If you are adding a new config please go [here](./add-new-config-guide.md).
 
 ### iv
 **Switch Over!**
