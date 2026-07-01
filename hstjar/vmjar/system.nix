@@ -12,15 +12,12 @@
 # And remember, your configuration is yours to customize.
 # After you're done, head over to ./user.nix to configure your user!
 #*/-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
 {
   inputs,
   config,
   lib,
   ...
-}:
-
-{
+}: {
   config = {
     system.stateVersion = "26.05"; # [CHANGE THIS]
     #            [note, this should be the same as the home manager state version]
@@ -31,13 +28,13 @@
     # Fill this out!
     sysSettings = {
       # =============[users] [list of users to create]
-      users = [ "jar" ];
-      adminUsers = [ "jar" ];
+      users = ["jar"];
+      adminUsers = ["jar"];
       # =============[users]^^^
 
       # =============[experience install]
       # [pick one or more if you know what you're doing]
-      cinnamon.enable = true; # sets cinnamon
+      cinnamon.enable = false; # sets cinnamon
       gnome.enable = true; # sets gnome [on by default]
       hyprland.enable = false; # sets hyprland ~19MiB
       niri.enable = false; # sets niri
