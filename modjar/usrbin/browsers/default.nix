@@ -32,6 +32,20 @@ in
       librewolf.enable = cfg.librewolf;
     }; # end of programs
 
+    xdg.mimeApps = {
+      enable = true;
+      defaultApplications = {
+        # [browser defaults]
+        "text/html" = "librewolf.desktop";
+        "x-scheme-handler/http" = "librewolf.desktop";
+        "x-scheme-handler/https" = "librewolf.desktop";
+        "x-scheme-handler/about" = "librewolf.desktop";
+        "x-scheme-handler/unknown" = "librewolf.desktop";
+        # [editor defaults]
+
+      }; # end of default application
+    }; # end of mime apps
+
     home.packages = with pkgs; [
       browsh # Browser within a TUI
     ]; # end of home.packages

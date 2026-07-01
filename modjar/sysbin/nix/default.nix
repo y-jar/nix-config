@@ -22,11 +22,9 @@
     programs.nix-ld.enable = true;
 
     # nix stuff
-    environment.systemPackages = with pkgs; [
-      nixd # Feature-rich Nix language server interoperating with C++ nix
-      nixfmt # Nix formatter
-      nil # Nix language server
-    ]; # End of environment.systemPackages
+    # environment.systemPackages = with pkgs; [
+
+    # ]; # End of environment.systemPackages
 
     # options for nix
     nix.settings = {

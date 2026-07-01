@@ -2,6 +2,9 @@
 {
 
   # ==========================[Enabled User Packages]=====================
+  imports = [
+    ./btop.nix
+  ];
 
   # ==========================[User Packages]=============================
   home.packages = with pkgs; [
@@ -34,7 +37,6 @@
     tldr # Simplified and community-driven man pages
     bat # Cat(1) clone with syntax highlighting and Git integration
     jp # json parser
-    btop # Monitor of resources
     fzf # fuzzy finder
     fd # Simple, fast and user-friendly alternative to find
     tree # Command to produce a depth indented directory listing

@@ -47,6 +47,7 @@ in
         zd = "zeditor";
         code = "codium";
         yz = "yazi";
+        brw = "browsh"; # TUI based browser
         # ========[app aliases]
 
         # ========[util]

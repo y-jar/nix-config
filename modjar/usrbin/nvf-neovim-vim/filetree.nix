@@ -12,8 +12,8 @@
             enable = true;
             setupOpts = {
               view = {
-                width = 35;
-                side = "left";
+                width = 30;
+                side = "right";
               }; # end of view
 
               renderer = {

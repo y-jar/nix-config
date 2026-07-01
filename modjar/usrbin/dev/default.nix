@@ -27,6 +27,12 @@ in
         gcc # GNU Compiler Collection, version 15.2.0 (wrapper script)
         go # Go Programming language
 
+        # [Nix]
+        nixd # Feature-rich Nix language server interoperating with C++ nix
+        nixfmt # Nix formatter
+        nil # Nix language server
+        alejandra # formatter ~1.7mib
+
         # [rust]
         # rustc # Safe, concurrent, practical language (wrapper script)
         # rust-analyzer # Language server for the Rust language
