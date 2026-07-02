@@ -67,12 +67,21 @@ Paste:
 </details>
 
 <!-- current state -->
-<details><summary>Shell Stats and Extras</summary>
-  <p>the current state of the config is pretty functional, basic things like theming, user configuration, server setup and other things are integrated</p>
+<details><summary>Shell Stats & Extras</summary>
+  <h1>My Shell Related Stuff</h1>
 </details>
 
-<!-- link to layout -->
-> click [here](resjar/docbin/directory-key.md) to see the **Full** directory layout.
+<details><summary>Looks</summary>
+    <h1>My Looks</h1>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri tamen permagna accessio potest, si aliquod aeternum et infinitum impendere malum nobis opinemur. Quod idem licet transferre in voluptatem, ut postea variari.</p>
+</details>
+
+<details><summary>Apps & System Options</summary>
+    <h1>Apps & System</h1>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri tamen permagna accessio potest, si aliquod aeternum et infinitum impendere malum nobis opinemur. Quod idem licet transferre in voluptatem, ut postea variari.</p>
+</details>
+
+---
 
 <!-- My system Configuration information stats -->
 ## System Layout
