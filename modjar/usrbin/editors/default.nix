@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 
@@ -22,5 +23,9 @@ in
     programs.vscodium.enable = cfg.vscodium.enable;
     programs.zed-editor.enable = cfg.zed.enable;
     programs.obsidian.enable = cfg.obsidian.enable;
+
+    home.packages = [
+      pkgs.lorem # Generate placeholder text
+    ];
   }; # end of config
 }

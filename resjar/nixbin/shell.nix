@@ -38,6 +38,13 @@ pkgs.mkShell {
         echo -e "\e[1;32m==> Fetching and syncing with main repository...\e[0m"
         git pull --rebase origin main
     }
+    jc() {
+        if [ -z "$*" ]; then
+            echo -e "\e[1;31m|!!! Error: Specify your commit name! gotta document!\e[0m"
+            return 1
+        fi
+        git commit -m "$*"
+    }
     # ================[Functions]
 
     # =======[aliases]

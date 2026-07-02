@@ -59,8 +59,15 @@ Paste:
 > configuring my personal NixOS setup. So please be aware that some of the config may not be
 > applicable to your setup.
 
+<!--===========SUMMERY=============-->
+
 <!-- current state -->
 <details><summary>Current State</summary>
+  <p>the current state of the config is pretty functional, basic things like theming, user configuration, server setup and other things are integrated</p>
+</details>
+
+<!-- current state -->
+<details><summary>Shell Stats and Extras</summary>
   <p>the current state of the config is pretty functional, basic things like theming, user configuration, server setup and other things are integrated</p>
 </details>
 
@@ -81,6 +88,8 @@ Paste:
 4. [rot jar/](./rotjar): the dir to contain any files that are in rotaion for references, work, etc... Anything in there will not be around for long.
 
 > click [here](resjar/docbin/key-key.md) to see the **Full** Documentation.
+
+
 
 ## Dev Section
 <!-- goals / working projects -->
