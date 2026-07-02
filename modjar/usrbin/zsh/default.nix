@@ -51,6 +51,9 @@ in
         # ========[app aliases]
 
         # ========[util]
+        #[jar]
+        jars = "git pull --rebase origin main";
+        #
         ckhrd = "lsblk && fdisk -l";
         jnconf = "cd ~/nix-config"; # nix config jar [move over into nix config]
         jkconf = "cd ~/kilnjar"; # kiln jar [my dev / project folder]

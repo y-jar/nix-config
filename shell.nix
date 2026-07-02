@@ -44,6 +44,20 @@ pkgs.mkShell {
     export NIX_CONFIG="experimental-features = nix-command flakes"
 
     # ================[Functions]
+    #[grabs latest version]
+    jars() {
+        echo -e "\e[1;32m==> Fetching and syncing with main repository...\e[0m"
+        git pull --rebase origin main
+    } # end of jars
+    #[essentialy nhs but for homemanager]
+    hms() {
+        if [ -z "$1" ]; then
+            echo -e "\e[1;31mError: Specify your home-manager user target profile! (e.g., hms jar)\e[0m"
+            return 1
+        fi
+        echo -e "\e[1;32m==> Deploying Home Manager environment for user profile: $1\e[0m"
+        nh home switch ~/nix-config#"$1"
+    } # end of hms
     #[grab hardware]:
     hardto() {
         # [yoinks the hardware-configuration.nix over to the picked host dir in hstjar/]

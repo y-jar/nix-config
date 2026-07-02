@@ -33,7 +33,11 @@ pkgs.mkShell {
     # =============[prompt]
 
     # ================[Functions]
-
+    #[grabs latest version]
+    jars() {
+        echo -e "\e[1;32m==> Fetching and syncing with main repository...\e[0m"
+        git pull --rebase origin main
+    }
     # ================[Functions]
 
     # =======[aliases]
