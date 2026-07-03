@@ -15,6 +15,7 @@
     popsicle # iso burner
     kdePackages.isoimagewriter # iso burner
     caligula # image burner
+    # comma # Runs programs without installing them
 
     # [management]
     # gearlever # Manages app images

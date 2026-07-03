@@ -53,11 +53,11 @@ in
         # ========[util]
         #[jar]
         jars = "git pull --rebase origin main";
-        #
-        ckhrd = "lsblk && fdisk -l";
         jnconf = "cd ~/nix-config"; # nix config jar [move over into nix config]
         jkconf = "cd ~/kilnjar"; # kiln jar [my dev / project folder]
         jkrconf = "cd ~/kilnjar/reposjar"; # kiln jar [my dev / project folder]
+        #
+        ckhrd = "lsblk && fdisk -l";
         # ls = "ls";
         grep = "grep --color=auto";
         cl = "clear";
@@ -65,6 +65,7 @@ in
         fcir = "fcitx5-remote -r"; # force reload fcitx5
         rz = "exec zsh"; # reload zsh
         ns = "nix-shell"; # load dev enviroment
+        "," = "nix-shell -p";
         # ========[util]
 
         # =========[Extra]

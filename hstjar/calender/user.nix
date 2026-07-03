@@ -45,7 +45,7 @@
       # [file explorers]
       nautilus.enable = true; # sets nautilus
       yazi.enable = true; # sets yazi
-      ranger.enable = false; # sets ranger
+      ranger.enable = true; # sets ranger
       # [media]
       media.enable = true; # sets media tools like mpv
       keepass.enable = true; # sets keepassxc
