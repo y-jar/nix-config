@@ -1,136 +1,13 @@
 {
-  # ======[]
-  description = "My nix within a Jar";
-  # ======[OUTPUTS]
-  outputs =
-    {
-      self,
-      nixpkgs,
-      ...
-    }@inputs:
-    {
-      nixosConfigurations = {
-        # THIS is a template for creating new nixos configurations,
-        #     Just copy and paste this block and replace TEMPLATE
-        #     with the name of your new configuration
-        # ========[]
-        # TEMPLATE = nixpkgs.lib.nixosSystem {
-        #   system = "x86_64-linux";
-        #   specialArgs = {
-        #     inherit inputs;
-        #     hostnm = "TEMPLATE"; # sets HOSTNAME [within, modjar/sysbin/networking/default.nix]
-        #   }; # end of specialArgs
-        #   modules = [
-        #     ./modjar/sysbin # base system entry
-        #     ./hstjar/TEMPLATE # entry system [configurate in this directory]
-        #     # ^^^^^^          | In this directory is where home-manager configuration is stored
-        #   ]; # end of modules
-        # }; # end of TEMPLATE
-
-        # ========[]
-        loom = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = {
-            inherit inputs;
-            hostnm = "loom"; # sets HOSTNAME
-          }; # end of specialArgs
-          modules = [
-            ./modjar/sysbin # base system entry
-            ./hstjar/loom # entry system
-          ]; # end of modules
-        }; # end of loom
-
-        # ========[]
-        calender = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = {
-            inherit inputs;
-            hostnm = "calender"; # sets HOSTNAME
-          }; # end of specialArgs
-          modules = [
-            ./modjar/sysbin # base system entry
-            ./hstjar/calender # entry system
-          ]; # end of modules
-        }; # end of calender
-
-        # ========[]
-        yilyonix = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = {
-            inherit inputs;
-            hostnm = "yilyonix"; # sets HOSTNAME
-          }; # end of specialArgs
-          modules = [
-            ./modjar/sysbin # base system entry
-            ./hstjar/yilyonix # entry system
-          ]; # end of modules
-        }; # end of yilyonix
-
-        # ========[]
-        ziiemar = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = {
-            inherit inputs;
-            hostnm = "ziiemar"; # sets HOSTNAME
-          }; # end of specialArgs
-          modules = [
-            ./modjar/sysbin # base system entry
-            ./hstjar/ziiemar # entry system [configurate in this directory]
-            # ^^^^^^          | In this directory is where home-manager configuration is stored
-          ]; # end of modules
-        }; # end of ziiemar
-
-        # ========[]
-        candle = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = {
-            inherit inputs;
-            hostnm = "candle"; # sets HOSTNAME [within, modjar/sysbin/networking/default.nix]
-          }; # end of specialArgs
-          modules = [
-            ./modjar/sysbin # base system entry
-            ./hstjar/candle # entry system [configurate in this directory]
-            # ^^^^^^          | In this directory is where home-manager configuration is stored
-          ]; # end of modules
-        }; # end of candle
-
-        # ========[]
-        whale = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = {
-            inherit inputs;
-            hostnm = "whale"; # sets HOSTNAME
-          }; # end of specialArgs
-          modules = [
-            ./modjar/sysbin # base system entry
-            ./hstjar/whale # entry system
-          ]; # end of modules
-        }; # end of whale
-
-        # ========[]
-        vmjar = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = {
-            inherit inputs;
-            hostnm = "vmjar"; # sets HOSTNAME
-          }; # end of specialArgs
-          modules = [
-            ./modjar/sysbin # base system entry
-            ./hstjar/vmjar # entry system
-          ]; # end of modules
-        }; # end of whale
-
-        # ========[^^ paste new config ^^]
-      }; # end of configurations
-    }; # end of outputs
-
-  # ======[INPUTS]
+  # =-=-=-=-=-=-=-=[Scroll down to !!Hosts!!]
+  description = "My Nix within a Jar";
+  # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=[INPUTS]=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   inputs = {
-    # =====[core parts]
+    # nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-25D11.url = "github:nixos/nixpkgs/nixos-25.11";
-
+    # home-manager
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs"; # locks version to the nixpkgs to reduce duplicate data
@@ -151,5 +28,58 @@
     #   url = "github:youwen5/zen-browser-flake";
     #   inputs.nixpkgs.follows = "nixpkgs";
     # };
-  }; # end of inputs
+  };
+  # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=[OUTPUTS]=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  outputs =
+    {
+      self,
+      nixpkgs,
+      ...
+    }@inputs:
+    let
+      # =-=-=[Systems that will be x86_64-linux]
+      mkJar = hostName: nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = {
+          inherit inputs;
+          hostnm = hostName; # Dynamically sets hostnm for networking/Zsh
+        }; # end of special args
+        modules = [
+          ./modjar/sysbin # Base system core entry
+          ./hstjar/${hostName} # Host-specific directory entry [what happens here can depend on each system]
+        ]; # end of modules
+      }; # end of mkJar
+
+      # =-=-=[Systems that will be non x86_64-linux]
+      # CURRENTLY UNDER RESEARCH
+      urnJar = { hostName, arch }: nixpkgs.lib.nixosSystem {
+        system = arch; # Dynamically sets the architecture
+        specialArgs = {
+          inherit inputs;
+          hostnm = hostName;
+        }; # end of special args
+        modules = [
+          ./modjar/sysbin #
+          ./hstjar/${hostName} #
+        ]; # end of modules
+      }; # end of uurnJar
+    in
+    {
+      # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=!!HOSTS!!=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+      nixosConfigurations = {
+        # ========[base linux system]
+        # TEMPLATE = mkJar "TEMPLATE";
+
+        loom = mkJar "loom"; # silly pc
+        calender = mkJar "calender"; # main pc
+        yilyonix = mkJar "yilyonix"; # test bench
+        ziiemar = mkJar "ziiemar"; # personal laptop
+        candle = mkJar "candle"; # gaming mini build
+        whale = mkJar "whale"; # Server system
+        vmjar = mkJar "vmjar"; # Virtual config
+
+        # ========[for non x86 systems..]
+        # TEMPLATE  = urnJarArch { hostName = "TEMPLATE"; arch = "aarch64-linux"; };
+      }; # end of nixosConfigurations
+    }; # end of nixosConfigurations
 }
