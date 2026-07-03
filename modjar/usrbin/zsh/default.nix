@@ -62,6 +62,7 @@ in
         grep = "grep --color=auto";
         cl = "clear";
         ga = "git add .";
+        gc = "git clone";
         fcir = "fcitx5-remote -r"; # force reload fcitx5
         rz = "exec zsh"; # reload zsh
         ns = "nix-shell"; # load dev enviroment
