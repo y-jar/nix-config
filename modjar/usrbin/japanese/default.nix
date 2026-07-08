@@ -72,4 +72,4 @@ in
       }; # End of fcitx5
     }; # End of i18n
   }; # End of config
-}
+} # end

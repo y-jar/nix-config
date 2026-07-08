@@ -1,3 +1,9 @@
+ #  _______
+ # '   /      ___  .___
+ #     |     /   ` /   \
+ #     |    |    | |   '
+ #  `--/    `.__/| /
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   # =-=-=-=-=-=-=-=[Scroll down to !!Hosts!!]
   description = "My Nix within a Jar";
@@ -45,8 +51,7 @@
         ]; # end of modules
       }; # end of mkJar
 
-      # =-=-=[Systems that will be non x86_64-linux]
-      # CURRENTLY UNDER RESEARCH
+      # =-=-=[Systems that will be non x86_64-linux] [WIP]
       urnJar = { hostName, arch }: nixpkgs.lib.nixosSystem {
         system = arch; # Dynamically sets the architecture
         specialArgs = {
@@ -54,27 +59,29 @@
           hostnm = hostName;
         }; # end of special args
         modules = [
-          ./modjar/sysbin #
-          ./hstjar/${hostName} #
+          ./modjar/sysbin # Entry for The System
+          ./hstjar/${hostName} # Entry for The host
         ]; # end of modules
       }; # end of uurnJar
     in
     {
       # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=!!HOSTS!!=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
       nixosConfigurations = {
-        # ========[base linux system]
+        # ========[base 糸s]
         # TEMPLATE = mkJar "TEMPLATE";
 
         loom = mkJar "loom"; # silly pc
         calender = mkJar "calender"; # main pc
-        yilyonix = mkJar "yilyonix"; # test bench
+        yilyonix = mkJar "yilyonix"; # test bench [Might need to FIX]
         ziiemar = mkJar "ziiemar"; # personal laptop
         candle = mkJar "candle"; # gaming mini build
         whale = mkJar "whale"; # Server system
         vmjar = mkJar "vmjar"; # Virtual config
 
-        # ========[for non x86 systems..]
+        # ========[for non x86 systems..] [WIP]
         # TEMPLATE  = urnJarArch { hostName = "TEMPLATE"; arch = "aarch64-linux"; };
       }; # end of nixosConfigurations
     }; # end of nixosConfigurations
 }
+
+# Go back Up!
