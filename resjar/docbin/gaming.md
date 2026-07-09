@@ -20,3 +20,4 @@ Here are some fixes for Steam games:
 
 - **Elden Ring anti-cheat**: args: `PROTON_EAC_RUNTIME=1 %command%`
 - audio not working: args: `PULSE_SINK="game-cap" %command%`
+- **Forcing Wayland on proton**: args: `PROTON_ENABLE_WAYLAND=1 %command%` Ref: https://www.youtube.com/@picoro-daimaku
