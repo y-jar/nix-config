@@ -6,7 +6,7 @@ binds {
     // [TERMINAL]
     Mod+Return hotkey-overlay-title="[E]nter a Terminal" { spawn "foot"; }
     // [LAUNCHER]
-    Mod+Space hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel";}
+    Mod+Shift+D hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel";}
     // Mod+D hotkey-overlay-title="[D]isplay Noctalia Launcher" { spawn "qs" "ipc" "-c" "noctalia-shell" "call" "launcher" "toggle"; }
     // Mod+D hotkey-overlay-title="[D]isplay Noctalia Launcher" { spawn-sh "noctalia msg panel-toggle launcher"; }
     Mod+D hotkey-overlay-title="[D]isplay Noctalia Launcher" { spawn-sh "noctalia-shell ipc call launcher toggle "; }
