@@ -9,11 +9,11 @@
   description = "My Nix within a Jar";
   # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=[INPUTS]=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   inputs = {
-    # nixpkgs
+    # [nixpkgs]
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-25D11.url = "github:nixos/nixpkgs/nixos-25.11";
-    # home-manager
+    # [home-manager]
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs"; # locks version to the nixpkgs to reduce duplicate data
@@ -29,6 +29,9 @@
       url = "github:NotAShelf/nvf";
       inputs.nixpkgs.follows = "nixpkgs";
     }; # end of nvf
+    nixdraw = {
+      url = "github:y-jar/nixdraw"; # [nix defined excalidraw]
+    }; # end of excalidraw
   }; # end of inputs
   # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=[OUTPUTS]=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   outputs =

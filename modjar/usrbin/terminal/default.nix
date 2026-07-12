@@ -22,13 +22,13 @@ in
         main = {
           font = "IntoneMono Nerd Font\:size=11";
           pad = "15x15"; # Adds some breathing room inside the window
-        };
+        }; # end of main
 
         colors-dark = {
           # background = "1a1b26";
           # foreground = "cfc9c2";
           alpha = 0.7; # trans parency
-        };
+        }; # end of colors dark
 
         cursor = {
           style = "beam";

@@ -51,7 +51,7 @@ in
           # [global hotkeys]
           globalOptions = {
             "Hotkey/TriggerKeys" = {
-              "0" = "Super+Alt+space"; # Toggle Japanese input on and off
+              "0" = "Super+space"; # Toggle Japanese input on and off
               "1" = ""; # Clears default Zenkaku_Hankaku toggle
               "2" = ""; # Clears default Hangul toggle [later]
             }; # End of Hotkey/Trigger
