@@ -61,6 +61,13 @@
           enable = false; # sets jellyfin server
           juser = "jar"; # sets jellyfin user for perms for file access
         }; # end of jellyfin
+        nixdraw = {
+          enable = true; # sets up a self-hosted excalidraw Server.
+          port = 3000; # sets the port for the excalidraw server
+          # =-=-=-=Usage:
+          # LOCAL: http://localhost:3000
+          # REMOTE: http://PH_Hostname:3000 or http://PH_IP_address:3000
+        }; # end of nixdraw
       }; # end of server
     }; # end of sysSettings
 

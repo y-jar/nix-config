@@ -40,7 +40,7 @@
       gnome.enable = true; # sets gnome [on by default] ~800mib
       hyprland.enable = true; # sets hyprland ~19MiB
       niri.enable = true; # sets niri
-      cinnamon.enable = true; # sets cinnamon ~800mib
+      cinnamon.enable = false; # sets cinnamon ~800mib
       # =============[experience install]^^^
 
       # =============[hardware]
@@ -89,6 +89,13 @@
           # "Fri 03:00:00": reboots every Friday at 3am
           # "*-*-1,15 02:00:00": reboots on the 1st and 15th of every month at 2am
         }; # end of sleepyjar
+        nixdraw = {
+          enable = false; # sets up a self-hosted excalidraw Server.
+          port = 3000; # sets the port for the excalidraw server
+          # =-=-=-=Usage:
+          # LOCAL: http://localhost:3000
+          # REMOTE: http://PH_Hostname:3000 or http://PH_IP_address:3000
+        }; # end of nixdraw
       }; # end of server
       # =============[Server]^^^
     }; # end of sysSettings
