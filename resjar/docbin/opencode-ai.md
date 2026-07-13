@@ -20,36 +20,22 @@ Local models run via Ollama on your machine. They are available in opencode via 
 
 | Model | ID | Notes |
 | :--- | :--- | :--- |
-| **GLM 4.7** | `ollama/glm-4.7` | Recommended by Ollama for opencode. Good general-purpose coding model. |
-| **Qwen3 Coder** | `ollama/qwen3-coder` | Specialized for code generation and editing. |
+| **Qwen3.5 9B** | `ollama/qwen3.5:9b` | Solid all-rounder for code and general tasks. |
+| **Qwen3.5 9B (MLX)** | `ollama/qwen3.5:9b-mlx` | MLX variant of Qwen3.5 9B. |
+| **Ministral 3 14B** | `ollama/frob/ministral-3:14b` | Mistral's larger reasoning model, good for analysis. |
+| **Ministral 3 3B** | `ollama/frob/ministral-3:3b` | Lightweight Mistral model for quick tasks. |
+| **Mistral 7B** | `ollama/mistral:7b` | General-purpose Mistral model. |
+| **Gemma 4** | `ollama/gemma4:latest` | Google's latest Gemma model. |
 
 ### Pulling Models
 Before using a local model, pull it with Ollama:
 ```bash
-ollama pull glm-4.7
-ollama pull qwen3-coder
-```
-
-### LM Studio Models (Local)
-Local models run via LM Studio on your machine. They are available in opencode via the `/models` command.
-
-| Model | ID | Notes |
-| :--- | :--- | :--- |
-| **GLM 4.6V Flash** | `lmstudio/zai-org/glm-4.6v-flash` | Lightweight and fast. Great for quick tasks. |
-| **Ministral 3 14B Reasoning** | `lmstudio/mistralai/ministral-3-14b-reasoning` | Mistral's reasoning model, good for analysis. |
-| **Qwen3.5 9B** | `lmstudio/qwen/qwen3.5-9b` | Solid all-rounder for code and general tasks. |
-
-### Downloading LM Studio Models
-Before using a local model, download it with the LM Studio CLI:
-```bash
-pull-models
-```
-
-Or manually:
-```bash
-lms get zai-org/glm-4.6v-flash
-lms get mistralai/ministral-3-14b-reasoning
-lms get qwen/qwen3.5-9b
+ollama pull qwen3.5:9b
+ollama pull qwen3.5:9b-mlx
+ollama pull frob/ministral-3:14b
+ollama pull frob/ministral-3:3b
+ollama pull mistral:7b
+ollama pull gemma4:latest
 ```
 
 ### Switching Models

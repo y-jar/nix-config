@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
-# pull-models.sh — downloads LM Studio models via lms CLI
+# pull-models.sh — downloads models via ollama CLI
 
-echo "Pulling LM Studio models..."
+echo "Pulling Ollama models..."
+ollama pull qwen3.5:9b
+ollama pull qwen3.5:9b-mlx
+ollama pull frob/ministral-3:14b
+ollama pull frob/ministral-3:3b
+ollama pull mistral:7b
+ollama pull gemma4:latest
 
-lms get zai-org/glm-4.6v-flash
-lms get mistralai/ministral-3-14b-reasoning
-lms get qwen/qwen3.5-9b
-
-echo "Done! Models downloaded."
+echo "Done! All models downloaded."

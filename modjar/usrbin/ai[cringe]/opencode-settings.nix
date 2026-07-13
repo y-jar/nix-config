@@ -15,37 +15,33 @@ in
               baseURL = "http://localhost:11434/v1";
             }; # end of options
             models = {
-              "glm-4.7" = {
-                name = "GLM 4.7";
-                tool_call = true;
-              }; # end of glm-4.7
-              "qwen3-coder" = {
-                name = "Qwen3 Coder";
-                tool_call = true;
-              }; # end of qwen3-coder
-            }; # end of models
-          }; # end of ollama
-          lmstudio = {
-            npm = "@ai-sdk/openai-compatible";
-            name = "LM Studio";
-            options = {
-              baseURL = "http://localhost:1234/v1";
-            }; # end of options
-            models = {
-              "zai-org/glm-4.6v-flash" = {
-                name = "GLM 4.6V Flash";
-                tool_call = true;
-              }; # end of glm-4.6v-flash
-              "mistralai/ministral-3-14b-reasoning" = {
-                name = "Ministral 3 14B Reasoning";
-                tool_call = true;
-              }; # end of ministral-3-14b-reasoning
-              "qwen/qwen3.5-9b" = {
+              "qwen3.5:9b" = {
                 name = "Qwen3.5 9B";
                 tool_call = true;
-              }; # end of qwen3.5-9b
+              }; # end of qwen3.5:9b
+              "qwen3.5:9b-mlx" = {
+                name = "Qwen3.5 9B (MLX)";
+                tool_call = true;
+              }; # end of qwen3.5:9b-mlx
+              "frob/ministral-3:14b" = {
+                name = "Ministral 3 14B";
+                tool_call = true;
+              }; # end of frob/ministral-3:14b
+              "frob/ministral-3:3b" = {
+                name = "Ministral 3 3B";
+                tool_call = true;
+              }; # end of frob/ministral-3:3b
+              "mistral:7b" = {
+                name = "Mistral 7B";
+                tool_call = true;
+              }; # end of mistral:7b
+              "gemma4:latest" = {
+                name = "Gemma 4";
+                tool_call = true;
+              }; # end of gemma4:latest
             }; # end of models
-          }; # end of lmstudio
+          }; # end of ollama
+
         }; # end of provider
 
         # permissions (order matters: last matching rule wins)

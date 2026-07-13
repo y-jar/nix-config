@@ -8,6 +8,7 @@ let
   # TEMPLATE: { name = "TEMPLATE"; path = ./scriptsbin/TEMPLATE.sh; }
   scriptList = [
     { name = "pull-models"; path = ./scriptsbin/pull-models.sh; }
+    { name = "remove-models"; path = ./scriptsbin/remove-models.sh; }
   ]; # end of script list
 
   jarScripts = map (s: mkScript s.name s.path) scriptList; # dont touch me!

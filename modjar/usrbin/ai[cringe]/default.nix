@@ -21,11 +21,8 @@ in
   config = lib.mkIf cfg.enable {
     home.packages = with pkgs; [
       lmstudio # for ai
+      opencode-desktop # opencode gui
     ]; # end of home.packages
 
-    services.ollama = {
-      enable = true;
-      acceleration = "rocm"; # Swap to "cuda" if using an Nvidia GPU, or leave this line out for CPU only
-    }; # end of services.ollama
   }; # end of config
 }
