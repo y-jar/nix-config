@@ -7,14 +7,14 @@ let
   # =-=-=[Scripts]
   # TEMPLATE: { name = "TEMPLATE"; path = ./scriptsbin/TEMPLATE.sh; }
   scriptList = [
-    { name = "nhu"; path = ./scriptsbin/nhu.sh; }
-    { name = "nru"; path = ./scriptsbin/nru.sh; }
+    { name = "bldjar"; path = ./scriptsbin/bldjar.sh; }
+    { name = "fixzsh"; path = ./scriptsbin/fixzsh.sh; }
   ]; # end of script list
 
   jarScripts = map (s: mkScript s.name s.path) scriptList; # dont touch me!
 in
 {
   config = {
-    environment.systemPackages = jarScripts;
+    home.packages = jarScripts;
   }; # end of config
 }

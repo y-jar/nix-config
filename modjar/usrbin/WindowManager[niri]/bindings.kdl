@@ -14,6 +14,7 @@ binds {
     Mod+Alt+L hotkey-overlay-title="[L]ock the Screen" { spawn "swaylock"; }
     // [BROWSER]
     Mod+B hotkey-overlay-title="Open [B]rowser" { spawn "librewolf"; }
+    Mod+Shift+B hotkey-overlay-title="Open [B]rowser search" { spawn "jsearch"; }
     // [SETTINGS LAUNCHER]
     Mod+S hotkey-overlay-title="Toggle Noctalia [S]ettings" { spawn "qs" "ipc" "-c" "noctalia-shell" "call" "settings" "toggle"; }
     // Mod+S hotkey-overlay-title="Toggle Wayle [S]ettings" { spawn "wayle" "panel" "settings"; }

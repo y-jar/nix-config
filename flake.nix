@@ -29,9 +29,6 @@
       url = "github:NotAShelf/nvf";
       inputs.nixpkgs.follows = "nixpkgs";
     }; # end of nvf
-    nixdraw = {
-      url = "github:y-jar/nixdraw"; # [nix defined excalidraw]
-    }; # end of excalidraw
   }; # end of inputs
   # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=[OUTPUTS]=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   outputs =

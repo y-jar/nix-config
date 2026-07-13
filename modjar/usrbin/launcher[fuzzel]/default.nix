@@ -7,6 +7,9 @@ let
   cfg = config.usrSettings.launcher;
 in
 {
+  imports = [
+    ./addScripts.nix
+  ];
   options = {
     usrSettings.launcher.enable = lib.mkOption {
       type = lib.types.bool;
@@ -24,6 +27,7 @@ in
           prompt = "糸 >"; # the prompt to use
           width = 30; # the width of the fuzzel window
           horizontal-pad = 20; # the horizontal padding of the fuzzel window
+          exit-on-keyboard-focus-loss = true; # close if clicked away
         }; # end of main
         colors = {
           background = "2b2622bf"; # the background color

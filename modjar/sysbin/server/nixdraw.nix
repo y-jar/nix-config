@@ -3,10 +3,6 @@ let
   cfg = config.sysSettings.server.nixdraw;
 in
 {
-  imports = [
-    inputs.nixdraw
-  ]; # end of imports
-
   options = {
     sysSettings.server.nixdraw = {
       enable = lib.mkOption {
@@ -22,10 +18,12 @@ in
     }; # end of sysSettings.server.nixdraw
   }; # end of options
 
-  config = {
-    services.excalidraw = {
-      enable = cfg.enable;
-      port = cfg.port;
-    }; # end of excalidraw
+  config = lib.mkIf cfg.enable {
+    virtualisation.oci-containers.containers.excalidraw = {
+       image = "excalidraw/excalidraw:latest"; # repo link
+       ports = [ "${toString cfg.port}:80" ]; #
+      }; # end of excalidraw
+    virtualisation.docker.enable = cfg.enable;
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.enable [ cfg.port ];
   }; # end of config
 }

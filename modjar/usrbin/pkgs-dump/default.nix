@@ -15,6 +15,7 @@
     popsicle # iso burner
     kdePackages.isoimagewriter # iso burner
     caligula # image burner
+    jq # Lightweight and flexible command-line JSON processor [needed for my jsearch script]
     # comma # Runs programs without installing them
 
     # [management]
