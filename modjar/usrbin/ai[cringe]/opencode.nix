@@ -30,6 +30,7 @@ in
         ## Development Guidelines
 
         Most projects will have a simple file for project rules and guidelines like: @resjar/pguidelines.md
+        When entering a project, please also read the README.md to get an overview of the project.
 
         ## General Guidelines
 
