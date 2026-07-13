@@ -16,6 +16,7 @@
   gnomeEnable,
   hyprlandEnable,
   niriEnable,
+  aiEnable,
   ...
 }:
 
@@ -77,7 +78,7 @@
 
       # =========[management]
       japanese.enable = false; # sets japanese input
-      ai.enable = false; # sets AI tools like LMstudio
+      ai.enable = aiEnable; # sets AI tools like opencode, ollama
       git.enable = true; # sets git
       bluetooth.enable = false; # sets blueman in home packages
       dev.enable = false; # sets dev tools and basic languages

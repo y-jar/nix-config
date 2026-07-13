@@ -40,6 +40,7 @@
       # =============[hardware]^^^
 
       # =============[software]
+      ai.enable = false; # sets AI tools (Ollama, opencode, etc.)
       localsend.enable = true;
       flatpak.enable = false; # sets flatpak in the system [still needs to be enabled in user.nix]
       gaming = {

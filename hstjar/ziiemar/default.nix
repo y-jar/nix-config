@@ -28,6 +28,7 @@
         gnomeEnable = config.sysSettings.gnome.enable;
         hyprlandEnable = config.sysSettings.hyprland.enable;
         niriEnable = config.sysSettings.niri.enable;
+        aiEnable = config.sysSettings.ai.enable;
       }; # end of home-manager extraSpecialArgs
     }; # end of home-manager base config
 
