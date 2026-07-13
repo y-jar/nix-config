@@ -2,6 +2,8 @@
 - [Back Home](../../README.md)
 - [Documentation Key](./key-key.md)
 
+> **Note:** This documentation was written with the assistance of AI.
+
 ---
 
 # AI / OpenCode Setup

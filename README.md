@@ -146,5 +146,4 @@ Paste:
 <!-- goals / working projects -->
 For anything related to development, please see the [dev section](./resjar/docbin/dev-key.md) for more details.
 
-## AI / OpenCode
-For information about the AI setup, available models, and custom agents, see the [AI / OpenCode documentation](./resjar/docbin/opencode-ai.md).
+> **Disclosure:** Parts of this config have been tinkered with using AI. All code is reviewed for understanding, and AI is used strictly for editing AI configs, mass searching for spelling errors, and similar tasks. This is a human-first config <3.
