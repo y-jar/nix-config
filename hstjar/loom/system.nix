@@ -7,17 +7,15 @@
 
 {
   config = {
-    system.stateVersion = "VersionNumber"; # [CHANGE THIS]
-    #            [note, this should be the same as the home manager state version]
-    #            [system state version from first install]
-    home-manager.users.PLEASECHANGEME_USERNAME.home.stateVersion = "HomeManagerVersionNumber"; # [CHANGE THIS]
+    system.stateVersion = "26.05";
+    home-manager.users.jar.home.stateVersion = "26.05";
     #            [home manager state version from first install]
 
     # Fill this out!
     sysSettings = {
       # =============[users] [list of users to create]
-      users = [ "PLEASECHANGEME_USERNAME" ];
-      adminUsers = [ "PLEASECHANGEME_USERNAME" ];
+      users = [ "jar" ];
+      adminUsers = [ "jar" ];
       # =============[users]^^^
 
       # =============[experience install]
@@ -59,10 +57,10 @@
 
     # set user for git [be sure to replace all instances of USERNAME and NAME
     #                     with your actual username and name                 ]
-    users.users.PLEASECHANGEME_USERNAME.description = "NAME";
-    home-manager.users.PLEASECHANGEME_USERNAME.usrSettings = {
-      name = "PLEASECHANGEME_NAME";
-      email = "PLEASECHANGEME_EMAIL";
+    users.users.jar.description = "jar";
+    home-manager.users.jar.usrSettings = {
+      name = "y-jar";
+      email = "park.7qs@gmail.com";
     };
   }; # end of config
 }

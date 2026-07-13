@@ -67,7 +67,7 @@
     users.users.jar.description = "jar";
     home-manager.users.jar.usrSettings = {
       name = "jar";
-      email = "park.7qs@gmaiil.com";
+      email = "park.7qs@gmail.com";
     };
   }; # end of config
 }

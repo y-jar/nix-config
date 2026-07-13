@@ -79,7 +79,7 @@
         vmjar = mkJar "vmjar"; # Virtual config
 
         # ========[for non x86 systems..] [WIP]
-        # TEMPLATE  = urnJarArch { hostName = "TEMPLATE"; arch = "aarch64-linux"; };
+        # TEMPLATE  = urnJar { hostName = "TEMPLATE"; arch = "aarch64-linux"; };
       }; # end of nixosConfigurations
     }; # end of nixosConfigurations
 }

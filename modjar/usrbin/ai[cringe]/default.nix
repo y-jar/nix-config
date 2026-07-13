@@ -21,5 +21,10 @@ in
     home.packages = with pkgs; [
       lmstudio # for ai
     ]; # end of home.packages
+
+    services.ollama = {
+      enable = true;
+      acceleration = "rocm"; # Swap to "cuda" if using an Nvidia GPU, or leave this line out for CPU only
+    }; # end of services.ollama
   }; # end of config
 }
