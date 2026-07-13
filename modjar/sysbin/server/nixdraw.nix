@@ -1,4 +1,4 @@
-{ inputs, lib, config, ... }:
+{ lib, config, ... }:
 let
   cfg = config.sysSettings.server.nixdraw;
 in
