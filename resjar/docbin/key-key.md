@@ -1,21 +1,31 @@
-**links to all documentation:**
+**Links:**
 - [Back Home](../../README.md)
-- [install guide](./install-guide.md)
-- [post install](./post-install.md)
-- [To add a new config](./add-new-config-guide.md)
-- [adding-modules](adding-modules.md)
+- [Documentation Key](./key-key.md)
+
+---
+
+# Documentation Key
+
+**links to all documentation:**
+- [Install Guide](./install-guide.md)
+- [Post Install](./post-install.md)
+- [To Add a New Config](./add-new-config-guide.md)
+- [Adding Modules](./adding-modules.md)
+- [Directory Key](./directory-key.md)
+- [Dev Key](./dev-key.md)
+- [AI / OpenCode Setup](./opencode-ai.md)
 
 **links to Window Managers and Desktop Environments**
-- [niri documentation](./niri.md)
-- [hyprland documentation](./hyprland.md)
-- [gnome documentation](./gnome.md)
+- [Niri Documentation](./niri.md)
+- [Hyprland Documentation](./hyprland.md)
+- [Gnome Documentation](./gnome.md)
 
 **links to shell documentation**
-- [noctalia documentation](./noctalia.md)
-- [wayle documentaion](./wayle.md)
+- [Noctalia Documentation](./noctalia.md)
+- [Wayle Documentation](./wayle.md)
 
 **links to other documentation**
-- [pipewire & audio documentation](./pipewire&audio-help.md)
-- [nvidia documentation](./nvidia.md)
-- [coloring](./coloring.md)
-- [gaming](./gaming.md)
+- [Pipewire & Audio Documentation](./pipewire&audio-help.md)
+- [Coloring](./coloring.md)
+- [Gaming](./gaming.md)
+- [Jellyfin](./jellyfin.md)

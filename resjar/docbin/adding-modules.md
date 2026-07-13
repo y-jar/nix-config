@@ -1,6 +1,6 @@
-**links**
-- [back home](../../README.md)
-- [back to Key](./key-key)
+**Links:**
+- [Back Home](../../README.md)
+- [Documentation Key](./key-key.md)
 
 # Adding Modules Guide
 

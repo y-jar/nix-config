@@ -1,3 +1,11 @@
-**links to All dev docs**
-- [dev goals](dev-goals.md)
-- [dev key](dev-key.md)
+**Links:**
+- [Back Home](../../README.md)
+- [Documentation Key](./key-key.md)
+
+---
+
+# Dev Key
+
+**Links to all dev docs:**
+- [Dev Goals](./dev-goals.md)
+- [Dev Key](./dev-key.md)

@@ -1,5 +1,10 @@
+**Links:**
+- [Back Home](../../README.md)
+- [Documentation Key](./key-key.md)
 
-### Dev Notes & Goals
+---
+
+# Dev Notes & Goals
 
 **Goals:**
 - adding streamlined updating or something, rightnow updating is a bit spooky [ DONE ]

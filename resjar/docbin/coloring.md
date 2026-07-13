@@ -1,4 +1,11 @@
-[back to key-key](./key-key.md)
+**Links:**
+- [Back Home](../../README.md)
+- [Documentation Key](./key-key.md)
+
+---
+
+# Coloring
+
 my color blue:
 <p color="#4f587e">Jar's Cloud Burst</a>
 <p color="#1c2635">Dark Cloud Burst</a>

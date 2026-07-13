@@ -33,7 +33,7 @@ Paste:
     <a href="./resjar/docbin/install-guide.md">
       <img src="https://img.shields.io/badge/Documentation-Installation%20Guide-d3866d?style=for-the-badge&logo=markdown&logoColor=white" alt="Installation Guide"/>
     </a>
-    <!-- directory documentaions -->
+    <!-- directory documentations -->
     <a href="./resjar/docbin/directory-key.md">
       <img src="https://img.shields.io/badge/Repository-Directory%20Key-8a7a71?style=for-the-badge&logo=git&logoColor=white" alt="Directory Key"/>
     </a>
@@ -45,7 +45,7 @@ Paste:
 <!-- my intro <3 -->
 <div align="center">
   <p style="max-width: 750px; margin: 0 auto; line-height: 1.6; color: #bcac9b;">
-    Hello! This is my NixOS config! The reason i started doing this was i wanted to learn more about it after finding out about some of it's core design princibles. And after dipping my toes in it i found that i adore how it works, and similar to my neovim config, my goal is to make it my personal platform and hopefully not have to configure it often extensively afterward.
+    Hello! This is my NixOS config! The reason i started doing this was i wanted to learn more about it after finding out about some of it's core design principles. And after dipping my toes in it i found that i adore how it works, and similar to my neovim config, my goal is to make it my personal platform and hopefully not have to configure it often extensively afterward.
   </p>
 </div>
 <br>
@@ -55,7 +55,7 @@ Paste:
 
 > **This config is intended for NixOS users only.** And is currently focused on configuring my personal NixOS setup. So please be aware that some of the config may not be applicable to your setup.
 
-<!--===========SUMMERY=============-->
+<!--===========SUMMARY=============-->
 
 ---
 <!--System stats, stating options like server stuff, browsers, capabilities-->
@@ -100,7 +100,7 @@ Paste:
   - **Hyprland:** Highly customized, dynamic tiling Wayland compositor.
   - **Niri:** A scrollable-tiling window manager environment.
   - **GNOME:** Full classic desktop environment infrastructure for standardized app layout support.
-  - **Cinnemon:** Full classic desktop environment infrastructure for standardized app layout support.
+  - **Cinnamon:** Full classic desktop environment infrastructure for standardized app layout support.
 
   #### Aesthetic Highlights:
   - Custom user themes and specific environment styling configurations managed loosely under `usrSettings`.
@@ -145,3 +145,6 @@ Paste:
 ## Dev Section
 <!-- goals / working projects -->
 For anything related to development, please see the [dev section](./resjar/docbin/dev-key.md) for more details.
+
+## AI / OpenCode
+For information about the AI setup, available models, and custom agents, see the [AI / OpenCode documentation](./resjar/docbin/opencode-ai.md).

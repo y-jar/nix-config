@@ -1,6 +1,6 @@
-**links**
+**Links:**
 - [Back Home](../../README.md)
-- [key-key](./key-key.md)
+- [Documentation Key](./key-key.md)
 
 # Add New Config Guide
 Adding a new config is pretty straightforward.

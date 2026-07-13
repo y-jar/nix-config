@@ -1,9 +1,9 @@
-# Install Guide
-Here is the guide to install the system. Please be sure to read the notes to asure that you know what you are doing.
-
 **Links:**
 - [Back Home](../../README.md)
-- [back to documentation key](./key-key.md)
+- [Documentation Key](./key-key.md)
+
+# Install Guide
+Here is the guide to install the system. Please be sure to read the notes to ensure that you know what you are doing.
 
 ## Steps to Follow on a new install
 
