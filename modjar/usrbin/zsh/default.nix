@@ -48,6 +48,7 @@ in
         code = "codium";
         yy = "yazi";
         brw = "browsh"; # TUI based browser
+        oc = "opencode"; # Ai thing
         # ========[app aliases]
 
         # ========[util]
@@ -67,6 +68,8 @@ in
         rz = "exec zsh"; # reload zsh
         ns = "nix-shell"; # load dev enviroment
         "," = "nix-shell -p";
+        ols = "ollama list";
+        olrs = "sudo systemctl restart ollama-model-loader.service";
         # ========[util]
 
         # =========[Extra]

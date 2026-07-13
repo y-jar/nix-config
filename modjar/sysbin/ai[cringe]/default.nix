@@ -13,7 +13,7 @@ in
   config = lib.mkIf cfg.enable {
     services.ollama = {
       enable = true;
-      acceleration = "rocm"; # Swap to "cuda" if using an Nvidia GPU, or leave this line out for CPU only
+      package = pkgs.ollama-rocm; # Swap to ollama-cuda for Nvidia, or ollama for CPU only
       # [models]
       loadModels = [
         "qwen3.5:9b"
