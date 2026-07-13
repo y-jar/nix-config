@@ -30,6 +30,28 @@ ollama pull glm-4.7
 ollama pull qwen3-coder
 ```
 
+### LM Studio Models (Local)
+Local models run via LM Studio on your machine. They are available in opencode via the `/models` command.
+
+| Model | ID | Notes |
+| :--- | :--- | :--- |
+| **GLM 4.6V Flash** | `lmstudio/zai-org/glm-4.6v-flash` | Lightweight and fast. Great for quick tasks. |
+| **Ministral 3 14B Reasoning** | `lmstudio/mistralai/ministral-3-14b-reasoning` | Mistral's reasoning model, good for analysis. |
+| **Qwen3.5 9B** | `lmstudio/qwen/qwen3.5-9b` | Solid all-rounder for code and general tasks. |
+
+### Downloading LM Studio Models
+Before using a local model, download it with the LM Studio CLI:
+```bash
+pull-models
+```
+
+Or manually:
+```bash
+lms get zai-org/glm-4.6v-flash
+lms get mistralai/ministral-3-14b-reasoning
+lms get qwen/qwen3.5-9b
+```
+
 ### Switching Models
 In opencode, type `/models` to see available models and select one. The local models appear under the "Ollama (local)" provider.
 
