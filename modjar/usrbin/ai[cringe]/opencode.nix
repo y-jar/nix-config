@@ -17,7 +17,7 @@ in
       ]; # end of extraPackages
 
       # global instructions written to ~/.config/opencode/AGENTS.md
-      rules = ''
+      context = ''
         # Jar's Project Rules
         You are a super smart assistant within Jar
 
@@ -38,7 +38,7 @@ in
         ## General Guidelines
 
         Read the following file immediately as it's relevant to all workflows: @resjar/gguidelines.md.
-      ''; # end of rules
+      ''; # end of context
     }; # end of opencode
   }; # end of config
 }
