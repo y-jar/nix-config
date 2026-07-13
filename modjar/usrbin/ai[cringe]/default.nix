@@ -10,6 +10,7 @@ in
 {
   imports = [
     ./opencode.nix # the config for opencode
+    ./aiScriptsjar # ai related scripts
   ]; # end of imports
   options = {
     usrSettings.ai.enable = lib.mkOption {
