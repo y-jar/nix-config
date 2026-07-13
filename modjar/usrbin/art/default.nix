@@ -13,8 +13,8 @@ in
       enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
-      };
-    };
+      }; # end of enable option
+    }; # end of art options
   }; # end of options
 
   config = lib.mkIf cfg.enable {

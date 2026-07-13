@@ -20,13 +20,13 @@
 
     # [management]
     # gearlever # Manages app images
+    hyprpicker # The mouse-following color picker
+    woomer # Zoomer application for Wayland inspired by tsoding's boomer
     # =======[Ness Jar] |>|>|>|>|>|>|>
 
     # =======[Folding Jar] |>|>|>|>|>|>|>
     # [Text Editors]
     # helix # Post-modern modal text editor
-    qownnotes # markdown app editor
-    buffer # Minimal editing space for all those things that don't need keeping
     # =======[Folding Jar] |>|>|>|>|>|>|>
 
     # =======[Looks Jar] |>|>|>|>|>|>|>

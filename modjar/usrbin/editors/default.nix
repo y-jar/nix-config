@@ -18,14 +18,20 @@ in
     }; # end of editors options
   }; # end of options
 
+  imports = [
+    ./helix.nix # helix config from: https://github.com/ryan4yin/nix-config
+  ]; # end of imports
+
   config = lib.mkIf cfg.enable {
     # Install each editor if the master switch is on OR the editor is explicitly enabled
     programs.vscodium.enable = cfg.vscodium.enable;
     programs.zed-editor.enable = cfg.zed.enable;
     programs.obsidian.enable = cfg.obsidian.enable;
 
-    home.packages = [
-      pkgs.lorem # Generate placeholder text
-    ];
+    home.packages = with pkgs; [
+      lorem # Generate placeholder text
+      qownnotes # markdown app editor
+      buffer # Minimal editing space for all those things that don't need keeping
+    ]; # end of home.packages
   }; # end of config
 }

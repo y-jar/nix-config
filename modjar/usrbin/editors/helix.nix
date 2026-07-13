@@ -1,0 +1,133 @@
+{ config, lib, pkgs, ... }:
+let
+  cfg = config.usrSettings.editors.helix;
+in
+{
+  options = {
+    usrSettings.editors.helix = {
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+      }; # end of enable
+    }; # end of helix
+  }; # end of ooptions
+
+  config = lib.mkIf cfg.enable {
+    programs.helix = {
+      enable = true;
+      package = pkgs.helix;
+      settings = {
+        editor = {
+          # Display & cursor
+          line-number = "relative";
+          cursorline = true;
+          color-modes = true;
+          scrolloff = 8;
+
+          # use system clipboard by default
+          default-yank-register = "+";
+          # Wrap long lines to the viewport (word-wrap style; does not insert hard line endings)
+          soft-wrap = {
+            enable = true;
+          }; # end of soft-wrap
+
+          # Completion / formatting
+          auto-format = true;
+          preview-completion-insert = true;
+          completion-timeout = 5;
+          idle-timeout = 200;
+          end-of-line-diagnostics = "hint";
+
+          # Save to disk on focus loss and after idle (helps LSP see disk changes)
+          auto-save = {
+            focus-lost = true;
+            after-delay = {
+              enable = true;
+              timeout = 2000;
+            }; # end of after-delay
+          }; # end of auto-save
+
+          # LSP: inlay hints, signature help, progress / messages in status area
+          lsp = {
+            display-messages = true;
+            display-progress-messages = true;
+            display-inlay-hints = true;
+            auto-signature-help = true;
+          }; # end of lsp
+
+          inline-diagnostics = {
+            cursor-line = "hint";
+            other-lines = "disable";
+          }; # end of inline-diagnostics
+
+          # Buffers tab strip, menu borders, status line layout
+          bufferline = "multiple";
+          popup-border = "menu";
+          statusline = {
+            left = [
+              "mode"
+              "spinner"
+              "version-control"
+              "file-name"
+              "read-only-indicator"
+              "file-modification-indicator"
+            ];
+            center = [ ];
+            right = [
+              "workspace-diagnostics"
+              "diagnostics"
+              "selections"
+              "position"
+              "position-percentage"
+              "file-type"
+              "file-encoding"
+              "file-line-ending"
+            ];
+            separator = "│";
+            diagnostics = [
+              "error"
+              "warning"
+              "info"
+            ];
+            workspace-diagnostics = [
+              "error"
+              "warning"
+            ];
+            mode = {
+              normal = "NORMAL";
+              insert = "INSERT";
+              select = "SELECT";
+            };
+          };
+
+          # Show dotfiles in picker (project-wide ignores still apply)
+          file-picker.hidden = false;
+
+          cursor-shape = {
+            insert = "bar";
+            normal = "block";
+            select = "underline";
+          };
+          indent-guides.render = true;
+        };
+
+        keys.normal = {
+          space.space = ":reload-all";
+          esc = [
+            "collapse_selection"
+            "keep_primary_selection"
+          ];
+          space.w = ":w";
+          space.q = ":q";
+
+          # useful vim keybindings
+          "$" = "goto_line_end";
+          "0" = "goto_line_start";
+
+          # Ctrl+o opens Zellij Session
+          "C-S-o" = "jump_backward";
+        }; # end of keys.normal
+      }; # end of settings
+    }; # end of helix
+  }; # end of config
+}

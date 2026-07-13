@@ -18,6 +18,8 @@ hl.bind(mainMod .. " + SHIFT + E", hl.dsp.exec_cmd(textEditor)) -- text editor
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd(browser))            -- browser
 hl.bind(mainMod .. " + V", hl.dsp.exec_cmd(volumeMixer))        -- volume mixer
 hl.bind(mainMod .. " + G", hl.dsp.exec_cmd("g4music"))          -- gapless
+hl.bind(mainMod .. " + C", hl.dsp.exec_cmd(hyprpicker))         -- color picker
+hl.bind(mainMod .. " + Z", hl.dsp.exec_cmd(woomer))             -- zoom
 
 -- noctalia-shell
 hl.bind(mainMod .. " + D", hl.dsp.exec_cmd(launcherPain))

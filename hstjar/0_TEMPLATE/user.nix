@@ -51,6 +51,7 @@
         zed.enable = true; # sets zed
         obsidian.enable = false; # sets obsidian
         nvf.enable = true; # sets nvf config for neovim [~2G]
+        helix.enable = false; # sets helix
       }; # end of editors
       discord.enable = false; # sets discord
       flatpak.enable = false; # sets flatpak and adds bazaar
