@@ -3,6 +3,8 @@
 // Window rules let you adjust behavior for individual windows.
 // Find more information on the wiki:
 // https://yalter.github.io/niri/Configuration:-Window-Rules
+// to find a id for a window:
+// niri msg windows
 
 // Work around WezTerm's initial configure bug
 // by setting an empty default-column-width.
