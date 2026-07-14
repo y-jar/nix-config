@@ -47,6 +47,7 @@
         }; # end of special args
         modules = [
           ./modjar/sysbin # Base system core entry
+          ./modjar/homekey.nix # Home-manager entry
           ./hstjar/${hostName} # Host-specific directory entry [what happens here can depend on each system]
         ]; # end of modules
       }; # end of mkJar
