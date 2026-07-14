@@ -41,7 +41,10 @@ in
           permission:
             read: allow
             edit: ask
-            bash: ask
+            bash:
+              "python3 ai-tools/loom-lang-loader.py *": allow
+              "python3 ai-tools/*": allow
+              "*": ask
           ---
 
           You are a general-purpose assistant for the Loom worldbuilding vault. This is an Obsidian knowledge base containing a fictional universe with its own metaphysics, constructed language, species, civilizations, and stories.
