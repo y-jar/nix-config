@@ -43,7 +43,7 @@ in
           intel-vaapi-driver # i965 older Intel fallback
           intel-compute-runtime # OpenCL for Intel [useful for Blender, Darktable etc]
           intel-ocl # older Intel OpenCL fallback
-        ]; # end of extraPackages
+        ]; # end of extraPackages (˘ε˘)
 
       # 32 bit libs for:
       # wine, proton, and any other compatability layer the reqs graphics
