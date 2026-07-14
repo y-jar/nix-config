@@ -38,7 +38,7 @@
       ...
     }@inputs:
     let
-      # =-=-=[Systems that will be x86_64-linux]
+      # =-=-=[Systems that will be x86_64-linux] [also uses home-manager]
       mkJar = hostName: nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = {
@@ -54,6 +54,18 @@
 
       # =-=-=[Systems that will be non x86_64-linux] [WIP]
       urnJar = { hostName, arch }: nixpkgs.lib.nixosSystem {
+        system = arch; # Dynamically sets the architecture
+        specialArgs = {
+          inherit inputs;
+          hostnm = hostName;
+        }; # end of special args
+        modules = [
+          ./modjar/sysbin # Entry for The System
+          ./hstjar/${hostName} # Entry for The host
+        ]; # end of modules
+      }; # end of uurnJar
+      # =-=-=[Systems that will be non x86_64-linux] [WIP]
+      mkWiyJar = { hostName, arch }: nixpkgs.lib.nixosSystem {
         system = arch; # Dynamically sets the architecture
         specialArgs = {
           inherit inputs;
