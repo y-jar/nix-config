@@ -64,7 +64,7 @@
           ./hstjar/${hostName} # Entry for The host
         ]; # end of modules
       }; # end of uurnJar
-      # =-=-=[Systems that will be non x86_64-linux] [WIP]
+      # =-=-=[Systems that will be ...] [WIP]
       mkWiyJar = { hostName, arch }: nixpkgs.lib.nixosSystem {
         system = arch; # Dynamically sets the architecture
         specialArgs = {
