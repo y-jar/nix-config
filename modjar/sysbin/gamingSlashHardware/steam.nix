@@ -35,10 +35,13 @@ in
         stdenv.cc.cc.lib # The default build environment for Unix packages in Nixpkgs and gcc
         libkrb5 # MIT Kerberos 5
         keyutils # Tools used to control the Linux kernel key management system
-        mangohud # for huds
         protonup-qt # installer for proton versions
       ]; # end of extraPackages
     }; # end of programs.steam
+
+    environment.systemPackages = with pkgs; [
+      mangohud # for huds
+    ]; # end of environment.systemPackages
 
     # sets the steam group to include all users
     users.groups = {

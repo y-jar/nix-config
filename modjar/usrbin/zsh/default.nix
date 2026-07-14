@@ -73,6 +73,7 @@ in
         # ========[util]
 
         # =========[Extra]
+        mcube = "mangohud vkcube --present_mode 1"; # needs mangohud+vulkan-tools
         cs = "cowsay";
         csj = "cowsay IM JAR";
         ff = "fastfetch";
