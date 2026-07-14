@@ -23,7 +23,7 @@ in
 
         ## External File Loading
 
-        CRITICAL: When you encounter a file reference (e.g., @rules/general.md), use your Read tool to load it on a need-to-know basis. They're relevant to the SPECIFIC task at hand.
+        CRITICAL: When you encounter a file reference (e.g., @rules/general.md, ai*/*.md), use your Read tool to load it on a need-to-know basis. They're relevant to the SPECIFIC task at hand.
 
         Instructions:
 
@@ -33,11 +33,8 @@ in
 
         ## Development Guidelines
 
-        Most projects will have a simple file for project rules and guidelines like: @resjar/pguidelines.md
-
-        ## General Guidelines
-
-        Read the following file immediately as it's relevant to all workflows: @resjar/gguidelines.md.
+        - respect development guidelines, and if there is no guidelines file, use your own best judgment
+        - also if a readme is available, use it to understand the project's structure and conventions
       ''; # end of context
     }; # end of opencode
   }; # end of config

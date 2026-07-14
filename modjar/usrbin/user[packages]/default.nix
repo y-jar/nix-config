@@ -43,6 +43,7 @@
     fd # Simple, fast and user-friendly alternative to find
     tree # Command to produce a depth indented directory listing
     cowsay # MOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+    python314Packages.pyyaml
     # =======[Dev Jar] |>|>|>|>|>|>|>^^^
 
     # ====Unsorteds====

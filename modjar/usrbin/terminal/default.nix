@@ -20,8 +20,8 @@ in
       enable = true;
       settings = {
         main = {
-          font = "IntoneMono Nerd Font\:size=11";
-          pad = "15x15"; # Adds some breathing room inside the window
+          font = "IntoneMono Nerd Font\:size=14";
+          pad = "5x5"; # Adds some breathing room inside the window
         }; # end of main
 
         colors-dark = {
