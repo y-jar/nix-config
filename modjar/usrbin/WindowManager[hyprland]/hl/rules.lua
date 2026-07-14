@@ -53,6 +53,12 @@ hl.window_rule({ match = { class = "org.freedesktop.impl.portal.desktop.kde" }, 
 hl.window_rule({ match = { class = "^(Zotero)$" }, float = true })
 hl.window_rule({ match = { class = "^(Zotero)$" }, size = { "(monitor_w*0.45)", "(monitor_h*0.45)" } })
 
+-- Buffer notes
+hl.window_rule({ match = { class = "^(org\\.gnome\\.gitlab\\.cheywood\\.Buffer)$" }, float = true })
+hl.window_rule({ match = { class = "^(org\\.gnome\\.gitlab\\.cheywood\\.Buffer)$" }, size = { "200", "300" } })
+hl.window_rule({ match = { class = "^(org\\.gnome\\.gitlab\\.cheywood\\.Buffer)$" }, center = true })
+hl.window_rule({ match = { class = "^(org\\.gnome\\.gitlab\\.cheywood\\.Buffer)$" }, opacity = 0.85 })
+
 -- Move
 -- kde-material-you-colors spawns a window when changing dark/light theme. This is to make sure it doesn't interfere at all.
 hl.window_rule({ match = { class = "^(plasma-changeicons)$" }, float = true })

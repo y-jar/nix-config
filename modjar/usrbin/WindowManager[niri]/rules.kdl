@@ -63,9 +63,11 @@ window-rule {
 }
 
 // makes sure buffer[app] is floating
-/-window-rule {
-    match app-id="buffer"
-    default-floating-position x=10 y=10
+window-rule {
+    match app-id=r#"^org\.gnome\.gitlab\.cheywood\.Buffer$"#
+    open-floating true
+    default-floating-position x=center y=center
+    default-column-width { fixed 200; }
 }
 
 // This Fixes the Cringe Steam Papershit, Thanks to @whisper
