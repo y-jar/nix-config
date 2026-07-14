@@ -9,6 +9,7 @@ let
   scriptList = [
     { name = "jsearch"; path = ./scriptsbin/searchweb.sh; }
     { name = "jpower"; path = ./scriptsbin/powermenu.sh; }
+    { name = "jemoji"; path = ./scriptsbin/emoji_picker.sh; }
   ]; # end of script list
 
   jarScripts = map (s: mkScript s.name s.path) scriptList; # dont touch me!

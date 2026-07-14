@@ -20,6 +20,7 @@ hl.bind(mainMod .. " + V", hl.dsp.exec_cmd(volumeMixer))        -- volume mixer
 hl.bind(mainMod .. " + G", hl.dsp.exec_cmd("g4music"))          -- gapless
 hl.bind(mainMod .. " + C", hl.dsp.exec_cmd(hyprpicker))         -- color picker
 hl.bind(mainMod .. " + Z", hl.dsp.exec_cmd(woomer))             -- zoom
+hl.bind(mainMod .. " + Period", hl.dsp.exec_cmd("jemoji"))     -- emoji picker
 
 -- noctalia-shell
 hl.bind(mainMod .. " + D", hl.dsp.exec_cmd(launcherPain))

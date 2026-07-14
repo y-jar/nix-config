@@ -191,7 +191,9 @@ binds {
     // Consume one window from the right to the bottom of the focused column.
     Mod+Comma  { consume-window-into-column; }
     // Expel the bottom window from the focused column to the right.
-    Mod+Period { expel-window-from-column; }
+    Mod+Ctrl+Period { expel-window-from-column; }
+    // Emoji/ASCII picker
+    Mod+Period { spawn "jemoji"; }
 
     Mod+R { switch-preset-column-width; }
     // Cycling through the presets in reverse order is also possible.
