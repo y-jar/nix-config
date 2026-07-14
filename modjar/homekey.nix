@@ -26,8 +26,8 @@
         name = user;
         value = {
           imports = [
-            ./hstjar/${hostnm}/user.nix
-            ./modjar/usrbin
+            ../hstjar/${hostnm}/user.nix
+            ../modjar/usrbin
           ];
         };
       }) config.sysSettings.users
