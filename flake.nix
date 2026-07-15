@@ -23,6 +23,14 @@
       url = "github:y-jar/wall-jar"; # [wallpapers i collected]
       flake = false;
     }; # end of wall-jar
+    icon-jar = {
+      url = "github:y-jar/icon-jar"; # [icons i collected]
+      flake = false;
+    }; # end of icon-jar
+    pfp-jar = {
+      url = "github:y-jar/pfp-jar"; # [profile pictures i collected]
+      flake = false;
+    }; # end of pfp-jar
     # [nix defined neovim config]
     nvf = {
       url = "github:NotAShelf/nvf";
