@@ -10,7 +10,7 @@ in
         default = false;
       }; # end of enable
     }; # end of helix
-  }; # end of ooptions
+  }; # end of options
 
   config = lib.mkIf cfg.enable {
     programs.helix = {
@@ -124,7 +124,7 @@ in
           "$" = "goto_line_end";
           "0" = "goto_line_start";
 
-          # Ctrl+o opens Zellij Session
+          # jump backward
           "C-S-o" = "jump_backward";
         }; # end of keys.normal
       }; # end of settings
