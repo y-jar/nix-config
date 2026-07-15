@@ -1,13 +1,17 @@
 {
   pkgs,
+  inputs,
   ...
 }:
 {
+  # imports = [
+  #   inputs.nix-index-database.nixosModules.nix-index
+  # ];
   config = {
     # set up nh
     programs.nh = {
       enable = true;
-      flake = "$HOME/nix-config"; # sets NH_OS_FLAKE variable for you
+      flake = "$HOME/nix-config"; # sets NH_OS_FLAKE variable for you/me/all
       clean = {
         enable = true;
         extraArgs = "--keep-since 5d --keep 5";
@@ -34,5 +38,8 @@
         "flakes"
       ]; # End of experimental-features
     }; # end of nix settings
+
+    # nix-index-database: pre-built db + comma wrapper [yippeeee]
+    # programs.nix-index-database.comma.enable = true;
   }; # end of config
 }
