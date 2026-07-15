@@ -9,19 +9,24 @@ local launcherPain = vars.launcherPain
 local textEditor = vars.textEditor
 local browser = vars.browser
 local volumeMixer = vars.volumeMixer
+local lockScreen = vars.lockScreen
+local appStore = vars.appStore
+local browserSearch = vars.browserSearch
 
 local wsScript = "bash " .. os.getenv("HOME") .. "/.config/hypr/hl/scripts-bin/hypr-workspace.sh"
 
 -- Apps / Launchers
-hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(terminal))      -- terminal
-hl.bind(mainMod .. " + Space", hl.dsp.exec_cmd(launcher))       -- launcher
-hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))        -- file manager
-hl.bind(mainMod .. " + SHIFT + E", hl.dsp.exec_cmd(textEditor)) -- text editor
-hl.bind(mainMod .. " + B", hl.dsp.exec_cmd(browser))            -- browser
-hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd(volumeMixer)) -- volume mixer
-hl.bind(mainMod .. " + G", hl.dsp.exec_cmd("g4music"))          -- gapless
-hl.bind(mainMod .. " + C", hl.dsp.exec_cmd(hyprpicker))         -- color picker
-hl.bind(mainMod .. " + Period", hl.dsp.exec_cmd("jemoji"))      -- emoji picker
+hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(terminal))          -- terminal
+hl.bind(mainMod .. " + SHIFT + D", hl.dsp.exec_cmd(launcher))       -- launcher (fuzzel, niri mirror)
+hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))            -- file manager
+hl.bind(mainMod .. " + SHIFT + E", hl.dsp.exec_cmd(textEditor))     -- text editor
+hl.bind(mainMod .. " + A", hl.dsp.exec_cmd(appStore))               -- app store
+hl.bind(mainMod .. " + B", hl.dsp.exec_cmd(browser))                -- browser
+hl.bind(mainMod .. " + SHIFT + B", hl.dsp.exec_cmd(browserSearch))      -- browser search
+hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd(volumeMixer))    -- volume mixer
+hl.bind(mainMod .. " + G", hl.dsp.exec_cmd("g4music"))              -- gapless
+hl.bind(mainMod .. " + C", hl.dsp.exec_cmd(hyprpicker))             -- color picker
+hl.bind(mainMod .. " + Period", hl.dsp.exec_cmd("jemoji"))          -- emoji picker
 
 -- noctalia-shell
 hl.bind(mainMod .. " + D", hl.dsp.exec_cmd(launcherPain))
@@ -32,6 +37,12 @@ hl.bind(mainMod .. " + comma", hl.dsp.exec_cmd("noctalia-shell ipc call settings
 hl.bind(mainMod .. " + Q", hl.dsp.window.close())
 hl.bind(mainMod .. " + SHIFT + Q", hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch hl.dsp.exit()"))
 hl.bind("SUPER + SHIFT + ALT + Q", hl.dsp.exec_cmd("hyprctl kill"), { description = "Window: Forcefully zap a window" })
+hl.bind("SUPER + ALT + L", hl.dsp.exec_cmd(lockScreen), { description = "Lock screen" })
+
+-- Screenshot
+hl.bind("SUPER + SHIFT + S", hl.dsp.exec_cmd("hyprshot region"), { description = "Screenshot: region" })
+hl.bind("SUPER + CTRL + SHIFT + S", hl.dsp.exec_cmd("hyprshot monitor"), { description = "Screenshot: screen" })
+hl.bind("SUPER + ALT + S", hl.dsp.exec_cmd("hyprshot window"), { description = "Screenshot: window" })
 
 -- Window manipulation
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
@@ -45,7 +56,7 @@ end)
 
 -- Scratchpad
 hl.bind(mainMod .. " + grave", hl.dsp.workspace.toggle_special("magic"))
-hl.bind(mainMod .. " + SHIFT + S", hl.dsp.window.move({ workspace = "special:magic" }))
+hl.bind(mainMod .. " + M", hl.dsp.window.move({ workspace = "special:magic" }))
 
 -- MISCELLANEOUS
 hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit"))

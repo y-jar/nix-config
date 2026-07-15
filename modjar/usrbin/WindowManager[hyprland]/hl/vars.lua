@@ -15,6 +15,10 @@ return {
     volumeMixer = "pavucontrol",
     -- settingsApp = ""
     taskManager = "gnome-system-monitor",
+    -- utilities
+    lockScreen = "swaylock",
+    appStore = "bazaar",
+    browserSearch = "jsearch",
     -- shell+
     taskbar = "wayle",
     superShell = "noctalia-shell"
