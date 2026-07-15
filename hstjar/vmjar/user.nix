@@ -36,7 +36,12 @@
       niri.enable = niriEnable;
       # [epr plus]
       launcher.enable = true; # sets launcher fuzzel
-      addMyWalls.enable = true; # sets my wallpapers [off by default]
+      resYoink = {
+        enable = true;
+        wallpapers = true;
+        icons = true;
+        profilePictures = true;
+      };
       # =========[experience]^^^
 
       # =========[appstream]
