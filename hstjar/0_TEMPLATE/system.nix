@@ -60,7 +60,14 @@
       # =============[hardware]^^^
 
       # =============[software]
-      ai.enable = false; # ~2gib - Ollama + models
+      ai = {
+        enable = false; # ~2gib - Ollama + models
+        port = 11434;
+        webui = {
+          enable = false; # Open WebUI chat interface (~2gib)
+          port = 8080;
+        };
+      };
       localsend.enable = true; # ~30mib - local file sharing
       flatpak.enable = false; # ~10mib - flatpak support [still needs to be enabled in user.nix]
       gaming = {

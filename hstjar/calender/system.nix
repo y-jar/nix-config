@@ -41,7 +41,14 @@
       # =============[hardware]^^^
 
       # =============[software]
-      ai.enable = true; # sets AI tools (Ollama, opencode, etc.)
+      ai = {
+        enable = true; # sets AI tools (Ollama, opencode, etc.)
+        port = 11434;
+        webui = {
+          enable = true; # Open WebUI chat interface
+          port = 8080;
+        };
+      };
       localsend.enable = true;
       flatpak.enable = false; # sets flatpak in the system [still needs to be enabled in user.nix]
       gaming = {
