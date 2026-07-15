@@ -21,6 +21,7 @@
             confirm = true;
             completeopt = "menuone,noselect";
             updatetime = 300;
+            autoformat = true;
 
             # tab settings
             tabstop = 2;
