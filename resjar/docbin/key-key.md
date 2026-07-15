@@ -26,8 +26,10 @@
 - [Noctalia Documentation](./noctalia.md) — Noctalia Wayland bar/shell
 - [Wayle Documentation](./wayle.md) — Wayle shell notes
 
+**Self-Hosting:**
+- [Self-Hosting Hub](./netkey.md) — Server and self-hosted services (Jellyfin, nixdraw, sleepyjar)
+
 **Other:**
 - [Pipewire & Audio Documentation](./pipewire&audio-help.md) — PipeWire routing and audio setup
 - [Coloring](./coloring.md) — Color palette hex values
 - [Gaming](./gaming.md) — Gaming troubleshooting (Minecraft, Steam, Wayland)
-- [Jellyfin](./jellyfin.md) — Jellyfin media server setup

@@ -1,8 +1,10 @@
-# Jellyfin
-
 **Links:**
 - [Back Home](../../README.md)
-- [back to documentation key](./key-key.md)
+- [Self-Hosting Hub](./netkey.md)
+
+---
+
+# Jellyfin
 
 ### Easiest options i found that sets up Jellyfin!
 **If you're setting it up on the same machine that runs the Jellyfin server:**
