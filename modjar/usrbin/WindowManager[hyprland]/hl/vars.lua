@@ -15,8 +15,6 @@ return {
     volumeMixer = "pavucontrol",
     -- settingsApp = ""
     taskManager = "gnome-system-monitor",
-    -- data
-    workspaceGroupSize = 10,
     -- shell+
     taskbar = "wayle",
     superShell = "noctalia-shell"

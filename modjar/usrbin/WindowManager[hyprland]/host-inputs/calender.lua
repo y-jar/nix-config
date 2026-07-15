@@ -7,6 +7,7 @@ hl.monitor({
     mode     = "preferred",
     position = "0x0",
     scale    = "auto",
+    defaultWorkspace = "1",
 })
 -- secondary monitor
 hl.monitor({
@@ -14,6 +15,7 @@ hl.monitor({
     mode     = "preferred",
     position = "2560x10",
     scale    = "auto",
+    defaultWorkspace = "11",
 })
 -- the third monitor
 hl.monitor({
@@ -21,4 +23,5 @@ hl.monitor({
     mode     = "preferred",
     position = "0x1440",
     scale    = "auto",
+    defaultWorkspace = "21",
 })
