@@ -23,11 +23,15 @@ in
       settings = {
         user.name = config.usrSettings.name;
         user.email = config.usrSettings.email;
-      };
+      }; # end of settings
     }; # end of git config
     home.packages = with pkgs; [
       gh # for github login
       lazygit # for kool github viewing
     ]; # end of home.packages
+    programs.delta = {
+      enable = true;
+      options = { side-by-side = true; line-numbers = true; };
+    }; # end of delta config
   }; # end of config
 }
