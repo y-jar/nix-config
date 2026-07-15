@@ -53,6 +53,14 @@ in
           comments.comment-nvim.enable = true;
           utility.surround.enable = true;
 
+          # extra plugins
+          startPlugins = [
+            "image-nvim"
+            "nui-nvim"
+            "nvim-web-devicons"
+            "render-markdown-nvim"
+          ];
+
           # basic bindings
           inherit keymaps; # add dem mappings!
           binds.whichKey = {
