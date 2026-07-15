@@ -21,9 +21,9 @@ in
     services.displayManager.gdm = {
       enable = true;
       banner = "=- Yil la kue mol loar -=";
-      extraPackages = with pkgs; [
-        gdm-settings # GDM settings GUI
-      ]; # end of extraPackages
     }; # end gdm
+    environment.systemPackages = [
+      pkgs.gdm-settings # GDM settings GUI
+    ]; # end systemPackages
   }; # end config
 }
