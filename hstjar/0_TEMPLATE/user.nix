@@ -37,11 +37,12 @@
       # [epr plus]
       launcher.enable = true; # sets launcher fuzzel
       resYoink = {
+        # ~300+mib at the time of adding this
         enable = false;
         wallpapers = false;
         icons = false;
         profilePictures = false;
-      }; # ~300+mib at the time of adding this
+      };
       # =========[experience]^^^
 
       # =========[appstream]
