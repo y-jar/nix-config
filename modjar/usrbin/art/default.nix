@@ -13,6 +13,7 @@ in
       enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
+        description = "Enable art tools (~3GiB, Blender + Krita + GIMP + Inkscape)";
       }; # end of enable option
     }; # end of art options
   }; # end of options

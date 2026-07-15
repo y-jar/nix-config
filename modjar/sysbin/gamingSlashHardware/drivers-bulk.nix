@@ -10,7 +10,7 @@ in
 {
   options = {
     sysSettings.gaming.drivers = {
-      enable = lib.mkEnableOption "gaming drivers base configuration";
+      enable = lib.mkEnableOption "Gaming drivers (~1.5GiB, Vulkan + Mesa + codecs)";
       amd.enable = lib.mkEnableOption "AMD specific graphics drivers and compute runtimes";
       intel.enable = lib.mkEnableOption "Intel integrated graphics drivers and runtimes";
       nvidia.enable = lib.mkEnableOption "NVIDIA graphics drivers and compute runtimes";

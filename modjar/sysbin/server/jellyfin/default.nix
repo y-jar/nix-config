@@ -14,7 +14,7 @@ in
       enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = "Enable Jellyfin server";
+        description = "Enable Jellyfin server (~500MiB)";
       }; # end of jellyfin.enable
       juser = lib.mkOption {
         type = lib.types.str;

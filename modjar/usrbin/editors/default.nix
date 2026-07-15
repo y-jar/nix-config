@@ -11,10 +11,10 @@ in
 {
   options = {
     usrSettings.editors = {
-      enable = lib.mkEnableOption "Enable editors master switch";
-      vscodium.enable = lib.mkEnableOption "Enable vscodium editor";
-      zed.enable = lib.mkEnableOption "Enable zed editor";
-      obsidian.enable = lib.mkEnableOption "Enable obsidian editor";
+      enable = lib.mkEnableOption "Enable editors (~600MiB, VSCodium + Zed + Obsidian + Helix + NVF)";
+      vscodium.enable = lib.mkEnableOption "Enable VSCodium editor (~300MiB)";
+      zed.enable = lib.mkEnableOption "Enable Zed editor (~200MiB)";
+      obsidian.enable = lib.mkEnableOption "Enable Obsidian editor (~200MiB)";
     }; # end of editors options
   }; # end of options
 

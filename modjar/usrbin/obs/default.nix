@@ -12,6 +12,7 @@ in
     usrSettings.obs.enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
+      description = "Enable OBS Studio (~400MiB, + plugins)";
     };
   };
 

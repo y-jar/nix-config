@@ -12,7 +12,7 @@ in
     usrSettings.gaming.heroic.enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = "Enables Heroic";
+      description = "Enable Heroic launcher (~300MiB)";
     }; # end of usrSettings.gaming.heroic.enable
   }; # end of options
 

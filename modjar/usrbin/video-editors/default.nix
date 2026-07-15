@@ -13,10 +13,12 @@ in
       enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
+        description = "Enable video editors";
       };
       kdenlive.enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
+        description = "Enable Kdenlive (~400MiB)";
       }; # end of kdenlive
     }; # end of videoEditors
   }; # end of options

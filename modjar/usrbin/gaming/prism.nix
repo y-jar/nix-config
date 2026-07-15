@@ -12,7 +12,7 @@ in
     usrSettings.gaming.prism.enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = "Enables Prism";
+      description = "Enable Prism Launcher (~200MiB)";
     }; # end of usrSettings.gaming.prism.enable
   }; # end of options
 

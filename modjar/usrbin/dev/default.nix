@@ -13,6 +13,7 @@ in
       enable = pkgs.lib.mkOption {
         type = pkgs.lib.types.bool;
         default = false;
+        description = "Enable dev tools (~1.5GiB, dotnet + python + node + gcc + go)";
       };
     }; # end of usrSettings.dev
   }; # end of options

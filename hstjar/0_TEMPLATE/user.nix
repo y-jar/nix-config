@@ -30,15 +30,14 @@
         enable = true;
       };
 
-      # =========[experience] [pick one or more if you know what you're doing]
+      # =========[experience] [pick one or more if you know what you're doing] [sIZES ARE APPROXIMATE]
       # gnome.enable = gnomeEnable;
       hyprland.enable = hyprlandEnable;
       niri.enable = niriEnable;
       # [epr plus]
-      launcher.enable = true; # sets launcher fuzzel
+      launcher.enable = true; # ~10mib - sets launcher fuzzel
       resYoink = {
-        # ~300+mib at the time of adding this
-        enable = false;
+        enable = false; # symlinks resources into ~/resjar/ [~300+mib for wallpapers]
         wallpapers = false;
         icons = false;
         profilePictures = false;
@@ -47,48 +46,48 @@
 
       # =========[appstream]
       browsers = {
-        enable = true; # sets firefox and librewolf [work and personal]
+        enable = true; # ~500mib - librewolf + firefox
         firefox = false; # disables firefox [work]
-        librewolf = true; # enables librewolf [personal] [the default is `true`]
+        librewolf = true; # enables librewolf [personal]
       };
-      terminal.enable = true; # sets terminal as foot
+      terminal.enable = true; # ~30mib - sets terminal as foot + kitty + alacritty
       editors = {
-        enable = true; # sets all editors
-        vscodium.enable = true; # sets vscodium
-        zed.enable = true; # sets zed
-        obsidian.enable = false; # sets obsidian
-        nvf.enable = true; # sets nvf config for neovim [~2G]
-        helix.enable = false; # sets helix
+        enable = true; # ~600mib - VSCodium + Zed + Obsidian + Helix + NVF
+        vscodium.enable = true; # ~300mib
+        zed.enable = true; # ~200mib
+        obsidian.enable = false; # ~200mib
+        nvf.enable = true; # ~200mib - neovim config
+        helix.enable = false; # ~20mib
       }; # end of editors
-      discord.enable = false; # sets discord
-      flatpak.enable = false; # sets flatpak and adds bazaar
+      discord.enable = false; # ~300mib
+      flatpak.enable = false; # ~10mib - flatpak + bazaar
       # [file explorers]
-      nautilus.enable = true; # sets nautilus
-      yazi.enable = true; # sets yazi
-      ranger.enable = false; # sets ranger
+      nautilus.enable = true; # ~50mib
+      yazi.enable = true; # ~10mib
+      ranger.enable = false; # ~20mib
       # [media]
-      media.enable = true; # sets media tools like mpv
-      keepass.enable = true; # sets keepassxc
+      media.enable = true; # ~200mib - mpv + ffmpeg + music players
+      keepass.enable = true; # ~100mib
       gaming = {
-        prism.enable = false; # sets prismlauncher [minecraft]
-        heroic.enable = false; # sets heroic [gog, epic.. other]
+        prism.enable = false; # ~200mib - Prism Launcher [minecraft]
+        heroic.enable = false; # ~300mib - Heroic [gog, epic.. other]
       }; # end of gaming
       # =========[appstream]^^^
 
       # =========[creative tools]
-      art.enable = false; # sets krita, blender +
-      # godot.enable = true; # sets godot
-      office.enable = false; # sets libreoffice and other apps
-      obs.enable = false; # sets up obs studio
-      videoEditors.kdenlive.enable = false; # sets kdenlive
+      art.enable = false; # ~3gib - Blender + Krita + GIMP + Inkscape + more
+      # godot.enable = true; # ~500mib
+      office.enable = false; # ~800mib - LibreOffice + Pandoc
+      obs.enable = false; # ~400mib - OBS Studio + plugins
+      videoEditors.kdenlive.enable = false; # ~400mib
       # =========[creative tools]^^^
 
       # =========[management]
-      japanese.enable = false; # sets japanese input
-      ai.enable = aiEnable; # sets AI tools like opencode, ollama
-      git.enable = true; # sets git
-      bluetooth.enable = false; # sets blueman in home packages
-      dev.enable = true; # sets dev tools and basic languages
+      japanese.enable = false; # ~100mib - fcitx5 + Mozc
+      ai.enable = aiEnable; # ~1.5gib - LM Studio + opencode-desktop
+      git.enable = true; # ~10mib - git + gh + lazygit
+      bluetooth.enable = false; # ~5mib - blueman
+      dev.enable = true; # ~1.5gib - dotnet + python + node + gcc + go + nix tools
       # =========[management]^^^
     }; # end of usrSettings
 

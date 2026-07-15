@@ -6,7 +6,7 @@ in
 {
   options = {
     sysSettings.ai = {
-      enable = lib.mkEnableOption "Enable AI tools (Ollama, opencode, etc.)";
+      enable = lib.mkEnableOption "Enable AI tools (~2GiB, Ollama + models)";
     };
   };
 

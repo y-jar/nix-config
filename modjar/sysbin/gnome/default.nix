@@ -13,7 +13,7 @@ in
     sysSettings.gnome.enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = "Enable GNOME desktop";
+      description = "Enable GNOME desktop (~800MiB)";
     };
   };
 

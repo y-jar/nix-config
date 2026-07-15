@@ -36,16 +36,16 @@
       # =============[users]^^^
 
       # =============[experience install]
-      # [pick one or more if you know what you're doing]
-      gnome.enable = true; # sets gnome [on by default] ~800mib
-      hyprland.enable = true; # sets hyprland ~19MiB
-      niri.enable = true; # sets niri
-      cinnamon.enable = false; # sets cinnamon ~800mib
+      # [pick one or more if you know what you're doing] [sIZES ARE APPROXIMATE]
+      gnome.enable = true; # ~800mib - full GNOME desktop
+      hyprland.enable = true; # ~19mib - compositor only
+      niri.enable = true; # ~20mib - compositor only
+      cinnamon.enable = false; # ~800mib - full Cinnamon desktop
       # =============[experience install]^^^
 
       # =============[hardware]
       # nvidia.enable = true;
-      bluetooth.enable = true; # sets blueman in home packages
+      bluetooth.enable = true; # ~10mib - sets blueman in home packages
       # [power management]
       # NOTE: tlp and powerprofiles are mutually exclusive, pick one
       # tlp is better for battery capping (laptops), powerprofiles gives a tray selector
@@ -54,28 +54,28 @@
       tlp.stopChargeThreshold = 100;  # 100 = no cap, 80 = stop charging at 80%
       powerprofiles.enable = true;
       audio = {
-        enable = true; # sets audio and adds some apps
+        enable = true; # ~100mib - PipeWire + audio tools
         addon.enable = false; # adds my audio setup
       };
       # =============[hardware]^^^
 
       # =============[software]
-      ai.enable = false; # sets AI tools (Ollama, opencode, etc.)
-      localsend.enable = true; # sets localsend in the system
-      flatpak.enable = false; # sets flatpak in the system [still needs to be enabled in user.nix]
+      ai.enable = false; # ~2gib - Ollama + models
+      localsend.enable = true; # ~30mib - local file sharing
+      flatpak.enable = false; # ~10mib - flatpak support [still needs to be enabled in user.nix]
       gaming = {
         drivers = {
-          enable = true; # sets gaming drivers
-          amd.enable = false; # sets amd drivers
-          intel.enable = false; # sets intel drivers
-          nvidia.enable = false; # sets nvidia drivers [NOT IMPLEMENTED]
+          enable = true; # ~1.5gib - Vulkan + Mesa + codecs
+          amd.enable = false; # AMD specific drivers
+          intel.enable = false; # Intel specific drivers
+          nvidia.enable = false; # NVIDIA drivers [NOT IMPLEMENTED]
         }; # end of drivers
-        steam.enable = true; # sets steam and associated libraries for gaming, but not more important drivers
+        steam.enable = true; # ~2gib - Steam client + 32-bit libs
       }; # end of gaming
-      virtcam.enable = false; # sets virtual camera for things like OBS
+      virtcam.enable = false; # ~5mib - virtual camera for OBS
       virt = {
-        enable = false; # sets virtualization and installs virtualization tools
-        isInVM = false; # enable if this system is in a vm [virtual mechine]
+        enable = false; # ~1gib - QEMU + libvirtd + tools
+        isInVM = false; # enable if this system is in a vm
       }; # end of virt
       # =============[software]^^^
 

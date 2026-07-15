@@ -16,6 +16,7 @@ in
     usrSettings.ai.enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
+      description = "Enable AI tools (~1.5GiB, LM Studio + opencode)";
     }; # end of ai.enable
   }; # end of options
   config = lib.mkIf cfg.enable {

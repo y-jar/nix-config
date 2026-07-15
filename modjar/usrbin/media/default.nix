@@ -9,7 +9,7 @@ let
 in
 {
   options = {
-    usrSettings.media.enable = lib.mkEnableOption "Enable media";
+    usrSettings.media.enable = lib.mkEnableOption "Enable media tools (~200MiB, mpv + ffmpeg + music players)";
   };
   config = lib.mkIf cfg.enable {
     # [MUSIC VIDEO]

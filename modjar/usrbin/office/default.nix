@@ -13,7 +13,7 @@ in
       enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = "Enable office apps";
+        description = "Enable office apps (~800MiB, LibreOffice)";
       };
     };
   }; # end options

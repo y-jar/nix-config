@@ -12,7 +12,7 @@ in
     sysSettings.gaming.steam.enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = "Enables Steam";
+      description = "Enable Steam (~2GiB, client + 32-bit libs)";
     }; # end of sysSettings.gaming.steam.enable
   }; # end of options
 

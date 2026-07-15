@@ -11,7 +11,7 @@ in
   imports = [ ./addon.nix ];
   options = {
     sysSettings.audio = {
-      enable = lib.mkEnableOption "Enable audio";
+      enable = lib.mkEnableOption "Enable audio (~100MiB, PipeWire + tools)";
     }; # end of sysSettings.audio
   }; # end of options
 

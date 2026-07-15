@@ -13,7 +13,7 @@ in
       enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = "Enable Cinnamon desktop environment";
+        description = "Enable Cinnamon desktop (~800MiB)";
       }; # end of enable
     }; # end of cinnamon
   }; # end of options

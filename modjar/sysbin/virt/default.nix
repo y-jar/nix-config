@@ -18,6 +18,7 @@ in
         enable = lib.mkOption {
           type = lib.types.bool;
           default = false;
+          description = "Enable virtualization (~1GiB, QEMU + libvirtd)";
         }; # end of enable
         isInVM = lib.mkOption {
           type = lib.types.bool;

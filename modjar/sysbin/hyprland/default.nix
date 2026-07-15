@@ -12,7 +12,7 @@ in
     sysSettings.hyprland.enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = "Enable Hyprland";
+      description = "Enable Hyprland (~19MiB)";
     };
   };
 

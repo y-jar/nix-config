@@ -13,6 +13,7 @@ in
       enable = lib.mkOption {
         type = lib.types.bool;
         default = true;
+        description = "Enable browsers (~500MiB, librewolf + firefox)";
       }; # end of enable option
       firefox = lib.mkOption {
         type = lib.types.bool;
