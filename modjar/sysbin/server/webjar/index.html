@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>jar's services</title>
+        <link rel="icon" href="JarOnPar.png">
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <!-- floating particles background -->
+        <canvas id="particles"></canvas>
+
+        <h1>jar's services</h1>
+        <p class="subtitle">self-hosted, local network</p>
+
+        <!-- service cards -->
+        <div class="grid">
+            <a class="card" href="http://whale:8096">
+                <div class="card-icon">&#127916;</div>
+                <div class="card-name">Jellyfin</div>
+                <div class="card-desc">Media server. Movies, shows, music.</div>
+                <div class="card-host">whale</div>
+            </a>
+
+            <a class="card" href="http://calender:3000">
+                <div class="card-icon">&#9998;</div>
+                <div class="card-name">Nixdraw</div>
+                <div class="card-desc">
+                    Excalidraw whiteboard. Diagrams and notes.
+                </div>
+                <div class="card-host">calender</div>
+            </a>
+
+            <a class="card" href="http://calender:11434">
+                <div class="card-icon">&#129302;</div>
+                <div class="card-name">Ollama</div>
+                <div class="card-desc">Local AI models. LLM API.</div>
+                <div class="card-host">calender</div>
+            </a>
+
+            <a class="card" href="http://calender:8080">
+                <div class="card-icon">&#128172;</div>
+                <div class="card-name">Open WebUI</div>
+                <div class="card-desc">Chat interface for local AI models.</div>
+                <div class="card-host">calender</div>
+            </a>
+        </div>
+
+        <footer>served by nginx via nixos</footer>
+        <!-- particles canvas animation -->
+        <script src="script.js"></script>
+    </body>
+</html>
