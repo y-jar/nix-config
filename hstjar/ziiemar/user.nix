@@ -35,6 +35,7 @@
         vscodium.enable = true; # sets vscodium
         zed.enable = true; # sets zed
         obsidian.enable = true; # sets obsidian
+        helix.enable = true; # sets helix
         nvf.enable = true; # sets nvf config for neovim [~2G]
       }; # end of editors
       discord.enable = true; # sets discord
