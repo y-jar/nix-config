@@ -111,22 +111,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-25D11": {
-      "locked": {
-        "lastModified": 1782335603,
-        "narHash": "sha256-sZkQH1CkiZtdvcaLx4sGQD9Q9h+A8qB04DRpqQCN530=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "03c72920da828594fae523aaef96f33dff10b340",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "nixos-25.11",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixpkgs-unstable": {
       "locked": {
         "lastModified": 1782467914,
@@ -172,7 +156,6 @@
       "inputs": {
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
-        "nixpkgs-25D11": "nixpkgs-25D11",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nvf": "nvf",
         "wall-jar": "wall-jar"
