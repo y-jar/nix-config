@@ -101,6 +101,10 @@
           # LOCAL: http://localhost:3000
           # REMOTE: http://PH_Hostname:3000 or http://PH_IP_address:3000
         }; # end of nixdraw
+        webjar = {
+          enable = false; # ~5mib - self-hosted link page (nginx)
+          port = 80;
+        }; # end of webjar
       }; # end of server
       # =============[Server]^^^
     }; # end of sysSettings

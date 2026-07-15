@@ -62,6 +62,10 @@
           enable = false; # sets jellyfin server
           juser = "candle"; # sets jellyfin user for perms for file access
         }; # end of jellyfin
+        webjar = {
+          enable = false; # ~5mib - self-hosted link page (nginx)
+          port = 80;
+        };
       }; # end of server
       # =============[Server]^^^
     }; # end of sysSettings

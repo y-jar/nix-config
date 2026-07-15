@@ -71,6 +71,10 @@
           # "Fri 03:00:00": reboots every Friday at 3am
           # "*-*-1,15 02:00:00": reboots on the 1st and 15th of every month at 2am
         }; # end of sleepyjar
+        webjar = {
+          enable = true; # self-hosted link page (nginx)
+          port = 80;
+        };
       }; # end of server
       # =============[Server]^^^
     }; # end of sysSettings
