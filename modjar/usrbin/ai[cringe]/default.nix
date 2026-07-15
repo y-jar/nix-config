@@ -24,6 +24,5 @@ in
       lmstudio # for ai
       opencode-desktop # opencode gui
     ]; # end of home.packages
-
   }; # end of config
 }

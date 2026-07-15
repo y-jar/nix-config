@@ -12,6 +12,7 @@ Self-hosted services and server configuration.
 
 - [Jellyfin](./jellyfin.md) — Media server for movies, TV, music, and books
 - [nixdraw](./nixdraw.md) — Self-hosted Excalidraw whiteboard via Docker
+- [Webjar](./webjar.md) — Self-hosted link page for all services (nginx)
 
 ## Other
 
