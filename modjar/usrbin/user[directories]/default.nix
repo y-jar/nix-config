@@ -19,10 +19,10 @@
       ~/resjar \
       ~/rotjar \
       ~/pic-jar \
-      ~/music-jar \
+      ~/musicjar \
       ~/kilnjar \
       ~/artjar \
-      ~/doc-jar \
-      ~/vid-jar
+      ~/docjar \
+      ~/vidjar
   '';
 }
