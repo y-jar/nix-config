@@ -58,6 +58,22 @@
         "type": "github"
       }
     },
+    "icon-jar": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1783293438,
+        "narHash": "sha256-bxpz6FgRp8RtwBfP8yAQ9JmvPMqspPnDDPlWb7d7pvU=",
+        "owner": "y-jar",
+        "repo": "icon-jar",
+        "rev": "f05045ea1f9b9f858615e89e0258e289977bbbd4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "y-jar",
+        "repo": "icon-jar",
+        "type": "github"
+      }
+    },
     "mnw": {
       "locked": {
         "lastModified": 1780772958,
@@ -152,12 +168,30 @@
         "type": "github"
       }
     },
+    "pfp-jar": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1783292681,
+        "narHash": "sha256-DAR8qHlG4/nWvcbBqrgLYCUkyzb9BEi4nk8r+hEen/c=",
+        "owner": "y-jar",
+        "repo": "pfp-jar",
+        "rev": "a60b5fb711d6531d157f3d9345d2b8348567a952",
+        "type": "github"
+      },
+      "original": {
+        "owner": "y-jar",
+        "repo": "pfp-jar",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "home-manager": "home-manager",
+        "icon-jar": "icon-jar",
         "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nvf": "nvf",
+        "pfp-jar": "pfp-jar",
         "wall-jar": "wall-jar"
       }
     },
