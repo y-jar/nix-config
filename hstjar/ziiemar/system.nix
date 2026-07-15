@@ -31,8 +31,10 @@
       # nvidia.enable = true;
       bluetooth.enable = true; # sets blueman in home packages
       # [power management]
-      tlp.enable = false; # NOTE: mutually exclusive with powerprofiles, pick one
-      powerprofiles.enable = true;
+      # NOTE: tlp and powerprofiles are mutually exclusive, pick one
+      tlp.enable = true;
+      tlp.stopChargeThreshold = 80;
+      # powerprofiles.enable = true;
       audio = {
         enable = true; # sets audio and adds some apps
         addon.enable = false; # adds my audio setup

@@ -47,7 +47,11 @@
       # nvidia.enable = true;
       bluetooth.enable = true; # sets blueman in home packages
       # [power management]
-      tlp.enable = false; # NOTE: mutually exclusive with powerprofiles, pick one
+      # NOTE: tlp and powerprofiles are mutually exclusive, pick one
+      # tlp is better for battery capping (laptops), powerprofiles gives a tray selector
+      tlp.enable = false;
+      tlp.startChargeThreshold = 0;   # 0 = always charge, 75 = resume charging at 75%
+      tlp.stopChargeThreshold = 100;  # 100 = no cap, 80 = stop charging at 80%
       powerprofiles.enable = true;
       audio = {
         enable = true; # sets audio and adds some apps
