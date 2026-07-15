@@ -34,9 +34,9 @@ in
 
   config = lib.mkIf cfg.enable {
     home.file = lib.mkMerge [
-      (lib.mkIf cfg.wallpapers { "picjar/wall-jar".source = inputs.wall-jar; })
-      (lib.mkIf cfg.icons { "picjar/icon-jar".source = inputs.icon-jar; })
-      (lib.mkIf cfg.profilePictures { "picjar/pfp-jar".source = inputs.pfp-jar; })
+      (lib.mkIf cfg.wallpapers { "resjar/wall-jar".source = inputs.wall-jar; })
+      (lib.mkIf cfg.icons { "resjar/icon-jar".source = inputs.icon-jar; })
+      (lib.mkIf cfg.profilePictures { "resjar/pfp-jar".source = inputs.pfp-jar; })
     ];
   };
 }
