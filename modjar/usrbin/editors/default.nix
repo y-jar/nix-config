@@ -20,6 +20,7 @@ in
 
   imports = [
     ./helix.nix # helix config from: https://github.com/ryan4yin/nix-config
+    ./nvf-neovim.nix # my neovim config via nvf
   ]; # end of imports
 
   config = lib.mkIf cfg.enable {
