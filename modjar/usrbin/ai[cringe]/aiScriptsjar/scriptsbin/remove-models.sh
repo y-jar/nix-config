@@ -1,17 +1,60 @@
 #!/usr/bin/env bash
-# remove-models.sh — removes models from ollama
+# remove-models.sh — interactively remove ollama models
 
-echo "=== Ollama Models ==="
-ollama list
-echo ""
-read -p "Remove all Ollama models? [y/N] " ollama_confirm
-if [[ "$ollama_confirm" =~ ^[Yy]$ ]]; then
-  ollama rm qwen3.5:9b
-  ollama rm qwen3.5:9b-mlx
-  ollama rm frob/ministral-3:14b
-  ollama rm frob/ministral-3:3b
-  ollama rm mistral:7b
-  ollama rm gemma4:latest
+MODELS=(
+  "qwen3.5:9b"
+  "qwen3.5:9b-mlx"
+  "frob/ministral-3:14b"
+  "frob/ministral-3:3b"
+  "mistral:7b"
+  "gemma4:latest"
+)
+
+# only show models that are actually installed
+INSTALLED=$(ollama list 2>/dev/null | awk 'NR>1 {print $1}')
+AVAILABLE=()
+for model in "${MODELS[@]}"; do
+  if echo "$INSTALLED" | grep -qx "$model"; then
+    AVAILABLE+=("$model")
+  fi
+done
+
+if [ ${#AVAILABLE[@]} -eq 0 ]; then
+  echo "No models installed."
+  exit 0
 fi
+
+SELECTED=$(printf '%s\n' "${AVAILABLE[@]}" | fzf --multi \
+  --header="┌──────────────────────────────
+│  Ollama Model Remover
+│
+│  Select models to remove.
+│  [Tab] toggle  [Ctrl-A] all  [Esc] quit
+=-" \
+  --prompt="Remove > " \
+  --height=40% \
+  --reverse)
+
+if [ -z "$SELECTED" ]; then
+  echo "Nothing selected."
+  exit 0
+fi
+
+echo ""
+echo "Removing:"
+echo "$SELECTED" | sed 's/^/  /'
+echo ""
+
+read -p "Continue? [Y/n] " confirm
+if [[ "$confirm" =~ ^[Nn]$ ]]; then
+  echo "Cancelled."
+  exit 0
+fi
+
+echo ""
+while IFS= read -r model; do
+  echo "Removing $model..."
+  ollama rm "$model"
+done <<< "$SELECTED"
 
 echo "Done!"
