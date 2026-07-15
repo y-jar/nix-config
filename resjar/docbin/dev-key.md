@@ -6,6 +6,7 @@
 
 # Dev Key
 
+Development-related documentation.
+
 **Links to all dev docs:**
 - [Dev Goals](./dev-goals.md)
-- [Dev Key](./dev-key.md)

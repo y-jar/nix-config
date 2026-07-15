@@ -14,9 +14,9 @@ Here is an example of adding a module to the flake.nix file *(with a fair amount
   # Nix goes and fetches those repos and locks them in flake.lock. Nothing is "usable" yet, 
   #   they're just downloaded.
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11"; # this sets the nixpkgs version
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05"; # this sets the nixpkgs version
     home-manager = {
-        url = "github:nix-community/home-manager/release-25.11"; # this grabs a specific release of home-manager
+        url = "github:nix-community/home-manager/release-26.05"; # this grabs a specific release of home-manager
         inputs.nixpkgs.follows = "nixpkgs"; # tells HM to reuse YOUR nixpkgs, not download its own
     }; # end of home-manager
   }; # end of inputs

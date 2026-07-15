@@ -6,26 +6,28 @@
 
 # Documentation Key
 
-**links to all documentation:**
-- [Install Guide](./install-guide.md)
-- [Post Install](./post-install.md)
-- [To Add a New Config](./add-new-config-guide.md)
-- [Adding Modules](./adding-modules.md)
-- [Directory Key](./directory-key.md)
-- [Dev Key](./dev-key.md)
-- [AI / OpenCode Setup](./opencode-ai.md)
+**Getting started:**
+- [Install Guide](./install-guide.md) — How to install the system on a new machine
+- [Post Install](./post-install.md) — Updating and switching configs after install
+- [To Add a New Config](./add-new-config-guide.md) — Adding a new host to the flake
+- [Adding Modules](./adding-modules.md) — How NixOS modules and the flake work
 
-**links to Window Managers and Desktop Environments**
-- [Niri Documentation](./niri.md)
-- [Hyprland Documentation](./hyprland.md)
-- [Gnome Documentation](./gnome.md)
+**Reference:**
+- [Directory Key](./directory-key.md) — Directory tree with descriptions of every module
+- [Dev Key](./dev-key.md) — Development goals and progress
+- [AI / OpenCode Setup](./opencode-ai.md) — OpenCode AI agents and model configuration
 
-**links to shell documentation**
-- [Noctalia Documentation](./noctalia.md)
-- [Wayle Documentation](./wayle.md)
+**Window Managers & Desktops:**
+- [Niri Documentation](./niri.md) — Niri Wayland compositor help
+- [Hyprland Documentation](./hyprland.md) — Hyprland compositor config and tips
+- [Gnome Documentation](./gnome.md) — GNOME desktop setup notes
 
-**links to other documentation**
-- [Pipewire & Audio Documentation](./pipewire&audio-help.md)
-- [Coloring](./coloring.md)
-- [Gaming](./gaming.md)
-- [Jellyfin](./jellyfin.md)
+**Shell & UI:**
+- [Noctalia Documentation](./noctalia.md) — Noctalia Wayland bar/shell
+- [Wayle Documentation](./wayle.md) — Wayle shell notes
+
+**Other:**
+- [Pipewire & Audio Documentation](./pipewire&audio-help.md) — PipeWire routing and audio setup
+- [Coloring](./coloring.md) — Color palette hex values
+- [Gaming](./gaming.md) — Gaming troubleshooting (Minecraft, Steam, Wayland)
+- [Jellyfin](./jellyfin.md) — Jellyfin media server setup

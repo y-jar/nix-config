@@ -1,4 +1,9 @@
-
 **Links:**
 - [Back Home](../../README.md)
-- [back to documentation key](./key-key.md)
+- [Documentation Key](./key-key.md)
+
+---
+
+# Noctalia
+
+Configured via `modjar/usrbin/Bar[noctalia]/`. Noctalia is a lightweight Wayland bar/shell built on Quickshell. Installed as a user-level package with no system-level toggle.

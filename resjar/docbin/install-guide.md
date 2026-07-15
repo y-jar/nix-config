@@ -26,9 +26,13 @@ hardto PICKEDHOST # <-- set your host name here [replace PICKEDHOST]
 ```
 
 > **My predefined PICKEDHOST options**: 
-> - `calender`: my main powerstation
-> - `vmjar`: for VMs that need use bios
-> - `yilyonix`: a basic laptop i have `[Very low specs]`
+> - `calender`: main desktop PC
+> - `candle`: gaming mini build
+> - `loom`: silly PC
+> - `vmjar`: virtual machine config
+> - `whale`: server system
+> - `yilyonix`: test bench (laptop/tablet)
+> - `ziiemar`: personal laptop (HP)
 
 **Add / Switch Bootloader Options**
 You will need to check the boot options within `/etc/nixos/configuration.nix` (it should be near the top at the `imports` section). And after finding it, check the lines over to the respective `hstjar/HOSTNAME/boot.nix` spot and make sure the bootloader options are correct or the same as the ones in `configuration.nix` in `/etc/nixos/`.
