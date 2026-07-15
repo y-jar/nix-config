@@ -6,6 +6,7 @@
     ./btop.nix
   ];
 
+
   # ==========================[User Packages]=============================
   home.packages = with pkgs; [
     # =======[Ness Jar] |>|>|>|>|>|>|>
@@ -16,18 +17,12 @@
     kdePackages.isoimagewriter # iso burner
     caligula # image burner
     jq # Lightweight and flexible command-line JSON processor [needed for my jsearch script]
-    # comma # Runs programs without installing them
 
     # [management]
     # gearlever # Manages app images
     hyprpicker # The mouse-following color picker
     woomer # Zoomer application for Wayland inspired by tsoding's boomer
     # =======[Ness Jar] |>|>|>|>|>|>|>
-
-    # =======[Folding Jar] |>|>|>|>|>|>|>
-    # [Text Editors]
-    # helix # Post-modern modal text editor
-    # =======[Folding Jar] |>|>|>|>|>|>|>
 
     # =======[Looks Jar] |>|>|>|>|>|>|>
     # [cursors]

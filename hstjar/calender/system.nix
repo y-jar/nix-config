@@ -45,7 +45,7 @@
         enable = true; # sets AI tools (Ollama, opencode, etc.)
         port = 11434;
         webui = {
-          enable = true; # Open WebUI chat interface
+          enable = false; # Open WebUI chat interface
           port = 8080;
         };
       };

@@ -67,9 +67,12 @@ in
         fcir = "fcitx5-remote -r"; # force reload fcitx5
         rz = "exec zsh"; # reload zsh
         ns = "nix-shell"; # load dev enviroment
-        "," = "nix-shell -p";
+        nsp = "nix-shell -p";
+        # ai... ew
         ols = "ollama list";
         olrs = "sudo systemctl restart ollama-model-loader.service";
+        olpm = "pull-models";
+        olrm = "remove-models";
         # ========[util]
 
         # =========[Extra]
@@ -101,7 +104,7 @@ in
           "prompt"  = "#d79921";
           "pointer" = "#e6dfd3";
           "marker"  = "#e6dfd3";
-          # "spinner" = "#d79921";
+          "spinner" = "#d79921";
         }; # end of colors
       }; # end of fzf
   }; # end of shell config
