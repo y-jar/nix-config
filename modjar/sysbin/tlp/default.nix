@@ -31,5 +31,7 @@ in
         STOP_CHARGE_THRESH_BAT0 = cfg.stopChargeThreshold;
       };
     }; # end of tlp
+
+    services.power-profiles-daemon.enable = lib.mkForce false;
   }; # end of config
 }
