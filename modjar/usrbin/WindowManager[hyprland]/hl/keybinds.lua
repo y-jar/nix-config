@@ -1,6 +1,7 @@
 -- my keybindings
 -- vars
-local vars = require("hl.vars") -- Load variables for the keybinds
+local vars = require("hl.vars")
+local utils = require("hl.utils")
 local mainMod = vars.mainMod
 local terminal = vars.terminal
 local fileManager = vars.fileManager
@@ -12,21 +13,20 @@ local volumeMixer = vars.volumeMixer
 local lockScreen = vars.lockScreen
 local appStore = vars.appStore
 local browserSearch = vars.browserSearch
-
-local wsScript = "bash " .. os.getenv("HOME") .. "/.config/hypr/hl/scripts-bin/hypr-workspace.sh"
+local hyprpicker = vars.hyprpicker
 
 -- Apps / Launchers
-hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(terminal))          -- terminal
-hl.bind(mainMod .. " + SHIFT + D", hl.dsp.exec_cmd(launcher))       -- launcher (fuzzel, niri mirror)
-hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))            -- file manager
-hl.bind(mainMod .. " + SHIFT + E", hl.dsp.exec_cmd(textEditor))     -- text editor
-hl.bind(mainMod .. " + A", hl.dsp.exec_cmd(appStore))               -- app store
-hl.bind(mainMod .. " + B", hl.dsp.exec_cmd(browser))                -- browser
-hl.bind(mainMod .. " + SHIFT + B", hl.dsp.exec_cmd(browserSearch))      -- browser search
-hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd(volumeMixer))    -- volume mixer
-hl.bind(mainMod .. " + G", hl.dsp.exec_cmd("g4music"))              -- gapless
-hl.bind(mainMod .. " + C", hl.dsp.exec_cmd(hyprpicker))             -- color picker
-hl.bind(mainMod .. " + Period", hl.dsp.exec_cmd("jemoji"))          -- emoji picker
+hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(terminal))
+hl.bind(mainMod .. " + SHIFT + D", hl.dsp.exec_cmd(launcher))
+hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
+hl.bind(mainMod .. " + SHIFT + E", hl.dsp.exec_cmd(textEditor))
+hl.bind(mainMod .. " + A", hl.dsp.exec_cmd(appStore))
+hl.bind(mainMod .. " + B", hl.dsp.exec_cmd(browser))
+hl.bind(mainMod .. " + SHIFT + B", hl.dsp.exec_cmd(browserSearch))
+hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd(volumeMixer))
+hl.bind(mainMod .. " + G", hl.dsp.exec_cmd("g4music"))
+hl.bind(mainMod .. " + C", hl.dsp.exec_cmd(hyprpicker))
+hl.bind(mainMod .. " + Period", hl.dsp.exec_cmd("jemoji"))
 
 -- noctalia-shell
 hl.bind(mainMod .. " + D", hl.dsp.exec_cmd(launcherPain))
@@ -46,6 +46,7 @@ hl.bind("SUPER + ALT + S", hl.dsp.exec_cmd("hyprshot window"), { description = "
 
 -- Window manipulation
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
+hl.bind(mainMod .. " + Backslash", function() utils.float_center() end)
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + F", function()
     hl.dispatch(hl.dsp.window.fullscreen({ mode = "fullscreen", action = "toggle" }))
@@ -59,21 +60,27 @@ hl.bind(mainMod .. " + grave", hl.dsp.workspace.toggle_special("magic"))
 hl.bind(mainMod .. " + M", hl.dsp.window.move({ workspace = "special:magic" }))
 
 -- MISCELLANEOUS
-hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit"))
+hl.bind(mainMod .. " + Tab", hl.dsp.layout("promote"))
 
--- FOCUS-NAVIGATION
+-- ===============================[FOCUS + MOVE NAVIGATION]
+-- hjkl: j/k = workspace up/down, h/l = monitor left/right
+for dir, key in pairs({
+    h = "h",
+    j = "j",
+    k = "k",
+    l = "l",
+}) do
+    hl.bind("SUPER + " .. key, utils.focus(dir))
+    hl.bind("SUPER + CTRL + " .. key, utils.move(dir))
+end
+
+-- Arrow keys: window focus + move (keeps existing behavior)
 for i = 1, 4 do
     local arrowkey = { "Left", "Right", "Up", "Down" }
     local focusdir = { "l", "r", "u", "d" }
     hl.bind("SUPER + " .. arrowkey[i], hl.dsp.focus({ direction = focusdir[i] }),
         { description = "Window: Focus " .. arrowkey[i] })
 end
-for i = 1, 2 do
-    local arrowkey = { "BracketLeft", "BracketRight" }
-    local focusdir = { "l", "r" }
-    hl.bind("SUPER + " .. arrowkey[i], hl.dsp.focus({ direction = focusdir[i] }))
-end
--- Move in direction
 for i = 1, 4 do
     local arrowkey = { "Left", "Right", "Up", "Down" }
     local focusdir = { "l", "r", "u", "d" }
@@ -81,31 +88,15 @@ for i = 1, 4 do
         { description = "Window: Move " .. arrowkey[i] })
 end
 
+-- Consume/Expel columns
+hl.bind("SUPER + bracketright", hl.dsp.layout("consume_or_expel next"))
+hl.bind("SUPER + bracketleft", hl.dsp.layout("consume_or_expel prev"))
+-- ===============================[FOCUS + MOVE NAVIGATION]
+
 -- ===============================[WORKSPACE MANAGEMENT]
--- Per-monitor workspace switching via hypr-workspace.sh
--- Monitors are ordered by position, each gets 10 workspaces.
--- SUPER+[1-0] switches within current monitor's range.
--- SUPER+SHIFT+[1-0] moves window within current monitor's range.
-
--- Switch workspaces: SUPER + [1-0]
-for i = 1, 10 do
-    local key = i % 10
-    hl.bind(mainMod .. " + " .. key, hl.dsp.exec_cmd(wsScript .. " focus " .. i))
-end
-
--- Move window to workspace: SUPER + SHIFT + [1-0]
-for i = 1, 10 do
-    local key = i % 10
-    hl.bind(mainMod .. " + SHIFT + " .. key, hl.dsp.exec_cmd(wsScript .. " move " .. i))
-end
-
--- Move window left/right: SUPER + SHIFT + Page_Up/Down
-hl.bind("SUPER + SHIFT + Page_Up", hl.dsp.exec_cmd(wsScript .. " move r-1"))
-hl.bind("SUPER + SHIFT + Page_Down", hl.dsp.exec_cmd(wsScript .. " move r+1"))
-
 -- Cycle workspaces: SUPER + scroll
-hl.bind(mainMod .. " + mouse_down", hl.dsp.exec_cmd(wsScript .. " focus e+1"))
-hl.bind(mainMod .. " + mouse_up", hl.dsp.exec_cmd(wsScript .. " focus e-1"))
+hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
+hl.bind(mainMod .. " + mouse_up", hl.dsp.focus({ workspace = "e-1" }))
 -- ===============================[WORKSPACE MANAGEMENT]
 
 -- Move/resize windows with mainMod + LMB/RMB and dragging

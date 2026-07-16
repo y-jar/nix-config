@@ -57,6 +57,9 @@ in
         jnconf = "cd ~/nix-config"; # nix config jar [move over into nix config]
         jkconf = "cd ~/kilnjar"; # kiln jar [my dev / project folder]
         jkrconf = "cd ~/kilnjar/reposjar"; # kiln jar [my dev / project folder]
+        # hyprland
+        hle = "hyprctl configerrors";
+        hlr = "hyprland reload";
         #
         ckhrd = "lsblk && fdisk -l";
         # ls = "ls";

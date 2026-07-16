@@ -16,6 +16,7 @@ return {
     -- settingsApp = ""
     taskManager = "gnome-system-monitor",
     -- utilities
+    hyprpicker = "hyprpicker",
     lockScreen = "swaylock",
     appStore = "bazaar",
     browserSearch = "jsearch",

@@ -7,6 +7,7 @@
 -- Base things
 require("hl.rules")
 require("hl.colors")
+require("hl.utils")
 require("hl.keybinds")
 require("hl.animations")
 require("hl.genr")
