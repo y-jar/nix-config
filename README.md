@@ -247,6 +247,7 @@ The most useful aliases available after install:
 | `ff` | `fastfetch` | System info |
 | `nv` / `zd` / `code` | nvim / zeditor / codium | Editor shortcuts |
 | `ckhrd` | `lsblk && fdisk -l` | Check storage blocks |
+| `,` | `nix-shell -p` (function) | Quick nix-shell — `, git curl` for interactive, `, git curl -- ls` for one-shot |
 
 Full alias list: [zsh module](modjar/usrbin/zsh/) · [installer shell](shell.nix)
 
