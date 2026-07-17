@@ -28,6 +28,18 @@ in
       # [prompt]
       # guide: https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html
       initContent = ''
+        # quick nix-shell: , git curl  or  , git curl -- ls
+        ,() {
+          local pkgs cmd
+          if [[ " $* " == *" -- "* ]]; then
+            pkgs="''${1%% -- *}"
+            cmd="''${1#* -- }"
+            nix-shell -p $pkgs --run "$cmd"
+          else
+            nix-shell -p "$@"
+          fi
+        }
+
         PROMPT='%F{#5F7CB8}%n|%f'
         RPROMPT='%F{#5F7CB8}%~ %F{#5F7CB8}%m%f %F{cyan}%*%f'
       '';
