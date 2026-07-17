@@ -8,6 +8,7 @@ MODELS=(
   "frob/ministral-3:3b"
   "mistral:7b"
   "gemma4:latest"
+  "minicpm-v4.6:1b"
 )
 
 SELECTED=$(printf '%s\n' "${MODELS[@]}" | fzf --multi \

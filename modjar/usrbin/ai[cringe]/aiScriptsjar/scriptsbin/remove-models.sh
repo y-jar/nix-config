@@ -8,6 +8,7 @@ MODELS=(
   "frob/ministral-3:3b"
   "mistral:7b"
   "gemma4:latest"
+  "minicpm-v4.6:1b"
 )
 
 # only show models that are actually installed
