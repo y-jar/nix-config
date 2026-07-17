@@ -106,6 +106,7 @@
       url = "github:NotAShelf/nvf";
       inputs.nixpkgs.follows = "nixpkgs";
     }; # end of nvf
+    rsakura.url = "github:preprocessor/rsakura"; # whisper's cool rust rewite fork
   }; # end of inputs
 }
 
