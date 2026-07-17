@@ -41,6 +41,7 @@
       # =============[hardware]^^^
 
       # =============[software]
+      UseNixPkgsYoinks.enable = true;
       ai = {
         enable = true; # sets AI tools (Ollama, opencode, etc.)
         port = 11434;

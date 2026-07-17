@@ -55,6 +55,7 @@
       # =============[hardware]^^^
 
       # =============[software]
+      UseNixPkgsYoinks.enable = false;
       ai.enable = false; # sets AI tools (Ollama, opencode, etc.)
       localsend.enable = true; # sets localsend in the system
       flatpak.enable = false; # sets flatpak in the system [still needs to be enabled in user.nix]

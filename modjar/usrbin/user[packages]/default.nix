@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, osConfig, inputs, ... }:
 {
 
   # ==========================[Enabled User Packages]=====================
@@ -17,6 +17,7 @@
     kdePackages.isoimagewriter # iso burner
     caligula # image burner
     jq # Lightweight and flexible command-line JSON processor [needed for my jsearch script]
+    gnome-disk-utility # Udisks graphical front-end
 
     # [management]
     # gearlever # Manages app images
@@ -42,5 +43,7 @@
     # =======[Dev Jar] |>|>|>|>|>|>|>^^^
 
     # ====Unsorteds====
+  ] ++ lib.optionals osConfig.sysSettings.UseNixPkgsYoinks.enable [
+    inputs.rsakura.packages.x86_64-linux.default # a cool thing whisper did, awesone of them to add it as a pkgs in nix! ref: https://github.com/preprocessor/rsakura
   ]; # end of systemPackages
 }

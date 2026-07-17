@@ -4,9 +4,10 @@
   ...
 }:
 {
-  # imports = [
-  #   inputs.nix-index-database.nixosModules.nix-index
-  # ];
+  imports = [
+    # inputs.nix-index-database.nixosModules.nix-index
+    ./overlays-nixYoinks.nix
+  ];
   config = {
     # set up nh
     programs.nh = {
@@ -39,7 +40,7 @@
       ]; # End of experimental-features
     }; # end of nix settings
 
-    # nix-index-database: pre-built db + comma wrapper [yippeeee]
-    # programs.nix-index-database.comma.enable = true;
+
+
   }; # end of config
 }
