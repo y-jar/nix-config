@@ -28,6 +28,7 @@ in
       blanket # Background noises
       quodlibet # media player
       gapless # Beautiful, fast, fluent, light weight music player written in GTK4 [but no gaps]
+      audacity # Audio editor
 
       # [other]
       ffmpeg #
