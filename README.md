@@ -3,14 +3,6 @@ Paste:
 <p><a href="">Here</a></p>
 <img src="">
 -->
-<!-- alert, hidden when not needed <3 -->
-<div>
-  <blockquote>
-    <p><strong>ALERT:</strong> A heavy rewrite was recently completed. Error checking is actively underway, and improved front-end documentation will be added iteratively. Time will tell when the polish is fully out!</p>
-  </blockquote>
-</div>
-<br>
-
 <!-- My title Jar <3 -->
 <div align="center">
   <h1 style="color:#d3866d; border-bottom: none; font-size: 2.5em; margin-bottom: 0;">NixOS in a Jar ❄️</h1>
@@ -126,21 +118,157 @@ Paste:
   - **Language & Modifiers:** Dedicated custom input layers and native support structures (such as `japanese` language input frameworks).
 </details>
 
+<details>
+  <summary><b>Apps Overview</b></summary>
+
+  Everything available in this config, toggled per host via `system.nix` and `user.nix`:
+
+  #### Desktop Environments & Compositors:
+  `Hyprland` · `Niri` · `GNOME` · `Cinnamon`
+
+  #### Terminals:
+  `Foot` · `Kitty` · `Alacritty`
+
+  #### Editors:
+  `VSCodium` · `Zed` · `Obsidian` · `Helix` · `NVF (neovim)`
+
+  #### Browsers:
+  `Firefox` · `LibreWolf` · `Browsh (TUI)`
+
+  #### File Managers:
+  `Nautilus` · `Yazi` · `Ranger`
+
+  #### Media & Playback:
+  `MPV` · `g4music` · `Blanket` · `Quod Libet` · `yt-dlp` · `ffmpeg`
+
+  #### Creative:
+  `Blender` · `Krita` · `GIMP` · `Inkscape` · `OBS Studio` · `Kdenlive`
+
+  #### Gaming:
+  `Steam` · `Heroic` · `Prism Launcher` · `MangoHud`
+
+  #### Dev Tools:
+  `OpenCode` · `Lazygit` · `dotnet` · `Python` · `Node` · `GCC` · `Go`
+
+  #### Self-Hosting:
+  `Jellyfin` · `nixdraw` · `webjar` · `sleepyjar`
+
+  #### Other:
+  `KeePassXC` · `LocalSend` · `Discord` · `Bazaar` · `LibreOffice` · `Fastfetch` · `Ollama` · `Japanese input (fcitx5 + Mozc)`
+</details>
+
+<details>
+  <summary><b>Keybinds Quick Ref</b></summary>
+
+  Full reference: [Niri](resjar/docbin/niri.md) · [Hyprland](resjar/docbin/hyprland.md)
+
+  #### Hyprland
+
+  | Category | Keybind | Action |
+  | :--- | :--- | :--- |
+  | Launchers | `SUPER+Return` | Terminal (foot) |
+  | | `SUPER+Space` | Launcher (fuzzel) |
+  | | `SUPER+B` | Browser (librewolf) |
+  | | `SUPER+E` | File manager (nautilus) |
+  | | `SUPER+A` | App store (bazaar) |
+  | Screenshots | `SUPER+Shift+S` | Screenshot region |
+  | | `SUPER+Ctrl+Shift+S` | Screenshot screen |
+  | | `SUPER+Alt+S` | Screenshot window |
+  | Window Mgmt | `SUPER+Q` | Close window |
+  | | `SUPER+V` | Toggle float |
+  | | `SUPER+F` | Fullscreen |
+  | | `SUPER+Shift+F` | Maximize |
+  | Navigation | `SUPER+HJKL` / `SUPER+arrows` | Focus direction |
+  | | `SUPER+[1-0]` | Switch workspace |
+  | | `SUPER+Shift+[1-0]` | Move window to workspace |
+  | Media | `XF86Audio*` | Volume / mute |
+  | | `XF86MonBrightness*` | Brightness |
+
+  #### Niri
+
+  | Category | Keybind | Action |
+  | :--- | :--- | :--- |
+  | Launchers | `Mod+Return` | Terminal (foot) |
+  | | `Mod+Shift+D` | Launcher (fuzzel) |
+  | | `Mod+B` | Browser (librewolf) |
+  | | `Mod+E` | File manager (nautilus) |
+  | | `Mod+A` | App store (bazaar) |
+  | Screenshots | `Mod+Shift+S` | Screenshot region |
+  | | `Mod+Ctrl+Shift+S` | Screenshot screen |
+  | | `Mod+Alt+S` | Screenshot window |
+  | Window Mgmt | `Super+Q` | Close window |
+  | | `Mod+V` | Toggle float |
+  | | `Mod+F` | Maximize column |
+  | | `Mod+Shift+F` | Fullscreen |
+  | Navigation | `Mod+HJKL` / `Mod+arrows` | Focus direction |
+  | | `Mod+1-9` | Focus workspace |
+  | | `Mod+Ctrl+1-9` | Move to workspace |
+  | Media | `XF86Audio*` | Volume / mute |
+  | | `XF86MonBrightness*` | Brightness |
+</details>
+
+<details>
+  <summary><b>Screenshots</b></summary>
+
+  <!-- TODO: Add desktop screenshots here -->
+  <p><i>Screenshots coming soon.</i></p>
+</details>
+
 
 <!-- My system Configuration information stats -->
 ## System Layout =-=-=-=-=-
 
 > [!NOTE] This config is currently in a state of active development.
 
-1. [flake.nix](flake.nix): the main flake file that defines the system and the per-system configurations.
-2. [res/](./resjar): the directory containing all the resource for the config and repository.
-3. [modjar/](./modjar): the directory containing all the NixOS modules. And inside:
-  4. [user bin/](./modjar/usrbin): the home-manager dir for user configuration per user.
-  5. [system bin/](./modjar/sysbin): the NixOS system configuration for **all** configurations.
-  6. [host jar/](./hstjar): the NixOS host configurations are in here.
-4. [rot jar/](./rotjar): the dir to contain any files that are in rotaion for references, work, etc... Anything in there will not be around for long.
+1. [flake.nix](flake.nix): main flake — defines hosts, inputs, and per-system configurations.
+2. [hstjar/](./hstjar): per-host configs (one folder per machine, each with `system.nix` + `user.nix` toggle sheets).
+3. [modjar/](./modjar): shared NixOS modules:
+   - [sysbin/](./modjar/sysbin): system-level modules (NixOS options under `sysSettings.*`).
+   - [usrbin/](./modjar/usrbin): user-level modules (Home Manager options under `usrSettings.*`).
+4. [resjar/](./resjar): resources — docs, templates, images.
+5. [rotjar/](./rotjar): temporary files in rotation. Anything in here won't be around for long.
 
-> click [here](resjar/docbin/key-key.md) to see the **Full** Documentation.
+> click [here](resjar/docbin/directory-key.md) to see the **Full** Directory Key.
+
+## Shell Aliases
+
+The most useful aliases available after install:
+
+| Alias | Command | Purpose |
+| :--- | :--- | :--- |
+| `nhs` | `nh os switch` | Deploy system config (auto-detects host) |
+| `nht` | `nh os test` | Test config without writing to bootloader |
+| `hms` | `nh home switch` | Deploy home-manager profile only |
+| `nhc` | `nh clean all --keep 7` | Clean old generations, keep last 7 |
+| `jc` | auto-commit function | Clean multi-word commit messages |
+| `nrs` / `nrt` | `nixos-rebuild switch/test` | Hard rebuild fallback (uses sudo) |
+| `jnconf` | `cd ~/nix-config` | Jump to config dir |
+| `jars` | `git pull --rebase origin main` | Pull latest config |
+| `ff` | `fastfetch` | System info |
+| `nv` / `zd` / `code` | nvim / zeditor / codium | Editor shortcuts |
+| `ckhrd` | `lsblk && fdisk -l` | Check storage blocks |
+
+Full alias list: [zsh module](modjar/usrbin/zsh/) · [installer shell](shell.nix)
+
+## Core Usage & Tips
+
+**Day-to-day workflow:**
+```bash
+nhs          # deploy system config (auto-detects host)
+nht          # test before deploying
+hms          # update just home-manager
+nhc          # clean up old generations
+jnconf       # jump to config dir
+jc "message" # clean commit
+```
+
+**Tips:**
+- `nh` auto-detects your active host — no argument needed after install.
+- Toggle features via simple `true`/`false` booleans in `system.nix` and `user.nix` per host.
+- Use `nix-shell -p <package>` for quick one-off tools without installing them.
+- New host? Run `hardto <host>` from the installer shell to scaffold from `0_TEMPLATE`.
+- After editing, always test with `nht` before deploying with `nhs`.
+- Run `nrs` or `nrt` as a fallback if `nh` has issues — same result, uses `nixos-rebuild` directly.
 
 ## Dev Section
 <!-- goals / working projects -->
