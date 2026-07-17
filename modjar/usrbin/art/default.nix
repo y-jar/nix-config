@@ -31,7 +31,10 @@ in
       krita # Digital painting and illustration software
       gimp # GNU Image Manipulation Program
       inkscape # Vector graphics editor
+      mypaint # Digital painting and illustration software
+      drawpile # Collaborative drawing and annotation software
 
+      # [3d]
       blender # 3D modeling and animation software
       blockbench # 3D model editor [mincraft stuff]
 
