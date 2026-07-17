@@ -7,41 +7,6 @@
 {
   # =-=-=-=-=-=-=-=[Scroll down to !!Hosts!!]
   description = "My Nix within a Jar";
-  # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=[INPUTS]=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  inputs = {
-    # [nixpkgs]
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-    # [home-manager]
-    home-manager = {
-      url = "github:nix-community/home-manager/release-26.05";
-      inputs.nixpkgs.follows = "nixpkgs"; # locks version to the nixpkgs to reduce duplicate data
-    }; # End of homemanager
-    # [nix-index-database] pre-built nix-index + comma wrapper [this did shit, no longer needed]
-    # nix-index-database = {
-    #   url = "github:nix-community/nix-index-database";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # }; # end of nix-index-database
-
-    # =====[addons]
-    wall-jar = {
-      url = "github:y-jar/wall-jar"; # [wallpapers i collected]
-      flake = false;
-    }; # end of wall-jar
-    icon-jar = {
-      url = "github:y-jar/icon-jar"; # [icons i collected]
-      flake = false;
-    }; # end of icon-jar
-    pfp-jar = {
-      url = "github:y-jar/pfp-jar"; # [profile pictures i collected]
-      flake = false;
-    }; # end of pfp-jar
-    # [nix defined neovim config]
-    nvf = {
-      url = "github:NotAShelf/nvf";
-      inputs.nixpkgs.follows = "nixpkgs";
-    }; # end of nvf
-  }; # end of inputs
   # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=[OUTPUTS]=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   outputs =
     {
@@ -107,6 +72,41 @@
         # TEMPLATE  = urnJar { hostName = "TEMPLATE"; arch = "aarch64-linux"; };
       }; # end of nixosConfigurations
     }; # end of nixosConfigurations
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=[INPUTS]=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  inputs = {
+    # [nixpkgs]
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    # [home-manager]
+    home-manager = {
+      url = "github:nix-community/home-manager/release-26.05";
+      inputs.nixpkgs.follows = "nixpkgs"; # locks version to the nixpkgs to reduce duplicate data
+    }; # End of homemanager
+    # [nix-index-database] pre-built nix-index + comma wrapper [this did shit, no longer needed]
+    # nix-index-database = {
+    #   url = "github:nix-community/nix-index-database";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # }; # end of nix-index-database
+
+    # =====[addons]
+    wall-jar = {
+      url = "github:y-jar/wall-jar"; # [wallpapers i collected]
+      flake = false;
+    }; # end of wall-jar
+    icon-jar = {
+      url = "github:y-jar/icon-jar"; # [icons i collected]
+      flake = false;
+    }; # end of icon-jar
+    pfp-jar = {
+      url = "github:y-jar/pfp-jar"; # [profile pictures i collected]
+      flake = false;
+    }; # end of pfp-jar
+    # [nix defined neovim config]
+    nvf = {
+      url = "github:NotAShelf/nvf";
+      inputs.nixpkgs.follows = "nixpkgs";
+    }; # end of nvf
+  }; # end of inputs
 }
 
 # Go back Up!
