@@ -1,6 +1,9 @@
 { ... }:
 {
   hjmSettings = {
+    name = "jar"; # [CHANGE THIS]
+    email = "park.7qs@gmail.com"; # [CHANGE THIS]
+
     shell.enable = true;
     hyprland.enable = true;
     niri.enable = false;

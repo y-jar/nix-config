@@ -2,6 +2,10 @@
 {
   # Fill this out! Same toggles as home.nix but for hjem.
   hjmSettings = {
+    # personal [for git]
+    name = "PLEASECHANGEME_NAME"; # [CHANGE THIS]
+    email = "PLEASECHANGEME_EMAIL"; # [CHANGE THIS]
+
     # core
     shell.enable = true;
 

@@ -10,8 +10,13 @@
 
 {
   config = {
+    home.stateVersion = "26.05"; # [CHANGE THIS]
+
     # Fill this out!
     usrSettings = {
+      name = "jar"; # [CHANGE THIS] for git
+      email = "park.7qs@gmail.com"; # [CHANGE THIS] for git
+
       # core [users, shell, basic things]
       # enables zsh shell with aliases [should be on by default]
       shell = {

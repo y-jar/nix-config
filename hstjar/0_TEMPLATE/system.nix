@@ -10,7 +10,7 @@
 #    you need!
 #
 # And remember, your configuration is yours to customize.
-# After you're done, head over to ./user.nix to configure your user!
+# After you're done, head over to ./home.nix to configure your user!
 #*/-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 {
@@ -23,10 +23,7 @@
 {
   config = {
     system.stateVersion = "VersionNumber"; # [CHANGE THIS]
-    #            [note, this should be the same as the home manager state version]
     #            [system state version from first install]
-    home-manager.users.PLEASECHANGEME_USERNAME.home.stateVersion = "HomeManagerVersionNumber"; # [CHANGE THIS]
-    #            [home manager state version from first install]
 
     # Fill this out!
     sysSettings = {
@@ -122,9 +119,5 @@
     # set user for git [be sure to replace all instances of USERNAME and NAME
     #                     with your actual username and name                 ]
     users.users.PLEASECHANGEME_USERNAME.description = "NAME";
-    home-manager.users.PLEASECHANGEME_USERNAME.usrSettings = {
-      name = "PLEASECHANGEME_NAME";
-      email = "PLEASECHANGEME_EMAIL";
-    };
   }; # end of config
 }

@@ -10,7 +10,7 @@
 #    you need!
 #
 # And remember, your configuration is yours to customize.
-# After you're done, head over to ./user.nix to configure your user!
+# After you're done, head over to ./home.nix to configure your user!
 #*/-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 {
   inputs,
@@ -20,10 +20,7 @@
 }: {
   config = {
     system.stateVersion = "26.05"; # [CHANGE THIS]
-    #            [note, this should be the same as the home manager state version]
     #            [system state version from first install]
-    home-manager.users.jar.home.stateVersion = "26.05"; # [CHANGE THIS]
-    #            [home manager state version from first install]
 
     # Fill this out!
     sysSettings = {
@@ -101,9 +98,5 @@
     # set user for git [be sure to replace all instances of USERNAME and NAME
     #                     with your actual username and name                 ]
     users.users.jar.description = "jar";
-    home-manager.users.jar.usrSettings = {
-      name = "y-jar";
-      email = "park.7qs@gmail.com";
-    };
   }; # end of config
 }

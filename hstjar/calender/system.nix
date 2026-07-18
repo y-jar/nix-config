@@ -8,10 +8,7 @@
 {
   config = {
     system.stateVersion = "25.11"; # [CHANGE THIS]
-    #            [note, this should be the same as the home manager state version]
     #            [system state version from first install]
-    home-manager.users.jar.home.stateVersion = "26.05"; # [CHANGE THIS]
-    #            [home manager state version from first install]
 
     # Fill this out!
     sysSettings = {
@@ -89,9 +86,5 @@
     # set user for git [be sure to replace all instances of USERNAME and NAME
     #                     with your actual username and name                 ]
     users.users.jar.description = "jar";
-    home-manager.users.jar.usrSettings = {
-      name = "y-jar"; # This is mainly used for my git settings :P
-      email = "park.7qs@gmail.com";
-    };
   }; # end of config
 }

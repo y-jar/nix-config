@@ -22,8 +22,13 @@
 
 {
   config = {
+    home.stateVersion = "HomeManagerVersionNumber"; # [CHANGE THIS]
+
     # Fill this out!
     usrSettings = {
+      name = "PLEASECHANGEME_NAME"; # [CHANGE THIS] for git
+      email = "PLEASECHANGEME_EMAIL"; # [CHANGE THIS] for git
+
       # core [users, shell, basic things]
       # enables zsh shell with aliases [should be on by default]
       shell = {
