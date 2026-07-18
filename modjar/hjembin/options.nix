@@ -1,0 +1,53 @@
+{ lib, ... }:
+
+{
+  options.hjmSettings = {
+    # core
+    shell.enable = lib.mkEnableOption "zsh shell";
+
+    # experience
+    hyprland.enable = lib.mkEnableOption "hyprland";
+    niri.enable = lib.mkEnableOption "niri";
+    launcher.enable = lib.mkEnableOption "fuzzel launcher";
+
+    # appstream
+    browsers = {
+      enable = lib.mkEnableOption "browsers (librewolf + firefox)";
+      firefox = lib.mkEnableOption "firefox";
+      librewolf = lib.mkEnableOption "librewolf";
+    };
+    terminal.enable = lib.mkEnableOption "terminals (foot + kitty + alacritty)";
+    editors = {
+      enable = lib.mkEnableOption "editors";
+      vscodium.enable = lib.mkEnableOption "vscodium";
+      zed.enable = lib.mkEnableOption "zed";
+      obsidian.enable = lib.mkEnableOption "obsidian";
+      nvf.enable = lib.mkEnableOption "nvf (neovim config)";
+      helix.enable = lib.mkEnableOption "helix";
+    };
+    discord.enable = lib.mkEnableOption "discord";
+    flatpak.enable = lib.mkEnableOption "flatpak + bazaar";
+    nautilus.enable = lib.mkEnableOption "nautilus file explorer";
+    yazi.enable = lib.mkEnableOption "yazi terminal file manager";
+    ranger.enable = lib.mkEnableOption "ranger terminal file manager";
+    media.enable = lib.mkEnableOption "media tools (mpv + ffmpeg)";
+    keepass.enable = lib.mkEnableOption "keepassxc";
+    gaming = {
+      prism.enable = lib.mkEnableOption "prismlauncher (minecraft)";
+      heroic.enable = lib.mkEnableOption "heroic (gog + epic)";
+    };
+
+    # creative
+    art.enable = lib.mkEnableOption "creative tools (blender + krita + gimp + inkscape)";
+    office.enable = lib.mkEnableOption "office (libreoffice + pandoc)";
+    obs.enable = lib.mkEnableOption "obs studio";
+    kdenlive.enable = lib.mkEnableOption "kdenlive video editor";
+
+    # management
+    japanese.enable = lib.mkEnableOption "japanese input (fcitx5 + mozc)";
+    ai.enable = lib.mkEnableOption "ai tools (lm studio + opencode)";
+    git.enable = lib.mkEnableOption "git tools (git + gh + lazygit)";
+    bluetooth.enable = lib.mkEnableOption "bluetooth (blueman)";
+    dev.enable = lib.mkEnableOption "dev tools (dotnet + python + node + gcc + go)";
+  };
+}

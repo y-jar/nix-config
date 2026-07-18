@@ -1,0 +1,53 @@
+{ ... }:
+{
+  # Fill this out! Same toggles as home.nix but for hjem.
+  hjmSettings = {
+    # core
+    shell.enable = true;
+
+    # experience
+    hyprland.enable = true;
+    niri.enable = false;
+    launcher.enable = true;
+
+    # appstream
+    browsers = {
+      enable = true;
+      firefox = true;
+      librewolf = true;
+    };
+    terminal.enable = true;
+    editors = {
+      enable = true;
+      vscodium.enable = true;
+      zed.enable = true;
+      obsidian.enable = false;
+      nvf.enable = true;
+      helix.enable = false;
+    };
+    discord.enable = false;
+    flatpak.enable = false;
+    nautilus.enable = true;
+    yazi.enable = true;
+    ranger.enable = false;
+    media.enable = true;
+    keepass.enable = true;
+    gaming = {
+      prism.enable = false;
+      heroic.enable = false;
+    };
+
+    # creative
+    art.enable = false;
+    office.enable = false;
+    obs.enable = false;
+    kdenlive.enable = false;
+
+    # management
+    japanese.enable = false;
+    ai.enable = false;
+    git.enable = true;
+    bluetooth.enable = false;
+    dev.enable = true;
+  };
+}
