@@ -5,7 +5,7 @@
 # NOTE: this will be changes to a more modular layout, for now, this is a simple default config
 {
   config = {
-    # Enable the OpenSSH daemon.
+    # [Enable the OpenSSH daemon.]
     services.openssh.enable = true;
     networking = {
       # NOTE: If hostname is changed, be sure to match it on flake.nix and in the shell alias in
@@ -13,13 +13,13 @@
       networkmanager.enable = true;
       hostName = "${hostnm}"; # sets HOSTNAME
 
-      # for dns issues i keep running into
+      # [for dns issues i keep running into]
       nameservers = [
         "8.8.8.8" # google
         "1.1.1.1" # Coudflare
       ]; # end of nameservers
 
-      # Configure network proxy if necessary
+      # [Configure network proxy if necessary]
       #proxy.default = "http://user:password@proxy:port/";
       #proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
