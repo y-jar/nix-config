@@ -22,9 +22,14 @@
             enable = true;
             directory = "/home/${user}";
 
-            files.".profile" = {
-              executable = true;
-              source = config.hjem.users.${user}.environment.loadEnv;
+            files = {
+              ".profile" = {
+                executable = true;
+                source = config.hjem.users.${user}.environment.loadEnv;
+              };
+            } // lib.optionalAttrs (config.hjemDotfiles.zshrc != null) {
+              ".zshrc".source = config.hjemDotfiles.zshrc;
+              ".fzfrc".source = config.hjemDotfiles.fzfrc;
             };
           };
         }) config.sysSettings.users
