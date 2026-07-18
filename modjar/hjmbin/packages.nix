@@ -26,8 +26,6 @@ in
     zed
   ] ++ lib.optionals hjm.editors.obsidian.enable [
     obsidian
-  ] ++ lib.optionals hjm.editors.nvf.enable [
-    neovim # placeholder for nvf
   ] ++ lib.optionals hjm.editors.helix.enable [
     helix
   ] ++ lib.optionals hjm.discord.enable [

@@ -3,6 +3,7 @@
 {
   imports = [
     inputs.hjem.nixosModules.default
+    inputs.nvf.nixosModules.default
   ];
 
   config = {
@@ -10,7 +11,7 @@
       clobberByDefault = true;
 
       extraModules = [
-        ../modjar/hjembin # Hjem user modules (auto-imports all .nix and subdirs)
+        ../modjar/hjmbin # Hjem user modules (auto-imports all .nix and subdirs)
         ../hstjar/${hostnm}/hjem.nix # Host-specific hjem config
       ];
 
