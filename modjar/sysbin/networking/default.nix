@@ -54,6 +54,15 @@
       }; # end of firewall
     }; # end of networking
 
+    # [network optimization]
+    boot = {
+      kernelModules = [ "tcp_bbr" ];
+      kernel.sysctl = {
+        "net.ipv4.tcp_congestion_control" = "bbr";
+        "net.core.default_qdisc" = "cake";
+      };
+    };
+
     # [for the dynamic seaching that other distros use.]
     services.avahi = {
       enable = true;
