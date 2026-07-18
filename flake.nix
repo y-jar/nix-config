@@ -67,7 +67,7 @@
         whale = mkJar "whale"; # Server system
         vmjar = mkJar "vmjar"; # Virtual config
 
-        # ========[hjem hosts (alternative to home-manager)]
+        # ========[hjem hosts (alternative to home-manager)] [Not fully implemented and toying with it]
         # hjemtest = mkHjemJar "hjemtest"; # uncomment when host dir exists
 
         # ========[for non x86 systems..] [WIP]
