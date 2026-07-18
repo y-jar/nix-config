@@ -26,7 +26,7 @@
         name = user;
         value = {
           imports = [
-            ../hstjar/${hostnm}/user.nix
+            ../hstjar/${hostnm}/home.nix
             ../modjar/usrbin
           ];
         };
