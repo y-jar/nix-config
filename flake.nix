@@ -1,8 +1,7 @@
- #  _______
- # '   /      ___  .___
- #     |     /   ` /   \
- #     |    |    | |   '
- #  `--/    `.__/| /
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
 {
   # =-=-=-=-=-=-=-=[Scroll down to !!Hosts!!]
@@ -28,7 +27,19 @@
           ./hstjar/${hostName} # Host-specific directory entry [what happens here can depend on each system]
         ]; # end of modules
       }; # end of mkJar
-
+      # =-=-=[Systems that will be x86_64-linux] [uses hjem instead of home-manager]
+      mkHjemJar = hostName: nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = {
+          inherit inputs;
+          hostnm = hostName;
+        }; # end of special args
+        modules = [
+          ./modjar/sysbin # Base system core entry
+          ./modjar/hjemkey.nix # Hjem entry (alternative to home-manager)
+          ./hstjar/${hostName} # Host-specific directory entry
+        ]; # end of modules
+      }; # end of mkHjemJar
       # =-=-=[Systems that will be non x86_64-linux] [WIP]
       urnJar = { hostName, arch }: nixpkgs.lib.nixosSystem {
         system = arch; # Dynamically sets the architecture
@@ -55,6 +66,9 @@
         candle = mkJar "candle"; # gaming mini build
         whale = mkJar "whale"; # Server system
         vmjar = mkJar "vmjar"; # Virtual config
+
+        # ========[hjem hosts (alternative to home-manager)]
+        # hjemtest = mkHjemJar "hjemtest"; # uncomment when host dir exists
 
         # ========[for non x86 systems..] [WIP]
         # TEMPLATE  = urnJar { hostName = "TEMPLATE"; arch = "aarch64-linux"; };
@@ -97,6 +111,8 @@
     rsakura.url = "github:preprocessor/rsakura"; # whisper's cool rust rewite fork
     # [cachyos kernel]
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
+    # [hjem] alternative to home-manager [https://github.com/feel-co/hjem]
+    hjem.url = "github:feel-co/hjem";
   }; # end of inputs
 }
 

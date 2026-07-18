@@ -42,10 +42,10 @@ Paste:
 </div>
 <br>
 <!-- Art i Made -->
-<span style="font-family: 'Lucida Console'; line-height: 14px; font-size: 14px; display: inline-block;">╃<br>
+<!--<span style="font-family: 'Lucida Console'; line-height: 14px; font-size: 14px; display: inline-block;">╃<br>
 &nbsp;.▀▀█▀▀&nbsp;.<br>
 &nbsp;&nbsp;&nbsp;:▓.:<br>
-.&nbsp;▀▀&nbsp;:&nbsp;╃</span>
+.&nbsp;▀▀&nbsp;:&nbsp;╃</span>-->
 
 <!-- Notes for Outsiders -->
 > [!NOTE] for outsiders, the install guide is located in the [install-guide](resjar/docbin/install-guide.md) file.
