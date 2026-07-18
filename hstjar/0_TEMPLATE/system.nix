@@ -45,6 +45,8 @@
 
       # =============[hardware]
       # nvidia.enable = true;
+      # [kernel] pick one: "default", "latest", "cachyos-latest", "cachyos-bore", "cachyos-lts"
+      kernel.variant = "default";
       bluetooth.enable = true; # ~10mib - sets blueman in home packages
       # [power management]
       # NOTE: tlp and powerprofiles are mutually exclusive, pick one

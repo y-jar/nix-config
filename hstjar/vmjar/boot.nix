@@ -1,4 +1,4 @@
-{ pkgs, ... }: {
+{ ... }: {
   # boot
   boot = {
     loader = {
@@ -13,6 +13,5 @@
       "fuse"
       "ntfs"
     ];
-    kernelPackages = pkgs.linuxPackages_latest;
   }; # end of boot
 }
