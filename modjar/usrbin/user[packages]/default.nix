@@ -42,6 +42,25 @@
     python314Packages.pyyaml
     # =======[Dev Jar] |>|>|>|>|>|>|>^^^
 
+    # =======[Nix Jar] |>|>|>|>|>|>|>
+    # [nix tools]
+    nix-output-monitor # prettier nix build output (nom)
+    nix-tree # visualize nix dependency tree
+    nurl # fetch a URL and output a nix hash
+    nix-init # generate a nix package from a repo URL
+    # =======[Nix Jar] |>|>|>|>|>|>|>^^^
+
+    # =======[CLI Jar] |>|>|>|>|>|>|>
+    # [cli tools]
+    gum # interactive CLI prompts, confirmations, choosers
+    lla # modern ls with icons, plugins, gitignore
+    ripgrep # fast recursive grep (better than grep -r)
+    sd # sed alternative, intuitive find-and-replace
+    trash-cli # safe rm to trash instead of permanent delete
+    chafa # terminal image/file viewer with sixel/kitty support
+    cliamp # CLI music player
+    # =======[CLI Jar] |>|>|>|>|>|>|>^^^
+
     # ====Unsorteds====
   ] ++ lib.optionals osConfig.sysSettings.UseNixPkgsYoinks.enable [
     inputs.rsakura.packages.x86_64-linux.default # a cool thing whisper did, awesone of them to add it as a pkgs in nix! ref: https://github.com/preprocessor/rsakura
