@@ -41,6 +41,12 @@ in
   ] ++ lib.optionals hjm.media.enable [
     mpv
     ffmpeg
+    blanket
+    quodlibet
+    gapless
+    audacity
+    yt-dlp
+    ytdownloader
   ] ++ lib.optionals hjm.keepass.enable [
     keepassxc
   ] ++ lib.optionals hjm.gaming.prism.enable [
@@ -68,6 +74,20 @@ in
     lazygit
   ] ++ lib.optionals hjm.bluetooth.enable [
     blueman
+  ] ++ lib.optionals hjm.niri.enable [
+    # niri packages
+    fuzzel
+    swww
+    wayshot
+    wl-clipboard
+    wlr-randr
+    playerctl
+    brightnessctl
+    libnotify
+    dunst
+    grim
+    slurp
+    wf-recorder
   ] ++ lib.optionals hjm.dev.enable [
     # dev tools placeholder
   ];

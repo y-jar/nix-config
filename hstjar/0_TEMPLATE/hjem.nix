@@ -6,15 +6,15 @@
     name = "PLEASECHANGEME_NAME"; # [CHANGE THIS]
     email = "PLEASECHANGEME_EMAIL"; # [CHANGE THIS]
 
-    # core
+    # [core]
     shell.enable = true;
 
-    # experience
+    # [experience]
     hyprland.enable = true;
     niri.enable = false;
     launcher.enable = true;
 
-    # appstream
+    # [appstream]
     browsers = {
       enable = true;
       firefox = true;
@@ -41,17 +41,20 @@
       heroic.enable = false;
     };
 
-    # creative
+    # [creative]
     art.enable = false;
     office.enable = false;
     obs.enable = false;
     kdenlive.enable = false;
 
-    # management
+    # [management]
     japanese.enable = false;
     ai.enable = false;
     git.enable = true;
     bluetooth.enable = false;
     dev.enable = true;
+
+    # [resources]
+    resYoink.enable = false;
   };
 }

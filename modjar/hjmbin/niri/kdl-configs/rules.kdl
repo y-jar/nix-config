@@ -1,0 +1,90 @@
+
+// ===========================RULES
+// Window rules let you adjust behavior for individual windows.
+// Find more information on the wiki:
+// https://yalter.github.io/niri/Configuration:-Window-Rules
+// to find a id for a window:
+// niri msg windows
+
+// Work around WezTerm's initial configure bug
+// by setting an empty default-column-width.
+window-rule {
+    // This regular expression is intentionally made as specific as possible,
+    // since this is the default config, and we want no false positives.
+    // You can get away with just app-id="wezterm" if you want.
+    match app-id=r#"^org\.wezfurlong\.wezterm$"#
+    default-column-width {}
+}
+
+// Open the Firefox picture-in-picture player as floating by default.
+window-rule {
+    // This app-id regular expression will work for both:
+    // - host Firefox (app-id is "firefox")
+    // - Flatpak Firefox (app-id is "org.mozilla.firefox")
+    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+    open-floating true
+}
+
+// Example: block out two password managers from screen capture.
+// (This example rule is commented out with a "/-" in front.)
+window-rule {
+    match app-id=r#"^org\.keepassxc\.KeePassXC$"#
+    match app-id=r#"^org\.gnome\.World\.Secrets$"#
+
+    block-out-from "screen-capture"
+
+    // Use this instead if you want them visible on third-party screenshot tools.
+    // block-out-from "screencast"
+}
+
+// Example: enable rounded corners for all windows.
+// (This example rule is commented out with a "/-" in front.)
+window-rule {
+    geometry-corner-radius 4
+    clip-to-geometry true
+}
+
+/-layer-rule {
+    match namespace="noctalia-shell"
+    // This ensures it doesn't overlap your windows
+    block-out-from "screencast"
+}
+
+// WINDOW-TRANSPARENCY
+// Make inactive windows semitransparent.
+window-rule {
+    match is-active=false
+    opacity 0.89
+}
+// Make active windows semitransparent.
+/-window-rule {
+    match is-active=true
+    opacity 0.95
+}
+
+// makes sure buffer[app] is floating
+window-rule {
+    match app-id=r#"^org\.gnome\.gitlab\.cheywood\.Buffer$"#
+    open-floating true
+    default-column-width { fixed 200; }
+}
+
+// This Fixes the Cringe Steam Papershit, Thanks to @whisper
+window-rule {
+    match app-id="steam" title=r#"^notificationtoasts_\d+_desktop$"#
+    default-floating-position x=10 y=10 relative-to="bottom-right"
+}
+
+// Set the regular wallpaper on the backdrop.
+/-layer-rule {
+    match namespace="^wallpaper$"
+    place-within-backdrop true
+}
+layer-rule {
+  match namespace="^noctalia-backdrop"
+  place-within-backdrop true
+}
+layer-rule {
+  match namespace="^noctalia-overview*"
+  place-within-backdrop true
+}

@@ -45,5 +45,12 @@
     git.enable = true;
     bluetooth.enable = false;
     dev.enable = true;
+
+    resYoink = {
+      enable = true;
+      wallpapers = true;
+      icons = true;
+      profilePictures = true;
+    };
   };
 }

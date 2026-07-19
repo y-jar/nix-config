@@ -45,5 +45,7 @@
     git.enable = true;
     bluetooth.enable = false;
     dev.enable = false;
+
+    resYoink.enable = false;
   };
 }
