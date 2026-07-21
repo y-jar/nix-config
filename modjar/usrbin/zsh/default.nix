@@ -83,6 +83,7 @@ in
         rz = "exec zsh"; # reload zsh
         ns = "nix-shell"; # load dev enviroment
         nsp = "nix-shell -p";
+        shlvl = "echo $SHLVL";
         # ai... ew
         ols = "ollama list";
         olrs = "sudo systemctl restart ollama-model-loader.service";

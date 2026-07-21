@@ -51,7 +51,7 @@
       flatpak.enable = false; # sets flatpak and adds bazaar
       # [file explorers]
       nautilus.enable = true; # sets nautilus
-      yazi.enable = false; # sets yazi
+      yazi.enable = true; # sets yazi
       ranger.enable = false; # sets ranger
       # [media]
       media.enable = true; # sets media tools like mpv
