@@ -193,7 +193,7 @@ binds {
     // Expel the bottom window from the focused column to the right.
     Mod+Ctrl+Period { expel-window-from-column; }
     // Emoji/ASCII picker
-    Mod+Period { spawn "jemoji"; }
+    Mod+Alt+Space { spawn "jemoji"; }
 
     Mod+R { switch-preset-column-width; }
     // Cycling through the presets in reverse order is also possible.

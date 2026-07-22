@@ -26,7 +26,7 @@ hl.bind(mainMod .. " + SHIFT + B", hl.dsp.exec_cmd(browserSearch))
 hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd(volumeMixer))
 hl.bind(mainMod .. " + G", hl.dsp.exec_cmd("g4music"))
 hl.bind(mainMod .. " + C", hl.dsp.exec_cmd(hyprpicker))
-hl.bind(mainMod .. " + Period", hl.dsp.exec_cmd("jemoji"))
+hl.bind(mainMod .. " + Alt + Space", hl.dsp.exec_cmd("jemoji"))
 
 -- noctalia-shell
 hl.bind(mainMod .. " + D", hl.dsp.exec_cmd(launcherPain))

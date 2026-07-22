@@ -67,7 +67,7 @@ Single-monitor hosts automatically get workspaces 1–10 (no config needed).
 | `SUPER+Shift+V` | Volume mixer (pavucontrol) |
 | `SUPER+G` | Gapless (g4music) |
 | `SUPER+C` | Color picker (hyprpicker) |
-| `SUPER+Period` | Emoji picker (jemoji) |
+| `SUPER+Alt+Space` | Emoji picker (jemoji) |
 
 ### Noctalia shell
 | Key | Action |
