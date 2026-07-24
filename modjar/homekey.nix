@@ -38,6 +38,7 @@
         hyprlandEnable = config.sysSettings.hyprland.enable;
         niriEnable = config.sysSettings.niri.enable;
         aiEnable = config.sysSettings.ai.enable;
+        komgaEnable = config.sysSettings.server.komga.enable or false;
       };
     };
 

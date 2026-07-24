@@ -13,7 +13,7 @@ let
 
   dirSetup = ''
     # [create jar directories]
-    mkdir -p ~/resjar ~/rotjar ~/pic-jar ~/musicjar ~/kilnjar ~/artjar ~/docjar ~/vidjar ~/Downloads
+    mkdir -p ~/resjar ~/rotjar ~/pic-jar ~/musicjar ~/kilnjar ~/artjar ~/entjar ~/docjar ~/vidjar ~/Downloads
   '';
 in
 {

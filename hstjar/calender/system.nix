@@ -65,6 +65,7 @@
 
       # =============[Server]
       server = {
+        komga.enable = true; # manga/comic server (port 25600)
         jellyfin = {
           enable = false; # sets jellyfin server
           juser = "jar"; # sets jellyfin user for perms for file access

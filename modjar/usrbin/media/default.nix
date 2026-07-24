@@ -8,6 +8,10 @@ let
   cfg = config.usrSettings.media;
 in
 {
+  imports = [
+    ./komga.nix
+  ];
+
   options = {
     usrSettings.media.enable = lib.mkEnableOption "Enable media tools (~200MiB, mpv + ffmpeg + music players)";
   };
@@ -29,6 +33,7 @@ in
       quodlibet # media player
       gapless # Beautiful, fast, fluent, light weight music player written in GTK4 [but no gaps]
       audacity # Audio editor +55mib
+      yacreader # Reader for Ebooks, manga, etc..
 
       # [other]
       ffmpeg #

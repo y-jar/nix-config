@@ -4,7 +4,7 @@
   xdg.userDirs = {
     enable = true;
     createDirectories = true;
-    download = "~/Downloads";
+    download = null;
     documents = null;
     music = null;
     pictures = null;
@@ -22,7 +22,9 @@
       ~/musicjar \
       ~/kilnjar \
       ~/artjar \
+      ~/entjar \
       ~/docjar \
-      ~/vidjar
+      ~/vidjar \
+      ~/Downloads
   '';
 }
