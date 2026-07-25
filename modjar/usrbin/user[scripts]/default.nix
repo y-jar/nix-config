@@ -9,6 +9,7 @@ let
   scriptList = [
     { name = "bldjar"; path = ./scriptsbin/bldjar.sh; }
     { name = "fixzsh"; path = ./scriptsbin/fixzsh.sh; }
+    { name = "ytdl";   path = ./scriptsbin/ytdl.sh; }
   ]; # end of script list
 
   jarScripts = map (s: mkScript s.name s.path) scriptList; # dont touch me!

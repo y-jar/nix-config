@@ -80,6 +80,7 @@ in
         ga = "git add .";
         gc = "git clone";
         fcir = "fcitx5-remote -r"; # force reload fcitx5
+        dl = "ytdl"; # youtube downloader
         rz = "exec zsh"; # reload zsh
         ns = "nix-shell"; # load dev enviroment
         nsp = "nix-shell -p";
