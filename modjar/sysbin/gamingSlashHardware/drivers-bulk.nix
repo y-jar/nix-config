@@ -21,6 +21,7 @@ in
     # Support for controllers
     hardware.xpadneo.enable = true; # for Xbox controllers
     services.udev.packages = [ pkgs.game-devices-udev-rules ];
+    services.lact.enable = true;
 
     # graphics + 32bit support for Steam
     hardware.graphics = {
