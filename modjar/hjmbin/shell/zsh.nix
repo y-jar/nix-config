@@ -22,6 +22,9 @@ let
     # syntax highlighting
     source ${zshSyntax}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
+    # zoxide (smart cd)
+    eval "$(zoxide init zsh)"
+
     # prompt
     PROMPT='%F{#5F7CB8}%n|%f'
     RPROMPT='%F{#5F7CB8}%~ %F{#5F7CB8}%m%f %F{cyan}%*%f'

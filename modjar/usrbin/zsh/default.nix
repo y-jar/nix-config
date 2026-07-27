@@ -58,7 +58,6 @@ in
         nv = "nvim";
         zd = "zeditor";
         code = "codium";
-        yy = "yazi";
         brw = "browsh"; # TUI based browser
         oc = "opencode"; # Ai thing
         # ========[app aliases]
@@ -100,30 +99,35 @@ in
         ff = "fastfetch";
         # =========[Extra]
       }; # end of aliases
-      }; # end of zsh config
+    }; # end of zsh config
 
-      # [fzf]
-      programs.fzf = {
-        enable = true;
-        enableZshIntegration = true;
-        defaultCommand = "fd --type f --hidden --follow --exclude .git";
-        fileWidgetCommand = "fd --type f --hidden --follow --exclude .git";
-        changeDirWidgetCommand = "fd --type d --hidden --follow --exclude .git";
-        historyWidgetOptions = [ "--preview" "echo {} | bat --color=always -l= -" ];
-        colors = {
-          "bg"      = "#2b2622";
-          "bg+"     = "#45403d";
-          "fg"      = "#e6dfd3";
-          "fg+"     = "#ebdbb2";
-          "hl"      = "#d79921";
-          "hl+"     = "#d79921";
-          "info"    = "#d79921";
-          "border"  = "#d79921";
-          "prompt"  = "#d79921";
-          "pointer" = "#e6dfd3";
-          "marker"  = "#e6dfd3";
-          "spinner" = "#d79921";
-        }; # end of colors
-      }; # end of fzf
+    programs.zoxide = {
+      enable = true;
+      enableZshIntegration = true;
+    };
+
+    # [fzf]
+    programs.fzf = {
+      enable = true;
+      enableZshIntegration = true;
+      defaultCommand = "fd --type f --hidden --follow --exclude .git";
+      fileWidgetCommand = "fd --type f --hidden --follow --exclude .git";
+      changeDirWidgetCommand = "fd --type d --hidden --follow --exclude .git";
+      historyWidgetOptions = [ "--preview" "echo {} | bat --color=always -l= -" ];
+      colors = {
+        "bg"      = "#2b2622";
+        "bg+"     = "#45403d";
+        "fg"      = "#e6dfd3";
+        "fg+"     = "#ebdbb2";
+        "hl"      = "#d79921";
+        "hl+"     = "#d79921";
+        "info"    = "#d79921";
+        "border"  = "#d79921";
+        "prompt"  = "#d79921";
+        "pointer" = "#e6dfd3";
+        "marker"  = "#e6dfd3";
+        "spinner" = "#d79921";
+      }; # end of colors
+    }; # end of fzf
   }; # end of shell config
 }

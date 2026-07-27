@@ -12,6 +12,7 @@ in
     fd
     bat
     fzf
+    zoxide
 
     # editors (base)
   ] ++ lib.optionals hjm.browsers.enable [
