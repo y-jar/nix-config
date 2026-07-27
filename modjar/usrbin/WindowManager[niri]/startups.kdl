@@ -9,6 +9,7 @@ spawn-at-startup "xwayland-satellite"
 spawn-at-startup "blanket"
 spawn-at-startup "pavucontrol"
 spawn-at-startup "easyeffects"
+spawn-at-startup "qpwgraph"
 // spawn-at-startup "wayle"
 // enviroment sturff
 environment {
