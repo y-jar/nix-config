@@ -39,6 +39,10 @@ in
           style = "beam";
           blink = "yes";
         }; # end of cursor
+
+        tweak = {
+          font-monospace-warn = "no"; # suppress false monospace warning
+        }; # end of tweak
       }; # end of settings
 
       # extra backups

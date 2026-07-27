@@ -69,10 +69,11 @@ in
         jnconf = "cd ~/nix-config"; # nix config jar [move over into nix config]
         jkconf = "cd ~/kilnjar"; # kiln jar [my dev / project folder]
         jkrconf = "cd ~/kilnjar/reposjar"; # kiln jar [my dev / project folder]
-        # hyprland
+        # [hyprland]
         hle = "hyprctl configerrors";
         hlr = "hyprland reload";
-        #
+        # [Tools]
+        clfont = "fc-cache -f -v"; # clear font cache
         ckhrd = "lsblk && fdisk -l";
         # ls = "ls";
         grep = "grep --color=auto";
@@ -85,7 +86,7 @@ in
         ns = "nix-shell"; # load dev enviroment
         nsp = "nix-shell -p";
         shlvl = "echo $SHLVL";
-        # ai... ew
+        # [ai... ew]
         ols = "ollama list";
         olrs = "sudo systemctl restart ollama-model-loader.service";
         olpm = "pull-models";
