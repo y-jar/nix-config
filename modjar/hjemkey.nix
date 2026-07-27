@@ -95,6 +95,9 @@
             // lib.optionalAttrs (config.hjemDotfiles.mpvConf != null) {
               ".config/mpv/mpv.conf".source = config.hjemDotfiles.mpvConf;
             }
+            // lib.optionalAttrs (config.hjemDotfiles.mimeApps != null) {
+              ".config/mimeapps.list".source = config.hjemDotfiles.mimeApps;
+            }
             # [niri config]
             // lib.optionalAttrs (config.hjemDotfiles.niriFiles != null) {
               ".config/niri/config.kdl".source = config.hjemDotfiles.niriFiles.config;

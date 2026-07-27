@@ -35,6 +35,7 @@ in
       gapless # Beautiful, fast, fluent, light weight music player written in GTK4 [but no gaps]
       audacity # Audio editor +55mib
       yacreader # Reader for Ebooks, manga, etc..
+      constrict # shrinks files
 
       # [other]
       ffmpeg #

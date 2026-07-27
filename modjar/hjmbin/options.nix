@@ -116,6 +116,12 @@
       internal = true;
       description = "Generated mpv.conf path";
     };
+    mimeApps = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      internal = true;
+      description = "Generated mimeapps.list path";
+    };
     # [niri/default.nix]
     niriFiles = lib.mkOption {
       type = lib.types.nullOr (lib.types.submodule {

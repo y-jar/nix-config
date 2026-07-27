@@ -39,6 +39,7 @@ in
   ] ++ lib.optionals hjm.ranger.enable [
     ranger
   ] ++ lib.optionals hjm.media.enable [
+    constrict # shrinks files
     mpv
     ffmpeg
     blanket
@@ -47,6 +48,9 @@ in
     audacity
     yt-dlp
     ytdownloader
+    loupe      # image viewer
+    totem      # video player (GNOME Videos)
+    file-roller # archive manager (GNOME)
   ] ++ lib.optionals hjm.keepass.enable [
     keepassxc
   ] ++ lib.optionals hjm.gaming.prism.enable [
