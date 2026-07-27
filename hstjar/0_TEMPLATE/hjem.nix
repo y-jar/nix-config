@@ -21,7 +21,7 @@
       librewolf = true;
     };
     terminal.enable = true;
-    terminal.font = "IntoneMono Nerd Font"; # [intone, miracode, monocraft]
+    terminal.font = "IntoneMono Nerd Font"; # options: "IntoneMono Nerd Font" "Monocraft" "Miracode"
     editors = {
       enable = true;
       vscodium.enable = true;

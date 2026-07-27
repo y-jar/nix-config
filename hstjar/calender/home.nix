@@ -44,7 +44,7 @@
         librewolf = true; # enables librewolf [personal] [the default is `true`]
       }; # end of browsers
       terminal.enable = true; # sets terminal as foot
-      terminal.font = "IntoneMono Nerd Font"; # [intone, miracode, monocraft]
+      terminal.font = "Monocraft"; # options: "IntoneMono Nerd Font" "Monocraft" "Miracode"
       syncthing.enable = true; # file sync (web UI at localhost:8384)
       editors = {
         enable = true; # sets editors

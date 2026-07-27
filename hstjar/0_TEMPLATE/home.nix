@@ -56,7 +56,7 @@
         librewolf = true; # enables librewolf [personal]
       };
       terminal.enable = true; # ~30mib - sets terminal as foot + kitty + alacritty
-      terminal.font = "IntoneMono Nerd Font"; # [intone, miracode, monocraft]
+      terminal.font = "IntoneMono Nerd Font"; # options: "IntoneMono Nerd Font" "Monocraft" "Miracode"
       syncthing.enable = false; # file sync (web UI at localhost:8384)
       editors = {
         enable = true; # ~600mib - VSCodium + Zed + Obsidian + Helix + NVF

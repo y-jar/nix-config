@@ -34,7 +34,7 @@
       # =========[appstream]
       browsers.enable = true; # sets firefox and librewolf [work and personal]
       terminal.enable = true; # sets terminal as foot
-      terminal.font = "IntoneMono Nerd Font"; # [intone, miracode, monocraft]
+      terminal.font = "IntoneMono Nerd Font"; # options: "IntoneMono Nerd Font" "Monocraft" "Miracode"
       syncthing.enable = true; # file sync (web UI at localhost:8384)
       editors = {
         enable = true; # sets all editors
