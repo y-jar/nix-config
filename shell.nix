@@ -15,12 +15,18 @@ pkgs.mkShell {
     nixfmt # Nix formatter
     alejandra # formatter ~1.7mib
     nil # Nix language server
+
+    # [installer]
+    gum # TUI prompts for setup script
   ]; # end of build inputs
 
   # hook: https://nix.dev/manual/nix/2.34/command-ref/nix-shell.html
   shellHook = ''
     # =============[prompt]
     echo -e "\e[1;33m====[ Entering Installer Shell for Nix in a Jar ]====\e[0m"
+    echo -e "|"
+    echo -e "| Interactive Installer:"
+    echo -e "|   '\e[1;32msetup\e[0m'            -> Launch the guided installer (gum TUI)"
     echo -e "|"
     echo -e "| Core Onboarding Steps:"
     echo -e "|   1. '\e[1;32mhardto <hostname>\e[0m' -> Copy template & grab local hardware config"
@@ -42,6 +48,11 @@ pkgs.mkShell {
 
     # [force features so flakes work] [if not there, nh will not work]
     export NIX_CONFIG="experimental-features = nix-command flakes"
+
+    # [interactive installer]
+    setup() {
+        bash "$HOME/nix-config/resjar/nixbin/install.sh"
+    }
 
     # ================[Functions]
     #[grabs latest version]
