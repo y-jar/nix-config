@@ -57,6 +57,7 @@
       };
       terminal.enable = true; # ~30mib - sets terminal as foot + kitty + alacritty
       terminal.font = "IntoneMono Nerd Font"; # options: "IntoneMono Nerd Font" "Monocraft" "Miracode"
+      terminal.fontSize = 14; # font size (default: 14)
       syncthing.enable = false; # file sync (web UI at localhost:8384)
       editors = {
         enable = true; # ~600mib - VSCodium + Zed + Obsidian + Helix + NVF
@@ -100,6 +101,7 @@
 
     theming = {
       enable = true; # sets theme for gtk/qt
+      cursorSize = 36; # cursor size in pixels (default: 36)
     }; # end of theming
   }; # end of config
 }

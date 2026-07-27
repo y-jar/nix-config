@@ -24,5 +24,10 @@
       default = "blue";
       description = "Catppuccin accent color, shared between gtk.nix and qt.nix";
     }; # end of theming.accent
+    theming.cursorSize = lib.mkOption {
+      type = lib.types.int;
+      default = 36;
+      description = "Cursor size in pixels (GTK/pointer)";
+    }; # end of theming.cursorSize
   }; # end of options
 }

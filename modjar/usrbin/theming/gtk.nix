@@ -22,7 +22,7 @@ in
       name = "jcsr";
       package = jcsr;
       gtk.enable = true;
-      size = 36;
+      size = cfg.cursorSize;
     }; # end of home.pointerCursor
 
     # [gtk settings]

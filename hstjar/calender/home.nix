@@ -45,6 +45,7 @@
       }; # end of browsers
       terminal.enable = true; # sets terminal as foot
       terminal.font = "Monocraft"; # options: "IntoneMono Nerd Font" "Monocraft" "Miracode"
+      terminal.fontSize = 16; # font size (default: 14)
       syncthing.enable = true; # file sync (web UI at localhost:8384)
       editors = {
         enable = true; # sets editors
@@ -88,6 +89,7 @@
 
     theming = {
       enable = true; # sets theme for gtk/qt
+      cursorSize = 48; # cursor size in pixels (default: 36)
     }; # end of theming
   }; # end of config
 }

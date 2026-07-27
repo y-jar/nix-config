@@ -19,13 +19,18 @@ in
       default = "IntoneMono Nerd Font";
       description = "Monospace font for terminal (foot). Options: \"IntoneMono Nerd Font\" \"Monocraft\" \"Miracode\"";
     };
+    usrSettings.terminal.fontSize = lib.mkOption {
+      type = lib.types.int;
+      default = 14;
+      description = "Font size for foot terminal";
+    };
   }; # end of options
   config = lib.mkIf cfg.enable {
     programs.foot = {
       enable = true;
       settings = {
         main = {
-          font = "${cfg.font}:size=14";
+          font = "${cfg.font}:size=${toString cfg.fontSize}";
           pad = "5x5"; # Adds some breathing room inside the window
         }; # end of main
 

@@ -41,6 +41,7 @@
       browsers.enable = true; # sets firefox and librewolf [work and personal]
       terminal.enable = true; # sets terminal as foot
       terminal.font = "IntoneMono Nerd Font"; # options: "IntoneMono Nerd Font" "Monocraft" "Miracode"
+      # terminal.fontSize = 14; # font size (default: 14)
       syncthing.enable = true; # file sync (web UI at localhost:8384)
       editors = {
         enable = true; # sets all editors
@@ -84,6 +85,7 @@
 
     theming = {
       enable = true; # sets theme for gtk/qt
+      # cursorSize = 36; # cursor size in pixels (default: 36)
     }; # end of theming
   }; # end of config
 }
