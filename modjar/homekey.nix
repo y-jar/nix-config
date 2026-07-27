@@ -39,6 +39,7 @@
         niriEnable = config.sysSettings.niri.enable;
         aiEnable = config.sysSettings.ai.enable;
         komgaEnable = config.sysSettings.server.komga.enable or false;
+        cosmicEnable = config.sysSettings.cosmic.enable;
       };
     };
 

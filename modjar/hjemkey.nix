@@ -129,6 +129,7 @@
       hyprlandEnable = config.sysSettings.hyprland.enable;
       niriEnable = config.sysSettings.niri.enable;
       aiEnable = config.sysSettings.ai.enable;
+      cosmicEnable = config.sysSettings.cosmic.enable;
     };
   };
 }

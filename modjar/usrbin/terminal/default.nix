@@ -14,13 +14,18 @@ in
       default = true;
       description = "Enable foot";
     };
+    usrSettings.terminal.font = lib.mkOption {
+      type = lib.types.str;
+      default = "IntoneMono Nerd Font";
+      description = "Monospace font for terminal (foot)";
+    };
   }; # end of options
   config = lib.mkIf cfg.enable {
     programs.foot = {
       enable = true;
       settings = {
         main = {
-          font = "IntoneMono Nerd Font\:size=14";
+          font = "${cfg.font}\\:size=14";
           pad = "5x5"; # Adds some breathing room inside the window
         }; # end of main
 

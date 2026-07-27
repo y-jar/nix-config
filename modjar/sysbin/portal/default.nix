@@ -30,6 +30,7 @@ in
         pkgs.xdg-desktop-portal-gnome # gnome
         pkgs.xdg-desktop-portal-wlr # niri
         pkgs.xdg-desktop-portal-hyprland # hyprland
+        pkgs.xdg-desktop-portal-cosmic # cosmic
       ];
       config = {
         # inline if statements incase the DE/WM is not enabled
@@ -61,6 +62,15 @@ in
             ]
           else
             [ "gtk" ]; # end of hyprland.default
+
+        cosmic.default =
+          if efg.cosmic.enable then
+            [
+              "cosmic"
+              "gtk"
+            ]
+          else
+            [ "gtk" ]; # end of cosmic.default
         # base for all other DEs/WMs
         common.default = [ "gtk" ]; # end of common.default
       }; # end of config

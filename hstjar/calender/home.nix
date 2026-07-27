@@ -44,6 +44,7 @@
         librewolf = true; # enables librewolf [personal] [the default is `true`]
       }; # end of browsers
       terminal.enable = true; # sets terminal as foot
+      terminal.font = "Miracode"; # [intone, miracode, monocraft]
       editors = {
         enable = true; # sets editors
         vscodium.enable = true; # sets vscodium

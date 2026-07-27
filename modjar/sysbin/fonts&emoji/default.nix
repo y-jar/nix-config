@@ -9,6 +9,7 @@
       cascadia-code # Monospaced font that includes programming ligatures and is designed to enhance the modern look and feel of the Windows Terminal
       excalifont # Font based on the original handwritten Virgil font carefully curated to improve legibility while preserving its hand-drawn nature
       monocraft #Programming font based on the typeface used in Minecraft
+      miracode #Sharp, readable, vector-y version of Monocraft
 
       # [jp]
       ipaexfont # japanese font

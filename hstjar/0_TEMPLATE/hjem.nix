@@ -21,6 +21,7 @@
       librewolf = true;
     };
     terminal.enable = true;
+    terminal.font = "Miracode"; # [intone, miracode, monocraft]
     editors = {
       enable = true;
       vscodium.enable = true;

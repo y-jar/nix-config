@@ -8,5 +8,5 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("easyeffects --hide-window --service-mode") -- audio effects
     hl.exec_cmd("pavucontrol")                              -- audio volume control
     -- misc
-    hl.exec_cmd("hyprctl setcursor Bibata-Modern-Ice 34")   -- set cursor
+    hl.exec_cmd("hyprctl setcursor jcsr 36")           -- set cursor
 end)

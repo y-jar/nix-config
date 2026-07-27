@@ -13,9 +13,14 @@ in
     home.packages = [ pkgs.papirus-folders ];
 
     # [cursor settings]
-    home.pointerCursor = {
-      name = "catppuccin-${cfg.flavor}-lavender-cursors";
-      package = pkgs.catppuccin-cursors.${cfg.flavor + "Lavender"};
+    home.pointerCursor = let
+      jcsr = pkgs.runCommand "jcsr" {} ''
+        mkdir -p $out/share/icons/jcsr
+        cp -r ${./cursors/jcsr}/* $out/share/icons/jcsr/
+      '';
+    in {
+      name = "jcsr";
+      package = jcsr;
       gtk.enable = true;
       size = 36;
     }; # end of home.pointerCursor

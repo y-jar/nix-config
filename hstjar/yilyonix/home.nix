@@ -52,6 +52,7 @@
       # =========[appstream]
       browsers.enable = true; # sets firefox and librewolf [work and personal]
       terminal.enable = true; # sets terminal as foot
+      terminal.font = "Miracode"; # [intone, miracode, monocraft]
       editors = {
         enable = false; # sets all editors
         vscodium.enable = false; # sets vscodium

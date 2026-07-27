@@ -23,6 +23,10 @@
       hyprland.enable = false; # sets hyprland
       niri.enable = true; # sets niri
       cinnamon.enable = false; # sets cinnamon
+      cosmic = {
+        enable = false; # sets cosmic desktop environment
+        greeter = false; # sets cosmic login manager (disables GDM if enabled)
+      };
       # =============[experience install]^^^
 
       # =============[hardware]

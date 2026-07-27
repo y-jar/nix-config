@@ -56,6 +56,7 @@
         librewolf = true; # enables librewolf [personal]
       };
       terminal.enable = true; # sets terminal as foot
+      terminal.font = "Miracode"; # [intone, miracode, monocraft]
       editors = {
         enable = true; # sets all editors
         vscodium.enable = true; # sets vscodium

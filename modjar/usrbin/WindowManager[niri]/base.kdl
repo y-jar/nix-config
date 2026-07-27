@@ -138,8 +138,6 @@ animations {
 
 // CURSOR-SETTINGS
 cursor {
-	// Be sure to have the theme within user/HOME/.local/share/icons/*
-	// First time? Just download the cursor, and extract it to that directory/folder
-   	// xcursor-theme "Bibata-Modern-Ice"
-   	// xcursor-size 48
+   	xcursor-theme "jcsr"
+   	xcursor-size 36
 }

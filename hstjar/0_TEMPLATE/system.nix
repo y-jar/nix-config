@@ -38,6 +38,10 @@
       hyprland.enable = true; # ~19mib - compositor only
       niri.enable = true; # ~20mib - compositor only
       cinnamon.enable = false; # ~800mib - full Cinnamon desktop
+      cosmic = {
+        enable = false; # COSMIC desktop environment
+        greeter = false; # COSMIC login manager (disables GDM if enabled)
+      };
       # =============[experience install]^^^
 
       # =============[hardware]
