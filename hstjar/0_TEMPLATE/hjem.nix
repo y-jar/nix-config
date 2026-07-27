@@ -35,7 +35,7 @@
     nautilus.enable = true;
     yazi.enable = true;
     ranger.enable = false;
-    media.enable = true;
+    media.enable = true; # sets media tools + default apps (images, video, audio, archives)
     keepass.enable = true;
     gaming = {
       prism.enable = false;

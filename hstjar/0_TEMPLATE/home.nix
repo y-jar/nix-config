@@ -74,7 +74,7 @@
       yazi.enable = true; # ~10mib
       ranger.enable = false; # ~20mib
       # [media]
-      media.enable = true; # ~200mib - mpv + ffmpeg + music players
+      media.enable = true; # ~200mib - mpv + ffmpeg + music players + default apps (images, video, audio, archives)
       keepass.enable = true; # ~100mib
       gaming = {
         prism.enable = false; # ~200mib - Prism Launcher [minecraft]

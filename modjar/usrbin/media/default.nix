@@ -10,6 +10,7 @@ in
 {
   imports = [
     ./komga.nix
+    ./defaultApps.nix
   ];
 
   options = {

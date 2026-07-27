@@ -50,7 +50,7 @@
       yazi.enable = true; # sets yazi
       ranger.enable = true; # sets ranger
       # [media]
-      media.enable = true; # sets media tools like mpv
+      media.enable = true; # sets media tools + default apps (images, video, audio, archives)
       keepass.enable = true; # sets keepassxc
       gaming = {
         prism.enable = true; # sets prismlauncher [minecraft]
