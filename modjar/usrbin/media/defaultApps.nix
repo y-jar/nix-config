@@ -23,14 +23,14 @@ in
         "image/bmp" = "org.gnome.Loupe.desktop";
         "image/x-portable-pixmap" = "org.gnome.Loupe.desktop";
 
-        # [video player] totem (GNOME Videos)
-        "video/mp4" = "org.gnome.Totem.desktop";
-        "video/x-matroska" = "org.gnome.Totem.desktop";
-        "video/webm" = "org.gnome.Totem.desktop";
-        "video/x-msvideo" = "org.gnome.Totem.desktop";
-        "video/quicktime" = "org.gnome.Totem.desktop";
-        "video/x-flv" = "org.gnome.Totem.desktop";
-        "video/mpeg" = "org.gnome.Totem.desktop";
+        # [video player] showtime (GNOME)
+        "video/mp4" = "org.gnome.Showtime.desktop";
+        "video/x-matroska" = "org.gnome.Showtime.desktop";
+        "video/webm" = "org.gnome.Showtime.desktop";
+        "video/x-msvideo" = "org.gnome.Showtime.desktop";
+        "video/quicktime" = "org.gnome.Showtime.desktop";
+        "video/x-flv" = "org.gnome.Showtime.desktop";
+        "video/mpeg" = "org.gnome.Showtime.desktop";
 
         # [audio player] mpv
         "audio/mpeg" = "mpv.desktop";
@@ -62,7 +62,7 @@ in
     # [packages]
     home.packages = with pkgs; [
       loupe # image viewer (GTK4/Rust, Wayland-native)
-      totem # video player (GNOME Videos)
+      showtime # video player (GNOME)
       file-roller # archive manager (GNOME)
     ]; # end of packages
   }; # end of config

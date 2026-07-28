@@ -29,14 +29,14 @@ let
     image/tiff=org.gnome.Loupe.desktop
     image/bmp=org.gnome.Loupe.desktop
     image/x-portable-pixmap=org.gnome.Loupe.desktop
-    # video player (totem)
-    video/mp4=org.gnome.Totem.desktop
-    video/x-matroska=org.gnome.Totem.desktop
-    video/webm=org.gnome.Totem.desktop
-    video/x-msvideo=org.gnome.Totem.desktop
-    video/quicktime=org.gnome.Totem.desktop
-    video/x-flv=org.gnome.Totem.desktop
-    video/mpeg=org.gnome.Totem.desktop
+    # video player (showtime)
+    video/mp4=org.gnome.Showtime.desktop
+    video/x-matroska=org.gnome.Showtime.desktop
+    video/webm=org.gnome.Showtime.desktop
+    video/x-msvideo=org.gnome.Showtime.desktop
+    video/quicktime=org.gnome.Showtime.desktop
+    video/x-flv=org.gnome.Showtime.desktop
+    video/mpeg=org.gnome.Showtime.desktop
     # audio player (mpv)
     audio/mpeg=mpv.desktop
     audio/flac=mpv.desktop

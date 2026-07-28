@@ -50,7 +50,7 @@ in
     yt-dlp
     ytdownloader
     loupe      # image viewer
-    totem      # video player (GNOME Videos)
+    showtime   # video player (GNOME)
     file-roller # archive manager (GNOME)
   ] ++ lib.optionals hjm.keepass.enable [
     keepassxc
