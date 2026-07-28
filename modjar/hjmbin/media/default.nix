@@ -55,6 +55,9 @@ let
     application/x-7z-compressed=org.gnome.FileRoller.desktop
     application/x-rar=org.gnome.FileRoller.desktop
     application/x-xz=org.gnome.FileRoller.desktop
+    # comic reader (yacreader)
+    application/x-cbz=YACReader.desktop
+    application/vnd.comicbook+zip=YACReader.desktop
   '';
 in
 {
