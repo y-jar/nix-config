@@ -27,6 +27,7 @@
       # =============[hardware]
       # nvidia.enable = true;
       bluetooth.enable = true; # sets blueman in home packages
+      neverSleep.enable = true; # disable system idle sleep
       # [power management]
       tlp.enable = false; # NOTE: mutually exclusive with powerprofiles, pick one
       powerprofiles.enable = true;

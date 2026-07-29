@@ -48,6 +48,7 @@
       # nvidia.enable = true;
       # [kernel] pick one: "default", "latest", "cachyos-latest", "cachyos-bore", "cachyos-lts"
       kernel.variant = "default";
+      neverSleep.enable = false; # disable system idle sleep
       bluetooth.enable = true; # ~10mib - sets blueman in home packages
       automount.enable = true; # auto-mount removable media (udisks2)
       # [power management]
