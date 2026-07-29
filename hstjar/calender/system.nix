@@ -34,8 +34,12 @@
       # [kernel] pick one: "default", "latest", "cachyos-latest", "cachyos-bore", "cachyos-lts"
       kernel.variant = "cachyos-latest";
       bluetooth.enable = false; # sets blueman in home packages
+      neverSleep.enable = false; # disable system idle sleep
+      automount.enable = true; # auto-mount removable media (udisks2)
       # [power management]
       tlp.enable = false; # NOTE: mutually exclusive with powerprofiles, pick one
+      tlp.startChargeThreshold = 0;
+      tlp.stopChargeThreshold = 100;
       powerprofiles.enable = true;
       audio = {
         enable = true; # sets audio and adds some apps
@@ -60,11 +64,15 @@
           enable = true; # sets gaming drivers
           amd.enable = true; # sets amd drivers
           intel.enable = false; # sets intel drivers
+          nvidia.enable = false; # sets nvidia drivers [NOT IMPLEMENTED]
         }; # end of drivers
         steam.enable = true; # sets steam and associated libraries for gaming, but not more important drivers
       }; # end of gaming
       virtcam.enable = true; # sets virtual camera for things like OBS
-      virt.enable = true; # sets virtualization and installs virtualization tools
+      virt = {
+        enable = true; # sets virtualization and installs virtualization tools
+        isInVM = false; # enable if this system is in a vm [virtual mechine]
+      };
       # =============[software]^^^
 
       # =============[Server]
@@ -84,6 +92,10 @@
         webjar = {
           enable = true; # self-hosted link page (nginx)
           port = 80;
+        };
+        sleepyjar = {
+          enable = false; # sets sleepy service
+          interval = "weekly"; # sets interval for sleepy service
         };
       }; # end of server
     }; # end of sysSettings

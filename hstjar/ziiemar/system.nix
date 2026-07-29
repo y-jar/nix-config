@@ -22,14 +22,24 @@
       gnome.enable = true; # sets gnome [on by default]
       hyprland.enable = false; # sets hyprland
       niri.enable = true; # sets niri
+      cinnamon.enable = false; # sets cinnamon
+      cosmic = {
+        enable = false; # sets cosmic desktop environment
+        greeter = false; # sets cosmic login manager (disables GDM if enabled)
+      };
       # =============[experience install]^^^
 
       # =============[hardware]
       # nvidia.enable = true;
+      # [kernel] pick one: "default", "latest", "cachyos-latest", "cachyos-bore", "cachyos-lts"
+      kernel.variant = "default";
+      neverSleep.enable = false; # disable system idle sleep
+      automount.enable = true; # auto-mount removable media (udisks2)
       bluetooth.enable = true; # sets blueman in home packages
       # [power management]
       # NOTE: tlp and powerprofiles are mutually exclusive, pick one
       tlp.enable = true;
+      tlp.startChargeThreshold = 0;
       tlp.stopChargeThreshold = 80;
       # powerprofiles.enable = true;
       audio = {
@@ -40,7 +50,14 @@
 
       # =============[software]
       UseNixPkgsYoinks.enable = false;
-      ai.enable = false; # sets AI tools (Ollama, opencode, etc.)
+      ai = {
+        enable = false; # sets AI tools (Ollama, opencode, etc.)
+        port = 11434;
+        webui = {
+          enable = false; # Open WebUI chat interface
+          port = 8080;
+        };
+      };
       localsend.enable = true;
       flatpak.enable = true; # sets flatpak in the system [still needs to be enabled in user.nix]
       gaming = {
@@ -48,11 +65,15 @@
           enable = true; # sets gaming drivers
           amd.enable = false; # sets amd drivers
           intel.enable = true; # sets intel drivers
+          nvidia.enable = false; # sets nvidia drivers [NOT IMPLEMENTED]
         }; # end of drivers
         steam.enable = true; # sets steam and associated libraries for gaming, but not more important drivers
       }; # end of gaming
       virtcam.enable = false; # sets virtual camera for things like OBS
-      virt.enable = true; # sets virtualization and installs virtualization tools
+      virt = {
+        enable = true; # sets virtualization and installs virtualization tools
+        isInVM = false; # enable if this system is in a vm
+      };
       # =============[software]^^^
       # =============[Server]
       server = {
@@ -61,8 +82,17 @@
           juser = "jar"; # sets jellyfin user for perms for file access
         }; # end of jellyfin
         webjar = {
-          enable = false; # ~5mib - self-hosted link page (nginx)
+          enable = true; # ~5mib - self-hosted link page (nginx)
           port = 80;
+        };
+        komga.enable = false; # manga/comic server (port 25600)
+        sleepyjar = {
+          enable = false; # sets sleepy service
+          interval = "weekly"; # sets interval for sleepy service
+        };
+        nixdraw = {
+          enable = false; # sets up a self-hosted excalidraw Server.
+          port = 3000; # sets the port for the excalidraw server
         };
       }; # end of server
     }; # end of sysSettings

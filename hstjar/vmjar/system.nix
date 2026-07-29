@@ -35,15 +35,23 @@
       gnome.enable = true; # sets gnome [on by default]
       hyprland.enable = false; # sets hyprland ~19MiB
       niri.enable = false; # sets niri
+      cosmic = {
+        enable = false; # sets cosmic desktop environment
+        greeter = false; # sets cosmic login manager (disables GDM if enabled)
+      };
       # =============[experience install]^^^
 
       # =============[hardware]
       # nvidia.enable = true;
+      neverSleep.enable = false; # disable system idle sleep
       # [kernel] pick one: "default", "latest", "cachyos-latest", "cachyos-bore", "cachyos-lts"
       kernel.variant = "latest";
       bluetooth.enable = false; # sets blueman in home packages
+      automount.enable = true; # auto-mount removable media (udisks2)
       # [power management]
       tlp.enable = false; # NOTE: mutually exclusive with powerprofiles, pick one
+      tlp.startChargeThreshold = 0;
+      tlp.stopChargeThreshold = 100;
       powerprofiles.enable = false;
       audio = {
         enable = true; # sets audio and adds some apps
@@ -53,7 +61,14 @@
 
       # =============[software]
       UseNixPkgsYoinks.enable = false;
-      ai.enable = false; # sets AI tools (Ollama, opencode, etc.)
+      ai = {
+        enable = false; # sets AI tools (Ollama, opencode, etc.)
+        port = 11434;
+        webui = {
+          enable = false; # Open WebUI chat interface
+          port = 8080;
+        };
+      };
       localsend.enable = true; # sets localsend in the system
       flatpak.enable = false; # sets flatpak in the system [still needs to be enabled in user.nix]
       gaming = {
@@ -78,6 +93,7 @@
           enable = false; # sets jellyfin server
           juser = "jar"; # sets jellyfin user for perms for file access
         }; # end of jellyfin
+        komga.enable = false; # manga/comic server (port 25600)
         sleepyjar = {
           enable = false; # sets sleepy service
           interval = "weekly"; # sets interval for sleepy service
@@ -87,8 +103,12 @@
           # "Fri 03:00:00": reboots every Friday at 3am
           # "*-*-1,15 02:00:00": reboots on the 1st and 15th of every month at 2am
         }; # end of sleepyjar
+        nixdraw = {
+          enable = false; # sets up a self-hosted excalidraw Server.
+          port = 3000; # sets the port for the excalidraw server
+        };
         webjar = {
-          enable = false; # ~5mib - self-hosted link page (nginx)
+          enable = true; # ~5mib - self-hosted link page (nginx)
           port = 80;
         };
       }; # end of server
