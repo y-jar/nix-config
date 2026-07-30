@@ -64,6 +64,7 @@ quality_fmt() {
             best) echo "bestvideo+bestaudio/best" ;;
             1080) echo "bestvideo[height<=1080]+bestaudio/best[height<=1080]/best" ;;
             720)  echo "bestvideo[height<=720]+bestaudio/best[height<=720]/best" ;;
+            video-only) echo "bestvideo/best" ;;
         esac
     fi
 }
@@ -84,7 +85,17 @@ ITEM_COUNT=$(yt-dlp --flat-playlist --print "%(playlist_count)s" "$URL" 2>/dev/n
 
 if [[ -z "$ITEM_COUNT" || "$ITEM_COUNT" == "NA" || "$ITEM_COUNT" -le 1 ]]; then
     VID_TITLE=$(yt-dlp --print "%(title)s" "$URL" 2>/dev/null | head -1)
-    echo -e "${G}Downloading:${N} $VID_TITLE"
+    echo -e "${G}Video:${N} $VID_TITLE"
+
+    FMT_CHOICE=$(echo -e "🎬 Video\n🎵 Audio only\n🖼  Only video" \
+        | fzf --prompt="Format > " --height=8 --reverse \
+        || echo "🎬 Video")
+
+    case "$FMT_CHOICE" in
+        *"Audio"*) FORCE_AUDIO=true;;
+        *"Only video"*) QUALITY="video-only";;
+    esac
+
     dl_video "$URL" "$HOME/Downloads/%(title)s.%(ext)s" "$(quality_fmt)"
     echo -e "${G}Done!${N} Saved to ~/Downloads/"
     exit 0
