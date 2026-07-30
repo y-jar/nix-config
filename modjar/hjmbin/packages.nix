@@ -13,6 +13,7 @@ in
     bat
     fzf
     zoxide
+    noogle-search # search Nix functions from CLI
 
     # editors (base)
   ] ++ lib.optionals hjm.browsers.enable [

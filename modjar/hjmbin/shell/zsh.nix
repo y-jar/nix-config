@@ -72,7 +72,7 @@ let
     alias fcir="fcitx5-remote -r"
     alias rz="exec zsh"
     alias ns="nix-shell"
-    alias nsp="nix-shell -p"
+    alias nsp="nix search nixpkgs"
     alias ols="ollama list"
     alias olrs="sudo systemctl restart ollama-model-loader.service"
     alias olpm="pull-models"

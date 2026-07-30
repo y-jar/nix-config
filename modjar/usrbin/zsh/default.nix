@@ -14,8 +14,8 @@ in
       type = lib.types.bool;
       default = true;
       description = "Enable zsh shell";
-    };
-  };
+    }; # end of enable option
+  }; # end of options
 
   config = lib.mkIf cfg.enable {
     programs.zsh = {
@@ -83,7 +83,7 @@ in
         dl = "ytdl"; # youtube downloader
         rz = "exec zsh"; # reload zsh
         ns = "nix-shell"; # load dev enviroment
-        nsp = "nix-shell -p";
+        nsp = "nix search nixpkgs";
         shlvl = "echo $SHLVL";
         # [ai... ew]
         ols = "ollama list";

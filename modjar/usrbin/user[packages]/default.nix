@@ -48,6 +48,7 @@
     nix-tree # visualize nix dependency tree
     nurl # fetch a URL and output a nix hash
     nix-init # generate a nix package from a repo URL
+    noogle-search # search Nix functions from the CLI
     # =======[Nix Jar] |>|>|>|>|>|>|>^^^
 
     # =======[CLI Jar] |>|>|>|>|>|>|>
