@@ -12,9 +12,13 @@
 
     # Fill this out!
     sysSettings = {
-      # =============[users] [list of users to create]
+      # =============[users]
+      mainUser = "candle";
       users = [ "candle" ];
       adminUsers = [ "candle" ];
+      userDescriptions = {
+        candle = "candle";
+      };
       # =============[users]^^^
 
       # =============[experience install]
@@ -107,8 +111,5 @@
       # =============[Server]^^^
     }; # end of sysSettings
 
-    # set user for git [be sure to replace all instances of USERNAME and NAME
-    #                     with your actual username and name                 ]
-    users.users.candle.description = "candle";
   }; # end of config
 }

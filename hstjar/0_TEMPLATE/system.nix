@@ -27,9 +27,14 @@
 
     # Fill this out!
     sysSettings = {
-      # =============[users] [list of users to create]
-      users = [ "PLEASECHANGEME_USERNAME" ];
-      adminUsers = [ "PLEASECHANGEME_USERNAME" ];
+      # =============[users]
+      mainUser = "PLEASECHANGEME_USERNAME"; # primary user (gets home-manager)
+      users = [ "PLEASECHANGEME_USERNAME" ]; # all users (main + any guests)
+      adminUsers = [ "PLEASECHANGEME_USERNAME" ]; # users with sudo access
+      userDescriptions = {
+        PLEASECHANGEME_USERNAME = "NAME";
+        # add more users as needed
+      };
       # =============[users]^^^
 
       # =============[experience install]
@@ -134,8 +139,5 @@
       # =============[Server]^^^
     }; # end of sysSettings
 
-    # set user for git [be sure to replace all instances of USERNAME and NAME
-    #                     with your actual username and name                 ]
-    users.users.PLEASECHANGEME_USERNAME.description = "NAME";
   }; # end of config
 }

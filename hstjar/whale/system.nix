@@ -12,9 +12,13 @@
 
     # Fill this out!
     sysSettings = {
-      # =============[users] [list of users to create]
+      # =============[users]
+      mainUser = "jar";
       users = [ "jar" ];
       adminUsers = [ "jar" ];
+      userDescriptions = {
+        jar = "jar";
+      };
       # =============[users]^^^
 
       # =============[experience install]
@@ -112,8 +116,5 @@
       # =============[Server]^^^
     }; # end of sysSettings
 
-    # set user for git [be sure to replace all instances of USERNAME and NAME
-    #                     with your actual username and name                 ]
-    users.users.jar.description = "jar";
   }; # end of config
 }

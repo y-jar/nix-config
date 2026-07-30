@@ -43,20 +43,14 @@
       };
     };
 
-    # [per-user config]
-    # for each user in sysSettings.users, load:
-    #   1. host-specific home.nix (toggles)
-    #   2. shared usrbin modules (implementations)
-    home-manager.users = builtins.listToAttrs (
-      map (user: {
-        name = user;
-        value = {
-          imports = [
-            ../hstjar/${hostnm}/home.nix   # host toggles
-            ../modjar/usrbin                # shared modules
-          ];
-        };
-      }) config.sysSettings.users
-    );
+    # [main user config]
+    # Only the mainUser gets home-manager (shared usrbin + host-specific toggles).
+    # Guest users get a Unix account via users/default.nix but no HM config.
+    home-manager.users.${config.sysSettings.mainUser} = {
+      imports = [
+        ../hstjar/${hostnm}/home.nix   # host toggles
+        ../modjar/usrbin                # shared modules
+      ];
+    };
   };
 }
