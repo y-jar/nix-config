@@ -101,11 +101,6 @@
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs"; # locks version to the nixpkgs to reduce duplicate data
     }; # End of homemanager
-    # [nix-index-database] pre-built nix-index + comma wrapper [this did shit, no longer needed]
-    # nix-index-database = {
-    #   url = "github:nix-community/nix-index-database";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # }; # end of nix-index-database
 
     # =====[addons]
     wall-jar = {
