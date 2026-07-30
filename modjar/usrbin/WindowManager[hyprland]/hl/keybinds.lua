@@ -27,6 +27,7 @@ hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd(volumeMixer))
 hl.bind(mainMod .. " + G", hl.dsp.exec_cmd("g4music"))
 hl.bind(mainMod .. " + C", hl.dsp.exec_cmd(hyprpicker))
 hl.bind(mainMod .. " + Alt + Space", hl.dsp.exec_cmd("jemoji"))
+hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd("foot --window-size-pixels=1600x800 --title=jwall-picker -e jwall"))
 
 -- noctalia-shell
 hl.bind(mainMod .. " + D", hl.dsp.exec_cmd(launcherPain))

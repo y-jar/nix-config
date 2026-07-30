@@ -7,6 +7,9 @@ hl.on("hyprland.start", function()
     -- audio
     hl.exec_cmd("easyeffects --hide-window --service-mode") -- audio effects
     hl.exec_cmd("pavucontrol")                              -- audio volume control
+    -- wallpaper
+    hl.exec_cmd("awww-daemon")
+    hl.exec_cmd("random-wall &")
     -- misc
     hl.exec_cmd("hyprctl setcursor jcsr 36")           -- set cursor
 end)

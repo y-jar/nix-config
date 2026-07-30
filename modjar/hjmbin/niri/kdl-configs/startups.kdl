@@ -15,6 +15,6 @@ environment {
     XDG_CURRENT_DESKTOP "niri"
 }
 // =================================WALL
-spawn-at-startup "swww-daemon"
+spawn-at-startup "awww-daemon"
 // SET wall
-// spawn-sh-at-startup "sleep 1 && swww img ~/pic-jar/wall-bin/halftone-ER-ranni-praying.png --transition-type fade --transition-duration 1"
+spawn-sh-at-startup "sleep 1 && random-wall"

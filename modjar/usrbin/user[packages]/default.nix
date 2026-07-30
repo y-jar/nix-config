@@ -28,6 +28,7 @@
     # =======[Looks Jar] |>|>|>|>|>|>|>
     # [cursors]
     catppuccin-cursors # matches catppuccin theme
+    awww # animated wallpaper daemon for Wayland
     # =======[Looks Jar] |>|>|>|>|>|>|>^^^
 
     # =======[Dev Jar] |>|>|>|>|>|>|>

@@ -83,7 +83,7 @@ in
   ] ++ lib.optionals hjm.niri.enable [
     # niri packages
     fuzzel
-    swww
+    awww
     wayshot
     wl-clipboard
     wlr-randr

@@ -30,7 +30,7 @@
       # =============[experience install]^^^
 
       # =============[hardware]
-      # nvidia.enable = true;
+      nvidia.enable = false;
       # [kernel] pick one: "default", "latest", "cachyos-latest", "cachyos-bore", "cachyos-lts"
       kernel.variant = "cachyos-latest";
 

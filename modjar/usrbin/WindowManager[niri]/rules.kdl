@@ -76,9 +76,15 @@ window-rule {
 }
 
 // Set the regular wallpaper on the backdrop.
-/-layer-rule {
+layer-rule {
     match namespace="^wallpaper$"
     place-within-backdrop true
+}
+// Float the wallpaper picker window
+window-rule {
+    match title="^jwall-picker$"
+    open-floating true
+    default-column-width { fixed 700; }
 }
 layer-rule {
   match namespace="^noctalia-backdrop"

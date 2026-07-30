@@ -27,6 +27,7 @@ binds {
     Mod+P hotkey-overlay-title="Open [P]ower Menu" { spawn "jpower"; } // power menu using fuzzel
     Mod+Z hotkey-overlay-title="Open [Z]oom" { spawn "woomer"; } // zoom
     Mod+C hotkey-overlay-title="Open [C]olor Picker" { spawn "hyprpicker" "-a"; } // color picker
+    Mod+Shift+W hotkey-overlay-title="Open [W]allpaper Picker" { spawn "foot" "--window-size-pixels=1600x800" "--title=jwall-picker" "-e" "jwall"; }
 
     // [OVERVIEW]
     Mod+Tab repeat=false hotkey-overlay-title="[T]oggle Overview" { toggle-overview; }

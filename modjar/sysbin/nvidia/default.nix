@@ -21,6 +21,6 @@ in
       open = cfg.open;
       nvidiaSettings = true;
     }; # end of hardware.nvidia
-    boot.blacklistKernelModules = [ "nouveau" ];
+    boot.blacklistedKernelModules = [ "nouveau" ];
   }; # end of config
 }
