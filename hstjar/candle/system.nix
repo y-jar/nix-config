@@ -35,6 +35,15 @@
       kernel.variant = "default";
       neverSleep.enable = false; # disable system idle sleep
       automount.enable = true; # auto-mount removable media (udisks2)
+      # [TTY console font] bitmap fonts (set null for kernel default):
+      #   "ter-116n"    - Terminus 16px (default-size, crisp)
+      #   "ter-124n"    - Terminus 24px (medium, good for HiDPI)
+      #   "ter-132n"    - Terminus 32px (large, very readable)
+      #   "sun12x22"    - Sun Solaris style (classic server look)
+      #   "latarcyrheb-sun32" - Large 32px with Cyrillic/Hebrew
+      console = {
+        font = "ter-132n";
+      };
       bluetooth.enable = true; # sets blueman in home packages
       # [power management]
       tlp.enable = false; # NOTE: mutually exclusive with powerprofiles, pick one

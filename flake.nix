@@ -72,6 +72,23 @@
 
         # ========[for non x86 systems..] [WIP]
         # TEMPLATE  = urnJar { hostName = "TEMPLATE"; arch = "aarch64-linux"; };
+
+        # ========[ISO / recovery]
+        iso = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
+            ({ pkgs, ... }: {
+              environment.systemPackages = with pkgs; [
+                git vim nh fastfetch neovim
+              ];
+              networking.hostName = "recovery";
+              services.openssh.enable = true;
+              users.users.root.initialPassword = "nixos";
+              system.stateVersion = "26.05";
+            })
+          ]; # End of modules
+        }; # End of iso
       }; # end of nixosConfigurations
     }; # end of nixosConfigurations
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=[INPUTS]=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

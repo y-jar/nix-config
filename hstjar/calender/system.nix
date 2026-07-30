@@ -33,6 +33,17 @@
       # nvidia.enable = true;
       # [kernel] pick one: "default", "latest", "cachyos-latest", "cachyos-bore", "cachyos-lts"
       kernel.variant = "cachyos-latest";
+
+      # [TTY console font] bitmap fonts (set null for kernel default):
+      #   "ter-116n"    - Terminus 16px (default-size, crisp)
+      #   "ter-124n"    - Terminus 24px (medium, good for HiDPI)
+      #   "ter-132n"    - Terminus 32px (large, very readable)
+      #   "sun12x22"    - Sun Solaris style (classic server look)
+      #   "latarcyrheb-sun32" - Large 32px with Cyrillic/Hebrew
+      console = {
+        font = "ter-132n";
+      };
+
       bluetooth.enable = false; # sets blueman in home packages
       neverSleep.enable = false; # disable system idle sleep
       automount.enable = true; # auto-mount removable media (udisks2)
