@@ -31,8 +31,9 @@ check_deps() {
 # ──[check we're in the right directory]
 check_dir() {
     if [ ! -f "$FLAKE_PATH" ]; then
-        echo -e "${RED}Error: flake.nix not found. Are you in the nix-config directory?${NC}"
-        exit 1
+        gum log --level error "flake.nix not found at $FLAKE_PATH"
+        gum log "Run from the nix-config directory or set NIX_CONFIG_DIR"
+        return 1
     fi
 }
 
@@ -395,29 +396,428 @@ view_docs() {
 }
 
 # ═══════════════════════════════════════
+#  Option 0: Install from ISO
+# ═══════════════════════════════════════
+iso_install() {
+    gum style --border double --align center --width 50 \
+        --foreground 212 "NixOS Installer" "Guided installation from ISO"
+
+    local target_disk=""
+    local fs_type=""
+    local use_subvolumes=false
+    local separate_home=false
+    local use_swap=false
+    local swap_size=""
+    local boot_mode=""
+    local boot_part=""
+    local root_part=""
+    local home_part=""
+    local swap_part=""
+
+    # ──────────────────────────────────────
+    # Step 1: Disk selection
+    # ──────────────────────────────────────
+    gum style --border normal --width 50 "Step 1: Select target disk"
+
+    local disks
+    disks=$(lsblk -ndo NAME,SIZE,TYPE 2>/dev/null | grep ' disk ' || true)
+    if [ -z "$disks" ]; then
+        gum log --level error "No disks found"
+        return 1
+    fi
+
+    local disk_list=""
+    while IFS= read -r line; do
+        local name size
+        name=$(echo "$line" | awk '{print $1}')
+        size=$(echo "$line" | awk '{print $2}')
+        disk_list+="/dev/$name | $size"$'\n'
+    done <<< "$disks"
+
+    local selected
+    selected=$(echo "$disk_list" | fzf --header="Select the disk to install onto" --height=10)
+    if [ -z "$selected" ]; then
+        gum log --level error "No disk selected"
+        return 1
+    fi
+
+    target_disk=$(echo "$selected" | awk -F'|' '{print $1}' | xargs)
+    gum log --level info "Selected disk: $target_disk"
+
+    if ! gum confirm "This will ERASE data on $target_disk. Continue?"; then
+        gum log --level info "Cancelled"
+        return 0
+    fi
+
+    # ──────────────────────────────────────
+    # Step 2: Boot mode detection
+    # ──────────────────────────────────────
+    gum style --border normal --width 50 "Step 2: Boot mode"
+
+    if [ -d /sys/firmware/efi ]; then
+        boot_mode="UEFI"
+    else
+        boot_mode="BIOS"
+    fi
+
+    local boot_choice
+    boot_choice=$(gum choose --header "Detected: $boot_mode. Override?" "UEFI" "BIOS" "Use detected ($boot_mode)")
+    case "$boot_choice" in
+        "UEFI") boot_mode="UEFI" ;;
+        "BIOS") boot_mode="BIOS" ;;
+    esac
+    gum log --level info "Boot mode: $boot_mode"
+
+    # ──────────────────────────────────────
+    # Step 3: Partition scheme
+    # ──────────────────────────────────────
+    gum style --border normal --width 50 "Step 3: Choose partition scheme"
+
+    fs_type=$(gum choose "ext4" "btrfs" "xfs" --header "Filesystem for root and home")
+    if [ -z "$fs_type" ]; then
+        gum log --level error "No filesystem selected"
+        return 1
+    fi
+    gum log --level info "Filesystem: $fs_type"
+
+    if gum confirm "Separate /home partition?"; then
+        separate_home=true
+    fi
+
+    if gum confirm "Swap partition?"; then
+        use_swap=true
+        swap_size=$(gum input --placeholder "e.g. 16G" --prompt "Swap size: " --value "8G")
+    fi
+
+    if [ "$fs_type" = "btrfs" ] && gum confirm "Use btrfs subvolumes? (@ / @home / @nix)"; then
+        use_subvolumes=true
+    fi
+
+    # ──────────────────────────────────────
+    # Step 4: Partition guide
+    # ──────────────────────────────────────
+    gum style --border normal --width 50 "Step 4: Partition the disk"
+
+    local guide=""
+    if [ "$boot_mode" = "UEFI" ]; then
+        guide+="512M  -> type 'EFI System'       -> /boot"$'\n'
+    else
+        guide+="1M    -> type 'BIOS boot'        -> (unformatted)"$'\n'
+    fi
+    if [ "$use_swap" = true ]; then
+        guide+="${swap_size} -> type 'Linux swap'         -> swap"$'\n'
+    fi
+    if [ "$separate_home" = true ]; then
+        guide+="50-100G -> type 'Linux filesystem' -> /"$'\n'
+        guide+="rest   -> type 'Linux filesystem' -> /home"$'\n'
+    else
+        guide+="rest   -> type 'Linux filesystem' -> /"$'\n'
+    fi
+
+    gum format -t code "Open cfdisk to partition:
+  sudo cfdisk $target_disk
+
+Recommended layout for $boot_mode:
+
+$guide"
+
+    if ! gum confirm "Run cfdisk now?"; then
+        gum log --level info "You can run: sudo cfdisk $target_disk"
+        if ! gum confirm "Ready to continue after partitioning?"; then
+            gum log --level info "Cancelled"
+            return 0
+        fi
+    else
+        sudo cfdisk "$target_disk"
+    fi
+
+    # ──────────────────────────────────────
+    # Step 5: Identify partitions
+    # ──────────────────────────────────────
+    gum style --border normal --width 50 "Step 5: Identify partitions"
+
+    echo ""
+    echo "Here are the partitions on $target_disk:"
+    lsblk "$target_disk" -o NAME,SIZE,FSTYPE,MOUNTPOINT
+    echo ""
+
+    if [ "$boot_mode" = "UEFI" ]; then
+        boot_part=$(gum input --placeholder "/dev/${target_disk##*/}1" --prompt "EFI boot partition: ")
+        root_part=$(gum input --placeholder "/dev/${target_disk##*/}2" --prompt "Root partition: ")
+    else
+        root_part=$(gum input --placeholder "/dev/${target_disk##*/}1" --prompt "Root partition (skip BIOS boot): ")
+    fi
+
+    if [ -z "$root_part" ]; then
+        gum log --level error "Root partition is required"
+        return 1
+    fi
+
+    if [ "$use_swap" = true ]; then
+        swap_part=$(gum input --prompt "Swap partition (or leave empty): ")
+    fi
+
+    if [ "$separate_home" = true ]; then
+        home_part=$(gum input --prompt "Home partition (or leave empty): ")
+    fi
+
+    for part in "$boot_part" "$root_part" "$home_part" "$swap_part"; do
+        if [ -n "$part" ] && [ ! -b "$part" ]; then
+            gum log --level error "Partition does not exist: $part"
+            return 1
+        fi
+    done
+
+    gum log --level info "Partitions identified OK"
+
+    # ──────────────────────────────────────
+    # Step 6: Format
+    # ──────────────────────────────────────
+    gum style --border normal --width 50 "Step 6: Format partitions"
+    gum log --level warn "About to FORMAT:"
+
+    if [ -n "$boot_part" ]; then
+        gum log "  $boot_part  -> FAT32 (EFI)"
+    fi
+    if [ -n "$root_part" ]; then
+        gum log "  $root_part  -> $fs_type"
+    fi
+    if [ -n "$home_part" ]; then
+        gum log "  $home_part  -> $fs_type"
+    fi
+    if [ -n "$swap_part" ]; then
+        gum log "  $swap_part  -> swap"
+    fi
+
+    if ! gum confirm "Format these partitions?"; then
+        gum log --level info "Cancelled"
+        return 0
+    fi
+
+    if [ -n "$boot_part" ]; then
+        gum spin --spinner dot --title "Formatting EFI partition..." -- \
+            sudo mkfs.fat -F 32 "$boot_part"
+    fi
+
+    if [ -n "$root_part" ]; then
+        case "$fs_type" in
+            ext4) gum spin --spinner dot --title "Formatting root..." -- sudo mkfs.ext4 -F "$root_part" ;;
+            btrfs) gum spin --spinner dot --title "Formatting root..." -- sudo mkfs.btrfs -f "$root_part" ;;
+            xfs) gum spin --spinner dot --title "Formatting root..." -- sudo mkfs.xfs -f "$root_part" ;;
+        esac
+    fi
+
+    if [ -n "$home_part" ]; then
+        case "$fs_type" in
+            ext4) gum spin --spinner dot --title "Formatting home..." -- sudo mkfs.ext4 -F "$home_part" ;;
+            btrfs) gum spin --spinner dot --title "Formatting home..." -- sudo mkfs.btrfs -f "$home_part" ;;
+            xfs) gum spin --spinner dot --title "Formatting home..." -- sudo mkfs.xfs -f "$home_part" ;;
+        esac
+    fi
+
+    if [ -n "$swap_part" ]; then
+        gum spin --spinner dot --title "Setting up swap..." -- sudo mkswap "$swap_part"
+    fi
+
+    gum log --level info "Formatting complete"
+
+    # ──────────────────────────────────────
+    # Step 7: Mount
+    # ──────────────────────────────────────
+    gum style --border normal --width 50 "Step 7: Mount partitions"
+
+    if mountpoint -q /mnt 2>/dev/null; then
+        if gum confirm "/mnt is already mounted. Unmount and continue?"; then
+            sudo umount -R /mnt 2>/dev/null || true
+        else
+            gum log --level error "Please unmount /mnt first"
+            return 1
+        fi
+    fi
+
+    if [ "$fs_type" = "btrfs" ] && [ "$use_subvolumes" = true ]; then
+        sudo mount "$root_part" /mnt
+        sudo btrfs subvolume create /mnt/@
+        sudo btrfs subvolume create /mnt/@home
+        sudo btrfs subvolume create /mnt/@nix
+        sudo umount /mnt
+
+        sudo mount -o subvol=@ "$root_part" /mnt
+        sudo mount --mkdir -o subvol=@home "$root_part" /mnt/home
+        sudo mount --mkdir -o subvol=@nix "$root_part" /mnt/nix
+    else
+        sudo mount "$root_part" /mnt
+        if [ -n "$home_part" ]; then
+            sudo mount --mkdir "$home_part" /mnt/home
+        fi
+    fi
+
+    if [ -n "$boot_part" ]; then
+        sudo mount --mkdir "$boot_part" /mnt/boot
+    fi
+
+    if [ -n "$swap_part" ]; then
+        sudo swapon "$swap_part"
+    fi
+
+    gum log --level info "Mounts:"
+    lsblk /mnt
+
+    # ──────────────────────────────────────
+    # Step 8: Network
+    # ──────────────────────────────────────
+    gum style --border normal --width 50 "Step 8: Network"
+
+    if ! ping -c 1 1.1.1.1 &>/dev/null; then
+        gum log --level warn "No network connectivity"
+        if gum confirm "Open iwd for Wi-Fi setup?"; then
+            if command -v iwctl &>/dev/null; then
+                sudo iwctl
+            else
+                gum log --level warn "iwctl not available"
+            fi
+        fi
+        if ! ping -c 1 1.1.1.1 &>/dev/null; then
+            if ! gum confirm "Still offline. Continue anyway? (nixos-install needs network)"; then
+                return 1
+            fi
+        fi
+    else
+        gum log --level info "Network OK"
+    fi
+
+    # ──────────────────────────────────────
+    # Step 9: Clone repo
+    # ──────────────────────────────────────
+    gum style --border normal --width 50 "Step 9: Clone nix-config"
+
+    local repo_url
+    repo_url=$(gum input --prompt "Repo URL: " --value "https://github.com/y-jar/nix-config.git")
+
+    local clone_dir="/mnt/etc/nixos"
+    if [ -d "$clone_dir" ]; then
+        if [ "$(ls -A "$clone_dir" 2>/dev/null)" ]; then
+            gum log --level warn "$clone_dir is not empty"
+            if ! gum confirm "Clone into it anyway?"; then
+                gum log "Skipping clone. Make sure the flake is in place."
+            fi
+        else
+            gum spin --spinner dot --title "Cloning..." -- \
+                sudo git clone "$repo_url" "$clone_dir"
+        fi
+    else
+        gum spin --spinner dot --title "Cloning..." -- \
+            sudo git clone "$repo_url" "$clone_dir"
+    fi
+
+    if [ ! -f "$clone_dir/flake.nix" ]; then
+        gum log --level error "flake.nix not found in $clone_dir"
+        gum log "Try cloning manually: sudo git clone $repo_url $clone_dir"
+        return 1
+    fi
+
+    # ──────────────────────────────────────
+    # Step 10: Select host
+    # ──────────────────────────────────────
+    gum style --border normal --width 50 "Step 10: Select host"
+
+    local hosts
+    hosts=$(find "$clone_dir/hstjar" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | \
+        xargs -n1 basename | grep -v '^0_TEMPLATE$' | sort || true)
+
+    if [ -z "$hosts" ]; then
+        gum log --level error "No hosts found in hstjar/"
+        return 1
+    fi
+
+    local host
+    host=$(echo "$hosts" | fzf --header="Select a host configuration")
+    if [ -z "$host" ]; then
+        gum log --level error "No host selected"
+        return 1
+    fi
+    gum log --level info "Selected host: $host"
+
+    gum spin --spinner dot --title "Generating hardware configuration..." -- \
+        nixos-generate-config --root /mnt
+    sudo cp /mnt/etc/nixos/hardware-configuration.nix "$clone_dir/hstjar/$host/"
+    gum log --level info "Hardware config generated from target mounts"
+
+    # ──────────────────────────────────────
+    # Step 11: nixos-install
+    # ──────────────────────────────────────
+    gum style --border normal --width 50 "Step 11: Install NixOS"
+
+    gum log --level info "Command: nixos-install --no-root-passwd --flake $clone_dir#$host"
+
+    if ! gum confirm "Proceed with installation?"; then
+        gum log --level info "Cancelled"
+        return 0
+    fi
+
+    gum spin --spinner dot --title "Installing NixOS (this takes a while)..." -- \
+        nixos-install --no-root-passwd --flake "$clone_dir#$host"
+
+    local install_status=$?
+    if [ $install_status -ne 0 ]; then
+        gum log --level error "Installation failed (exit code $install_status)"
+        return 1
+    fi
+
+    gum log --level info "NixOS installed successfully!"
+
+    # ──────────────────────────────────────
+    # Step 12: Set root password
+    # ──────────────────────────────────────
+    gum style --border normal --width 50 "Step 12: Set root password"
+
+    if gum confirm "Set root password now?"; then
+        sudo nixos-enter --root /mnt -c 'passwd'
+    fi
+
+    # ──────────────────────────────────────
+    # Step 13: Done
+    # ──────────────────────────────────────
+    gum style --border double --align center --width 50 \
+        --foreground 2 "Installation Complete!" \
+        "Host: $host" \
+        "Disk: $target_disk"
+
+    if gum confirm "Unmount and reboot now?"; then
+        gum spin --spinner dot --title "Unmounting..." -- \
+            sudo umount -R /mnt
+        sudo reboot
+    else
+        gum log "Reboot manually:"
+        gum format -t code "sudo umount -R /mnt && sudo reboot"
+    fi
+}
+
+# ═══════════════════════════════════════
 #  Main Menu
 # ═══════════════════════════════════════
 main() {
     check_deps
-    check_dir
 
     while true; do
         choice=$(gum choose \
+            "Install from ISO" \
             "Fresh Install" \
             "Update Existing Host" \
             "Manual Install" \
             "View Documentation" \
             "Exit" \
             --header "NixOS in a Jar — Installer" \
-            --height 10)
+            --height 12)
 
         case "$choice" in
-            "Fresh Install")     fresh_install ;;
-            "Update Existing Host") update_existing ;;
-            "Manual Install")    manual_install ;;
-            "View Documentation") view_docs ;;
-            "Exit")              gum log --level info "Goodbye!"; exit 0 ;;
-            *)                   gum log --level warn "Unknown option" ;;
+            "Install from ISO")      iso_install ;;
+            "Fresh Install")         check_dir && fresh_install ;;
+            "Update Existing Host")  check_dir && update_existing ;;
+            "Manual Install")        manual_install ;;
+            "View Documentation")    check_dir && view_docs ;;
+            "Exit")                  gum log --level info "Goodbye!"; exit 0 ;;
+            *)                       gum log --level warn "Unknown option" ;;
         esac
 
         echo ""
