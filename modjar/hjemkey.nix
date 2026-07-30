@@ -112,10 +112,10 @@
       inherit hostnm;
       inherit inputs;
       gnomeEnable = config.sysSettings.gnome.enable or false;
-      hyprlandEnable = config.sysSettings.hyprland.enable;
-      niriEnable = config.sysSettings.niri.enable;
-      aiEnable = config.sysSettings.ai.enable;
-      cosmicEnable = config.sysSettings.cosmic.enable;
+      hyprlandEnable = config.sysSettings.hyprland.enable or false;
+      niriEnable = config.sysSettings.niri.enable or false;
+      aiEnable = config.sysSettings.ai.enable or false;
+      cosmicEnable = config.sysSettings.cosmic.enable or false;
     };
   };
 }

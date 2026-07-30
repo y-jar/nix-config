@@ -71,10 +71,6 @@ in
     obs-studio
   ] ++ lib.optionals hjm.kdenlive.enable [
     kdenlive
-  ] ++ lib.optionals hjm.japanese.enable [
-    # fcitx5 + mozc placeholder
-  ] ++ lib.optionals hjm.ai.enable [
-    # lm studio + opencode placeholder
   ] ++ lib.optionals hjm.git.enable [
     gh
     lazygit
@@ -94,7 +90,5 @@ in
     grim
     slurp
     wf-recorder
-  ] ++ lib.optionals hjm.dev.enable [
-    # dev tools placeholder
   ];
 }

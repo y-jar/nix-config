@@ -3,12 +3,12 @@
     ./gtk.nix # GTK theme
     ./qt.nix # Qt theme
   ];
-  options = {
+  options.usrSettings = {
     theming.enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
       description = "Enable theming";
-    }; # end of theming.enable
+    };
     theming.flavor = lib.mkOption {
       type = lib.types.enum [
         "latte"
@@ -18,16 +18,16 @@
       ];
       default = "mocha";
       description = "Catppuccin flavor, shared between gtk.nix and qt.nix";
-    }; # end of theming.flavor
+    };
     theming.accent = lib.mkOption {
       type = lib.types.str;
       default = "blue";
       description = "Catppuccin accent color, shared between gtk.nix and qt.nix";
-    }; # end of theming.accent
+    };
     theming.cursorSize = lib.mkOption {
       type = lib.types.int;
       default = 36;
       description = "Cursor size in pixels (GTK/pointer)";
-    }; # end of theming.cursorSize
-  }; # end of options
+    };
+  };
 }

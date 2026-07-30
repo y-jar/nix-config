@@ -80,11 +80,11 @@
       bluetooth.enable = true; # sets blueman in home packages
       dev.enable = false; # sets dev tools and basic languages
       # =========[management]^^^
+      theming = {
+        enable = false; # sets theme for gtk/qt
+        # cursorSize = 36; # cursor size in pixels (default: 36)
+      };
     }; # end of usrSettings
 
-    theming = {
-      enable = false; # sets theme for gtk/qt
-      # cursorSize = 36; # cursor size in pixels (default: 36)
-    }; # end of theming
   }; # end of config
 }

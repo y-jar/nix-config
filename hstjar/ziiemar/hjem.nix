@@ -5,8 +5,8 @@
     email = "park.7qs@gmail.com"; # [CHANGE THIS]
 
     shell.enable = true;
-    hyprland.enable = true;
-    niri.enable = false;
+    hyprland.enable = false;
+    niri.enable = true;
     launcher.enable = true;
 
     browsers = {

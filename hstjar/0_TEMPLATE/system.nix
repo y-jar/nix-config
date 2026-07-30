@@ -97,7 +97,7 @@
           enable = true; # ~1.5gib - Vulkan + Mesa + codecs
           amd.enable = false; # AMD specific drivers
           intel.enable = false; # Intel specific drivers
-          nvidia.enable = false; # NVIDIA drivers [NOT IMPLEMENTED]
+          nvidia.enable = false; # NVIDIA drivers (Vulkan + 32-bit)
         }; # end of drivers
         steam.enable = true; # ~2gib - Steam client + 32-bit libs
       }; # end of gaming

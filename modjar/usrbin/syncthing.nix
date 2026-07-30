@@ -8,9 +8,7 @@ let
 in
 {
   options.usrSettings.syncthing = {
-    enable = lib.mkEnableOption {
-      description = "Enable Syncthing file sync (web UI at localhost:8384)";
-    };
+    enable = lib.mkEnableOption "Enable Syncthing file sync (web UI at localhost:8384)";
   };
 
   config = lib.mkIf cfg.enable {

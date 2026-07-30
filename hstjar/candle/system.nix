@@ -34,7 +34,6 @@
       # =============[experience install]^^^
 
       # =============[hardware]
-      # nvidia.enable = true;
       # [kernel] pick one: "default", "latest", "cachyos-latest", "cachyos-bore", "cachyos-lts"
       kernel.variant = "default";
       neverSleep.enable = false; # disable system idle sleep
@@ -77,7 +76,7 @@
           enable = true; # sets gaming drivers
           amd.enable = true; # sets amd drivers
           intel.enable = false; # sets intel drivers
-          nvidia.enable = false; # sets nvidia drivers [NOT IMPLEMENTED]
+          nvidia.enable = false; # sets nvidia drivers (Vulkan + 32-bit)
         }; # end of drivers
         steam.enable = true; # sets steam and associated libraries for gaming, but not more important drivers
       }; # end of gaming

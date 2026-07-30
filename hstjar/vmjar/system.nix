@@ -4,9 +4,7 @@
 # Things to note:
 # 1. You should change the stateVersion to the version you're using
 # 2. You should change the home-manager state version to the version you're using
-# 3. You should change all PLEASECHANGEME_* placeholders to your actual username
-#   or values.
-# 4. whether or not something is false or true is entirely up to you. enable what
+# 3. whether or not something is false or true is entirely up to you. enable what
 #    you need!
 #
 # And remember, your configuration is yours to customize.
@@ -46,7 +44,6 @@
       # =============[experience install]^^^
 
       # =============[hardware]
-      # nvidia.enable = true;
       neverSleep.enable = false; # disable system idle sleep
       # [kernel] pick one: "default", "latest", "cachyos-latest", "cachyos-bore", "cachyos-lts"
       kernel.variant = "latest";
@@ -89,7 +86,7 @@
           enable = true; # sets gaming drivers
           amd.enable = false; # sets amd drivers
           intel.enable = false; # sets intel drivers
-          nvidia.enable = false; # sets nvidia drivers [NOT IMPLEMENTED]
+          nvidia.enable = false; # sets nvidia drivers (Vulkan + 32-bit)
         }; # end of drivers
         steam.enable = false; # sets steam and associated libraries for gaming, but not more important drivers
       }; # end of gaming

@@ -5,7 +5,7 @@
   ...
 }:
 let
-  cfg = config.theming;
+  cfg = config.usrSettings.theming;
 in
 {
   config = lib.mkIf cfg.enable {

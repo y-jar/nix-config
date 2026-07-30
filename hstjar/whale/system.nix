@@ -34,7 +34,6 @@
       # =============[experience install]^^^
 
       # =============[hardware]
-      # nvidia.enable = true;
       # [kernel] pick one: "default", "latest", "cachyos-latest", "cachyos-bore", "cachyos-lts"
       kernel.variant = "default";
       # [TTY console font] bitmap fonts (set null for kernel default):
@@ -77,7 +76,7 @@
           enable = true; # sets gaming drivers
           amd.enable = false; # sets amd drivers
           intel.enable = true; # sets intel drivers
-          nvidia.enable = false; # sets nvidia drivers [NOT IMPLEMENTED]
+          nvidia.enable = false; # sets nvidia drivers (Vulkan + 32-bit)
         }; # end of drivers
         steam.enable = false; # sets steam and associated libraries for gaming, but not more important drivers
       }; # end of gaming

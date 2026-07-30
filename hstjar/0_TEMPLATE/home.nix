@@ -97,11 +97,11 @@
       bluetooth.enable = false; # ~5mib - blueman
       dev.enable = true; # ~1.5gib - dotnet + python + node + gcc + go + nix tools
       # =========[management]^^^
+      theming = {
+        enable = true; # sets theme for gtk/qt
+        cursorSize = 36; # cursor size in pixels (default: 36)
+      };
     }; # end of usrSettings
 
-    theming = {
-      enable = true; # sets theme for gtk/qt
-      cursorSize = 36; # cursor size in pixels (default: 36)
-    }; # end of theming
   }; # end of config
 }

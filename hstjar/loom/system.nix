@@ -23,8 +23,8 @@
       # =============[experience install]
       # [pick one or more if you know what you're doing]
       gnome.enable = true; # sets gnome [on by default]
-      hyprland.enable = true; # sets hyprland
-      niri.enable = true; # sets niri
+      hyprland.enable = false; # sets hyprland
+      niri.enable = false; # sets niri
       cinnamon.enable = false; # sets cinnamon
       cosmic = {
         enable = false; # sets cosmic desktop environment
@@ -33,7 +33,6 @@
       # =============[experience install]^^^
 
       # =============[hardware]
-      # nvidia.enable = true;
       # [kernel] pick one: "default", "latest", "cachyos-latest", "cachyos-bore", "cachyos-lts"
       kernel.variant = "default";
       neverSleep.enable = false; # disable system idle sleep
@@ -76,7 +75,7 @@
           enable = true; # sets gaming drivers
           amd.enable = false; # sets amd drivers
           intel.enable = false; # sets intel drivers
-          nvidia.enable = false; # sets nvidia drivers [NOT IMPLEMENTED]
+          nvidia.enable = false; # sets nvidia drivers (Vulkan + 32-bit)
         };
         steam.enable = true; # sets steam
       };

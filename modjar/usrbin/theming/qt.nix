@@ -6,7 +6,7 @@
 }:
 let
   # [options]
-  cfg = config.theming;
+  cfg = config.usrSettings.theming;
 
   # [theme settings]
   catppuccinKvantum = pkgs.catppuccin-kvantum.override {
