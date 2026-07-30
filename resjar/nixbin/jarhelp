@@ -1,0 +1,109 @@
+#!/usr/bin/env bash
+
+cat <<'GUIDE'
+=== Jar's NixOS Install Guide ===
+
+TARGET DRIVE:
+  lsblk                    # find your disk (e.g. /dev/sda, /dev/nvme0n1)
+
+====== PARTITIONING ======
+
+UEFI (modern, default):
+  cfdisk /dev/sdX
+  - 512M      -> type "EFI System"          -> /boot
+  - remaining -> type "Linux filesystem"     -> /
+
+UEFI + separate /home:
+  cfdisk /dev/sdX
+  - 512M      -> type "EFI System"          -> /boot
+  - 50-100G   -> type "Linux filesystem"    -> /
+  - remaining -> type "Linux filesystem"    -> /home
+
+UEFI + /home + swap:
+  cfdisk /dev/sdX
+  - 512M      -> type "EFI System"          -> /boot
+  - 50-100G   -> type "Linux filesystem"    -> /
+  - 8-32G     -> type "Linux swap"          -> swap
+  - remaining -> type "Linux filesystem"    -> /home
+
+Legacy/BIOS:
+  cfdisk /dev/sdX
+  - 1M        -> type "BIOS boot"           -> (unformatted)
+  - remaining -> type "Linux filesystem"    -> /
+
+====== FORMATTING ======
+
+EFI partition (always fat32):
+  mkfs.fat -F 32 /dev/sdX1
+
+Root / Home (pick one):
+  ext4:  mkfs.ext4 /dev/sdX2
+  btrfs: mkfs.btrfs /dev/sdX2
+  xfs:   mkfs.xfs /dev/sdX2
+
+  (for separate /home, format /dev/sdX3 the same way)
+
+Swap:
+  mkswap /dev/sdX?   &&   swapon /dev/sdX?
+
+====== MOUNTING ======
+
+UEFI basic:
+  mount /dev/sdX2 /mnt
+  mount --mkdir /dev/sdX1 /mnt/boot
+
+UEFI + separate /home:
+  mount /dev/sdX2 /mnt
+  mount --mkdir /dev/sdX1 /mnt/boot
+  mount --mkdir /dev/sdX3 /mnt/home
+
+btrfs WITH subvolumes (NixOS-safe, optional):
+  mount /dev/sdX2 /mnt
+  btrfs subvolume create /mnt/@
+  btrfs subvolume create /mnt/@home
+  btrfs subvolume create /mnt/@nix
+  umount /mnt
+  mount -o subvol=@     /dev/sdX2 /mnt
+  mount --mkdir -o subvol=@home /dev/sdX2 /mnt/home
+  mount --mkdir -o subvol=@nix  /dev/sdX2 /mnt/nix
+  mount --mkdir /dev/sdX1 /mnt/boot
+
+Verify mounts:  lsblk
+
+====== NETWORK ======
+
+Ethernet usually works out of the box.
+Wi-Fi (iwd):
+  iwctl
+  > station list
+  > station wlan0 connect "SSID"
+
+Test:  ping 1.1.1.1
+
+====== FLAKE INSTALL ======
+
+  cd /mnt
+  git clone https://github.com/y-jar/nix-config
+  cd nix-config
+  nixos-install --flake .#HOSTNAME
+
+  HOSTNAME options:
+    calender  - main pc
+    candle    - gaming mini pc
+    loom      - general pc
+    vmjar     - virtual machine
+    whale     - server
+    yilyonix  - test bench
+    ziiemar   - laptop
+
+====== REBOOT ======
+
+  umount -R /mnt
+  reboot
+
+====== POST-INSTALL ======
+
+After reboot, on the new system:
+  passwd              # set your password
+  nh os switch ~/nix-config#HOSTNAME   # rebuild if needed
+GUIDE

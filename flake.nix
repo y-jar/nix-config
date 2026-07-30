@@ -81,6 +81,7 @@
             ({ pkgs, ... }: {
               environment.systemPackages = with pkgs; [
                 git vim nh fastfetch neovim
+                (pkgs.writeShellScriptBin "jarhelp" (builtins.readFile ./resjar/nixbin/jarhelp))
               ];
               networking.hostName = "recovery";
               services.openssh.enable = true;
