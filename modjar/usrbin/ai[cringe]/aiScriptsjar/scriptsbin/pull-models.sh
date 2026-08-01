@@ -4,6 +4,7 @@
 MODELS=(
   "qwen3.5:9b"
   "qwen3.5:9b-mlx"
+  "qwen3.6:27b"
   "frob/ministral-3:14b"
   "frob/ministral-3:3b"
   "mistral:7b"

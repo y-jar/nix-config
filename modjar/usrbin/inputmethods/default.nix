@@ -67,6 +67,11 @@ in
                 Theme = "Nord-Dark";
               }; # End of globalSection
             }; # End of classicui
+            quickphrase = {
+              globalSection = {
+                TriggerKey = "Super+Alt+u";
+              }; # End of globalSection
+            }; # End of quickphrase
           }; # End of addons
         }; # End of Settings
       }; # End of fcitx5

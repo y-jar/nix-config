@@ -25,6 +25,6 @@
       ~/entjar \
       ~/docjar \
       ~/vidjar \
-      ~/Downloads
+      ~/downloads
   '';
 }

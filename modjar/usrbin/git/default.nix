@@ -23,6 +23,7 @@ in
       settings = {
         user.name = config.usrSettings.name;
         user.email = config.usrSettings.email;
+        init.defaultBranch = "main"; # git init defaults to main instead of master
       }; # end of settings
     }; # end of git config
     home.packages = with pkgs; [
