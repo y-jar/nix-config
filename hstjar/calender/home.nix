@@ -56,7 +56,7 @@
         nvf.enable = true; # sets nvf config for neovim
       }; # end of editors
       discord.enable = true; # sets discord
-      flatpak.enable = false; # sets flatpak and adds bazaar
+      flatpak.enable = true; # sets flatpak and adds bazaar
       # [file explorers]
       nautilus.enable = true; # sets nautilus
       yazi.enable = true; # sets yazi

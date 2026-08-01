@@ -19,6 +19,7 @@ in
   config = lib.mkIf cfg.enable {
     home.packages = [
       pkgs.prismlauncher
+      pkgs.mcpelauncher-ui-qt # bedrock
     ]; # end of home.packages
   }; # end of config
 }
