@@ -21,8 +21,8 @@ in
 
     services.nginx = {
       enable = true;
-      recommendedGzipSettings = true; # Enable recommended gzip settings.
-      recommendedOptimisation = true; # Enable recommended optimisation settings.
+      recommendedGzipSettings = true;
+      recommendedOptimisation = true;
       recommendedProxySettings = true; # Whether to enable recommended proxy settings if a vhost does not specify the option manually.
 
       virtualHosts."_" = {
