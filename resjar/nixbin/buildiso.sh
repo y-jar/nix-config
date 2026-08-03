@@ -13,6 +13,7 @@ ISO=$(ls "$OUT"/iso/*.iso 2>/dev/null | head -1)
 }
 
 mkdir -p ~/downloads
+rm -f ~/downloads/$(basename "$ISO")
 cp "$ISO" ~/downloads/
 echo "Built: $ISO"
 echo "Copied to: ~/downloads/$(basename "$ISO")"

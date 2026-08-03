@@ -26,6 +26,11 @@ check_deps() {
         echo "Run: nix-shell -p gum"
         exit 1
     fi
+    if ! command -v fzf &>/dev/null; then
+        echo -e "${RED}Error: 'fzf' is not installed.${NC}"
+        echo "Run: nix-shell -p fzf"
+        exit 1
+    fi
 }
 
 # ──[check we're in the right directory]
@@ -420,7 +425,7 @@ iso_install() {
     gum style --border normal --width 50 "Step 1: Select target disk"
 
     local disks
-    disks=$(lsblk -ndo NAME,SIZE,TYPE 2>/dev/null | grep ' disk ' || true)
+    disks=$(lsblk -ndo NAME,SIZE,TYPE 2>/dev/null | awk '$3=="disk"' || true)
     if [ -z "$disks" ]; then
         gum log --level error "No disks found"
         return 1
@@ -541,11 +546,16 @@ $guide"
     lsblk "$target_disk" -o NAME,SIZE,FSTYPE,MOUNTPOINT
     echo ""
 
+    local disk_suffix=""
+    case "$target_disk" in
+        *nvme*|*mmcblk*|*loop*) disk_suffix="p" ;;
+    esac
+
     if [ "$boot_mode" = "UEFI" ]; then
-        boot_part=$(gum input --placeholder "/dev/${target_disk##*/}1" --prompt "EFI boot partition: ")
-        root_part=$(gum input --placeholder "/dev/${target_disk##*/}2" --prompt "Root partition: ")
+        boot_part=$(gum input --placeholder "/dev/${target_disk##*/}${disk_suffix}1" --prompt "EFI boot partition: ")
+        root_part=$(gum input --placeholder "/dev/${target_disk##*/}${disk_suffix}2" --prompt "Root partition: ")
     else
-        root_part=$(gum input --placeholder "/dev/${target_disk##*/}1" --prompt "Root partition (skip BIOS boot): ")
+        root_part=$(gum input --placeholder "/dev/${target_disk##*/}${disk_suffix}1" --prompt "Root partition (skip BIOS boot): ")
     fi
 
     if [ -z "$root_part" ]; then
@@ -636,14 +646,20 @@ $guide"
     fi
 
     if [ "$fs_type" = "btrfs" ] && [ "$use_subvolumes" = true ]; then
-        sudo mount "$root_part" /mnt
+        sudo mount --mkdir "$root_part" /mnt
         sudo btrfs subvolume create /mnt/@
-        sudo btrfs subvolume create /mnt/@home
+        if [ "$separate_home" != true ]; then
+            sudo btrfs subvolume create /mnt/@home
+        fi
         sudo btrfs subvolume create /mnt/@nix
         sudo umount /mnt
 
         sudo mount -o subvol=@ "$root_part" /mnt
-        sudo mount --mkdir -o subvol=@home "$root_part" /mnt/home
+        if [ "$separate_home" = true ]; then
+            sudo mount --mkdir "$home_part" /mnt/home
+        else
+            sudo mount --mkdir -o subvol=@home "$root_part" /mnt/home
+        fi
         sudo mount --mkdir -o subvol=@nix "$root_part" /mnt/nix
     else
         sudo mount "$root_part" /mnt
@@ -661,7 +677,7 @@ $guide"
     fi
 
     gum log --level info "Mounts:"
-    lsblk /mnt
+    lsblk "$target_disk" -o NAME,SIZE,FSTYPE,MOUNTPOINT
 
     # ──────────────────────────────────────
     # Step 8: Network
