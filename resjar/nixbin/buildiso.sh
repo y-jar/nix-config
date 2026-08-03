@@ -13,8 +13,11 @@ ISO=$(ls "$OUT"/iso/*.iso 2>/dev/null | head -1)
 }
 
 mkdir -p ~/downloads
-rm -f ~/downloads/$(basename "$ISO")
+rm -f ~/downloads/nixinjarISO-minimal-*.iso
 cp "$ISO" ~/downloads/
+TS=$(date +%y%m%d-%H%M)
+mv ~/downloads/$(basename "$ISO") ~/downloads/nixinjarISO-minimal-${TS}.iso
+FINAL="$HOME/downloads/nixinjarISO-minimal-${TS}.iso"
 echo "Built: $ISO"
-echo "Copied to: ~/downloads/$(basename "$ISO")"
-echo "Write it: sudo dd if=~/downloads/$(basename "$ISO") of=/dev/sdX bs=4M status=progress conv=fsync"
+echo "Copied to: $FINAL"
+echo "Write it: sudo dd if=$FINAL of=/dev/sdX bs=4M status=progress conv=fsync"
