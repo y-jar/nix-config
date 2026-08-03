@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
   config = {
 
@@ -18,6 +18,10 @@
     programs.evince.enable = true; # Enablilng this native option automatically sets up PDF thumbnailing
     services.tumbler.enable = true; # image stuff
 
+    # [perf / cleanliness]
+    services.dbus.implementation = "broker"; # faster, lighter D-Bus than the reference implementation
+    services.speechd.enable = lib.mkForce false; # text-to-speech daemon
+
     environment.sessionVariables = {
       NIXOS_OZONE_WL = "1"; # nudges Electron/Chrome apps to use Wayland
       QT_QPA_PLATFORMTHEME = "qtct";
@@ -29,6 +33,18 @@
       librsvg
       webp-pixbuf-loader
     ];
+
+    # ==================================Boot========================================
+    boot = {
+      initrd.systemd.enable = true; # systemd in the initrd
+      loader.timeout = 1; # skip the long boot-menu wait
+      consoleLogLevel = 3; # quieter kernel log
+      kernelParams = [
+        "quiet"
+        "udev.log_level=3"
+        "systemd.show_status=auto"
+      ]; # end of kernelParams
+    }; # end of boot
 
     # ==================================System Packages========================================
     # List packages installed in system profile.

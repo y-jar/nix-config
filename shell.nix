@@ -114,10 +114,10 @@ pkgs.mkShell {
     #
     #[sys]
     nhs() {
-        nh os switch ~/nix-config#"$1"
+        nh os switch --accept-flake-config ~/nix-config#"$1"
     } # end of nhs
     nht() {
-        nh os test ~/nix-config#"$1"
+        nh os test --accept-flake-config ~/nix-config#"$1"
     } # end of nht
     # ================[Functions]
 

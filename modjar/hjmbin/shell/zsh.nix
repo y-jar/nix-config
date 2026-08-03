@@ -43,8 +43,8 @@ let
 
     # aliases
     # ==[syst]
-    alias nht="nh os test ~/nix-config#${hostnm}"
-    alias nhs="nh os switch ~/nix-config#${hostnm}"
+    alias nht="nh os test --accept-flake-config ~/nix-config#${hostnm}"
+    alias nhs="nh os switch --accept-flake-config ~/nix-config#${hostnm}"
     alias nhc="nh clean all --keep 7"
     alias nrs="nixos-rebuild switch --sudo --flake ~/nix-config#${hostnm}"
     alias nrt="nixos-rebuild test --sudo --flake ~/nix-config#${hostnm}"

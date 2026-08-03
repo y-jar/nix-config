@@ -185,7 +185,7 @@ fresh_install() {
 
     if gum confirm "Test configuration first? (nht)"; then
         gum log --level info "Testing $host..."
-        nh os test ~/nix-config#"$host" || {
+        nh os test --accept-flake-config ~/nix-config#"$host" || {
             gum log --level error "Test failed — fix your config and try again"
             return 1
         }
@@ -194,7 +194,7 @@ fresh_install() {
 
     if gum confirm "Deploy system now? (nhs)"; then
         gum log --level info "Deploying $host..."
-        nh os switch ~/nix-config#"$host" || {
+        nh os switch --accept-flake-config ~/nix-config#"$host" || {
             gum log --level error "Deploy failed"
             return 1
         }
@@ -274,7 +274,7 @@ update_existing() {
     # Step 5: Test & Deploy
     if gum confirm "Test configuration first? (nht)"; then
         gum log --level info "Testing $host..."
-        nh os test ~/nix-config#"$host" || {
+        nh os test --accept-flake-config ~/nix-config#"$host" || {
             gum log --level error "Test failed"
             return 1
         }
@@ -283,7 +283,7 @@ update_existing() {
 
     if gum confirm "Deploy system now? (nhs)"; then
         gum log --level info "Deploying $host..."
-        nh os switch ~/nix-config#"$host" || {
+        nh os switch --accept-flake-config ~/nix-config#"$host" || {
             gum log --level error "Deploy failed"
             return 1
         }

@@ -6,6 +6,18 @@
 {
   # =-=-=-=-=-=-=-=[Scroll down to !!Hosts!!]
   description = "My Nix within a Jar";
+
+  # =-=-=-=[binary caches / substituters]
+  nixConfig = {
+    extra-substituters = [
+      "https://bazinga.cachix.org" # whisper's cache [preprocessor]
+      "https://onelock.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "bazinga.cachix.org-1:WI9TV6l0gBVhcfY7OQM5zWqYmESIarKME0fjVN6yDYU="
+      "onelock.cachix.org-1:Wyy9XrWqFKcPxkZXQg5yZXtsbKTbkaga44UWRJfgqEg="
+    ];
+  };
   # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=[OUTPUTS]=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   outputs =
     {
@@ -92,12 +104,13 @@
           ]; # End of modules
         }; # End of iso
       }; # end of nixosConfigurations
+
+      formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt; # nix fmt
     }; # end of nixosConfigurations
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=[INPUTS]=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   inputs = {
     # [nixpkgs]
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     # [home-manager]
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";

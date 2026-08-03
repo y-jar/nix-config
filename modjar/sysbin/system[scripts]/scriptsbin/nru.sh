@@ -12,7 +12,7 @@ nix --extra-experimental-features 'nix-command flakes' flake update
 
 # Apply the update
 echo "Rebuilding system configuration..."
-nh os switch ~/nix-config#"$CURRENT_HOST"
+nh os switch --accept-flake-config ~/nix-config#"$CURRENT_HOST"
 
 # Clean up old generations (Keep last 7)
 echo "Optimizing generations..."

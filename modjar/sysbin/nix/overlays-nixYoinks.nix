@@ -11,7 +11,7 @@
     }; # end of UseNixPkgsYoinks
   }; # end of options
   # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=[NIX Grabbos / OVERLAYS]=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  config = {
+  config = lib.mkIf config.sysSettings.UseNixPkgsYoinks.enable {
     # [rsakura]:
     nixpkgs.overlays = [
       inputs.rsakura.overlays.default

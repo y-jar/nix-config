@@ -105,7 +105,7 @@ Test:  ping 1.1.1.1
 
 After reboot, on the new system:
   passwd              # set your password
-  nh os switch ~/nix-config#HOSTNAME   # rebuild if needed
+  nh os switch --accept-flake-config ~/nix-config#HOSTNAME   # rebuild if needed
 
 ===== INTERACTIVE INSTALLER =====
 For a guided experience, run:

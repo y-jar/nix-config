@@ -5,7 +5,6 @@
 }:
 {
   imports = [
-    # inputs.nix-index-database.nixosModules.nix-index
     ./overlays-nixYoinks.nix
   ];
   config = {
@@ -35,9 +34,27 @@
     nix.settings = {
       download-buffer-size = 134217728; # around 128mb
       experimental-features = [
+        "pipe-operators"
         "nix-command"
         "flakes"
       ]; # End of experimental-features
+
+      # [binary caches / substituters]
+      substituters = [
+        "https://cache.nixos.org"
+        "https://bazinga.cachix.org" # whisper's cache [preprocessor]
+        "https://onelock.cachix.org"
+      ]; # end of substituters
+      trusted-public-keys = [
+        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+        "bazinga.cachix.org-1:WI9TV6l0gBVhcfY7OQM5zWqYmESIarKME0fjVN6yDYU="
+        "onelock.cachix.org-1:Wyy9XrWqFKcPxkZXQg5yZXtsbKTbkaga44UWRJfgqEg="
+      ]; # end of trusted-public-keys
+
+      # [perf & hygiene]
+      auto-optimise-store = true; # dedupe identical store paths
+      trusted-users = [ "root" "@wheel" ]; # let wheel users run privileged nix ops
+      use-xdg-base-directories = true; # keep nix's user config/cache in ~/.config & ~/.cache
     }; # end of nix settings
 
 
