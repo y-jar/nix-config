@@ -49,6 +49,8 @@ auto_confirm() {
 
 # ──[auto-mode spin: run command directly (no TTY spinner needed in auto mode)]
 # Usage: auto_spin "Title text" -- command args...
+# Note: gum spin uses Go's exec which can't see bash functions (like
+# run_privileged), so we wrap in bash -c to inherit exported functions.
 auto_spin() {
     local title="$1"; shift
     shift  # skip the -- separator
@@ -56,7 +58,7 @@ auto_spin() {
         echo "[auto] $title"
         "$@"
     else
-        gum spin --spinner dot --title "$title" -- "$@"
+        gum spin --spinner dot --title "$title" -- bash -c '"$@"' _ "$@"
     fi
 }
 
@@ -503,6 +505,134 @@ pick_part() {
     echo "$selected"
 }
 
+# ──[verify boot partition matches boot mode + partition table type]
+# BIOS+GPT requires a BIOS boot partition (GRUB can't fall back to blocklists
+# on btrfs); aborts before formatting if missing.
+verify_boot_partition() {
+    local disk="$1" mode="$2" boot_part="$3"
+
+    [ "${INSTALLJAR_TEST_MODE:-0}" = "1" ] && return 0
+    [ "${INSTALLJAR_AUTO_PARTITION:-0}" = "1" ] && return 0
+
+    local pttype
+    pttype=$(blkid -s PTTYPE -o value "$disk" 2>/dev/null || echo "")
+
+    if [ "$mode" = "BIOS" ] && [ "$pttype" = "gpt" ]; then
+        if ! sfdisk -l "$disk" 2>/dev/null | grep -qi 'BIOS boot'; then
+            gum log --level error "BIOS boot mode + GPT partition table detected, but no 'BIOS boot' partition found."
+            gum log --level error "GRUB on BIOS+GPT requires a 1M partition of type 'BIOS boot' (unformatted)."
+            gum log --level error "Without it, GRUB cannot install on GPT+btrfs (btrfs has no blocklist fallback)."
+            gum log --level error "Fix: sudo cfdisk $disk — add a 1M partition of type 'BIOS boot', then re-run."
+            return 1
+        fi
+        gum log --level info "BIOS boot partition OK"
+    elif [ "$mode" = "UEFI" ] && [ "$pttype" = "gpt" ]; then
+        if [ -z "$boot_part" ]; then
+            gum log --level error "UEFI boot mode + GPT detected, but no EFI System partition selected."
+            gum log --level error "Fix: sudo cfdisk $disk — add a 512M partition of type 'EFI System', then re-run."
+            return 1
+        fi
+        gum log --level info "EFI System partition OK"
+    fi
+    return 0
+}
+
+# ──[auto-partition the target disk based on chosen combo]
+# Triggered by INSTALLJAR_AUTO_PARTITION=1. Wipes $target_disk and writes
+# a layout matching the existing testvm combos (boot × pttype × fs × home × swap × subvol).
+# Exports partition paths back via INSTALLJAR_AUTO_*_PART env vars so subsequent
+# Step 5 (pick_part) returns them.
+auto_partition() {
+    local disk="$1" boot_mode="$2" fs_type="$3"
+    local separate_home="$4" use_swap="$5" use_subvolumes="$6" swap_size="${7:-2G}"
+    local label="${INSTALLJAR_AUTO_LABEL:-}"
+
+    # Default partition table: GPT for UEFI; GPT for btrfs/subvols (blocklist fallback
+    # is unsafe on btrfs); MBR for everything else (BIOS+ext4/xfs).
+    if [ -z "$label" ]; then
+        if [ "$boot_mode" = "UEFI" ]; then
+            label="gpt"
+        elif [ "$fs_type" = "btrfs" ] || [ "$use_subvolumes" = true ]; then
+            label="gpt"
+        else
+            label="dos"
+        fi
+    fi
+
+    # Partition suffix (nvme/mmcblk/loop use p1, p2, ...)
+    local disk_base part_suffix
+    disk_base=$(basename "$disk")
+    part_suffix=""
+    case "$disk_base" in
+        nvme*|mmcblk*|loop*) part_suffix="p" ;;
+    esac
+
+    local script="label: $label"$'\n'
+    local part_num=1
+    local boot_part_dev="" root_part_dev="" home_part_dev="" swap_part_dev=""
+
+    # Boot/ESP partition first (1M BIOS boot or 512M EFI System)
+    if [ "$boot_mode" = "UEFI" ]; then
+        script+=",512M,U"$'\n'
+        boot_part_dev="/dev/${disk_base}${part_suffix}${part_num}"
+        part_num=$((part_num + 1))
+    elif [ "$label" = "gpt" ]; then
+        script+=",1M,21686148-6449-6E6F-744E-656564454649"$'\n'  # BIOS boot (unformatted)
+        part_num=$((part_num + 1))
+    fi
+
+    # Root partition size: 16G when swap+home both set (leaves room for ~2G home on a 20G disk);
+    # 18G otherwise (matches existing testvm combos).
+    local root_size="18G"
+    if [ "$use_swap" = true ] && [ "$separate_home" = true ]; then
+        root_size="16G"
+    fi
+
+    # Root partition
+    script+=",$root_size,L"$'\n'
+    root_part_dev="/dev/${disk_base}${part_suffix}${part_num}"
+    part_num=$((part_num + 1))
+
+    # Optional swap (2G default)
+    if [ "$use_swap" = true ]; then
+        script+=",${swap_size},S"$'\n'
+        swap_part_dev="/dev/${disk_base}${part_suffix}${part_num}"
+        part_num=$((part_num + 1))
+    fi
+
+    # Optional home (rest of disk)
+    if [ "$separate_home" = true ]; then
+        script+=",,L"$'\n'
+        home_part_dev="/dev/${disk_base}${part_suffix}${part_num}"
+        part_num=$((part_num + 1))
+    fi
+
+    gum log --level info "auto_partition: wiping $disk and writing $label layout..."
+    if ! run_privileged sfdisk --wipe always "$disk" <<<"$script" >/dev/null 2>&1; then
+        gum log --level error "auto_partition: sfdisk failed."
+        return 1
+    fi
+
+    # Re-read partition table and let udev settle
+    run_privileged blockdev --rereadpt "$disk" 2>/dev/null || true
+    sleep 2
+
+    # Export partition paths so Step 5 (pick_part) returns them in auto mode
+    [ -n "$boot_part_dev" ]  && export INSTALLJAR_AUTO_BOOT_PART="$boot_part_dev"
+    [ -n "$root_part_dev" ]  && export INSTALLJAR_AUTO_ROOT_PART="$root_part_dev"
+    [ -n "$home_part_dev" ]  && export INSTALLJAR_AUTO_HOME_PART="$home_part_dev"
+    [ -n "$swap_part_dev" ]  && export INSTALLJAR_AUTO_SWAP_PART="$swap_part_dev"
+
+    gum log --level info "auto_partition: $label layout on $disk"
+    if [ -n "$boot_part_dev" ]; then
+        gum log --level info "  boot: $boot_part_dev"
+    fi
+    gum log --level info "  root: $root_part_dev"
+    [ -n "$home_part_dev" ] && gum log --level info "  home: $home_part_dev"
+    [ -n "$swap_part_dev" ] && gum log --level info "  swap: $swap_part_dev"
+    return 0
+}
+
 # ──[emit a fileSystems entry for the portable VM config]
 gen_fs_entry() {
     local mnt="$1" device="$2" fstype="$3" options="$4"
@@ -685,9 +815,15 @@ iso_install() {
 
     local guide=""
     if [ "$boot_mode" = "UEFI" ]; then
-        guide+="512M  -> type 'EFI System'       -> /boot"$'\n'
+        guide+="512M  -> type 'EFI System'       -> /boot  (REQUIRED)"$'\n'
     else
-        guide+="1M    -> type 'BIOS boot'        -> (unformatted)"$'\n'
+        local pttype_now
+        pttype_now=$(blkid -s PTTYPE -o value "$target_disk" 2>/dev/null || echo "")
+        if [ "$pttype_now" = "gpt" ]; then
+            guide+="1M    -> type 'BIOS boot'        -> (unformatted)  *** REQUIRED for GPT ***"$'\n'
+        else
+            guide+="1M    -> type 'BIOS boot'        -> (unformatted, optional on MBR)"$'\n'
+        fi
     fi
     if [ "$use_swap" = true ]; then
         guide+="${swap_size} -> type 'Linux swap'         -> swap"$'\n'
@@ -706,7 +842,11 @@ Recommended layout for $boot_mode:
 
 $guide"
 
-    if ! auto_confirm "Run cfdisk now?" INSTALLJAR_AUTO_CFDISK; then
+    if [ "${INSTALLJAR_AUTO_PARTITION:-0}" = "1" ]; then
+        auto_partition "$target_disk" "$boot_mode" "$fs_type" \
+            "$separate_home" "$use_swap" "$use_subvolumes" "$swap_size" \
+            || return 1
+    elif ! auto_confirm "Run cfdisk now?" INSTALLJAR_AUTO_CFDISK; then
         gum log --level info "You can run: sudo cfdisk $target_disk"
         if ! auto_confirm "Ready to continue after partitioning?" INSTALLJAR_AUTO_READY; then
             gum log --level info "Cancelled"
@@ -765,6 +905,10 @@ $guide"
     done
 
     gum log --level info "Partitions identified OK"
+
+    if ! verify_boot_partition "$target_disk" "$boot_mode" "$boot_part"; then
+        return 1
+    fi
 
     # ──────────────────────────────────────
     # Step 6: Format
@@ -968,12 +1112,15 @@ $guide"
     fi
     gum log --level info "Hardware config written for $host"
 
+    # Ensure nixos-install (runs as root via run_privileged) can access the repo
+    run_privileged chown -R "$(id -u):$(id -g)" "$clone_dir" 2>/dev/null || true
+
     # ──────────────────────────────────────
     # Step 11: nixos-install
     # ──────────────────────────────────────
     gum style --border normal --width 50 "Step 11: Install NixOS"
 
-    gum log --level info "Command: nixos-install --no-root-passwd --flake $clone_dir#$host"
+    gum log --level info "Command: sudo nixos-install --no-root-passwd --flake $clone_dir#$host"
 
     if ! auto_confirm "Proceed with installation?" INSTALLJAR_AUTO_PROCEED; then
         gum log --level info "Cancelled"
@@ -981,7 +1128,7 @@ $guide"
     fi
 
     gum log --level info "Installing NixOS — build & copy logs below (this takes a while)..."
-    nixos-install --no-root-passwd --flake "$clone_dir#$host" --show-trace
+    run_privileged nixos-install --no-root-passwd --flake "$clone_dir#$host" --show-trace
 
     local install_status=$?
     if [ $install_status -ne 0 ]; then

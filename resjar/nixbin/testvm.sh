@@ -15,7 +15,7 @@
 set -euo pipefail
 
 TEST_ROOT="/tmp/opencode/tier2"
-ISO="${ISO:-$HOME/downloads/nixos-minimal-26.05.20260719.fd14620-x86_64-linux.iso}"
+ISO="${ISO:-$(ls -t "$HOME"/downloads/nixinjarISO-minimal-*.iso 2>/dev/null | head -1)}"
 REPO="${REPO:-/home/jar/nix-config}"
 NIXBIN="$REPO/resjar/nixbin"
 VMPTY="$NIXBIN/vmpty.py"
@@ -47,7 +47,7 @@ VERIFY_HOME=""
 VERIFY_SWAP=""
 VERIFY_SUBVOL=""
 
-COMBOS="ext4-home ext4-flat ext4-home-swap btrfs-home btrfs-subvol btrfs-subvol-flat xfs-home"
+COMBOS="ext4-home ext4-flat ext4-home-swap btrfs-home btrfs-subvol btrfs-subvol-flat xfs-home gpt-btrfs-bios-home gpt-auto-btrfs-subvol-bios-home"
 
 die() { echo "FAIL: $*" >&2; exit 1; }
 
@@ -95,6 +95,24 @@ load_combo() {
       AUTO_ROOT_PART=/dev/vda1; AUTO_HOME_PART=/dev/vda2; AUTO_SWAP_PART=""
       VERIFY_HOME=1; VERIFY_SWAP=0; VERIFY_SUBVOL=0
       ;;
+    gpt-btrfs-bios-home)
+      # GPT + 1M BIOS boot + 18G btrfs root + rest btrfs home (BIOS, no subvols)
+      # Reproduces user's bootloader bug, but with proper BIOS boot part.
+      DISK_LAYOUT=$'label: gpt\n,1M,21686148-6449-6E6F-744E-656564454649\n,18G,L\n,,L\n'
+      AUTO_FS=btrfs;    AUTO_HOME=1; AUTO_SWAP=0; AUTO_SUBVOL=0
+      AUTO_ROOT_PART=/dev/vda2; AUTO_HOME_PART=/dev/vda3; AUTO_SWAP_PART=""
+      VERIFY_HOME=1; VERIFY_SWAP=0; VERIFY_SUBVOL=0
+      ;;
+    gpt-auto-btrfs-subvol-bios-home)
+      # Blank disk — install.sh's auto_partition creates:
+      #   GPT + 1M BIOS boot + 18G btrfs (subvol @/@home/@nix) + rest btrfs home
+      # Tests the INSTALLJAR_AUTO_PARTITION=1 code path.
+      DISK_LAYOUT=""
+      AUTO_FS=btrfs;    AUTO_HOME=1; AUTO_SWAP=0; AUTO_SUBVOL=1
+      AUTO_PARTITION=1; AUTO_LABEL=gpt
+      # partition paths are auto-set by auto_partition (exported)
+      VERIFY_HOME=1; VERIFY_SWAP=0; VERIFY_SUBVOL=1
+      ;;
     *) die "unknown combo: $COMBO (available: $COMBOS)" ;;
   esac
 }
@@ -135,10 +153,15 @@ append_cmdline() {
 }
 
 make_disk() {
-  echo "== creating + pre-partitioning $DISK (combo: $COMBO) =="
+  echo "== creating disk $DISK (combo: $COMBO) =="
   rm -f "$DISK"
   truncate -s 20G "$DISK"
-  printf '%s' "$DISK_LAYOUT" | sfdisk "$DISK" >/dev/null 2>&1
+  if [ -n "$DISK_LAYOUT" ]; then
+    echo "== pre-partitioning $DISK =="
+    printf '%s' "$DISK_LAYOUT" | sfdisk "$DISK" >/dev/null 2>&1
+  else
+    echo "== leaving $DISK blank (auto_partition will partition it) =="
+  fi
 }
 
 gen_key() {
@@ -204,14 +227,12 @@ EOF
 
 gen_provision_drv() {
   cat > "$TEST_ROOT/provision.drv" <<EOF
-# auto-generated: provision the live VM (root password + ssh pubkey)
+# auto-generated: provision the live VM (ssh pubkey for nixos user)
 wait recovery:~\]\\\$ 
 send export TERM=xterm-256color; stty rows 50 cols 160\r
 wait recovery:~\]\\\$ 
-send echo 'root:installjar-test' | sudo chpasswd; echo P1=\$?\r
+send mkdir -p ~/.ssh && echo '$PUBKEY' >> ~/.ssh/authorized_keys && chmod 700 ~/.ssh && chmod 600 ~/.ssh/authorized_keys; echo P1=\$?\r
 wait P1=[01]
-send sudo mkdir -p /root/.ssh && echo '$PUBKEY' | sudo tee -a /root/.ssh/authorized_keys >/dev/null && sudo chmod 700 /root/.ssh && sudo chmod 600 /root/.ssh/authorized_keys; echo P2=\$?\r
-wait P2=[01]
 EOF
 }
 
@@ -238,30 +259,30 @@ launch_qemu_live() {
 }
 
 phase_provision() {
-  echo "== phase 1: provision ssh =="
+  echo "== phase 1: provision ssh (nixos user) =="
   "$PYTHON" "$VMPTY" --socket "$SOCK" --script "$TEST_ROOT/provision.drv" \
     --log "$TEST_ROOT/provision.log" --timeout 120
-  grep -q 'P1=0' "$TEST_ROOT/provision.log" && grep -q 'P2=0' "$TEST_ROOT/provision.log" \
+  grep -q 'P1=0' "$TEST_ROOT/provision.log" \
     || die "provision failed (see $TEST_ROOT/provision.log)"
 }
 
 push_tree() {
-  echo "== pushing working tree + overlay into guest =="
+  echo "== pushing working tree + overlay into guest (nixos user) =="
   set +e
   tar cz -C "$REPO" --exclude=./.git --exclude=./.rotjar . | \
-    timeout 120 ssh "${SSH_OPTS[@]}" root@127.0.0.1 \
+    timeout 120 ssh "${SSH_OPTS[@]}" nixos@127.0.0.1 \
       'rm -rf /tmp/tree && mkdir -p /tmp/tree && tar xz -C /tmp/tree && echo TREE_DONE'
   [ "${PIPESTATUS[1]:-$?}" = 0 ] || { set -e; die "tree push failed"; }
   tar cz -C "$TEST_ROOT/overlay" hstjar | \
-    timeout 60 ssh "${SSH_OPTS[@]}" root@127.0.0.1 'tar xz -C /tmp/tree && echo OVERLAY_DONE'
+    timeout 60 ssh "${SSH_OPTS[@]}" nixos@127.0.0.1 'tar xz -C /tmp/tree && echo OVERLAY_DONE'
   [ "${PIPESTATUS[1]:-$?}" = 0 ] || { set -e; die "overlay push failed"; }
   timeout 60 scp -i "$KEY" -P "$GUEST_PORT" -o StrictHostKeyChecking=no \
     -o UserKnownHostsFile=/dev/null -o PasswordAuthentication=no \
-    "$TEST_ROOT/flake.patched.nix" root@127.0.0.1:/tmp/tree/flake.nix 2>/dev/null
+    "$TEST_ROOT/flake.patched.nix" nixos@127.0.0.1:/tmp/tree/flake.nix 2>/dev/null
   [ $? = 0 ] || { set -e; die "flake scp failed"; }
   set -e
   local v
-  v=$(timeout 30 ssh "${SSH_OPTS[@]}" root@127.0.0.1 \
+  v=$(timeout 30 ssh "${SSH_OPTS[@]}" nixos@127.0.0.1 \
     'test -f /tmp/tree/flake.nix && test -f /tmp/tree/flake.lock && test -d /tmp/tree/hstjar/tier2test && grep -q tier2test /tmp/tree/flake.nix && echo PUSH_OK' 2>/dev/null) \
     || die "push_tree verify cmd failed"
   printf '%s\n' "$v" | grep -q PUSH_OK || die "push_tree verification failed (flake/overlay not in place)"
@@ -283,6 +304,8 @@ phase_install() {
   auto_env+=" INSTALLJAR_AUTO_SUBVOL=$AUTO_SUBVOL"
   auto_env+=" INSTALLJAR_AUTO_CFDISK=0"
   auto_env+=" INSTALLJAR_AUTO_READY=1"
+  [ -n "${AUTO_PARTITION:-}" ] && auto_env+=" INSTALLJAR_AUTO_PARTITION=$AUTO_PARTITION"
+  [ -n "${AUTO_LABEL:-}" ] && auto_env+=" INSTALLJAR_AUTO_LABEL=$AUTO_LABEL"
   auto_env+=" INSTALLJAR_AUTO_ROOT_PART=$AUTO_ROOT_PART"
   [ -n "$AUTO_HOME_PART" ] && auto_env+=" INSTALLJAR_AUTO_HOME_PART=$AUTO_HOME_PART"
   [ -n "$AUTO_SWAP_PART" ] && auto_env+=" INSTALLJAR_AUTO_SWAP_PART=$AUTO_SWAP_PART"
@@ -298,8 +321,8 @@ phase_install() {
 
   set +e
   timeout $([ "$SMOKE" -eq 1 ] && echo 120 || echo 5400) \
-    ssh "${SSH_OPTS[@]}" root@127.0.0.1 \
-    "cd /tmp/tree && sudo env $auto_env CLONE_DIR=/tmp/tree TERM=xterm-256color bash ./resjar/nixbin/install.sh" \
+    ssh "${SSH_OPTS[@]}" nixos@127.0.0.1 \
+    "cd /tmp/tree && env $auto_env CLONE_DIR=/tmp/tree TERM=xterm-256color bash ./resjar/nixbin/install.sh" \
     2>&1 | tee "$TEST_ROOT/install.log"
   local rc=${PIPESTATUS[0]}
   set -e
@@ -333,9 +356,11 @@ phase3_boot_verify() {
         'hostname; lsblk -o NAME,SIZE,FSTYPE,MOUNTPOINT /dev/vda; df -h / /home /nix 2>/dev/null; swapon --show 2>/dev/null; systemctl is-system-running 2>/dev/null' 2>/dev/null); then
       echo "$out"
       printf '%s\n' "$out" | grep -q tier2test || die "hostname mismatch"
-      printf '%s\n' "$out" | grep -q '/dev/vda1' || die "vda1 not mounted"
+      # Check root is mounted on some /dev/vd* partition (don't assume vda1 —
+      # GPT combos put BIOS boot or ESP on vda1 and root on vda2).
+      printf '%s\n' "$out" | grep -qE '^/dev/vd[a-z0-9]+ +[0-9]+.* +[0-9]+% +/$' || die "root / not mounted"
       if [ "$VERIFY_HOME" = 1 ] && [ "$VERIFY_SUBVOL" = 0 ]; then
-        printf '%s\n' "$out" | grep -q '/dev/vda2' || die "vda2 (home) not mounted"
+        printf '%s\n' "$out" | grep -qE '^/dev/vd[a-z0-9]+ +[0-9]+.* +[0-9]+% +/home$' || die "/home not mounted"
       fi
       if [ "$VERIFY_SUBVOL" = 1 ]; then
         printf '%s\n' "$out" | grep -q '/nix' || die "/nix subvol not mounted"
