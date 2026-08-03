@@ -19,6 +19,18 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
+# ──[privileged runner with TEST-MODE guard]
+# INSTALLJAR_TEST_MODE=1 turns privileged/destructive ops into no-ops
+# (defense in depth — should only ever be set by the test harness).
+run_privileged() {
+    if [ "${INSTALLJAR_TEST_MODE:-0}" = "1" ]; then
+        gum log --level warn "TEST-MODE: skipping privileged op: sudo $*"
+        return 0
+    fi
+    sudo "$@"
+}
+export -f run_privileged
+
 # ──[check dependencies]
 check_deps() {
     if ! command -v gum &>/dev/null; then
@@ -645,7 +657,7 @@ $guide"
             return 0
         fi
     else
-        sudo cfdisk "$target_disk"
+        run_privileged cfdisk "$target_disk"
     fi
 
     # ──────────────────────────────────────
@@ -690,7 +702,7 @@ $guide"
     fi
 
     for part in "$boot_part" "$root_part" "$home_part" "$swap_part"; do
-        if [ -n "$part" ] && [ ! -b "$part" ]; then
+        if [ -n "$part" ] && [ "${INSTALLJAR_SKIP_DEV_CHECK:-0}" != "1" ] && [ ! -b "$part" ]; then
             gum log --level error "Partition does not exist: $part"
             return 1
         fi
@@ -724,27 +736,27 @@ $guide"
 
     if [ -n "$boot_part" ]; then
         gum spin --spinner dot --title "Formatting EFI partition..." -- \
-            sudo mkfs.fat -F 32 "$boot_part"
+            run_privileged mkfs.fat -F 32 "$boot_part"
     fi
 
     if [ -n "$root_part" ]; then
         case "$fs_type" in
-            ext4) gum spin --spinner dot --title "Formatting root..." -- sudo mkfs.ext4 -F "$root_part" ;;
-            btrfs) gum spin --spinner dot --title "Formatting root..." -- sudo mkfs.btrfs -f "$root_part" ;;
-            xfs) gum spin --spinner dot --title "Formatting root..." -- sudo mkfs.xfs -f "$root_part" ;;
+            ext4) gum spin --spinner dot --title "Formatting root..." -- run_privileged mkfs.ext4 -F "$root_part" ;;
+            btrfs) gum spin --spinner dot --title "Formatting root..." -- run_privileged mkfs.btrfs -f "$root_part" ;;
+            xfs) gum spin --spinner dot --title "Formatting root..." -- run_privileged mkfs.xfs -f "$root_part" ;;
         esac
     fi
 
     if [ -n "$home_part" ]; then
         case "$fs_type" in
-            ext4) gum spin --spinner dot --title "Formatting home..." -- sudo mkfs.ext4 -F "$home_part" ;;
-            btrfs) gum spin --spinner dot --title "Formatting home..." -- sudo mkfs.btrfs -f "$home_part" ;;
-            xfs) gum spin --spinner dot --title "Formatting home..." -- sudo mkfs.xfs -f "$home_part" ;;
+            ext4) gum spin --spinner dot --title "Formatting home..." -- run_privileged mkfs.ext4 -F "$home_part" ;;
+            btrfs) gum spin --spinner dot --title "Formatting home..." -- run_privileged mkfs.btrfs -f "$home_part" ;;
+            xfs) gum spin --spinner dot --title "Formatting home..." -- run_privileged mkfs.xfs -f "$home_part" ;;
         esac
     fi
 
     if [ -n "$swap_part" ]; then
-        gum spin --spinner dot --title "Setting up swap..." -- sudo mkswap "$swap_part"
+        gum spin --spinner dot --title "Setting up swap..." -- run_privileged mkswap "$swap_part"
     fi
 
     gum log --level info "Formatting complete"
@@ -756,7 +768,7 @@ $guide"
 
     if mountpoint -q /mnt 2>/dev/null; then
         if gum confirm "/mnt is already mounted. Unmount and continue?"; then
-            sudo umount -R /mnt 2>/dev/null || true
+            run_privileged umount -R /mnt 2>/dev/null || true
         else
             gum log --level error "Please unmount /mnt first"
             return 1
@@ -764,34 +776,34 @@ $guide"
     fi
 
     if [ "$fs_type" = "btrfs" ] && [ "$use_subvolumes" = true ]; then
-        sudo mount --mkdir "$root_part" /mnt
-        sudo btrfs subvolume create /mnt/@
+        run_privileged mount --mkdir "$root_part" /mnt
+        run_privileged btrfs subvolume create /mnt/@
         if [ "$separate_home" != true ]; then
-            sudo btrfs subvolume create /mnt/@home
+            run_privileged btrfs subvolume create /mnt/@home
         fi
-        sudo btrfs subvolume create /mnt/@nix
-        sudo umount /mnt
+        run_privileged btrfs subvolume create /mnt/@nix
+        run_privileged umount /mnt
 
-        sudo mount -o subvol=@ "$root_part" /mnt
+        run_privileged mount -o subvol=@ "$root_part" /mnt
         if [ "$separate_home" = true ]; then
-            sudo mount --mkdir "$home_part" /mnt/home
+            run_privileged mount --mkdir "$home_part" /mnt/home
         else
-            sudo mount --mkdir -o subvol=@home "$root_part" /mnt/home
+            run_privileged mount --mkdir -o subvol=@home "$root_part" /mnt/home
         fi
-        sudo mount --mkdir -o subvol=@nix "$root_part" /mnt/nix
+        run_privileged mount --mkdir -o subvol=@nix "$root_part" /mnt/nix
     else
-        sudo mount "$root_part" /mnt
+        run_privileged mount "$root_part" /mnt
         if [ -n "$home_part" ]; then
-            sudo mount --mkdir "$home_part" /mnt/home
+            run_privileged mount --mkdir "$home_part" /mnt/home
         fi
     fi
 
     if [ -n "$boot_part" ]; then
-        sudo mount --mkdir "$boot_part" /mnt/boot
+        run_privileged mount --mkdir "$boot_part" /mnt/boot
     fi
 
     if [ -n "$swap_part" ]; then
-        sudo swapon "$swap_part"
+        run_privileged swapon "$swap_part"
     fi
 
     gum log --level info "Mounts:"
@@ -806,7 +818,7 @@ $guide"
         gum log --level warn "No network connectivity"
         if gum confirm "Open iwd for Wi-Fi setup?"; then
             if command -v iwctl &>/dev/null; then
-                sudo iwctl
+                run_privileged iwctl
             else
                 gum log --level warn "iwctl not available"
             fi
@@ -828,7 +840,7 @@ $guide"
     local repo_url
     repo_url=$(gum input --prompt "Repo URL: " --value "https://github.com/y-jar/nix-config.git")
 
-    local clone_dir="/mnt/etc/nixos"
+    local clone_dir="${CLONE_DIR:-/mnt/etc/nixos}"
     if [ -d "$clone_dir" ]; then
         if [ "$(ls -A "$clone_dir" 2>/dev/null)" ]; then
             gum log --level warn "$clone_dir is not empty"
@@ -841,7 +853,7 @@ $guide"
         fi
     else
         gum spin --spinner dot --title "Cloning..." -- \
-            sudo git clone "$repo_url" "$clone_dir"
+            run_privileged git clone "$repo_url" "$clone_dir"
     fi
 
     if [ ! -f "$clone_dir/flake.nix" ]; then
@@ -876,11 +888,11 @@ $guide"
         gum log --level info "VM host detected ($host) — writing portable hardware config"
         gen_vm_hardware_config "$fs_type" "$use_subvolumes" "$separate_home" \
             "$boot_part" "$root_part" "$home_part" "$swap_part" \
-            | sudo tee "$clone_dir/hstjar/$host/hardware-configuration.nix" >/dev/null
+            | run_privileged tee "$clone_dir/hstjar/$host/hardware-configuration.nix" >/dev/null
     else
         gum spin --spinner dot --title "Generating hardware configuration..." -- \
             nixos-generate-config --root /mnt
-        sudo cp /mnt/etc/nixos/hardware-configuration.nix "$clone_dir/hstjar/$host/"
+        run_privileged cp /mnt/etc/nixos/hardware-configuration.nix "$clone_dir/hstjar/$host/"
     fi
     gum log --level info "Hardware config written for $host"
 
@@ -896,8 +908,8 @@ $guide"
         return 0
     fi
 
-    gum spin --spinner dot --title "Installing NixOS (this takes a while)..." -- \
-        nixos-install --no-root-passwd --flake "$clone_dir#$host"
+    gum log --level info "Installing NixOS — build & copy logs below (this takes a while)..."
+    nixos-install --no-root-passwd --flake "$clone_dir#$host" --show-trace
 
     local install_status=$?
     if [ $install_status -ne 0 ]; then
@@ -920,7 +932,7 @@ $guide"
     root_pass=$(gum input --password --prompt "Root password: " --placeholder "min 8 chars")
     if [ -n "$root_pass" ]; then
         gum log --level info "Setting root password..."
-        printf '%s:%s\n' root "$root_pass" | sudo nixos-enter --root /mnt -c chpasswd
+        printf '%s:%s\n' root "$root_pass" | run_privileged nixos-enter --root /mnt -c chpasswd
     else
         gum log --level warn "Root password left empty — root stays passwordless"
     fi
@@ -932,7 +944,7 @@ $guide"
         fi
         if [ -n "$user_pass" ]; then
             gum log --level info "Setting password for $main_user..."
-            printf '%s:%s\n' "$main_user" "$user_pass" | sudo nixos-enter --root /mnt -c chpasswd
+            printf '%s:%s\n' "$main_user" "$user_pass" | run_privileged nixos-enter --root /mnt -c chpasswd
         fi
     fi
     gum log --level info "Passwords set"
@@ -963,8 +975,8 @@ $guide"
 
     if gum confirm "Unmount and reboot now?"; then
         gum spin --spinner dot --title "Unmounting..." -- \
-            sudo umount -R /mnt
-        sudo reboot
+            run_privileged umount -R /mnt
+        run_privileged reboot
     else
         gum log "Reboot manually:"
         gum format -t code "sudo umount -R /mnt && sudo reboot"
@@ -989,11 +1001,11 @@ main() {
             --height 12)
 
         case "$choice" in
-            "Install from ISO")      iso_install ;;
-            "Fresh Install")         check_dir && fresh_install ;;
-            "Update Existing Host")  check_dir && update_existing ;;
-            "Manual Install")        manual_install ;;
-            "View Documentation")    check_dir && view_docs ;;
+            "Install from ISO")      iso_install || true ;;
+            "Fresh Install")         check_dir && fresh_install || true ;;
+            "Update Existing Host")  check_dir && update_existing || true ;;
+            "Manual Install")        manual_install || true ;;
+            "View Documentation")    check_dir && view_docs || true ;;
             "Exit")                  gum log --level info "Goodbye!"; exit 0 ;;
             *)                       gum log --level warn "Unknown option" ;;
         esac
@@ -1002,4 +1014,7 @@ main() {
     done
 }
 
-main "$@"
+# Only run the menu when executed directly (not when sourced for testing)
+if [ "${BASH_SOURCE[0]:-}" = "$0" ]; then
+    main "$@"
+fi
