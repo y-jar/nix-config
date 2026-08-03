@@ -26,7 +26,8 @@ pkgs.mkShell {
     echo -e "\e[1;33m====[ Entering Installer Shell for Nix in a Jar ]====\e[0m"
     echo -e "|"
     echo -e "| Interactive Installer:"
-    echo -e "|   '\e[1;32msetup\e[0m'            -> Launch the guided installer (gum TUI)"
+    echo -e "|   '\e[1;32minstalljar\e[0m'        -> Launch the guided installer (gum TUI)"
+    echo -e "|   '\e[1;32mtestjar\e[0m'          -> Run installer tests (gum TUI)"
     echo -e "|"
     echo -e "| Core Onboarding Steps:"
     echo -e "|   1. '\e[1;32mhardto <hostname>\e[0m' -> Copy template & grab local hardware config"
@@ -40,10 +41,8 @@ pkgs.mkShell {
     echo -e "|   'chkhrd'         -> Check local storage blocks and partitions"
     echo -e "|   'ctrl+D' or `exit` -> Exit when you are done!"
     echo -e "|"
-    echo -e "| For more Help, refer to:"
-    echo -e "|   \e]8;;file://$HOME/nix-config/resjar/docbin/install-guide.md\e\\\\install-guide\e]8;;\e\\\\"
-    echo -e "|   \e]8;;file://$HOME/nix-config/resjar/docbin/key-key.md\e\\\\documents-key\e]8;;\e\\\\"
-    echo -e "|   \e]8;;file://$HOME/nix-config/README.md\e\\\\README\e]8;;\e\\\\"
+    echo -e "| For questions/bugs: \e]8;;https://github.com/y-jar/nix-config/issues\e\\\\report here\e]8;;\e\\\\"
+    echo -e "|"
     # =============[prompt]
 
     # [force features so flakes work] [if not there, nh will not work]
@@ -51,7 +50,11 @@ pkgs.mkShell {
 
     # [interactive installer]
     setup() {
-        bash "$HOME/nix-config/resjar/nixbin/install.sh"
+        installjar
+    }
+    # [test runner]
+    testjar() {
+        bash "$HOME/nix-config/resjar/nixbin/testjar" "$@"
     }
 
     # ================[Functions]

@@ -1,0 +1,185 @@
+#!/usr/bin/env bash
+# ═══════════════════════════════════════════════════════
+#  testjar — gum TUI runner for installer tests
+#
+#  Human:   ./resjar/nixbin/testjar          (gum menu)
+#  AI/CLI:  ./resjar/nixbin/testjar --tier1
+#           ./resjar/nixbin/testjar --smoke --combo btrfs-subvol
+#           ./resjar/nixbin/testjar --full  --combo ext4-flat
+#
+#  All output is tee'd to resjar/nixbin/.testlog (gitignored).
+# ═══════════════════════════════════════════════════════
+set -euo pipefail
+
+SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+TESTINSTALL="$SCRIPT_DIR/testinstall.sh"
+TESTVM="$SCRIPT_DIR/testvm.sh"
+LOG="$SCRIPT_DIR/.testlog"
+
+COMBOS="ext4-home ext4-flat ext4-home-swap btrfs-home btrfs-subvol btrfs-subvol-flat xfs-home"
+DEFAULT_COMBO="ext4-home"
+
+die() { echo "FAIL: $*" >&2; exit 1; }
+
+check_deps() {
+  command -v gum >/dev/null || die "'gum' not found — run: nix-shell -p gum"
+  [ -x "$TESTINSTALL" ] || die "testinstall.sh not found: $TESTINSTALL"
+  [ -x "$TESTVM" ] || die "testvm.sh not found: $TESTVM"
+}
+
+pick_combo() {
+  local choices=""
+  local default_idx=1
+  local idx=1
+  for c in $COMBOS; do
+    if [ "$c" = "$DEFAULT_COMBO" ]; then default_idx=$idx; fi
+    choices+="$c"$'\n'
+    idx=$((idx + 1))
+  done
+  choices+=$'\n'"(cancel — back to menu)"
+  # Navigate to default combo (Down default_idx-1 times, Enter)
+  # gum choose highlights first item by default; Down×N selects Nth (0-indexed)
+  local sel
+  sel=$(printf '%s' "$choices" | gum choose --header "Select combo (default: $DEFAULT_COMBO)" --height 12)
+  case "$sel" in
+    ""|*"cancel"*) echo "" ;;
+    *) echo "$sel" ;;
+  esac
+}
+
+run_tier1() {
+  echo "== Tier 1: Logic tests (testinstall.sh) =="
+  bash "$TESTINSTALL" 2>&1 | tee "$LOG"
+  local rc=${PIPESTATUS[0]}
+  echo ""
+  [ $rc -eq 0 ] && echo "== Tier 1 PASS ==" || echo "== Tier 1 FAIL (rc=$rc) =="
+  return $rc
+}
+
+run_smoke() {
+  local combo="${1:-$DEFAULT_COMBO}"
+  echo "== Tier 2 SMOKE: $combo == "
+  bash "$TESTVM" --smoke --combo "$combo" 2>&1 | tee "$LOG"
+  local rc=${PIPESTATUS[0]}
+  echo ""
+  [ $rc -eq 0 ] && echo "== SMOKE PASS ($combo) ==" || echo "== SMOKE FAIL ($combo, rc=$rc) =="
+  return $rc
+}
+
+run_full() {
+  local combo="${1:-$DEFAULT_COMBO}"
+  echo "== Tier 2 FULL: $combo =="
+  bash "$TESTVM" --combo "$combo" 2>&1 | tee "$LOG"
+  local rc=${PIPESTATUS[0]}
+  echo ""
+  [ $rc -eq 0 ] && echo "== FULL PASS ($combo) ==" || echo "== FULL FAIL ($combo, rc=$rc) =="
+  return $rc
+}
+
+show_log() {
+  if [ ! -f "$LOG" ]; then
+    echo "No test log found ($LOG)"
+    return 0
+  fi
+  if [ -t 0 ] && command -v less >/dev/null; then
+    less "$LOG"
+  else
+    cat "$LOG"
+  fi
+}
+
+main_menu() {
+  while true; do
+    local choice
+    choice=$(gum choose \
+      "Tier 1: Logic tests (fast, ~2s)" \
+      "Tier 2: Smoke test (VM, ~60s)" \
+      "Tier 2: Full install test (VM, ~10min)" \
+      "Combo: Full install (pick combo)" \
+      "Show last test log" \
+      "Exit" \
+      --header "Test Jar — Installer Tests" \
+      --height 12) || true
+
+    case "$choice" in
+      "Tier 1: Logic tests (fast, ~2s)")
+        run_tier1 || true
+        ;;
+      "Tier 2: Smoke test (VM, ~60s)")
+        local c
+        c=$(pick_combo)
+        [ -z "$c" ] && continue
+        run_smoke "$c" || true
+        ;;
+      "Tier 2: Full install test (VM, ~10min)")
+        run_full "$DEFAULT_COMBO" || true
+        ;;
+      "Combo: Full install (pick combo)")
+        local c
+        c=$(pick_combo)
+        [ -z "$c" ] && continue
+        run_full "$c" || true
+        ;;
+      "Show last test log")
+        show_log
+        ;;
+      "Exit"|"")
+        echo "Goodbye!"
+        exit 0
+        ;;
+      *)
+        gum log --level warn "Unknown option: $choice"
+        ;;
+    esac
+
+    echo ""
+    if ! gum confirm "Run another test?"; then
+      echo "Goodbye!"
+      exit 0
+    fi
+  done
+}
+
+# ──[CLI passthrough: if any args, run directly without menu]
+main() {
+  check_deps
+
+  # Parse CLI args
+  local mode=""
+  local combo=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --tier1) mode="tier1" ;;
+      --smoke) mode="smoke" ;;
+      --full)  mode="full" ;;
+      --combo) combo="$2"; shift ;;
+      --log)   show_log; exit 0 ;;
+      -h|--help)
+        echo "usage: testjar [--tier1] [--smoke] [--full] [--combo NAME] [--log]"
+        echo ""
+        echo "  (no args)    — gum TUI menu"
+        echo "  --tier1      — run logic tests (fast)"
+        echo "  --smoke      — run smoke test (VM, ~60s)"
+        echo "  --full       — run full install test (VM, ~10min)"
+        echo "  --combo NAME — combo to use (default: $DEFAULT_COMBO)"
+        echo "  --log        — show last test log"
+        echo ""
+        echo "available combos: $COMBOS"
+        exit 0
+        ;;
+      *) die "unknown arg: $1" ;;
+    esac
+    shift
+  done
+
+  [ -n "$combo" ] && [ -z "$mode" ] && die "--combo requires --smoke or --full"
+
+  case "$mode" in
+    tier1) run_tier1; exit $? ;;
+    smoke) run_smoke "${combo:-$DEFAULT_COMBO}"; exit $? ;;
+    full)  run_full  "${combo:-$DEFAULT_COMBO}"; exit $? ;;
+    "")    main_menu ;;
+  esac
+}
+
+main "$@"
