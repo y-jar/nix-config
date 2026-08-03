@@ -106,6 +106,7 @@
       }; # end of nixosConfigurations
 
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt; # nix fmt
+      packages.x86_64-linux.iso = self.nixosConfigurations.iso.config.system.build.isoImage; # nix build .#iso
     }; # end of nixosConfigurations
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=[INPUTS]=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   inputs = {

@@ -48,6 +48,7 @@ let
     alias nhc="nh clean all --keep 7"
     alias nrs="nixos-rebuild switch --sudo --flake ~/nix-config#${hostnm}"
     alias nrt="nixos-rebuild test --sudo --flake ~/nix-config#${hostnm}"
+    alias buildiso="sh ~/nix-config/resjar/nixbin/buildiso.sh"
 
     # ==[app aliases]
     alias nv="nvim"

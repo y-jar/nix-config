@@ -52,6 +52,7 @@ in
         nhc = "nh clean all --keep 7"; # base cleanup
         nrs = "nixos-rebuild switch --sudo --flake ~/nix-config#${hostnm}"; # hard building
         nrt = "nixos-rebuild test --sudo --flake ~/nix-config#${hostnm}"; # testing
+        buildiso = "sh ~/nix-config/resjar/nixbin/buildiso.sh"; # build recovery ISO
         # ========[syst]
 
         # ========[app aliases]
