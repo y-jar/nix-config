@@ -79,7 +79,7 @@
       ai.enable = aiEnable; # sets AI tools like opencode, ollama
       git.enable = true; # sets git
       bluetooth.enable = true; # sets blueman in home packages
-      dev.enable = true; # sets dev tools and basic languages
+      dev.enable = false; # sets dev tools and basic languages
       # =========[management]^^^
       theming = {
         enable = true; # sets theme for gtk/qt
