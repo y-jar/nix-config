@@ -46,6 +46,7 @@ AUTO_SWAP_PART=""
 VERIFY_HOME=""
 VERIFY_SWAP=""
 VERIFY_SUBVOL=""
+VERIFY_HOME_CONFIG=""
 
 COMBOS="ext4-home ext4-flat ext4-home-swap btrfs-home btrfs-subvol btrfs-subvol-flat xfs-home gpt-btrfs-bios-home gpt-auto-btrfs-subvol-bios-home"
 
@@ -57,7 +58,7 @@ load_combo() {
       DISK_LAYOUT=$'label: dos\n,18G,L\n,,L\n'
       AUTO_FS=ext4;     AUTO_HOME=1; AUTO_SWAP=0; AUTO_SUBVOL=0
       AUTO_ROOT_PART=/dev/vda1; AUTO_HOME_PART=/dev/vda2; AUTO_SWAP_PART=""
-      VERIFY_HOME=1; VERIFY_SWAP=0; VERIFY_SUBVOL=0
+      VERIFY_HOME=1; VERIFY_SWAP=0; VERIFY_SUBVOL=0; VERIFY_HOME_CONFIG=1
       ;;
     ext4-flat)
       DISK_LAYOUT=$'label: dos\n,,L\n'
@@ -101,7 +102,7 @@ load_combo() {
       DISK_LAYOUT=$'label: gpt\n,1M,21686148-6449-6E6F-744E-656564454649\n,18G,L\n,,L\n'
       AUTO_FS=btrfs;    AUTO_HOME=1; AUTO_SWAP=0; AUTO_SUBVOL=0
       AUTO_ROOT_PART=/dev/vda2; AUTO_HOME_PART=/dev/vda3; AUTO_SWAP_PART=""
-      VERIFY_HOME=1; VERIFY_SWAP=0; VERIFY_SUBVOL=0
+      VERIFY_HOME=1; VERIFY_SWAP=0; VERIFY_SUBVOL=0; VERIFY_HOME_CONFIG=1
       ;;
     gpt-auto-btrfs-subvol-bios-home)
       # Blank disk — install.sh's auto_partition creates:
@@ -111,7 +112,7 @@ load_combo() {
       AUTO_FS=btrfs;    AUTO_HOME=1; AUTO_SWAP=0; AUTO_SUBVOL=1
       AUTO_PARTITION=1; AUTO_LABEL=gpt
       # partition paths are auto-set by auto_partition (exported)
-      VERIFY_HOME=1; VERIFY_SWAP=0; VERIFY_SUBVOL=1
+      VERIFY_HOME=1; VERIFY_SWAP=0; VERIFY_SUBVOL=1; VERIFY_HOME_CONFIG=1
       ;;
     *) die "unknown combo: $COMBO (available: $COMBOS)" ;;
   esac
@@ -184,6 +185,8 @@ EOF
     default = false;
     description = "Set true when this host runs in a VM (installjar uses the portable hardware config).";
   };
+  # informational marker for installjar's copy_config_to_home step (read by grep, not eval'd)
+  # mainUser = "test";
   config = {
     isInVM = true;
     boot.loader.grub.enable = true;
@@ -353,7 +356,7 @@ phase3_boot_verify() {
   local out
   for _ in $(seq 1 60); do
     if out=$(ssh "${SSH_OPTS[@]}" root@127.0.0.1 \
-        'hostname; lsblk -o NAME,SIZE,FSTYPE,MOUNTPOINT /dev/vda; df -h / /home /nix 2>/dev/null; swapon --show 2>/dev/null; systemctl is-system-running 2>/dev/null' 2>/dev/null); then
+        'hostname; lsblk -o NAME,SIZE,FSTYPE,MOUNTPOINT /dev/vda; df -h / /home /nix 2>/dev/null; swapon --show 2>/dev/null; systemctl is-system-running 2>/dev/null; test -f /home/test/nix-config/flake.nix && echo HCFG_OK' 2>/dev/null); then
       echo "$out"
       printf '%s\n' "$out" | grep -q tier2test || die "hostname mismatch"
       # Check root is mounted on some /dev/vd* partition (don't assume vda1 —
@@ -367,6 +370,9 @@ phase3_boot_verify() {
       fi
       if [ "$VERIFY_SWAP" = 1 ]; then
         printf '%s\n' "$out" | grep -q 'swap' || die "swap not active"
+      fi
+      if [ "$VERIFY_HOME_CONFIG" = 1 ]; then
+        printf '%s\n' "$out" | grep -q HCFG_OK || die "/home/test/nix-config/flake.nix missing (Step 11.5 copy_config_to_home failed)"
       fi
       echo "TIER2 PASS ($COMBO)"
       return 0

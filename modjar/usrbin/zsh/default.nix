@@ -67,6 +67,7 @@ in
         #[jar]
         jars = "git pull --rebase origin main";
         jnconf = "cd ~/nix-config"; # nix config jar [move over into nix config]
+        neconf = "cd /etc/nixos"; # nix config (system-installed mirror)
         jkconf = "cd ~/kilnjar"; # kiln jar [my dev / project folder]
         jkrconf = "cd ~/kilnjar/reposjar"; # kiln jar [my dev / project folder]
         # [hyprland]

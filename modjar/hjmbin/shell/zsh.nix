@@ -61,6 +61,7 @@ let
     # ==[util]
     alias jars="git pull --rebase origin main"
     alias jnconf="cd ~/nix-config"
+    alias neconf="cd /etc/nixos"
     alias jkconf="cd ~/kilnjar"
     alias jkrconf="cd ~/kilnjar/reposjar"
     alias hle="hyprctl configerrors"

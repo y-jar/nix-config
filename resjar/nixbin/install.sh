@@ -519,10 +519,17 @@ verify_boot_partition() {
 
     if [ "$mode" = "BIOS" ] && [ "$pttype" = "gpt" ]; then
         if ! sfdisk -l "$disk" 2>/dev/null | grep -qi 'BIOS boot'; then
-            gum log --level error "BIOS boot mode + GPT partition table detected, but no 'BIOS boot' partition found."
-            gum log --level error "GRUB on BIOS+GPT requires a 1M partition of type 'BIOS boot' (unformatted)."
-            gum log --level error "Without it, GRUB cannot install on GPT+btrfs (btrfs has no blocklist fallback)."
-            gum log --level error "Fix: sudo cfdisk $disk — add a 1M partition of type 'BIOS boot', then re-run."
+            # Detect the case where user created a 1M partition but didn't set its type
+            if sfdisk -l "$disk" 2>/dev/null | awk '/^\/dev\//' | grep -qE '\b1M\b'; then
+                gum log --level error "BIOS boot mode + GPT detected. A 1M partition exists but its TYPE is not 'BIOS boot'."
+                gum log --level error "GRUB on BIOS+GPT requires a 1M partition of type 'BIOS boot' (unformatted)."
+                gum log --level error "Fix: sudo cfdisk $disk → select the 1M partition → Type → 'BIOS boot' (or GUID 21686148-6449-6E6F-744E-656564454649), then re-run."
+            else
+                gum log --level error "BIOS boot mode + GPT partition table detected, but no 'BIOS boot' partition found."
+                gum log --level error "GRUB on BIOS+GPT requires a 1M partition of type 'BIOS boot' (unformatted)."
+                gum log --level error "Without it, GRUB cannot install on GPT+btrfs (btrfs has no blocklist fallback)."
+                gum log --level error "Fix: sudo cfdisk $disk — add a 1M partition of type 'BIOS boot', then re-run."
+            fi
             return 1
         fi
         gum log --level info "BIOS boot partition OK"
@@ -630,6 +637,55 @@ auto_partition() {
     gum log --level info "  root: $root_part_dev"
     [ -n "$home_part_dev" ] && gum log --level info "  home: $home_part_dev"
     [ -n "$swap_part_dev" ] && gum log --level info "  swap: $swap_part_dev"
+    return 0
+}
+
+# ──[copy $clone_dir → /mnt/home/$main_user/nix-config and chown]
+# Runs after nixos-install succeeds. Skips silently when main_user is unset or
+# home dir doesn't exist. Makes all `nhs`/`nht`/`nrs`/`nrt`/`nru` aliases work
+# on first boot (they hardcode ~/nix-config as the flake root).
+# Non-fatal: warns on failure rather than aborting iso_install (the system is
+# already installed; user can copy manually if needed).
+copy_config_to_home() {
+    local main_user="$1" clone_dir="$2"
+    [ "${INSTALLJAR_TEST_MODE:-0}" = "1" ] && return 0
+    if [ -z "$main_user" ]; then
+        gum log --level warn "No mainUser set — skipping ~/nix-config copy (config stays at $clone_dir)"
+        return 0
+    fi
+    local target="/mnt/home/$main_user/nix-config"
+    if [ ! -d "/mnt/home/$main_user" ]; then
+        gum log --level warn "Home dir /mnt/home/$main_user doesn't exist — skipping ~/nix-config copy"
+        return 0
+    fi
+    if [ ! -d "$clone_dir" ]; then
+        gum log --level warn "Source $clone_dir doesn't exist — skipping ~/nix-config copy"
+        return 0
+    fi
+    gum log --level info "Copying $clone_dir → /home/$main_user/nix-config (owned by $main_user)..."
+    run_privileged mkdir -p "$target"
+    if ! run_privileged cp -a "$clone_dir/." "$target/"; then
+        gum log --level warn "copy_config_to_home: cp failed (config remains at $clone_dir; user can copy manually)"
+        return 0
+    fi
+    # Force flush writes to disk so a hard VM kill doesn't lose the new files.
+    run_privileged sync
+    # chown via nixos-enter: the user only exists inside the new system, not on
+# the live ISO. Resolve numeric UID:GID inside the chroot with `id -u`/`id -g`
+# (works regardless of group config — isNormalUser uses group "users", not a
+# per-user group, so $main_user:$main_user would fail with "invalid group").
+# Non-fatal: even if chown fails, the files are copied.
+    local uid_gid
+    uid_gid=$(run_privileged nixos-enter --root /mnt -c "echo \$(id -u $main_user):\$(id -g $main_user)" 2>/dev/null | tr -dc '0-9:') || true
+    if [ -z "$uid_gid" ]; then
+        gum log --level warn "copy_config_to_home: could not resolve uid:gid for $main_user (files may be root-owned)"
+        return 0
+    fi
+    if ! run_privileged chown -R "$uid_gid" "$target"; then
+        gum log --level warn "copy_config_to_home: chown $uid_gid failed (files may be root-owned)"
+        return 0
+    fi
+    gum log --level info "Config copied to ~/nix-config (owned by $main_user)"
     return 0
 }
 
@@ -1074,7 +1130,7 @@ $guide"
     fi
 
     # ──────────────────────────────────────
-    # Step 10: Select host
+    # Step 10: Select host + action
     # ──────────────────────────────────────
     gum style --border normal --width 50 "Step 10: Select host"
 
@@ -1082,23 +1138,178 @@ $guide"
     hosts=$(find "$clone_dir/hstjar" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | \
         xargs -n1 basename | grep -v '^0_TEMPLATE$' | sort || true)
 
-    if [ -z "$hosts" ]; then
-        gum log --level error "No hosts found in hstjar/"
-        return 1
+    local host=""
+    local main_user=""
+    local action=""
+    local refresh_only=0
+
+    # Auto-mode: pick action via env var (default: existing)
+    if auto_val INSTALLJAR_AUTO_HOST_ACTION >/dev/null 2>&1; then
+        action=$(auto_val INSTALLJAR_AUTO_HOST_ACTION)
+        gum log --level info "Auto: host action: $action"
+    elif [ "${INSTALLJAR_AUTO:-0}" = "1" ]; then
+        action="existing"
+    else
+        action=$(gum choose \
+            "Pick existing host" \
+            "Scaffold a new host" \
+            "Refresh hardware-config for existing host" \
+            --header "Host action" --height 7)
     fi
 
-    local host
-    if auto_val INSTALLJAR_AUTO_HOST >/dev/null 2>&1; then
-        host=$(auto_val INSTALLJAR_AUTO_HOST)
-        gum log --level info "Auto: selected host: $host"
-    else
-        host=$(echo "$hosts" | fzf --header="Select a host configuration")
+    case "$action" in
+        "Scaffold a new host"|"new")
+            # ──────────────────────────────────────
+            # Sub-action: scaffold new host from 0_TEMPLATE
+            # ──────────────────────────────────────
+            local new_host=""
+            if auto_val INSTALLJAR_AUTO_NEW_HOST >/dev/null 2>&1; then
+                new_host=$(auto_val INSTALLJAR_AUTO_NEW_HOST)
+            else
+                new_host=$(gum input --prompt "New host name: " --placeholder "e.g. mylaptop")
+            fi
+            if [ -z "$new_host" ]; then
+                gum log --level error "No host name provided"
+                return 1
+            fi
+            if ! [[ "$new_host" =~ ^[a-z][a-z0-9-]*$ ]]; then
+                gum log --level error "Invalid host name '$new_host' (lowercase letters, digits, hyphens only)"
+                return 1
+            fi
+            [ "$new_host" != "0_TEMPLATE" ] || { gum log --level error "Reserved name 0_TEMPLATE"; return 1; }
+            if [ -d "$clone_dir/hstjar/$new_host" ]; then
+                gum log --level error "Host $new_host already exists in hstjar/"
+                return 1
+            fi
+
+            gum log --level info "Scaffolding $new_host from 0_TEMPLATE..."
+            cp -r "$clone_dir/hstjar/0_TEMPLATE" "$clone_dir/hstjar/$new_host"
+
+            # Register in flake.nix (uses marker; fallback to manual edit prompt)
+            local marker="# ===[INSTALLER: append new hosts on the line below]==="
+            if grep -qF "$marker" "$clone_dir/flake.nix"; then
+                sed -i "/$(printf '%s' "$marker" | sed 's/[[\.*^$(){}?+|/]/\\&/g')/i\\        $new_host = mkJar \"$new_host\"; # added by installer" \
+                    "$clone_dir/flake.nix"
+                gum log --level info "Registered $new_host in flake.nix"
+            else
+                gum log --level warn "Marker not found in flake.nix — manual addition needed"
+                gum log --level info "Add this line under nixosConfigurations in flake.nix:"
+                gum log --level info "  $new_host = mkJar \"$new_host\";"
+                gum confirm "Open flake.nix in \${EDITOR:-nano} to add manually?" && \
+                    run_privileged "${EDITOR:-nano}" "$clone_dir/flake.nix"
+            fi
+
+            # Prompt for primary username (used for placeholder replacement)
+            if auto_val INSTALLJAR_AUTO_MAIN_USER >/dev/null 2>&1; then
+                main_user=$(auto_val INSTALLJAR_AUTO_MAIN_USER)
+            else
+                main_user=$(gum input --prompt "Primary username: " --placeholder "e.g. jar")
+            fi
+            if [ -z "$main_user" ]; then
+                gum log --level error "Username required for new host"
+                return 1
+            fi
+
+            # Replace placeholders in new host's system.nix
+            local sys_file="$clone_dir/hstjar/$new_host/system.nix"
+            if [ -f "$sys_file" ]; then
+                sed -i "s/PLEASECHANGEME_USERNAME/$main_user/g" "$sys_file"
+                # stateVersion: detect from nixos-version, fallback to "26.05"
+                local sv
+                sv=$(nixos-version 2>/dev/null | cut -d. -f1-2 || echo "26.05")
+                [ -n "$sv" ] && sed -i "s/VersionNumber/$sv/" "$sys_file"
+                gum log --level info "Replaced placeholders in hstjar/$new_host/system.nix"
+            else
+                gum log --level warn "system.nix not found in new host dir — skipping placeholder replacement"
+            fi
+
+            # Git-add new files so flake eval sees them
+            ( cd "$clone_dir" && git add flake.nix "hstjar/$new_host" 2>/dev/null ) || true
+            gum log --level info "Scaffolded $new_host"
+
+            host="$new_host"
+            ;;
+        "Refresh hardware-config for existing host"|"refresh")
+            # ──────────────────────────────────────
+            # Sub-action: refresh hardware-config only on existing host
+            # ──────────────────────────────────────
+            if [ -z "$hosts" ]; then
+                gum log --level error "No hosts found in hstjar/ to refresh"
+                return 1
+            fi
+            if auto_val INSTALLJAR_AUTO_HOST >/dev/null 2>&1; then
+                host=$(auto_val INSTALLJAR_AUTO_HOST)
+                gum log --level info "Auto: selected host: $host"
+            else
+                host=$(echo "$hosts" | fzf --header="Pick host to refresh")
+            fi
+            if [ -z "$host" ]; then
+                gum log --level error "No host selected"
+                return 1
+            fi
+            if [ ! -d "$clone_dir/hstjar/$host" ]; then
+                gum log --level error "Host $host does not exist in hstjar/"
+                return 1
+            fi
+            gum log --level info "Selected host: $host (refresh-only)"
+
+            # gen hardware config (same logic as existing path below)
+            if grep -qP 'isInVM\s*=\s*true' "$clone_dir/hstjar/$host/system.nix" 2>/dev/null; then
+                gen_vm_hardware_config "$fs_type" "$use_subvolumes" "$separate_home" \
+                    "$boot_part" "$root_part" "$home_part" "$swap_part" \
+                    | run_privileged tee "$clone_dir/hstjar/$host/hardware-configuration.nix" >/dev/null
+            else
+                auto_spin "Generating hardware configuration..." -- \
+                    nixos-generate-config --root /mnt
+                run_privileged cp /mnt/etc/nixos/hardware-configuration.nix "$clone_dir/hstjar/$host/"
+            fi
+            ( cd "$clone_dir" && git add "hstjar/$host/hardware-configuration.nix" 2>/dev/null ) || true
+
+            # Extract main_user for the post-summary
+            main_user=$(grep -oP 'mainUser\s*=\s*"\K[^"]+' "$clone_dir/hstjar/$host/system.nix" 2>/dev/null | head -1 || true)
+
+            gum log --level info "Hardware config refreshed for $host"
+            gum style --border normal --width 50 "Refresh complete"
+            gum format -t code "Hardware config regenerated for: $host
+File: hstjar/$host/hardware-configuration.nix
+
+Next:
+  cd ~/nix-config && nhs   # deploy updated config"
+            # Sentinel: skip nixos-install + downstream steps
+            refresh_only=1
+            ;;
+        "Pick existing host"|"existing"|""|" ")
+            # ──────────────────────────────────────
+            # Sub-action: pick existing host (original path)
+            # ──────────────────────────────────────
+            if [ -z "$hosts" ]; then
+                gum log --level error "No hosts found in hstjar/"
+                return 1
+            fi
+            if auto_val INSTALLJAR_AUTO_HOST >/dev/null 2>&1; then
+                host=$(auto_val INSTALLJAR_AUTO_HOST)
+                gum log --level info "Auto: selected host: $host"
+            else
+                host=$(echo "$hosts" | fzf --header="Select a host configuration")
+            fi
+            if [ -z "$host" ]; then
+                gum log --level error "No host selected"
+                return 1
+            fi
+            gum log --level info "Selected host: $host"
+            # main_user read from system.nix (existing path — current behavior)
+            main_user=$(grep -oP 'mainUser\s*=\s*"\K[^"]+' "$clone_dir/hstjar/$host/system.nix" 2>/dev/null | head -1 || true)
+            ;;
+        *)
+            gum log --level error "Unknown action: $action"
+            return 1
+            ;;
+    esac
+
+    # Refresh-only path: abort before nixos-install
+    if [ "$refresh_only" = "1" ]; then
+        return 0
     fi
-    if [ -z "$host" ]; then
-        gum log --level error "No host selected"
-        return 1
-    fi
-    gum log --level info "Selected host: $host"
 
     if grep -qP 'isInVM\s*=\s*true' "$clone_dir/hstjar/$host/system.nix" 2>/dev/null; then
         gum log --level info "VM host detected ($host) — writing portable hardware config"
@@ -1139,14 +1350,17 @@ $guide"
     gum log --level info "NixOS installed successfully!"
 
     # ──────────────────────────────────────
+    # Step 11.5: Copy config to user home
+    # ──────────────────────────────────────
+    copy_config_to_home "$main_user" "$clone_dir"
+
+    # ──────────────────────────────────────
     # Step 12: Set passwords
     # ──────────────────────────────────────
     gum style --border normal --width 50 "Step 12: Set passwords"
 
     local root_pass=""
     local user_pass=""
-    local main_user=""
-    main_user=$(grep -oP 'mainUser\s*=\s*"\K[^"]+' "$clone_dir/hstjar/$host/system.nix" 2>/dev/null | head -1 || true)
 
     if auto_val INSTALLJAR_AUTO_ROOT_PASS >/dev/null 2>&1; then
         root_pass=$(auto_val INSTALLJAR_AUTO_ROOT_PASS)
@@ -1186,20 +1400,17 @@ $guide"
         "Host: $host" \
         "Disk: $target_disk"
 
-    gum style --border normal --width 50 "Step 13: Next steps"
+gum style --border normal --width 50 "Step 13: Next steps"
     gum format -t code '1. Remove the install media
 2. Reboot into the new system
 3. Login with your user
-4. Commit + push the cloned config:
-     cd /etc/nixos
-     git add -A
-     git commit -m "install: <host>"
-     git push
-5. Useful commands:
+4. Edit your config:
+     cd ~/nix-config
+     # edit hstjar/<host>/* files
      nht        # test config
      nhs        # deploy system
      jarhelp    # help menu
-6. Locked out? Boot the ISO and reset:
+5. Locked out? Boot the ISO and reset:
      nixos-enter --root /mnt -c "passwd"'
 
     if auto_confirm "Unmount and reboot now?" INSTALLJAR_AUTO_REBOOT; then

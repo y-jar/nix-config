@@ -71,6 +71,7 @@
         # ========[base 糸s]
         # TEMPLATE = mkJar "TEMPLATE";
 
+        # ===[INSTALLER: append new hosts on the line below]===
         loom = mkJar "loom"; # silly pc
         calender = mkJar "calender"; # main pc
         yilyonix = mkJar "yilyonix"; # test bench [Might need to FIX]

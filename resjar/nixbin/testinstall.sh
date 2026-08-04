@@ -97,15 +97,46 @@ chmod +x "$STUB_BIN/fzf"
 
 cat > "$STUB_BIN/git" <<'GIT'
 #!/usr/bin/env bash
-# git clone <url> <dir>  ->  fake repo with one VM host
-url="$2"; dir="$3"
-mkdir -p "$dir/hstjar/vmhost" "$dir/hstjar/0_TEMPLATE"
-printf '{\n  description = "test flake";\n}\n' > "$dir/flake.nix"
+# Handle git subcommands: only `clone` is meaningful; `add`/etc are no-ops
+case "$1" in
+  clone)
+    url="$2"; dir="$3"
+    mkdir -p "$dir/hstjar/vmhost" "$dir/hstjar/0_TEMPLATE"
+cat > "$dir/flake.nix" <<'FLAKE'
+{
+  outputs = { self, nixpkgs, ... }@inputs: {
+    nixosConfigurations = {
+        # TEMPLATE = mkJar "TEMPLATE";
+        # ===[INSTALLER: append new hosts on the line below]===
+        vmhost = nixpkgs.lib.nixosSystem { system = "x86_64-linux"; modules = [ ./hstjar/vmhost ]; };
+    };
+  };
+}
+FLAKE
 printf 'sysSettings.virt.isInVM = true;\nmainUser = "mainuser";\n' > "$dir/hstjar/vmhost/system.nix"
 printf '{}\n' > "$dir/hstjar/vmhost/home.nix"
 printf '{}\n' > "$dir/hstjar/vmhost/boot.nix"
 printf '{}\n' > "$dir/hstjar/0_TEMPLATE/default.nix"
+cat > "$dir/hstjar/0_TEMPLATE/system.nix" <<'TPL'
+{ config, lib, ... }: {
+  config = {
+    system.stateVersion = "VersionNumber";
+    sysSettings = {
+      mainUser = "PLEASECHANGEME_USERNAME";
+      users = [ "PLEASECHANGEME_USERNAME" ];
+    };
+  };
+}
+TPL
 printf 'git clone %s %s\n' "$url" "$dir" > "$STUB_DIR/git.log"
+    ;;
+  add|commit|status|diff|log|push|pull)
+    exit 0
+    ;;
+  *)
+    exit 0
+    ;;
+esac
 GIT
 chmod +x "$STUB_BIN/git"
 
@@ -147,6 +178,10 @@ for c in mkfs.fat mkfs.ext4 mkfs.btrfs mkfs.xfs mkswap mount umount btrfs swapon
 done
 printf '#!/usr/bin/env bash\nexit 1\n' > "$STUB_BIN/mountpoint"
 chmod +x "$STUB_BIN/mountpoint"
+
+# nixos-version stub (so do_new_host stateVersion detection doesn't crash)
+printf '#!/usr/bin/env bash\necho "26.05"\n' > "$STUB_BIN/nixos-version"
+chmod +x "$STUB_BIN/nixos-version"
 
 export PATH="$STUB_BIN:$PATH"
 export STUB_DIR
@@ -280,6 +315,49 @@ seed_iso() { # home_choice home_inputs
     rm -rf "$CLONE_DIR"
 }
 
+# seed_auto: sets up all INSTALLJAR_AUTO_* env vars for a non-interactive run.
+# Uses UEFI+ext4+separate-home (matching the lsblk_parts fixture vda1/vda2/vda3).
+# Caller must `unset Auto` before re-running to avoid env leakage.
+seed_auto() {
+    export INSTALLJAR_AUTO=1
+    export INSTALLJAR_AUTO_DISK=vda
+    export INSTALLJAR_AUTO_ERASE=1
+    export INSTALLJAR_AUTO_BOOT="$BOOT_MODE"
+    export INSTALLJAR_AUTO_FS=ext4
+    export INSTALLJAR_AUTO_HOME=1
+    export INSTALLJAR_AUTO_SWAP=0
+    export INSTALLJAR_AUTO_CFDISK=0
+    export INSTALLJAR_AUTO_READY=1
+    export INSTALLJAR_AUTO_FORMAT=1
+    export INSTALLJAR_AUTO_PROCEED=1
+    export INSTALLJAR_AUTO_REBOOT=0
+    export INSTALLJAR_AUTO_ROOT_PASS=rootpass123
+    export INSTALLJAR_AUTO_REPO=https://github.com/y-jar/nix-config.git
+    export INSTALLJAR_AUTO_BOOT_PART=/dev/vda1
+    export INSTALLJAR_AUTO_ROOT_PART=/dev/vda2
+    export INSTALLJAR_AUTO_HOME_PART=/dev/vda3
+    printf 'vda 40G disk\n' > "$STUB_DIR/lsblk_disks"
+    printf 'vda    40G\nvda1   512M\nvda2   39.5G\nvda3   2G\n' > "$STUB_DIR/lsblk_parts"
+    printf 'NAME   SIZE FSTYPE MOUNTPOINT\nvda    40G\nvda1   512M\nvda2   39.5G\nvda3   2G\n' > "$STUB_DIR/lsblk_display"
+    : > "$STUB_DIR/chpasswd.log"
+    : > "$STUB_DIR/nixos_install.log"
+    rm -rf "$CLONE_DIR"
+}
+
+# unset_auto: clears all AUTO env vars so subsequent tests run in interactive mode.
+unset_auto() {
+    unset INSTALLJAR_AUTO \
+          INSTALLJAR_AUTO_DISK INSTALLJAR_AUTO_ERASE INSTALLJAR_AUTO_BOOT \
+          INSTALLJAR_AUTO_FS INSTALLJAR_AUTO_HOME INSTALLJAR_AUTO_SWAP \
+          INSTALLJAR_AUTO_CFDISK INSTALLJAR_AUTO_READY INSTALLJAR_AUTO_FORMAT \
+          INSTALLJAR_AUTO_PROCEED INSTALLJAR_AUTO_REBOOT INSTALLJAR_AUTO_ROOT_PASS \
+          INSTALLJAR_AUTO_REPO INSTALLJAR_AUTO_BOOT_PART INSTALLJAR_AUTO_ROOT_PART \
+          INSTALLJAR_AUTO_HOME_PART INSTALLJAR_AUTO_SWAP_PART \
+          INSTALLJAR_AUTO_HOST_ACTION INSTALLJAR_AUTO_NEW_HOST \
+          INSTALLJAR_AUTO_MAIN_USER INSTALLJAR_AUTO_HOST \
+          INSTALLJAR_AUTO_SUBVOL INSTALLJAR_AUTO_SWAP_SIZE
+}
+
 # ---- run A: separate /home on vda3, empty user password -> fallback to root's
 seed_iso "/dev/vda3 | 2G" $'rootpass123\n'
 if out=$(iso_install 2>&1); then rc=0; else rc=$?; fi
@@ -305,6 +383,77 @@ else
     pass "no /home entry after None (skip) fallback"
 fi
 assert_contains 'mainuser:myuserpass' "$STUB_DIR/chpasswd.log" "explicit user password used when given"
+
+# ═══════════════════════════════════════════════════════════════
+echo "== new host action: scaffold + register flake =="
+(
+    seed_auto
+    export INSTALLJAR_AUTO_HOST_ACTION=new
+    export INSTALLJAR_AUTO_NEW_HOST=newtest
+    export INSTALLJAR_AUTO_MAIN_USER=newuser
+    iso_install 2>&1
+)
+
+# Test 1: scaffolding created new host dir from template
+if [ -d "$CLONE_DIR/hstjar/newtest" ]; then
+    pass "do_new_host: hstjar/newtest/ scaffolded from 0_TEMPLATE"
+else
+    fail "do_new_host: hstjar/newtest/ missing (scaffold failed)"
+fi
+assert_contains 'mainUser = "newuser"' "$CLONE_DIR/hstjar/newtest/system.nix" "do_new_host: PLEASECHANGEME_USERNAME replaced with newuser"
+assert_contains 'system.stateVersion = "26.05"' "$CLONE_DIR/hstjar/newtest/system.nix" "do_new_host: stateVersion replaced (VersionNumber -> 26.05)"
+assert_contains 'newtest = mkJar "newtest"' "$CLONE_DIR/flake.nix" "do_new_host: host registered in flake.nix after marker line"
+assert_contains '--show-trace' "$STUB_DIR/nixos_install.log" "do_new_host: nixos-install runs (auto-proceed past Step 11)"
+
+# ═══════════════════════════════════════════════════════════════
+echo "== refresh action: regen hardware-config, skip nixos-install =="
+(
+    seed_auto
+    export INSTALLJAR_AUTO_HOST_ACTION=refresh
+    export INSTALLJAR_AUTO_HOST=vmhost
+    # Stale hardware config to be overwritten
+    printf '# STALE\n{ ... }: { }\n' > "$CLONE_DIR/hstjar/vmhost/hardware-configuration.nix"
+    out=$(iso_install 2>&1) || true
+    printf '%s' "$out" > "$STUB_DIR/refresh_out.log"
+)
+assert_contains 'device = "/dev/vda2"' "$CLONE_DIR/hstjar/vmhost/hardware-configuration.nix" "do_refresh_hw: refreshed hardware config has new root device"
+
+# Test 1: hardware-config refreshed (should NOT contain "# STALE")
+if grep -q 'STALE' "$CLONE_DIR/hstjar/vmhost/hardware-configuration.nix" 2>/dev/null; then
+    fail "do_refresh_hw: hardware-configuration.nix still contains STALE marker"
+else
+    pass "do_refresh_hw: hardware-configuration.nix overwritten with fresh content"
+fi
+
+# Test 2: nixos-install was NOT called (refresh-only path aborts before Step 11)
+if [ -s "$STUB_DIR/nixos_install.log" ]; then
+    fail "do_refresh_hw: nixos-install was called (should abort before Step 11)"
+else
+    pass "do_refresh_hw: nixos-install NOT called (refresh-only aborts before Step 11)"
+fi
+assert_contains 'Hardware config refreshed for vmhost' "$STUB_DIR/refresh_out.log" "do_refresh_hw: prints refresh-complete summary"
+
+# ═══════════════════════════════════════════════════════════════
+echo "== new_host_action: validates bad host names =="
+(
+    seed_auto
+    export INSTALLJAR_AUTO_HOST_ACTION=new
+    export INSTALLJAR_AUTO_NEW_HOST=BadName
+    export INSTALLJAR_AUTO_MAIN_USER=user
+    out=$(iso_install 2>&1) || true
+    printf '%s' "$out" > "$STUB_DIR/badhost_out.log"
+)
+assert_contains 'Invalid host name' "$STUB_DIR/badhost_out.log" "do_new_host: rejects uppercase with Invalid host name error"
+
+# ═══════════════════════════════════════════════════════════════
+echo "== existing action (auto): picks existing host via INSTALLJAR_AUTO_HOST =="
+(
+    seed_auto
+    export INSTALLJAR_AUTO_HOST_ACTION=existing
+    export INSTALLJAR_AUTO_HOST=vmhost
+    iso_install 2>&1
+)
+assert_contains '--show-trace' "$STUB_DIR/nixos_install.log" "existing-action still runs nixos-install"
 
 # ═══════════════════════════════════════════════════════════════
 echo "== install.sh TEST-MODE guard: run_privileged =="
