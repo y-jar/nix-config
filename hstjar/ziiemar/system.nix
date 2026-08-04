@@ -52,7 +52,10 @@
       # NOTE: tlp and powerprofiles are mutually exclusive, pick one
       tlp.enable = true;
       tlp.startChargeThreshold = 0;
-      tlp.stopChargeThreshold = 80;
+      tlp.stopChargeThreshold = 80; # no hard cap on HP consumer; BIOS "Adaptive Battery Optimizer" is adaptive
+      tlp.cpuEppOnBattery = "power"; # max battery savings (balance_power = default)
+      tlp.platformProfileOnBattery = "low-power"; # (cool|quiet|balanced|performance)
+      tlp.pcieAspmOnBattery = "powersave"; # deeper PCIe idle states
       # powerprofiles.enable = true;
       audio = {
         enable = true; # sets audio and adds some apps

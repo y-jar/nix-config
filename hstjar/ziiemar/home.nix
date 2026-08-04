@@ -87,5 +87,39 @@
       };
     }; # end of usrSettings
 
+    # Drop the OLED panel to 48Hz on battery, 120Hz on AC, to save power.
+    systemd.user.services.niri-refresh-on-battery = {
+      Unit = {
+        Description = "Switch niri eDP-1 refresh rate based on power source";
+        After = [ "graphical-session.target" ];
+      };
+      Service = {
+        Type = "simple";
+        Environment = [ "WAYLAND_DISPLAY=wayland-1" ];
+        ExecStart = "${pkgs.writeShellScriptBin "niri-refresh-on-battery" ''
+          set -eu
+          last=""
+          while :; do
+            ac=$(cat /sys/class/power_supply/AC/online 2>/dev/null || echo 0)
+            if [ "$ac" = "0" ]; then
+              mode="2880x1800@48.001"
+            else
+              mode="2880x1800@120.001"
+            fi
+            if [ "$mode" != "$last" ]; then
+              niri msg output eDP-1 mode "$mode" 2>/dev/null || true
+              last="$mode"
+            fi
+            sleep 10
+          done
+        ''}/bin/niri-refresh-on-battery";
+        Restart = "on-failure";
+        RestartSec = 10;
+      };
+      Install = {
+        WantedBy = [ "graphical-session.target" ];
+      };
+    };
+
   }; # end of config
 }
