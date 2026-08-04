@@ -107,10 +107,33 @@
             })
           ]; # End of modules
         }; # End of iso
+
+        # ========[ISO / recovery - graphical GNOME]
+        iso-gnome = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-graphical-gnome.nix"
+            ({ pkgs, lib, ... }: {
+              environment.systemPackages = with pkgs; [
+                git vim nh fastfetch neovim
+                gum fzf
+                (pkgs.writeShellScriptBin "jarhelp" (builtins.readFile ./resjar/nixbin/jarhelp))
+                (pkgs.writeShellScriptBin "installjar" (builtins.readFile ./resjar/nixbin/install.sh))
+              ];
+              networking.hostName = "recovery";
+              services.openssh.enable = true;
+              boot.zfs.forceImportRoot = false; # recommended; silence zfs warning
+              users.users.root.initialHashedPassword = lib.mkForce null; # silence pw warning; "nixos" still wins
+              users.users.root.initialPassword = "nixos";
+              system.stateVersion = "26.05";
+            })
+          ]; # End of modules
+        }; # End of iso-gnome
       }; # end of nixosConfigurations
 
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt; # nix fmt
       packages.x86_64-linux.iso = self.nixosConfigurations.iso.config.system.build.isoImage; # nix build .#iso
+      packages.x86_64-linux.iso-gnome = self.nixosConfigurations.iso-gnome.config.system.build.isoImage; # nix build .#iso-gnome
     }; # end of nixosConfigurations
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=[INPUTS]=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   inputs = {

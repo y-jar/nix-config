@@ -1128,18 +1128,36 @@ $guide"
                 return 1
             fi
         else
-            if gum confirm "Open iwd for Wi-Fi setup?"; then
-                if command -v iwctl &>/dev/null; then
-                    run_privileged iwctl
-                else
-                    gum log --level warn "iwctl not available"
+            # Build a menu of available network tools
+            local net_options=""
+            command -v nmtui &>/dev/null && net_options+="Open nmtui (NetworkManager)"$'\n'
+            command -v iwctl  &>/dev/null && net_options+="Open iwctl (iwd)"$'\n'
+            net_options+="Continue offline"$'\n'
+            net_options+="Cancel install"$'\n'
+
+            while true; do
+                local net_choice
+                net_choice=$(printf '%b' "${net_options%$'\n'}" | gum choose --header "No network — pick a tool to connect" --height 8)
+                [ -z "$net_choice" ] && net_choice="Cancel install"
+
+                case "$net_choice" in
+                    "Open nmtui"*)
+                        run_privileged nmtui ;;
+                    "Open iwctl"*)
+                        run_privileged iwctl ;;
+                    "Continue offline")
+                        break ;;
+                    "Cancel install")
+                        gum log --level info "Cancelled"
+                        return 0 ;;
+                esac
+
+                if ping -c 1 1.1.1.1 &>/dev/null; then
+                    gum log --level info "Network OK"
+                    break
                 fi
-            fi
-            if ! ping -c 1 1.1.1.1 &>/dev/null; then
-                if ! gum confirm "Still offline. Continue anyway? (nixos-install needs network)"; then
-                    return 1
-                fi
-            fi
+                gum log --level warn "Still offline"
+            done
         fi
     else
         gum log --level info "Network OK"
@@ -1180,6 +1198,9 @@ $guide"
         return 1
     fi
 
+    # Ensure the nixos user can access the repo (clone may have been done as root)
+    run_privileged chown -R "$(id -u):$(id -g)" "$clone_dir" 2>/dev/null || true
+
     # ──────────────────────────────────────
     # Step 10: Select host + action
     # ──────────────────────────────────────
@@ -1193,6 +1214,7 @@ $guide"
     local main_user=""
     local action=""
     local refresh_only=0
+    local hw_config_done=0
 
     # Auto-mode: pick action via env var (default: existing)
     if auto_val INSTALLJAR_AUTO_HOST_ACTION >/dev/null 2>&1; then
@@ -1316,8 +1338,14 @@ $guide"
                     | run_privileged tee "$clone_dir/hstjar/$host/hardware-configuration.nix" >/dev/null
             else
                 auto_spin "Generating hardware configuration..." -- \
-                    nixos-generate-config --root /mnt
-                run_privileged cp /mnt/etc/nixos/hardware-configuration.nix "$clone_dir/hstjar/$host/"
+                    run_privileged nixos-generate-config --root /mnt
+                local hw_cfg="/mnt/etc/nixos/hardware-configuration.nix"
+                if [ ! -f "$hw_cfg" ]; then
+                    gum log --level error "nixos-generate-config did not produce $hw_cfg"
+                    gum log --level error "This usually means /mnt is not mounted or permissions are wrong."
+                    return 1
+                fi
+                run_privileged cp "$hw_cfg" "$clone_dir/hstjar/$host/"
             fi
             ( cd "$clone_dir" && git add "hstjar/$host/hardware-configuration.nix" 2>/dev/null ) || true
 
@@ -1327,12 +1355,23 @@ $guide"
             gum log --level info "Hardware config refreshed for $host"
             gum style --border normal --width 50 "Refresh complete"
             gum format -t code "Hardware config regenerated for: $host
-File: hstjar/$host/hardware-configuration.nix
+File: hstjar/$host/hardware-configuration.nix"
 
-Next:
-  cd ~/nix-config && nhs   # deploy updated config"
-            # Sentinel: skip nixos-install + downstream steps
-            refresh_only=1
+            # Ask whether to continue to nixos-install or stop here
+            if [ "${INSTALLJAR_AUTO:-0}" = "1" ]; then
+                if [ "${INSTALLJAR_AUTO_REFRESH_INSTALL:-0}" = "1" ]; then
+                    gum log --level info "Auto: continuing to nixos-install after refresh"
+                    hw_config_done=1
+                else
+                    refresh_only=1
+                fi
+            else
+                if gum confirm "Continue to install NixOS with updated config?"; then
+                    hw_config_done=1
+                else
+                    refresh_only=1
+                fi
+            fi
             ;;
         "Pick existing host"|"existing"|""|" ")
             # ──────────────────────────────────────
@@ -1367,20 +1406,26 @@ Next:
         return 0
     fi
 
-    if grep -qP 'isInVM\s*=\s*true' "$clone_dir/hstjar/$host/system.nix" 2>/dev/null; then
-        gum log --level info "VM host detected ($host) — writing portable hardware config"
-        gen_vm_hardware_config "$fs_type" "$use_subvolumes" "$separate_home" \
-            "$boot_part" "$root_part" "$home_part" "$swap_part" "$boot_mode" \
-            | run_privileged tee "$clone_dir/hstjar/$host/hardware-configuration.nix" >/dev/null
-    else
-        auto_spin "Generating hardware configuration..." -- \
-            nixos-generate-config --root /mnt
-        run_privileged cp /mnt/etc/nixos/hardware-configuration.nix "$clone_dir/hstjar/$host/"
+    # Generate hardware config (skip if refresh already did it inline)
+    if [ "$hw_config_done" != "1" ]; then
+        if grep -qP 'isInVM\s*=\s*true' "$clone_dir/hstjar/$host/system.nix" 2>/dev/null; then
+            gum log --level info "VM host detected ($host) — writing portable hardware config"
+            gen_vm_hardware_config "$fs_type" "$use_subvolumes" "$separate_home" \
+                "$boot_part" "$root_part" "$home_part" "$swap_part" "$boot_mode" \
+                | run_privileged tee "$clone_dir/hstjar/$host/hardware-configuration.nix" >/dev/null
+        else
+            auto_spin "Generating hardware configuration..." -- \
+                run_privileged nixos-generate-config --root /mnt
+            local hw_cfg="/mnt/etc/nixos/hardware-configuration.nix"
+            if [ ! -f "$hw_cfg" ]; then
+                gum log --level error "nixos-generate-config did not produce $hw_cfg"
+                gum log --level error "This usually means /mnt is not mounted or permissions are wrong."
+                return 1
+            fi
+            run_privileged cp "$hw_cfg" "$clone_dir/hstjar/$host/"
+        fi
+        gum log --level info "Hardware config written for $host"
     fi
-    gum log --level info "Hardware config written for $host"
-
-    # Ensure nixos-install (runs as root via run_privileged) can access the repo
-    run_privileged chown -R "$(id -u):$(id -g)" "$clone_dir" 2>/dev/null || true
 
     # ──────────────────────────────────────
     # Step 11: nixos-install
