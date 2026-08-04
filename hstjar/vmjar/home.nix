@@ -52,8 +52,8 @@
       # =========[appstream]
       browsers = {
         enable = true; # sets firefox and librewolf [work and personal]
-        firefox = false; # disables firefox [work]
-        librewolf = true; # enables librewolf [personal]
+        firefox = true; # disables firefox [work]
+        librewolf = false; # enables librewolf [personal]
       };
       terminal.enable = true; # sets terminal as foot
       terminal.font = "IntoneMono Nerd Font"; # options: "IntoneMono Nerd Font" "Monocraft" "Miracode"

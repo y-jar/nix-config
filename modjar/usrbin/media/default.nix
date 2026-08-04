@@ -40,7 +40,6 @@ in
       # [other]
       ffmpeg #
       yt-dlp # Feature-rich command-line audio/video downloader
-      ytdownloader # Modern GUI video and audio downloader: [please don't use this for pirating, be kind]: requested from a sibling
     ]; # end of packages
   }; # enf of config
 }
