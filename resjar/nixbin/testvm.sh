@@ -48,7 +48,7 @@ VERIFY_SWAP=""
 VERIFY_SUBVOL=""
 VERIFY_HOME_CONFIG=""
 
-COMBOS="ext4-home ext4-flat ext4-home-swap btrfs-home btrfs-subvol btrfs-subvol-flat xfs-home gpt-btrfs-bios-home gpt-auto-btrfs-subvol-bios-home"
+COMBOS="ext4-home ext4-flat ext4-home-swap btrfs-home btrfs-subvol btrfs-subvol-flat xfs-home gpt-btrfs-bios-home gpt-auto-btrfs-subvol-bios-home newhost refresh"
 
 die() { echo "FAIL: $*" >&2; exit 1; }
 
@@ -114,6 +114,20 @@ load_combo() {
       # partition paths are auto-set by auto_partition (exported)
       VERIFY_HOME=1; VERIFY_SWAP=0; VERIFY_SUBVOL=1; VERIFY_HOME_CONFIG=1
       ;;
+    newhost)
+      DISK_LAYOUT=$'label: dos\n,18G,L\n,,L\n'
+      AUTO_FS=ext4;     AUTO_HOME=1; AUTO_SWAP=0; AUTO_SUBVOL=0
+      AUTO_ROOT_PART=/dev/vda1; AUTO_HOME_PART=/dev/vda2; AUTO_SWAP_PART=""
+      VERIFY_HOME=1; VERIFY_SWAP=0; VERIFY_SUBVOL=0; VERIFY_HOME_CONFIG=1
+      ;;
+    refresh)
+      # Pre-partitioned ext4 + home; install.sh regenerates hardware-config
+      # for tier2test (refresh path), then aborts before nixos-install.
+      DISK_LAYOUT=$'label: dos\n,18G,L\n,,L\n'
+      AUTO_FS=ext4;     AUTO_HOME=1; AUTO_SWAP=0; AUTO_SUBVOL=0
+      AUTO_ROOT_PART=/dev/vda1; AUTO_HOME_PART=/dev/vda2; AUTO_SWAP_PART=""
+      VERIFY_HOME=1; VERIFY_SWAP=0; VERIFY_SUBVOL=0; VERIFY_HOME_CONFIG=0
+      ;;
     *) die "unknown combo: $COMBO (available: $COMBOS)" ;;
   esac
 }
@@ -171,13 +185,102 @@ gen_key() {
 }
 
 gen_overlay() {
-  echo "== generating guest overlay (tier2test host) =="
-  local d="$TEST_ROOT/overlay/hstjar/tier2test"
-  mkdir -p "$d"
-  cat > "$d/default.nix" <<'EOF'
+  case "$COMBO" in
+    newhost)
+      echo "== generating overlay (minimal 0_TEMPLATE for newhost scaffolding) =="
+      # Overlay 0_TEMPLATE with minimal system.nix + home.nix so nixos-install
+      # fits in 20G. Without this, 0_TEMPLATE/home.nix defaults (browsers ~500mib,
+      # editors ~600mib, media ~200mib, dev ~1.5gib, theming, nautilus, yazi)
+      # exceed the disk. Also disable gdm (defaults true in modjar/sysbin/gdm).
+      local d="$TEST_ROOT/overlay/hstjar/0_TEMPLATE"
+      mkdir -p "$d"
+      cat > "$d/default.nix" <<'EOF'
 { ... }: { imports = [ ./system.nix ./hardware-configuration.nix ]; }
 EOF
-  cat > "$d/system.nix" <<EOF
+      cat > "$d/system.nix" <<EOF
+{ config, lib, pkgs, ... }:
+{
+  options.isInVM = lib.mkOption {
+    type = lib.types.bool;
+    default = false;
+    description = "Set true when this host runs in a VM (installjar uses the portable hardware config).";
+  };
+  config = {
+    isInVM = true;
+    system.stateVersion = "VersionNumber";
+    sysSettings = {
+      mainUser = "PLEASECHANGEME_USERNAME";
+      users = [ "PLEASECHANGEME_USERNAME" ];
+      adminUsers = [ "PLEASECHANGEME_USERNAME" ];
+      userDescriptions = {
+        PLEASECHANGEME_USERNAME = "test";
+      };
+      gnome.enable = false;
+      gdm.enable = false;
+      hyprland.enable = false;
+      niri.enable = false;
+      cinnamon.enable = false;
+      cosmic.enable = false;
+      gaming.drivers.enable = false;
+      gaming.steam.enable = false;
+      audio.enable = false;
+      bluetooth.enable = false;
+      virt.isInVM = true;
+      server.webjar.enable = false;
+      neverSleep.enable = false;
+      localsend.enable = false;
+      flatpak.enable = false;
+      ai.enable = false;
+      UseNixPkgsYoinks.enable = false;
+      nvidia.enable = false;
+      tlp.enable = false;
+      powerprofiles.enable = false;
+      automount.enable = false;
+    };
+boot.loader.grub.enable = true;
+    boot.loader.grub.device = "/dev/vda";
+    boot.loader.grub.useOSProber = false;
+    networking.hostName = "newhost";
+    networking.networkmanager.enable = true;
+    systemd.services."serial-getty@ttyS0".enable = true;
+    services.getty.autologinUser = "test";
+    users.users.test = {
+      isNormalUser = true;
+      password = "installjar-test";
+      extraGroups = [ "wheel" "networkmanager" ];
+      openssh.authorizedKeys.keys = [ "$PUBKEY" ];
+    };
+    users.users.root.openssh.authorizedKeys.keys = [ "$PUBKEY" ];
+    services.openssh.enable = true;
+    services.openssh.settings.PasswordAuthentication = true;
+    services.openssh.settings.PermitRootLogin = "yes";
+    environment.systemPackages = with pkgs; [ vim ];
+  };
+}
+EOF
+      cat > "$d/hardware-configuration.nix" <<'EOF'
+{ config, lib, pkgs, modulesPath, ... }:
+{
+  imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
+  boot.initrd.availableKernelModules = [ "virtio_pci" "virtio_blk" "virtio_net" "ahci" "ata_piix" ];
+  boot.initrd.kernelModules = [ ];
+  boot.kernelModules = [ ];
+  boot.extraModulePackages = [ ];
+  fileSystems."/" = { device = "/dev/vda1"; fsType = "ext4"; };
+  fileSystems."/home" = { device = "/dev/vda2"; fsType = "ext4"; };
+  swapDevices = [ ];
+}
+EOF
+      cp "$REPO/flake.nix" "$TEST_ROOT/flake.patched.nix"
+      ;;
+    refresh)
+      echo "== generating overlay (tier2test with STALE hardware config) =="
+      local d="$TEST_ROOT/overlay/hstjar/tier2test"
+      mkdir -p "$d"
+      cat > "$d/default.nix" <<'EOF'
+{ ... }: { imports = [ ./system.nix ./hardware-configuration.nix ]; }
+EOF
+      cat > "$d/system.nix" <<EOF
 { config, lib, pkgs, ... }:
 {
   options.isInVM = lib.mkOption {
@@ -211,7 +314,56 @@ EOF
   };
 }
 EOF
-  cat > "$d/hardware-configuration.nix" <<'EOF'
+      # STALE hardware-configuration.nix (install.sh's refresh path will overwrite)
+      cat > "$d/hardware-configuration.nix" <<'EOF'
+# STALE — install.sh refresh should overwrite this
+{ ... }: { }
+EOF
+      cp "$REPO/flake.nix" "$TEST_ROOT/flake.patched.nix"
+      sed -i '/vmjar = mkJar "vmjar";/a\        tier2test = nixpkgs.lib.nixosSystem { system = "x86_64-linux"; modules = [ ./hstjar/tier2test ]; };' "$TEST_ROOT/flake.patched.nix"
+      ;;
+    *)
+      echo "== generating guest overlay (tier2test host) =="
+      local d="$TEST_ROOT/overlay/hstjar/tier2test"
+      mkdir -p "$d"
+      cat > "$d/default.nix" <<'EOF'
+{ ... }: { imports = [ ./system.nix ./hardware-configuration.nix ]; }
+EOF
+      cat > "$d/system.nix" <<EOF
+{ config, lib, pkgs, ... }:
+{
+  options.isInVM = lib.mkOption {
+    type = lib.types.bool;
+    default = false;
+    description = "Set true when this host runs in a VM (installjar uses the portable hardware config).";
+  };
+  # informational marker for installjar's copy_config_to_home step (read by grep, not eval'd)
+  # mainUser = "test";
+  config = {
+    isInVM = true;
+    boot.loader.grub.enable = true;
+    boot.loader.grub.device = "/dev/vda";
+    boot.loader.grub.useOSProber = false;
+    networking.hostName = "tier2test";
+    networking.networkmanager.enable = true;
+    systemd.services."serial-getty@ttyS0".enable = true;
+    services.getty.autologinUser = "test";
+    users.users.test = {
+      isNormalUser = true;
+      password = "installjar-test";
+      extraGroups = [ "wheel" "networkmanager" ];
+      openssh.authorizedKeys.keys = [ "$PUBKEY" ];
+    };
+    users.users.root.openssh.authorizedKeys.keys = [ "$PUBKEY" ];
+    services.openssh.enable = true;
+    services.openssh.settings.PasswordAuthentication = true;
+    services.openssh.settings.PermitRootLogin = "yes";
+    environment.systemPackages = with pkgs; [ vim ];
+    system.stateVersion = "26.05";
+  };
+}
+EOF
+      cat > "$d/hardware-configuration.nix" <<'EOF'
 { config, lib, pkgs, modulesPath, ... }:
 {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
@@ -224,8 +376,10 @@ EOF
   swapDevices = [ ];
 }
 EOF
-  cp "$REPO/flake.nix" "$TEST_ROOT/flake.patched.nix"
-  sed -i '/vmjar = mkJar "vmjar";/a\        tier2test = nixpkgs.lib.nixosSystem { system = "x86_64-linux"; modules = [ ./hstjar/tier2test ]; };' "$TEST_ROOT/flake.patched.nix"
+      cp "$REPO/flake.nix" "$TEST_ROOT/flake.patched.nix"
+      sed -i '/vmjar = mkJar "vmjar";/a\        tier2test = nixpkgs.lib.nixosSystem { system = "x86_64-linux"; modules = [ ./hstjar/tier2test ]; };' "$TEST_ROOT/flake.patched.nix"
+      ;;
+  esac
 }
 
 gen_provision_drv() {
@@ -285,15 +439,16 @@ push_tree() {
   [ $? = 0 ] || { set -e; die "flake scp failed"; }
   set -e
   local v
+  local verify_host="tier2test"
+  [ "$COMBO" = "newhost" ] && verify_host="0_TEMPLATE"
   v=$(timeout 30 ssh "${SSH_OPTS[@]}" nixos@127.0.0.1 \
-    'test -f /tmp/tree/flake.nix && test -f /tmp/tree/flake.lock && test -d /tmp/tree/hstjar/tier2test && grep -q tier2test /tmp/tree/flake.nix && echo PUSH_OK' 2>/dev/null) \
+    "test -f /tmp/tree/flake.nix && test -f /tmp/tree/flake.lock && test -d /tmp/tree/hstjar/$verify_host && grep -q 'INSTALLER: append new hosts' /tmp/tree/flake.nix && echo PUSH_OK" 2>/dev/null) \
     || die "push_tree verify cmd failed"
   printf '%s\n' "$v" | grep -q PUSH_OK || die "push_tree verification failed (flake/overlay not in place)"
 }
 
 phase_install() {
   echo "== phase 2: run install.sh (auto-mode via SSH, combo: $COMBO) =="
-
   local proceed="1"
   [ "$SMOKE" -eq 1 ] && proceed="0"
 
@@ -317,10 +472,33 @@ phase_install() {
   auto_env+=" INSTALLJAR_AUTO_UNMOUNT=1"
   auto_env+=" INSTALLJAR_AUTO_NETWORK_CONTINUE=1"
   auto_env+=" INSTALLJAR_AUTO_REPO="
-  auto_env+=" INSTALLJAR_AUTO_HOST=tier2test"
-  auto_env+=" INSTALLJAR_AUTO_PROCEED=$proceed"
-  auto_env+=" INSTALLJAR_AUTO_ROOT_PASS="
-  auto_env+=" INSTALLJAR_AUTO_REBOOT=0"
+
+  # Combo-specific host-action env vars
+  case "$COMBO" in
+    newhost)
+      auto_env+=" INSTALLJAR_AUTO_HOST_ACTION=new"
+      auto_env+=" INSTALLJAR_AUTO_NEW_HOST=newhost"
+      auto_env+=" INSTALLJAR_AUTO_MAIN_USER=test"
+      ;;
+    refresh)
+      auto_env+=" INSTALLJAR_AUTO_HOST_ACTION=refresh"
+      auto_env+=" INSTALLJAR_AUTO_HOST=tier2test"
+      auto_env+=" INSTALLJAR_AUTO_PROCEED=$proceed"
+      auto_env+=" INSTALLJAR_AUTO_REBOOT=0"
+      ;;
+    *)
+      auto_env+=" INSTALLJAR_AUTO_HOST=tier2test"
+      auto_env+=" INSTALLJAR_AUTO_PROCEED=$proceed"
+      auto_env+=" INSTALLJAR_AUTO_ROOT_PASS="
+      auto_env+=" INSTALLJAR_AUTO_REBOOT=0"
+      ;;
+  esac
+
+  [ "$COMBO" != "refresh" ] && {
+    auto_env+=" INSTALLJAR_AUTO_PROCEED=$proceed"
+    auto_env+=" INSTALLJAR_AUTO_ROOT_PASS="
+    auto_env+=" INSTALLJAR_AUTO_REBOOT=0"
+  }
 
   set +e
   timeout $([ "$SMOKE" -eq 1 ] && echo 120 || echo 5400) \
@@ -338,8 +516,21 @@ phase_install() {
     return 0
   fi
 
-  grep -q 'NixOS installed successfully' "$TEST_ROOT/install.log" || \
-    die "install did not report success (see $TEST_ROOT/install.log)"
+  case "$COMBO" in
+    refresh)
+      # Refresh path: no nixos-install, just hardware-config regen
+      grep -q 'Hardware config refreshed' "$TEST_ROOT/install.log" ||
+        die "refresh: 'Hardware config refreshed' not in log (see $TEST_ROOT/install.log)"
+      grep -q 'NixOS installed successfully' "$TEST_ROOT/install.log" &&
+        die "refresh: nixos-install was called (should abort before Step 11)"
+      echo "== REFRESH OK: hardware-config regenerated, no nixos-install =="
+      return 0
+      ;;
+    *)
+      grep -q 'NixOS installed successfully' "$TEST_ROOT/install.log" || \
+        die "install did not report success (see $TEST_ROOT/install.log)"
+      ;;
+  esac
 }
 
 phase3_boot_verify() {
@@ -354,11 +545,13 @@ phase3_boot_verify() {
     2>"$TEST_ROOT/qemu3.err" &
   trap kill_vm EXIT
   local out
+  local expect_host="tier2test"
+  [ "$COMBO" = "newhost" ] && expect_host="newhost"
   for _ in $(seq 1 60); do
     if out=$(ssh "${SSH_OPTS[@]}" root@127.0.0.1 \
         'hostname; lsblk -o NAME,SIZE,FSTYPE,MOUNTPOINT /dev/vda; df -h / /home /nix 2>/dev/null; swapon --show 2>/dev/null; systemctl is-system-running 2>/dev/null; test -f /home/test/nix-config/flake.nix && echo HCFG_OK' 2>/dev/null); then
       echo "$out"
-      printf '%s\n' "$out" | grep -q tier2test || die "hostname mismatch"
+      printf '%s\n' "$out" | grep -q "$expect_host" || die "hostname mismatch (expected $expect_host)"
       # Check root is mounted on some /dev/vd* partition (don't assume vda1 —
       # GPT combos put BIOS boot or ESP on vda1 and root on vda2).
       printf '%s\n' "$out" | grep -qE '^/dev/vd[a-z0-9]+ +[0-9]+.* +[0-9]+% +/$' || die "root / not mounted"
@@ -426,6 +619,12 @@ main() {
   push_tree
   phase_install
   if [ "$SMOKE" -eq 1 ]; then kill_vm; trap - EXIT; exit 0; fi
+  # Refresh combo: no nixos-install, no disk boot — just verify logs + exit
+  if [ "$COMBO" = "refresh" ]; then
+    echo "TIER2 PASS ($COMBO)"
+    kill_vm; trap - EXIT
+    exit 0
+  fi
   kill_vm; trap - EXIT
   phase3_boot_verify
   kill_vm; trap - EXIT

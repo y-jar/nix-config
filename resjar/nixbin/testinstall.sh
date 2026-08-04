@@ -117,6 +117,13 @@ printf 'sysSettings.virt.isInVM = true;\nmainUser = "mainuser";\n' > "$dir/hstja
 printf '{}\n' > "$dir/hstjar/vmhost/home.nix"
 printf '{}\n' > "$dir/hstjar/vmhost/boot.nix"
 printf '{}\n' > "$dir/hstjar/0_TEMPLATE/default.nix"
+cat > "$dir/hstjar/0_TEMPLATE/home.nix" <<'HOMETPL'
+{ config, ... }: {
+  config = {
+    home.stateVersion = "HomeManagerVersionNumber";
+  };
+}
+HOMETPL
 cat > "$dir/hstjar/0_TEMPLATE/system.nix" <<'TPL'
 { config, lib, ... }: {
   config = {
@@ -124,6 +131,7 @@ cat > "$dir/hstjar/0_TEMPLATE/system.nix" <<'TPL'
     sysSettings = {
       mainUser = "PLEASECHANGEME_USERNAME";
       users = [ "PLEASECHANGEME_USERNAME" ];
+      virt.isInVM = true;
     };
   };
 }
@@ -402,6 +410,7 @@ else
 fi
 assert_contains 'mainUser = "newuser"' "$CLONE_DIR/hstjar/newtest/system.nix" "do_new_host: PLEASECHANGEME_USERNAME replaced with newuser"
 assert_contains 'system.stateVersion = "26.05"' "$CLONE_DIR/hstjar/newtest/system.nix" "do_new_host: stateVersion replaced (VersionNumber -> 26.05)"
+assert_contains 'home.stateVersion = "26.05"' "$CLONE_DIR/hstjar/newtest/home.nix" "do_new_host: HomeManagerVersionNumber replaced in home.nix"
 assert_contains 'newtest = mkJar "newtest"' "$CLONE_DIR/flake.nix" "do_new_host: host registered in flake.nix after marker line"
 assert_contains '--show-trace' "$STUB_DIR/nixos_install.log" "do_new_host: nixos-install runs (auto-proceed past Step 11)"
 
@@ -409,14 +418,16 @@ assert_contains '--show-trace' "$STUB_DIR/nixos_install.log" "do_new_host: nixos
 echo "== refresh action: regen hardware-config, skip nixos-install =="
 (
     seed_auto
+    # Pre-clone so $CLONE_DIR exists; then plant a stale hardware-config
+    git clone https://github.com/y-jar/nix-config.git "$CLONE_DIR"
+    printf '# STALE\n{ ... }: { }\n' > "$CLONE_DIR/hstjar/vmhost/hardware-configuration.nix"
+    # Don't re-clone — use existing clone (AUTO_CLONE unset → auto_confirm returns false)
+    unset INSTALLJAR_AUTO_CLONE
     export INSTALLJAR_AUTO_HOST_ACTION=refresh
     export INSTALLJAR_AUTO_HOST=vmhost
-    # Stale hardware config to be overwritten
-    printf '# STALE\n{ ... }: { }\n' > "$CLONE_DIR/hstjar/vmhost/hardware-configuration.nix"
     out=$(iso_install 2>&1) || true
     printf '%s' "$out" > "$STUB_DIR/refresh_out.log"
 )
-assert_contains 'device = "/dev/vda2"' "$CLONE_DIR/hstjar/vmhost/hardware-configuration.nix" "do_refresh_hw: refreshed hardware config has new root device"
 
 # Test 1: hardware-config refreshed (should NOT contain "# STALE")
 if grep -q 'STALE' "$CLONE_DIR/hstjar/vmhost/hardware-configuration.nix" 2>/dev/null; then
@@ -424,6 +435,7 @@ if grep -q 'STALE' "$CLONE_DIR/hstjar/vmhost/hardware-configuration.nix" 2>/dev/
 else
     pass "do_refresh_hw: hardware-configuration.nix overwritten with fresh content"
 fi
+assert_contains 'device = "/dev/vda2"' "$CLONE_DIR/hstjar/vmhost/hardware-configuration.nix" "do_refresh_hw: refreshed hardware config has new root device"
 
 # Test 2: nixos-install was NOT called (refresh-only path aborts before Step 11)
 if [ -s "$STUB_DIR/nixos_install.log" ]; then

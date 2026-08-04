@@ -849,6 +849,10 @@ iso_install() {
             return 1
         fi
     fi
+    if [ "$fs_type" = "xfs" ]; then
+        gum log --level warn "XFS with BIOS GRUB: formatting with GRUB-compatible XFS flags (reflink=0, bigtime=0)"
+        gum log --level warn "Note: some modern XFS features disabled for GRUB compat. UEFI users may use systemd-boot instead."
+    fi
     gum log --level info "Filesystem: $fs_type"
 
     if auto_confirm "Separate /home partition?" INSTALLJAR_AUTO_HOME; then
@@ -999,7 +1003,7 @@ $guide"
         case "$fs_type" in
             ext4) auto_spin "Formatting root..." -- run_privileged mkfs.ext4 -F "$root_part" ;;
             btrfs) auto_spin "Formatting root..." -- run_privileged mkfs.btrfs -f "$root_part" ;;
-            xfs) auto_spin "Formatting root..." -- run_privileged mkfs.xfs -f "$root_part" ;;
+            xfs) auto_spin "Formatting root (GRUB compat flags)..." -- run_privileged mkfs.xfs -f -m crc=1,reflink=0,bigtime=0,inobtcount=0,rmapbt=0,finobt=0 -i nrext64=0,exchange=0,sparse=0 -n parent=0 "$root_part" ;;
         esac
     fi
 
@@ -1007,7 +1011,7 @@ $guide"
         case "$fs_type" in
             ext4) auto_spin "Formatting home..." -- run_privileged mkfs.ext4 -F "$home_part" ;;
             btrfs) auto_spin "Formatting home..." -- run_privileged mkfs.btrfs -f "$home_part" ;;
-            xfs) auto_spin "Formatting home..." -- run_privileged mkfs.xfs -f "$home_part" ;;
+            xfs) auto_spin "Formatting home (GRUB compat flags)..." -- run_privileged mkfs.xfs -f -m crc=1,reflink=0,bigtime=0,inobtcount=0,rmapbt=0,finobt=0 -i nrext64=0,exchange=0,sparse=0 -n parent=0 "$home_part" ;;
         esac
     fi
 
@@ -1212,15 +1216,20 @@ $guide"
 
             # Replace placeholders in new host's system.nix
             local sys_file="$clone_dir/hstjar/$new_host/system.nix"
+            local home_file="$clone_dir/hstjar/$new_host/home.nix"
+            local sv
+            sv=$(nixos-version 2>/dev/null | cut -d. -f1-2 || echo "26.05")
             if [ -f "$sys_file" ]; then
                 sed -i "s/PLEASECHANGEME_USERNAME/$main_user/g" "$sys_file"
-                # stateVersion: detect from nixos-version, fallback to "26.05"
-                local sv
-                sv=$(nixos-version 2>/dev/null | cut -d. -f1-2 || echo "26.05")
                 [ -n "$sv" ] && sed -i "s/VersionNumber/$sv/" "$sys_file"
                 gum log --level info "Replaced placeholders in hstjar/$new_host/system.nix"
             else
                 gum log --level warn "system.nix not found in new host dir — skipping placeholder replacement"
+            fi
+            # Replace HomeManagerVersionNumber in home.nix (same version as system)
+            if [ -f "$home_file" ]; then
+                [ -n "$sv" ] && sed -i "s/HomeManagerVersionNumber/$sv/" "$home_file"
+                gum log --level info "Replaced home.stateVersion in hstjar/$new_host/home.nix"
             fi
 
             # Git-add new files so flake eval sees them
