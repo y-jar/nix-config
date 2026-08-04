@@ -43,10 +43,12 @@ AUTO_SUBVOL=""
 AUTO_ROOT_PART=""
 AUTO_HOME_PART=""
 AUTO_SWAP_PART=""
+AUTO_BOOT_PART=""
 VERIFY_HOME=""
 VERIFY_SWAP=""
 VERIFY_SUBVOL=""
 VERIFY_HOME_CONFIG=""
+VERIFY_BOOT=""
 
 COMBOS="ext4-home ext4-flat ext4-home-swap btrfs-home btrfs-subvol btrfs-subvol-flat xfs-home gpt-btrfs-bios-home gpt-auto-btrfs-subvol-bios-home newhost refresh"
 
@@ -91,10 +93,12 @@ load_combo() {
       VERIFY_HOME=0; VERIFY_SWAP=0; VERIFY_SUBVOL=1
       ;;
     xfs-home)
-      DISK_LAYOUT=$'label: dos\n,18G,L\n,,L\n'
+      # MBR: 1G ext4 /boot + 16G xfs root + rest xfs home
+      # BIOS+XFS requires separate ext4 /boot (GRUB can't read modern XFS)
+      DISK_LAYOUT=$'label: dos\n,1G,L\n,16G,L\n,,L\n'
       AUTO_FS=xfs;      AUTO_HOME=1; AUTO_SWAP=0; AUTO_SUBVOL=0
-      AUTO_ROOT_PART=/dev/vda1; AUTO_HOME_PART=/dev/vda2; AUTO_SWAP_PART=""
-      VERIFY_HOME=1; VERIFY_SWAP=0; VERIFY_SUBVOL=0
+      AUTO_BOOT_PART=/dev/vda1; AUTO_ROOT_PART=/dev/vda2; AUTO_HOME_PART=/dev/vda3; AUTO_SWAP_PART=""
+      VERIFY_HOME=1; VERIFY_SWAP=0; VERIFY_SUBVOL=0; VERIFY_BOOT=1
       ;;
     gpt-btrfs-bios-home)
       # GPT + 1M BIOS boot + 18G btrfs root + rest btrfs home (BIOS, no subvols)
@@ -467,6 +471,7 @@ phase_install() {
   auto_env+=" INSTALLJAR_AUTO_ROOT_PART=$AUTO_ROOT_PART"
   [ -n "$AUTO_HOME_PART" ] && auto_env+=" INSTALLJAR_AUTO_HOME_PART=$AUTO_HOME_PART"
   [ -n "$AUTO_SWAP_PART" ] && auto_env+=" INSTALLJAR_AUTO_SWAP_PART=$AUTO_SWAP_PART"
+  [ -n "$AUTO_BOOT_PART" ] && auto_env+=" INSTALLJAR_AUTO_BOOT_PART=$AUTO_BOOT_PART"
   auto_env+=" INSTALLJAR_AUTO_FORMAT=1"
   auto_env+=" INSTALLJAR_AUTO_ERASE=1"
   auto_env+=" INSTALLJAR_AUTO_UNMOUNT=1"
@@ -549,7 +554,7 @@ phase3_boot_verify() {
   [ "$COMBO" = "newhost" ] && expect_host="newhost"
   for _ in $(seq 1 60); do
     if out=$(ssh "${SSH_OPTS[@]}" root@127.0.0.1 \
-        'hostname; lsblk -o NAME,SIZE,FSTYPE,MOUNTPOINT /dev/vda; df -h / /home /nix 2>/dev/null; swapon --show 2>/dev/null; systemctl is-system-running 2>/dev/null; test -f /home/test/nix-config/flake.nix && echo HCFG_OK' 2>/dev/null); then
+        'hostname; lsblk -o NAME,SIZE,FSTYPE,MOUNTPOINT /dev/vda; df -h / /boot /home /nix 2>/dev/null; swapon --show 2>/dev/null; systemctl is-system-running 2>/dev/null; test -f /home/test/nix-config/flake.nix && echo HCFG_OK' 2>/dev/null); then
       echo "$out"
       printf '%s\n' "$out" | grep -q "$expect_host" || die "hostname mismatch (expected $expect_host)"
       # Check root is mounted on some /dev/vd* partition (don't assume vda1 —
@@ -563,6 +568,9 @@ phase3_boot_verify() {
       fi
       if [ "$VERIFY_SWAP" = 1 ]; then
         printf '%s\n' "$out" | grep -q 'swap' || die "swap not active"
+      fi
+      if [ "$VERIFY_BOOT" = 1 ]; then
+        printf '%s\n' "$out" | grep -qE '^/dev/vd[a-z0-9]+ +[0-9]+.* +[0-9]+% +/boot$' || die "/boot not mounted"
       fi
       if [ "$VERIFY_HOME_CONFIG" = 1 ]; then
         printf '%s\n' "$out" | grep -q HCFG_OK || die "/home/test/nix-config/flake.nix missing (Step 11.5 copy_config_to_home failed)"

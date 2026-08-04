@@ -184,6 +184,11 @@ for c in mkfs.fat mkfs.ext4 mkfs.btrfs mkfs.xfs mkswap mount umount btrfs swapon
     printf '#!/usr/bin/env bash\nexit 0\n' > "$STUB_BIN/$c"
     chmod +x "$STUB_BIN/$c"
 done
+# mkfs stubs log their calls so tests can verify which filesystem was formatted where
+for c in mkfs.fat mkfs.ext4 mkfs.btrfs mkfs.xfs; do
+    printf '#!/usr/bin/env bash\necho "%s $*" >> "$STUB_DIR/mkfs.log"\nexit 0\n' "$c" > "$STUB_BIN/$c"
+    chmod +x "$STUB_BIN/$c"
+done
 printf '#!/usr/bin/env bash\nexit 1\n' > "$STUB_BIN/mountpoint"
 chmod +x "$STUB_BIN/mountpoint"
 
@@ -320,6 +325,7 @@ seed_iso() { # home_choice home_inputs
 
     : > "$STUB_DIR/chpasswd.log"
     : > "$STUB_DIR/nixos_install.log"
+    : > "$STUB_DIR/mkfs.log"
     rm -rf "$CLONE_DIR"
 }
 
@@ -345,10 +351,11 @@ seed_auto() {
     export INSTALLJAR_AUTO_ROOT_PART=/dev/vda2
     export INSTALLJAR_AUTO_HOME_PART=/dev/vda3
     printf 'vda 40G disk\n' > "$STUB_DIR/lsblk_disks"
-    printf 'vda    40G\nvda1   512M\nvda2   39.5G\nvda3   2G\n' > "$STUB_DIR/lsblk_parts"
-    printf 'NAME   SIZE FSTYPE MOUNTPOINT\nvda    40G\nvda1   512M\nvda2   39.5G\nvda3   2G\n' > "$STUB_DIR/lsblk_display"
+    printf 'vda    40G\nvda1   1G\nvda2   16G\nvda3   2G\n' > "$STUB_DIR/lsblk_parts"
+    printf 'NAME   SIZE FSTYPE MOUNTPOINT\nvda    40G\nvda1   1G\nvda2   16G\nvda3   2G\n' > "$STUB_DIR/lsblk_display"
     : > "$STUB_DIR/chpasswd.log"
     : > "$STUB_DIR/nixos_install.log"
+    : > "$STUB_DIR/mkfs.log"
     rm -rf "$CLONE_DIR"
 }
 
@@ -455,7 +462,40 @@ echo "== new_host_action: validates bad host names =="
     out=$(iso_install 2>&1) || true
     printf '%s' "$out" > "$STUB_DIR/badhost_out.log"
 )
+
 assert_contains 'Invalid host name' "$STUB_DIR/badhost_out.log" "do_new_host: rejects uppercase with Invalid host name error"
+
+# ═══════════════════════════════════════════════════════════════
+echo "== BIOS+XFS creates separate ext4 /boot =="
+(
+    seed_auto
+    # Override for BIOS+XFS: boot=/dev/vda1 (ext4), root=/dev/vda2 (xfs), home=/dev/vda3 (xfs)
+    export INSTALLJAR_AUTO_BOOT=BIOS
+    export INSTALLJAR_AUTO_FS=xfs
+    export INSTALLJAR_AUTO_BOOT_PART=/dev/vda1
+    export INSTALLJAR_AUTO_ROOT_PART=/dev/vda2
+    export INSTALLJAR_AUTO_HOME_PART=/dev/vda3
+    export INSTALLJAR_AUTO_HOST_ACTION=existing
+    export INSTALLJAR_AUTO_HOST=vmhost
+    # lsblk fixtures: vda1=1G, vda2=16G, vda3=2G (matches auto_partition layout)
+    printf 'vda    40G\nvda1   1G\nvda2   16G\nvda3   2G\n' > "$STUB_DIR/lsblk_parts"
+    printf 'NAME   SIZE FSTYPE MOUNTPOINT\nvda    40G\nvda1   1G\nvda2   16G\nvda3   2G\n' > "$STUB_DIR/lsblk_display"
+    iso_install 2>&1
+)
+
+# 1. hardware-configuration.nix has /boot entry with ext4
+assert_contains 'fileSystems."/boot"' "$CLONE_DIR/hstjar/vmhost/hardware-configuration.nix" "BIOS+XFS: /boot entry present in hardware-config"
+assert_contains 'fsType = "ext4"' "$CLONE_DIR/hstjar/vmhost/hardware-configuration.nix" "BIOS+XFS: /boot is ext4 (not vfat)"
+# 2. hardware-configuration.nix has root entry with xfs
+assert_contains 'fsType = "xfs"' "$CLONE_DIR/hstjar/vmhost/hardware-configuration.nix" "BIOS+XFS: root is xfs"
+# 3. mkfs.log shows ext4 for boot, xfs for root, and NO mkfs.fat
+assert_contains 'mkfs.ext4' "$STUB_DIR/mkfs.log" "BIOS+XFS: mkfs.ext4 called (for /boot)"
+assert_contains 'mkfs.xfs' "$STUB_DIR/mkfs.log" "BIOS+XFS: mkfs.xfs called (for root/home)"
+if grep -q 'mkfs.fat' "$STUB_DIR/mkfs.log" 2>/dev/null; then
+    fail "BIOS+XFS: mkfs.fat should NOT be called (not UEFI)"
+else
+    pass "BIOS+XFS: mkfs.fat NOT called (not UEFI)"
+fi
 
 # ═══════════════════════════════════════════════════════════════
 echo "== existing action (auto): picks existing host via INSTALLJAR_AUTO_HOST =="
