@@ -679,39 +679,42 @@ copy_config_to_home() {
         gum log --level warn "No mainUser set — skipping ~/nix-config copy (config stays at $clone_dir)"
         return 0
     fi
-    local target="/mnt/home/$main_user/nix-config"
-    if [ ! -d "/mnt/home/$main_user" ]; then
-        gum log --level warn "Home dir /mnt/home/$main_user doesn't exist — skipping ~/nix-config copy"
+    local home_dir="/mnt/home/$main_user"
+    if [ ! -d "$home_dir" ]; then
+        gum log --level warn "Home dir $home_dir doesn't exist — skipping ~/nix-config copy"
         return 0
     fi
-    if [ ! -d "$clone_dir" ]; then
+
+    # Copy the nix-config repo into the user's home (if available)
+    if [ -d "$clone_dir" ]; then
+        local target="$home_dir/nix-config"
+        gum log --level info "Copying $clone_dir → /home/$main_user/nix-config..."
+        run_privileged mkdir -p "$target"
+        if ! run_privileged cp -a "$clone_dir/." "$target/"; then
+            gum log --level warn "copy_config_to_home: cp failed (config remains at $clone_dir; user can copy manually)"
+        fi
+        # Force flush writes to disk so a hard VM kill doesn't lose the new files.
+        run_privileged sync
+    else
         gum log --level warn "Source $clone_dir doesn't exist — skipping ~/nix-config copy"
-        return 0
     fi
-    gum log --level info "Copying $clone_dir → /home/$main_user/nix-config (owned by $main_user)..."
-    run_privileged mkdir -p "$target"
-    if ! run_privileged cp -a "$clone_dir/." "$target/"; then
-        gum log --level warn "copy_config_to_home: cp failed (config remains at $clone_dir; user can copy manually)"
-        return 0
-    fi
-    # Force flush writes to disk so a hard VM kill doesn't lose the new files.
-    run_privileged sync
-    # chown via nixos-enter: the user only exists inside the new system, not on
-# the live ISO. Resolve numeric UID:GID inside the chroot with `id -u`/`id -g`
-# (works regardless of group config — isNormalUser uses group "users", not a
-# per-user group, so $main_user:$main_user would fail with "invalid group").
-# Non-fatal: even if chown fails, the files are copied.
+
+    # Chown the ENTIRE home directory — nixos-install runs as root, so
+    # home-manager activation creates root-owned files (~/.zshrc, ~/.config/*,
+    # XDG dirs, etc.). Without this, GDM authenticates the user but the
+    # session crashes on permission errors, looping back to the login screen.
     local uid_gid
     uid_gid=$(run_privileged nixos-enter --root /mnt -c "echo \$(id -u $main_user):\$(id -g $main_user)" 2>/dev/null | tr -dc '0-9:') || true
     if [ -z "$uid_gid" ]; then
         gum log --level warn "copy_config_to_home: could not resolve uid:gid for $main_user (files may be root-owned)"
         return 0
     fi
-    if ! run_privileged chown -R "$uid_gid" "$target"; then
-        gum log --level warn "copy_config_to_home: chown $uid_gid failed (files may be root-owned)"
+    gum log --level info "Fixing ownership of /home/$main_user (uid:gid $uid_gid)..."
+    if ! run_privileged chown -R "$uid_gid" "$home_dir"; then
+        gum log --level warn "copy_config_to_home: chown $uid_gid $home_dir failed (files may be root-owned)"
         return 0
     fi
-    gum log --level info "Config copied to ~/nix-config (owned by $main_user)"
+    gum log --level info "Home directory owned by $main_user — session should start cleanly"
     return 0
 }
 
