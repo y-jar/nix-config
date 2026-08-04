@@ -505,10 +505,9 @@ pick_part() {
     echo "$selected"
 }
 
-# ──[verify boot partition matches boot mode + partition table type]
-# BIOS+GPT requires a BIOS boot partition (GRUB can't fall back to blocklists
-# on btrfs); aborts before formatting if missing.
-verify_boot_partition() {
+# ──[pure validation: returns 0 if OK, 1 if failed. Echoes error lines on failure.]
+# TEST_MODE and AUTO_PARTITION always pass (validation skipped).
+verify_boot_partition_check() {
     local disk="$1" mode="$2" boot_part="$3" fs_type="${4:-}"
 
     [ "${INSTALLJAR_TEST_MODE:-0}" = "1" ] && return 0
@@ -519,38 +518,73 @@ verify_boot_partition() {
 
     if [ "$mode" = "BIOS" ] && [ "$pttype" = "gpt" ]; then
         if ! sfdisk -l "$disk" 2>/dev/null | grep -qi 'BIOS boot'; then
-            # Detect the case where user created a 1M partition but didn't set its type
             if sfdisk -l "$disk" 2>/dev/null | awk '/^\/dev\//' | grep -qE '\b1M\b'; then
-                gum log --level error "BIOS boot mode + GPT detected. A 1M partition exists but its TYPE is not 'BIOS boot'."
-                gum log --level error "GRUB on BIOS+GPT requires a 1M partition of type 'BIOS boot' (unformatted)."
-                gum log --level error "Fix: sudo cfdisk $disk → select the 1M partition → Type → 'BIOS boot' (or GUID 21686148-6449-6E6F-744E-656564454649), then re-run."
+                echo "BIOS boot mode + GPT detected. A 1M partition exists but its TYPE is not 'BIOS boot'."
+                echo "GRUB on BIOS+GPT requires a 1M partition of type 'BIOS boot' (unformatted)."
+                echo "Fix: sudo cfdisk $disk → select the 1M partition → Type → 'BIOS boot' (or GUID 21686148-6449-6E6F-744E-656564454649), then re-run."
             else
-                gum log --level error "BIOS boot mode + GPT partition table detected, but no 'BIOS boot' partition found."
-                gum log --level error "GRUB on BIOS+GPT requires a 1M partition of type 'BIOS boot' (unformatted)."
-                gum log --level error "Without it, GRUB cannot install on GPT+btrfs (btrfs has no blocklist fallback)."
-                gum log --level error "Fix: sudo cfdisk $disk — add a 1M partition of type 'BIOS boot', then re-run."
+                echo "BIOS boot mode + GPT partition table detected, but no 'BIOS boot' partition found."
+                echo "GRUB on BIOS+GPT requires a 1M partition of type 'BIOS boot' (unformatted)."
+                echo "Without it, GRUB cannot install on GPT+btrfs (btrfs has no blocklist fallback)."
+                echo "Fix: sudo cfdisk $disk — add a 1M partition of type 'BIOS boot', then re-run."
             fi
             return 1
         fi
-        gum log --level info "BIOS boot partition OK"
     elif [ "$mode" = "UEFI" ] && [ "$pttype" = "gpt" ]; then
         if [ -z "$boot_part" ]; then
-            gum log --level error "UEFI boot mode + GPT detected, but no EFI System partition selected."
-            gum log --level error "Fix: sudo cfdisk $disk — add a 512M partition of type 'EFI System', then re-run."
+            echo "UEFI boot mode + GPT detected, but no EFI System partition selected."
+            echo "Fix: sudo cfdisk $disk — add a 512M partition of type 'EFI System', then re-run."
             return 1
         fi
-        gum log --level info "EFI System partition OK"
     fi
 
-    # BIOS+XFS: a /boot partition is required (GRUB can't read modern XFS)
     if [ "$mode" = "BIOS" ] && [ "$fs_type" = "xfs" ] && [ -z "$boot_part" ]; then
-        gum log --level error "BIOS boot mode + XFS filesystem: a separate /boot partition (ext4) is required."
-        gum log --level error "GRUB 2.12 cannot read modern XFS — it needs an ext4 /boot to find the kernel."
-        gum log --level error "Fix: sudo cfdisk $disk — add a 1G partition (Linux filesystem) for /boot, then re-run."
+        echo "BIOS boot mode + XFS filesystem: a separate /boot partition (ext4) is required."
+        echo "GRUB 2.12 cannot read modern XFS — it needs an ext4 /boot to find the kernel."
+        echo "Fix: sudo cfdisk $disk — add a 1G partition (Linux filesystem) for /boot, then re-run."
         return 1
     fi
 
     return 0
+}
+
+# ──[verify boot partition matches boot mode + partition table type]
+# Wrapper: calls the pure check, logs errors/success via gum, returns 0/1.
+verify_boot_partition() {
+    local disk="$1" mode="$2" boot_part="$3" fs_type="${4:-}"
+
+    local err
+    err=$(verify_boot_partition_check "$disk" "$mode" "$boot_part" "$fs_type") || {
+        while IFS= read -r line; do
+            [ -n "$line" ] && gum log --level error "$line"
+        done <<< "$err"
+        return 1
+    }
+
+    # Log success messages
+    local pttype
+    pttype=$(blkid -s PTTYPE -o value "$disk" 2>/dev/null || echo "")
+    if [ "$mode" = "BIOS" ] && [ "$pttype" = "gpt" ]; then
+        gum log --level info "BIOS boot partition OK"
+    elif [ "$mode" = "UEFI" ] && [ "$pttype" = "gpt" ]; then
+        gum log --level info "EFI System partition OK"
+    fi
+
+    return 0
+}
+
+# ──[detect if we're running in a VM — used to pick portable vs generated hardware config]
+# Checks systemd-detect-virt first; falls back to isInVM=true in the host's system.nix.
+is_vm_host() {
+    local clone_dir="$1" host="$2"
+    if command -v systemd-detect-virt &>/dev/null; then
+        local virt
+        virt=$(systemd-detect-virt 2>/dev/null || echo "none")
+        if [ -n "$virt" ] && [ "$virt" != "none" ]; then
+            return 0
+        fi
+    fi
+    grep -qP 'isInVM\s*=\s*true' "$clone_dir/hstjar/$host/system.nix" 2>/dev/null
 }
 
 # ──[auto-partition the target disk based on chosen combo]
@@ -716,6 +750,56 @@ copy_config_to_home() {
     fi
     gum log --level info "Home directory owned by $main_user — session should start cleanly"
     return 0
+}
+
+# ──[copy live ISO Wi-Fi credentials to the installed system]
+# Mirrors archinstall's copy_iso_network_config. Copies NetworkManager
+# connection files and/or iwd PSKs from the live ISO to /mnt so Wi-Fi
+# works on first boot without re-running nmtui.
+copy_network_config() {
+    [ "${INSTALLJAR_TEST_MODE:-0}" = "1" ] && return 0
+    local copied=0
+
+    # NetworkManager connection files
+    local nm_src="/etc/NetworkManager/system-connections"
+    local nm_dst="/mnt/etc/NetworkManager/system-connections"
+    if [ -d "$nm_src" ] && ls "$nm_src"/*.nmconnection >/dev/null 2>&1; then
+        gum log --level info "Copying NetworkManager Wi-Fi profiles to target..."
+        run_privileged mkdir -p "$nm_dst"
+        run_privileged cp "$nm_src"/*.nmconnection "$nm_dst/" 2>/dev/null || true
+        run_privileged chmod 600 "$nm_dst"/*.nmconnection 2>/dev/null || true
+        run_privileged chown root:root "$nm_dst"/*.nmconnection 2>/dev/null || true
+        copied=1
+    fi
+
+    # iwd PSK files
+    local iwd_src="/var/lib/iwd"
+    local iwd_dst="/mnt/var/lib/iwd"
+    if [ -d "$iwd_src" ] && ls "$iwd_src"/*.psk >/dev/null 2>&1; then
+        gum log --level info "Copying iwd Wi-Fi profiles to target..."
+        run_privileged mkdir -p "$iwd_dst"
+        run_privileged cp "$iwd_src"/*.psk "$iwd_dst/" 2>/dev/null || true
+        run_privileged chmod 600 "$iwd_dst"/*.psk 2>/dev/null || true
+        run_privileged chown root:root "$iwd_dst"/*.psk 2>/dev/null || true
+        copied=1
+    fi
+
+    # systemd-networkd configs (wired/static IP)
+    local netd_src="/etc/systemd/network"
+    local netd_dst="/mnt/etc/systemd/network"
+    if [ -d "$netd_src" ] && ls "$netd_src"/*.network >/dev/null 2>&1; then
+        gum log --level info "Copying systemd-networkd configs to target..."
+        run_privileged mkdir -p "$netd_dst"
+        run_privileged cp "$netd_src"/*.network "$netd_dst/" 2>/dev/null || true
+        copied=1
+    fi
+
+    if [ "$copied" = "1" ]; then
+        run_privileged sync
+        gum log --level info "Network credentials copied — Wi-Fi should work on first boot"
+    else
+        gum log --level info "No live network credentials found to copy"
+    fi
 }
 
 # ──[emit a fileSystems entry for the portable VM config]
@@ -1335,7 +1419,7 @@ $guide"
             gum log --level info "Selected host: $host (refresh-only)"
 
             # gen hardware config (same logic as existing path below)
-            if grep -qP 'isInVM\s*=\s*true' "$clone_dir/hstjar/$host/system.nix" 2>/dev/null; then
+            if is_vm_host "$clone_dir" "$host"; then
                 gen_vm_hardware_config "$fs_type" "$use_subvolumes" "$separate_home" \
                     "$boot_part" "$root_part" "$home_part" "$swap_part" "$boot_mode" \
                     | run_privileged tee "$clone_dir/hstjar/$host/hardware-configuration.nix" >/dev/null
@@ -1411,7 +1495,7 @@ File: hstjar/$host/hardware-configuration.nix"
 
     # Generate hardware config (skip if refresh already did it inline)
     if [ "$hw_config_done" != "1" ]; then
-        if grep -qP 'isInVM\s*=\s*true' "$clone_dir/hstjar/$host/system.nix" 2>/dev/null; then
+        if is_vm_host "$clone_dir" "$host"; then
             gum log --level info "VM host detected ($host) — writing portable hardware config"
             gen_vm_hardware_config "$fs_type" "$use_subvolumes" "$separate_home" \
                 "$boot_part" "$root_part" "$home_part" "$swap_part" "$boot_mode" \
@@ -1454,9 +1538,10 @@ File: hstjar/$host/hardware-configuration.nix"
     gum log --level info "NixOS installed successfully!"
 
     # ──────────────────────────────────────
-    # Step 11.5: Copy config to user home
+    # Step 11.5: Copy config to user home + network creds
     # ──────────────────────────────────────
     copy_config_to_home "$main_user" "$clone_dir"
+    copy_network_config
 
     # ──────────────────────────────────────
     # Step 12: Set passwords
@@ -1516,6 +1601,14 @@ gum style --border normal --width 50 "Step 13: Next steps"
      jarhelp    # help menu
 5. Locked out? Boot the ISO and reset:
      nixos-enter --root /mnt -c "passwd"'
+
+    # Offer a chroot shell for debugging/password resets before rebooting
+    if [ "${INSTALLJAR_AUTO:-0}" != "1" ]; then
+        if gum confirm "Drop into installed system shell before reboot?"; then
+            gum log --level info "Launching nixos-enter — type 'exit' to return"
+            run_privileged nixos-enter --root /mnt || true
+        fi
+    fi
 
     if auto_confirm "Unmount and reboot now?" INSTALLJAR_AUTO_REBOOT; then
         auto_spin "Unmounting..." -- \
