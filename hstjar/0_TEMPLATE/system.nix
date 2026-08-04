@@ -63,6 +63,8 @@
       console = {
         font = "ter-132n";
       };
+      boot.quiet = false;
+      boot.fastMenu = false;
 
       neverSleep.enable = false; # disable system idle sleep
       bluetooth.enable = true; # ~10mib - sets blueman in home packages
@@ -138,6 +140,5 @@
       }; # end of server
       # =============[Server]^^^
     }; # end of sysSettings
-
   }; # end of config
 }

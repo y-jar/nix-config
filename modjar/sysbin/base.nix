@@ -1,5 +1,23 @@
-{ pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
+let
+  cfg = config.sysSettings.boot;
+in
 {
+  options = {
+    sysSettings.boot = {
+      quiet = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Silence kernel/udev/systemd startup logs (quiet, udev.log_level=3, systemd.show_status=auto, consoleLogLevel=3). Default: false so users see the boot sequence.";
+      };
+      fastMenu = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Set boot loader timeout to 1 second. Default: false (systemd-boot default of 5 seconds).";
+      };
+    };
+  };
+
   config = {
 
     time.timeZone = "America/New_York";
@@ -37,9 +55,9 @@
     # ==================================Boot========================================
     boot = {
       initrd.systemd.enable = true; # systemd in the initrd
-      loader.timeout = 1; # skip the long boot-menu wait
-      consoleLogLevel = 3; # quieter kernel log
-      kernelParams = [
+      loader.timeout = lib.mkIf cfg.fastMenu 1; # 1s when fastMenu, else systemd-boot default (5s)
+      consoleLogLevel = lib.mkIf cfg.quiet 3; # quieter kernel log
+      kernelParams = lib.mkIf cfg.quiet [
         "quiet"
         "udev.log_level=3"
         "systemd.show_status=auto"
