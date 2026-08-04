@@ -40,7 +40,7 @@
       # =========[appstream]
       browsers.enable = true; # sets firefox and librewolf [work and personal]
       terminal.enable = true; # sets terminal as foot
-      terminal.font = "IntoneMono Nerd Font"; # options: "IntoneMono Nerd Font" "Monocraft" "Miracode"
+      terminal.font = "Monocraft"; # options: "IntoneMono Nerd Font" "Monocraft" "Miracode"
       # terminal.fontSize = 14; # font size (default: 14)
       syncthing.enable = true; # file sync (web UI at localhost:8384)
       editors = {

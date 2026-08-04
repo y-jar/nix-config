@@ -24,7 +24,7 @@
       # =============[experience install]
       # [pick one or more if you know what you're doing]
       gnome.enable = false; # sets gnome [on by default]
-      hyprland.enable = true; # sets hyprland
+      hyprland.enable = false; # sets hyprland
       niri.enable = true; # sets niri
       cinnamon.enable = false; # sets cinnamon
       cosmic = {
@@ -62,10 +62,10 @@
       # =============[software]
       UseNixPkgsYoinks.enable = false;
       ai = {
-        enable = false; # sets AI tools (Ollama, opencode, etc.)
+        enable = true; # sets AI tools (Ollama, opencode, etc.)
         port = 11434;
         webui = {
-          enable = false; # Open WebUI chat interface
+          enable = true; # Open WebUI chat interface
           port = 8080;
         };
       };
