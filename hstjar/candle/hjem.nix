@@ -1,7 +1,7 @@
 { ... }:
 {
   hjmSettings = {
-    name = "jar"; # [CHANGE THIS]
+    name = "y-jar"; # [CHANGE THIS]
     email = "park.7qs@gmail.com"; # [CHANGE THIS]
 
     shell.enable = true;

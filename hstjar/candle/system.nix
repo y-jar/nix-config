@@ -13,11 +13,11 @@
     # Fill this out!
     sysSettings = {
       # =============[users]
-      mainUser = "candle";
-      users = [ "candle" ];
-      adminUsers = [ "candle" ];
+      mainUser = "wax";
+      users = [ "wax" ];
+      adminUsers = [ "wax" ];
       userDescriptions = {
-        candle = "candle";
+        wax = "wax";
       };
       # =============[users]^^^
 
