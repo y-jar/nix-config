@@ -18,7 +18,8 @@
     mkdir -p \
       ~/resjar \
       ~/rotjar \
-      ~/pic-jar \
+      ~/picjar \
+      ~/picjar/shotbin \
       ~/musicjar \
       ~/kilnjar \
       ~/artjar \

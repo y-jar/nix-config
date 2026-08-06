@@ -29,7 +29,13 @@ in
 
   config = lib.mkIf cfg.enable {
     programs = {
-      firefox.enable = cfg.firefox;
+      firefox = {
+        enable = cfg.firefox;
+        # Firefox 150+ pops the native GTK emoji dialog on Ctrl+. which clashes
+        # with mozc's Ctrl+. = full katakana; jemoji on Super+Alt+Space covers
+        # emoji instead.
+        policies.Preferences."widget.gtk.native-emoji-dialog" = false;
+      };
       librewolf.enable = cfg.librewolf;
     }; # end of programs
 

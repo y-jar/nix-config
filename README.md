@@ -165,7 +165,7 @@ Paste:
 <details>
   <summary><b>Keybinds Quick Ref</b></summary>
 
-  Full reference: [Niri](resjar/docbin/niri.md) · [Hyprland](resjar/docbin/hyprland.md)
+  Full reference: [Niri](resjar/docbin/niri.md) · [Hyprland](resjar/docbin/hyprland.md) · [mozc keymap](modjar/usrbin/inputmethods/keymap.tsv)
 
   #### Hyprland
 
@@ -210,6 +210,22 @@ Paste:
   | | `Mod+Ctrl+1-9` | Move to workspace |
   | Media | `XF86Audio*` | Volume / mute |
   | | `XF86MonBrightness*` | Brightness |
+
+  #### Mozc (Japanese IME)
+
+  | Category | Keybind | Action |
+  | :--- | :--- | :--- |
+  | IME toggle | `SUPER+Space` | Toggle IME on/off |
+  | Mode | `Ctrl+,` | Hiragana |
+  | | `Ctrl+.` | Full-width Katakana |
+  | | `Ctrl+/` | Half-width Katakana |
+  | | `Ctrl+'` | Half-width Alphanumeric |
+  | | `Ctrl+;` | Full-width Alphanumeric |
+  | Convert | `Ctrl+u` | Hiragana |
+  | | `Ctrl+i` / `F7` | Full-width Katakana |
+  | | `Ctrl+o` / `F8` | Half-width Katakana |
+  | | `Ctrl+p` / `F9` | Full-width Alphanumeric |
+  | | `Ctrl+t` / `F10` | Half-width Alphanumeric |
 </details>
 
 <details>

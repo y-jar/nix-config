@@ -49,7 +49,6 @@ in
     gapless
     audacity
     yt-dlp
-    ytdownloader
     loupe      # image viewer
     showtime   # video player (GNOME)
     file-roller # archive manager (GNOME)

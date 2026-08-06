@@ -50,6 +50,20 @@ in
 
       # [linking!]
       gtk3.extraConfig.gtk-application-prefer-dark-theme = true;
+      # GTK hardcodes Ctrl+. / Ctrl+; to its emoji picker ("insert-emoji").
+      # Those clash with mozc's Ctrl+. = full katakana and Ctrl+; = full
+      # alphanumeric, so unbind them and move the picker to Super+Alt+Space
+      # (which is already jemoji at the compositor level).
+      gtk3.extraCss = ''
+        @binding-set EmojiSelectRemap {
+          unbind "<Control>period";
+          unbind "<Control>semicolon";
+          bind "<Super><Alt>space" { "insert-emoji" () };
+        }
+        entry, textview {
+          -gtk-key-bindings: EmojiSelectRemap;
+        }
+      '';
       # mirrors the gtk3 theme into gtk4/libadwaita apps instead of leaving
       # them on stock Adwaita (this was the actual bug before)
       gtk4.theme = config.gtk.theme;

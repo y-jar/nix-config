@@ -21,6 +21,11 @@ in
     home.sessionVariables = {
       GTK_IM_MODULE = lib.mkForce "";
     }; # End of home.sessionVariables
+
+    # mozc keymap (built from keymap.tsv into config1.db)
+    xdg.configFile."mozc/config1.db" = {
+      source = import ./config1-db.nix { inherit pkgs; };
+    }; # End of mozc config1.db
     i18n.inputMethod = {
       enable = true;
       type = "fcitx5";

@@ -25,6 +25,11 @@
 
 { config, lib, pkgs, inputs, hostnm, ... }:
 
+let
+  # hjmbin modules expose generated dotfiles via the hjemDotfiles options,
+  # which live inside the hjem user submodule. Read them from there.
+  hjemDotfiles = config.hjem.users.${config.sysSettings.mainUser}.hjemDotfiles;
+in
 {
   imports = [
     inputs.hjem.nixosModules.default    # hjem: manages user home dirs
@@ -56,52 +61,59 @@
           ".profile" = {
             executable = true;
             text = ''
-              ${lib.optionalString (config.hjemDotfiles.dirSetup != null) config.hjemDotfiles.dirSetup}
+              ${lib.optionalString (hjemDotfiles.dirSetup != null) hjemDotfiles.dirSetup}
               source ${config.hjem.users.${config.sysSettings.mainUser}.environment.loadEnv}
             '';
           };
         }
         # [shell dotfiles]
-        // lib.optionalAttrs (config.hjemDotfiles.zshrc != null) {
-          ".zshrc".source = config.hjemDotfiles.zshrc;
-          ".fzfrc".source = config.hjemDotfiles.fzfrc;
+        // lib.optionalAttrs (hjemDotfiles.zshrc != null) {
+          ".zshrc".source = hjemDotfiles.zshrc;
+          ".fzfrc".source = hjemDotfiles.fzfrc;
         }
         # [git config]
-        // lib.optionalAttrs (config.hjemDotfiles.gitconfig != null) {
-          ".gitconfig".source = config.hjemDotfiles.gitconfig;
+        // lib.optionalAttrs (hjemDotfiles.gitconfig != null) {
+          ".gitconfig".source = hjemDotfiles.gitconfig;
+        }
+        # [inputmethods config]
+        // lib.optionalAttrs (hjemDotfiles.mozcConfig1Db != null) {
+          ".config/mozc/config1.db".source = hjemDotfiles.mozcConfig1Db;
+        }
+        // lib.optionalAttrs (hjemDotfiles.fcitx5Files != null) {
+          ".config/fcitx5".source = hjemDotfiles.fcitx5Files;
         }
         # [yazi config]
-        // lib.optionalAttrs (config.hjemDotfiles.yaziToml != null) {
-          ".config/yazi/yazi.toml".source = config.hjemDotfiles.yaziToml;
-          ".config/yazi/keymap.toml".source = config.hjemDotfiles.yaziKeymap;
-          ".config/yazi/theme.toml".source = config.hjemDotfiles.yaziTheme;
+        // lib.optionalAttrs (hjemDotfiles.yaziToml != null) {
+          ".config/yazi/yazi.toml".source = hjemDotfiles.yaziToml;
+          ".config/yazi/keymap.toml".source = hjemDotfiles.yaziKeymap;
+          ".config/yazi/theme.toml".source = hjemDotfiles.yaziTheme;
         }
         # [media config]
-        // lib.optionalAttrs (config.hjemDotfiles.mpvConf != null) {
-          ".config/mpv/mpv.conf".source = config.hjemDotfiles.mpvConf;
+        // lib.optionalAttrs (hjemDotfiles.mpvConf != null) {
+          ".config/mpv/mpv.conf".source = hjemDotfiles.mpvConf;
         }
-        // lib.optionalAttrs (config.hjemDotfiles.mimeApps != null) {
-          ".config/mimeapps.list".source = config.hjemDotfiles.mimeApps;
+        // lib.optionalAttrs (hjemDotfiles.mimeApps != null) {
+          ".config/mimeapps.list".source = hjemDotfiles.mimeApps;
         }
         # [niri config]
-        // lib.optionalAttrs (config.hjemDotfiles.niriFiles != null) {
-          ".config/niri/config.kdl".source = config.hjemDotfiles.niriFiles.config;
-          ".config/niri/base.kdl".source = config.hjemDotfiles.niriFiles.base;
-          ".config/niri/bindings.kdl".source = config.hjemDotfiles.niriFiles.bindings;
-          ".config/niri/rules.kdl".source = config.hjemDotfiles.niriFiles.rules;
-          ".config/niri/startups.kdl".source = config.hjemDotfiles.niriFiles.startups;
-          ".config/niri/host-inputs.kdl".source = config.hjemDotfiles.niriFiles.hostInputs;
+        // lib.optionalAttrs (hjemDotfiles.niriFiles != null) {
+          ".config/niri/config.kdl".source = hjemDotfiles.niriFiles.config;
+          ".config/niri/base.kdl".source = hjemDotfiles.niriFiles.base;
+          ".config/niri/bindings.kdl".source = hjemDotfiles.niriFiles.bindings;
+          ".config/niri/rules.kdl".source = hjemDotfiles.niriFiles.rules;
+          ".config/niri/startups.kdl".source = hjemDotfiles.niriFiles.startups;
+          ".config/niri/host-inputs.kdl".source = hjemDotfiles.niriFiles.hostInputs;
         }
         # [resource symlinks]
-        // lib.optionalAttrs (config.hjemDotfiles.resYoink != null) (
-          lib.optionalAttrs (config.hjemDotfiles.resYoink ? wallpapers) {
-            "resjar/wall-jar".source = config.hjemDotfiles.resYoink.wallpapers;
+        // lib.optionalAttrs (hjemDotfiles.resYoink != null) (
+          lib.optionalAttrs (hjemDotfiles.resYoink ? wallpapers) {
+            "resjar/wall-jar".source = hjemDotfiles.resYoink.wallpapers;
           }
-          // lib.optionalAttrs (config.hjemDotfiles.resYoink ? icons) {
-            "resjar/icon-jar".source = config.hjemDotfiles.resYoink.icons;
+          // lib.optionalAttrs (hjemDotfiles.resYoink ? icons) {
+            "resjar/icon-jar".source = hjemDotfiles.resYoink.icons;
           }
-          // lib.optionalAttrs (config.hjemDotfiles.resYoink ? profilePictures) {
-            "resjar/pfp-jar".source = config.hjemDotfiles.resYoink.profilePictures;
+          // lib.optionalAttrs (hjemDotfiles.resYoink ? profilePictures) {
+            "resjar/pfp-jar".source = hjemDotfiles.resYoink.profilePictures;
           }
         ); # end of resource symlinks
       };

@@ -51,7 +51,7 @@ niri validate -c ~/.config/niri/config.kdl
 | `Mod+S` | Noctalia settings |
 | `Mod+G` | Gapless (g4music) |
 | `Mod+C` | Color picker (hyprpicker) |
-| `Mod+Period` | Emoji picker (jemoji) |
+| `Mod+Alt+Space` | Emoji picker (jemoji) |
 | `Mod+P` | Power menu (jpower) |
 | `Mod+Z` | Zoom (woomer) |
 

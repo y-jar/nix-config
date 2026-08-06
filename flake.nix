@@ -100,7 +100,7 @@
               ];
               networking.hostName = "recovery";
               services.openssh.enable = true;
-              boot.zfs.forceImportRoot = false; # recommended; silence zfs warning
+              boot.zfs.forceImportRoot = false; # recommended; silence zfs/xfs? warning
               users.users.root.initialHashedPassword = lib.mkForce null; # silence pw warning; "nixos" still wins
               users.users.root.initialPassword = "nixos";
               system.stateVersion = "26.05";
@@ -135,7 +135,7 @@
       packages.x86_64-linux.iso = self.nixosConfigurations.iso.config.system.build.isoImage; # nix build .#iso
       packages.x86_64-linux.iso-gnome = self.nixosConfigurations.iso-gnome.config.system.build.isoImage; # nix build .#iso-gnome
     }; # end of nixosConfigurations
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=[INPUTS]=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=[INPUTS]=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   inputs = {
     # [nixpkgs]
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";

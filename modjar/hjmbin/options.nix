@@ -122,6 +122,19 @@
       internal = true;
       description = "Generated mimeapps.list path";
     };
+    # [inputmethods/default.nix]
+    mozcConfig1Db = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      internal = true;
+      description = "Generated mozc config1.db path";
+    };
+    fcitx5Files = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      internal = true;
+      description = "Generated fcitx5 config dir path";
+    };
     # [niri/default.nix]
     niriFiles = lib.mkOption {
       type = lib.types.nullOr (lib.types.submodule {

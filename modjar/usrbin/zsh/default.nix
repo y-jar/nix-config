@@ -61,6 +61,7 @@ in
         code = "codium";
         brw = "browsh"; # TUI based browser
         oc = "opencode"; # Ai thing
+        b = "browsh"; # browser
         # ========[app aliases]
 
         # ========[util]
@@ -75,6 +76,8 @@ in
         hlr = "hyprland reload";
         # [Tools]
         clfont = "fc-cache -f -v"; # clear font cache
+        rfc5 = "fcitx5 -r -d"; # restart fcitx5
+        rz = "exec zsh"; # reload zsh
         ckhrd = "lsblk && fdisk -l";
         # ls = "ls";
         grep = "grep --color=auto";
@@ -83,7 +86,6 @@ in
         gc = "git clone";
         fcir = "fcitx5-remote -r"; # force reload fcitx5
         dl = "ytdl"; # youtube downloader
-        rz = "exec zsh"; # reload zsh
         ns = "nix-shell"; # load dev enviroment
         nsp = "nix search nixpkgs";
         shlvl = "echo $SHLVL";

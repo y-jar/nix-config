@@ -123,7 +123,7 @@ prefer-no-csd
 // The path is formatted with strftime(3) to give you the screenshot date and time.
 // You can also set this to null to disable saving screenshots to disk.
 // screenshot-path null
-screenshot-path "~/pic-jar/scrtakes-jar/scr-mound-bin/ from %Y-%m-%d %H-%M-%S.png"
+screenshot-path "~/picjar/shotbin/ from %Y-%m-%d %H-%M-%S.png"
 
 // Animation settings.
 // The wiki explains how to configure individual animations:
