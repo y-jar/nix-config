@@ -1,11 +1,21 @@
+#*/-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Hi, This is the system configuration file for the picked host.
+# If you're new here, just think of it as a checklist to fill out.
+# Things to note:
+# 1. You should change the stateVersion to the version you're using
+# 2. You should change the home-manager state version to the version you're using
+# 3. whether or not something is false or true is entirely up to you. enable what
+#    you need!
+#
+# And remember, your configuration is yours to customize.
+# After you're done, head over to ./home.nix to configure your user!
+#*/-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 {
   inputs,
   config,
   lib,
   ...
-}:
-
-{
+}: {
   config = {
     system.stateVersion = "26.05"; # [CHANGE THIS]
     #            [system state version from first install]
@@ -14,8 +24,8 @@
     sysSettings = {
       # =============[users]
       mainUser = "jar";
-      users = [ "jar" ];
-      adminUsers = [ "jar" ];
+      users = ["jar"];
+      adminUsers = ["jar"];
       userDescriptions = {
         jar = "jar";
       };
@@ -23,10 +33,10 @@
 
       # =============[experience install]
       # [pick one or more if you know what you're doing]
+      cinnamon.enable = false; # sets cinnamon
       gnome.enable = true; # sets gnome [on by default]
       hyprland.enable = false; # sets hyprland ~19MiB
-      niri.enable = true; # sets niri
-      cinnamon.enable = false; # sets cinnamon
+      niri.enable = false; # sets niri
       cosmic = {
         enable = false; # sets cosmic desktop environment
         greeter = false; # sets cosmic login manager (disables GDM if enabled)
@@ -34,8 +44,9 @@
       # =============[experience install]^^^
 
       # =============[hardware]
+      neverSleep.enable = true; # disable system idle sleep
       # [kernel] pick one: "default", "latest", "cachyos-latest", "cachyos-bore", "cachyos-lts"
-      kernel.variant = "default";
+      kernel.variant = "latest";
       # [TTY console font] bitmap fonts (set null for kernel default):
       #   "ter-116n"    - Terminus 16px (default-size, crisp)
       #   "ter-124n"    - Terminus 24px (medium, good for HiDPI)
@@ -45,14 +56,13 @@
       console = {
         font = "ter-132n";
       };
-      bluetooth.enable = true; # sets blueman in home packages
+      bluetooth.enable = false; # sets blueman in home packages
       automount.enable = true; # auto-mount removable media (udisks2)
-      neverSleep.enable = true; # disable system idle sleep
       # [power management]
       tlp.enable = false; # NOTE: mutually exclusive with powerprofiles, pick one
       tlp.startChargeThreshold = 0;
       tlp.stopChargeThreshold = 100;
-      powerprofiles.enable = true;
+      powerprofiles.enable = false;
       audio = {
         enable = true; # sets audio and adds some apps
         addon.enable = false; # adds my audio setup
@@ -69,13 +79,13 @@
           port = 8080;
         };
       };
-      localsend.enable = true;
+      localsend.enable = false; # sets localsend in the system
       flatpak.enable = false; # sets flatpak in the system [still needs to be enabled in user.nix]
       gaming = {
         drivers = {
           enable = true; # sets gaming drivers
           amd.enable = false; # sets amd drivers
-          intel.enable = true; # sets intel drivers
+          intel.enable = false; # sets intel drivers
           nvidia.enable = false; # sets nvidia drivers (Vulkan + 32-bit)
         }; # end of drivers
         steam.enable = false; # sets steam and associated libraries for gaming, but not more important drivers
@@ -83,20 +93,20 @@
       virtcam.enable = false; # sets virtual camera for things like OBS
       virt = {
         enable = false; # sets virtualization and installs virtualization tools
-        isInVM = false; # enable if this system is in a vm
+        isInVM = true; # enable if this system is in a vm [virtual mechine]
       };
       # =============[software]^^^
 
       # =============[Server]
       server = {
-        komga.enable = true; # manga/comic server (port 25600)
         jellyfin = {
           enable = true; # sets jellyfin server
           juser = "jar"; # sets jellyfin user for perms for file access
         }; # end of jellyfin
+        komga.enable = true; # manga/comic server (port 25600)
         sleepyjar = {
           enable = true; # sets sleepy service
-          interval = "daily"; # sets interval for sleepy service
+          interval = "weekly"; # sets interval for sleepy service
           # some* options for sleepy service:
           # daily: reboots every midnight
           # weekly: reboots every Sunday at midnight
@@ -108,7 +118,7 @@
           port = 3000; # sets the port for the excalidraw server
         };
         webjar = {
-          enable = true; # self-hosted link page (nginx)
+          enable = true; # ~5mib - self-hosted link page (nginx)
           port = 80;
         };
       }; # end of server

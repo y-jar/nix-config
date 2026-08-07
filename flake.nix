@@ -79,7 +79,6 @@
         ziiemar = mkJar "ziiemar"; # personal laptop
         candle = mkJar "candle"; # gaming mini build
         whale = mkJar "whale"; # Server system
-        whalefin = mkJar "whalefin"; # Server system
         vmjar = mkJar "vmjar"; # Virtual config
 
         # ========[hjem hosts (alternative to home-manager)] [Not fully implemented and toying with it]

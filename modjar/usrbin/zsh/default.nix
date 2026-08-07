@@ -40,20 +40,39 @@ in
           fi
         }
 
+        # [nh shortcuts with host args for if i want to mannually switch]
+        nhtm() {
+          local target="''${1:-${hostnm}}"
+          nh os test --accept-flake-config ~/nix-config#"$target"
+        }
+        nhsm() {
+          local target="''${1:-${hostnm}}"
+          nh os switch --accept-flake-config ~/nix-config#"$target"
+        }
+        nrtm() {
+          local target="''${1:-${hostnm}}"
+          nixos-rebuild test --sudo --flake ~/nix-config#"$target"
+        }
+        nrsm() {
+          local target="''${1:-${hostnm}}"
+          nixos-rebuild switch --sudo --flake ~/nix-config#"$target"
+        }
+
+        # [prompt]
         PROMPT='%F{#5F7CB8}%n|%f'
         RPROMPT='%F{#5F7CB8}%~ %F{#5F7CB8}%m%f %F{cyan}%*%f'
       '';
 
       # [aliases]
       shellAliases = {
-        # ========[syst]
+        # ========[sys nix]
         nht = "nh os test --accept-flake-config ~/nix-config#${hostnm}"; # base test
         nhs = "nh os switch --accept-flake-config ~/nix-config#${hostnm}"; # base switch
         nhc = "nh clean all --keep 7"; # base cleanup
         nrs = "nixos-rebuild switch --sudo --flake ~/nix-config#${hostnm}"; # hard building
         nrt = "nixos-rebuild test --sudo --flake ~/nix-config#${hostnm}"; # testing
         buildiso = "sh ~/nix-config/resjar/nixbin/buildiso.sh"; # build recovery ISO
-        # ========[syst]
+        # ========[syst nix]^^^
 
         # ========[app aliases]
         nv = "nvim";

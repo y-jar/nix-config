@@ -2,8 +2,12 @@
   # boot
   boot = {
     loader = {
-      systemd-boot.enable = true;
-      efi.canTouchEfiVariables = true;
+      grub = {
+        enable = true;
+        device = "/dev/vda";
+        useOSProber = true;
+        fsIdentifier = "provided";
+      }; # end of grub
     }; # end of loader
     supportedFilesystems = [
       "fuse"

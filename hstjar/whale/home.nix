@@ -1,3 +1,15 @@
+#*/-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Hi this is the user configuration file for the picked host.
+#
+# And remember, your configuration is yours to customize.
+# After you're done, head over to ./system.nix to configure your system!
+#
+# Some notes for new systems:
+# 1. try to avoid disabling shell. It's the default shell for most systems.
+# 2. enable and disable only what you need.
+# 3. for hyprland and niri, there are some files you can tweak in modjar/usrbin for
+#   per system configuration. There is an unknown default to prevent issues.
+#*/-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 {
   config,
   pkgs,
@@ -38,7 +50,11 @@
       # =========[experience]^^^
 
       # =========[appstream]
-      browsers.enable = true; # sets firefox and librewolf [work and personal]
+      browsers = {
+        enable = true; # sets firefox and librewolf [work and personal]
+        firefox = true; # disables firefox [work]
+        librewolf = false; # enables librewolf [personal]
+      };
       terminal.enable = true; # sets terminal as foot
       terminal.font = "IntoneMono Nerd Font"; # options: "IntoneMono Nerd Font" "Monocraft" "Miracode"
       # terminal.fontSize = 14; # font size (default: 14)
@@ -46,7 +62,7 @@
       editors = {
         enable = true; # sets all editors
         vscodium.enable = true; # sets vscodium
-        zed.enable = true; # sets zed
+        zed.enable = false; # sets zed
         obsidian.enable = false; # sets obsidian
         nvf.enable = true; # sets nvf config for neovim [~2G]
       }; # end of editors
@@ -77,11 +93,11 @@
       japanese.enable = true; # sets japanese input
       ai.enable = aiEnable; # sets AI tools like opencode, ollama
       git.enable = true; # sets git
-      bluetooth.enable = true; # sets blueman in home packages
+      bluetooth.enable = false; # sets blueman in home packages
       dev.enable = false; # sets dev tools and basic languages
       # =========[management]^^^
       theming = {
-        enable = false; # sets theme for gtk/qt
+        enable = true; # sets theme for gtk/qt
         # cursorSize = 36; # cursor size in pixels (default: 36)
       };
     }; # end of usrSettings

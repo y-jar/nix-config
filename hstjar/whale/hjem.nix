@@ -11,7 +11,7 @@
 
     browsers = {
       enable = true;
-      firefox = true;
+      firefox = false;
       librewolf = true;
     };
     terminal.enable = true;
@@ -19,7 +19,7 @@
     editors = {
       enable = true;
       vscodium.enable = true;
-      zed.enable = true;
+      zed.enable = false;
       obsidian.enable = false;
       nvf.enable = true;
       helix.enable = false;
@@ -41,10 +41,10 @@
     obs.enable = false;
     kdenlive.enable = false;
 
-    japanese.enable = true;
+    japanese.enable = false;
     ai.enable = false;
     git.enable = true;
-    bluetooth.enable = true;
+    bluetooth.enable = false;
     dev.enable = false;
 
     resYoink.enable = false;
