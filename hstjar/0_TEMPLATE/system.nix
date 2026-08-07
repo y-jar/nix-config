@@ -114,7 +114,7 @@
       server = {
         komga.enable = false; # manga/comic server (port 25600)
         jellyfin = {
-          enable = false; # sets jellyfin server
+          enable = false; # sets jellyfin server.  note: the default port is 8096.
           juser = "PLEASECHANGEME_USERNAME"; # sets jellyfin user for perms for file access
         }; # end of jellyfin
         sleepyjar = {

@@ -100,7 +100,7 @@
       # =============[Server]
       server = {
         jellyfin = {
-          enable = true; # sets jellyfin server
+          enable = true; # sets jellyfin server.  note: the default port is 8096.
           juser = "jar"; # sets jellyfin user for perms for file access
         }; # end of jellyfin
         komga.enable = true; # manga/comic server (port 25600)
@@ -114,7 +114,7 @@
           # "*-*-1,15 02:00:00": reboots on the 1st and 15th of every month at 2am
         }; # end of sleepyjar
         nixdraw = {
-          enable = false; # sets up a self-hosted excalidraw Server.
+          enable = true; # sets up a self-hosted excalidraw Server.
           port = 3000; # sets the port for the excalidraw server
         };
         webjar = {

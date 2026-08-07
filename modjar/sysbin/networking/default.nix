@@ -68,6 +68,11 @@
       enable = true;
       nssmdns4 = true;
       openFirewall = true;
+      publish = {
+        enable = true;
+        addresses = true;
+        domain = true;
+      }; # end of publish
     }; # end of avahi
   }; # end of config
 }
