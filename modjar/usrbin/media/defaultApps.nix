@@ -56,7 +56,7 @@ in
         # [comic reader] yacreader
         "application/x-cbz" = "YACReader.desktop";
         "application/vnd.comicbook+zip" = "YACReader.desktop";
-      };
+      }; # end of defaultapplications
     }; # end of default applications
 
     # [packages]
