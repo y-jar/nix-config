@@ -4,7 +4,7 @@
     loader = {
       grub = {
         enable = true;
-        device = "/dev/vda";
+        device = "/dev/sda"; # Changed from /dev/vda to /dev/sda
         useOSProber = true;
         fsIdentifier = "provided";
       }; # end of grub
