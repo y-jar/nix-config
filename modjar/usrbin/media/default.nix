@@ -11,6 +11,8 @@ in
   imports = [
     ./komga.nix
     ./defaultApps.nix
+    # [yoinked repos]
+    ./webtoon-dl.nix
   ];
 
   options = {
