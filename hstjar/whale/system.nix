@@ -79,7 +79,7 @@
           port = 8080;
         };
       };
-      localsend.enable = false; # sets localsend in the system
+      localsend.enable = true; # sets localsend in the system
       flatpak.enable = false; # sets flatpak in the system [still needs to be enabled in user.nix]
       gaming = {
         drivers = {
@@ -124,6 +124,5 @@
       }; # end of server
       # =============[Server]^^^
     }; # end of sysSettings
-
   }; # end of config
 }
