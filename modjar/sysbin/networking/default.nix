@@ -12,6 +12,9 @@
       # 	~/nix-config/modules/home/shell/zsh.nix
       networkmanager.enable = true;
       hostName = "${hostnm}"; # sets HOSTNAME
+      extraHosts = ''
+        192.168.1.101 whale whale.local
+      '';
 
       # [for dns issues i keep running into]
       nameservers = [
