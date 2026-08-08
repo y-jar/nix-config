@@ -78,7 +78,7 @@
         yilyonix = mkJar "yilyonix"; # test bench [Might need to FIX]
         ziiemar = mkJar "ziiemar"; # personal laptop
         candle = mkJar "candle"; # gaming mini build
-        whale = mkJar "whale"; # Server system
+        whale = mkJar "whale"; # Server system under loomjar (proxmox server)
         vmjar = mkJar "vmjar"; # Virtual config
 
         # ========[hjem hosts (alternative to home-manager)] [Not fully implemented and toying with it]

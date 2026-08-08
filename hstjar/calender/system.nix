@@ -92,13 +92,13 @@
 
       # =============[Server]
       server = {
-        komga.enable = true; # manga/comic server (port 25600)
+        komga.enable = false; # manga/comic server (port 25600)
         jellyfin = {
           enable = false; # sets jellyfin server
           juser = "jar"; # sets jellyfin user for perms for file access
         }; # end of jellyfin
         nixdraw = {
-          enable = true; # sets up a self-hosted excalidraw Server.
+          enable = false; # sets up a self-hosted excalidraw Server.
           port = 3000; # sets the port for the excalidraw server
           # =-=-=-=Usage:
           # LOCAL: http://localhost:3000
