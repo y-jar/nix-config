@@ -16,7 +16,7 @@ lib.mkIf komgaEnable {
     };
     Service = {
       Type = "simple";
-      ExecStart = "${pkgs.komga}/bin/komga";
+      ExecStart = "${pkgs.komga}/bin/komga --server.address=0.0.0.0 --server.port=25600";
       Restart = "on-failure";
       RestartSec = 5;
     };

@@ -29,11 +29,15 @@
       # [firewall shii]
       firewall = {
         enable = true;
-        allowedTCPPorts = [ 53317 ]; # LocalSend
+        allowedTCPPorts = [
+          53317 # LocalSend
+          25600 # Komga
+          8096  # Jellyfin (if not handled by services.jellyfin.openFirewall)
+        ];
         allowedUDPPorts = [
           53317
           5353
-        ]; # LocalSend + mDNS
+        ];
 
         # [For KDE Connect / Phone integration Un comment if needed]
         allowedTCPPortRanges = [
