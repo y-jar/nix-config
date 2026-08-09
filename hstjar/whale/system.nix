@@ -105,7 +105,7 @@
         }; # end of jellyfin
         komga.enable = true; # manga/comic server (port 25600)
         sleepyjar = {
-          enable = true; # sets sleepy service
+          enable = false; # sets sleepy service
           interval = "weekly"; # sets interval for sleepy service
           # some* options for sleepy service:
           # daily: reboots every midnight
