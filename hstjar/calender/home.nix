@@ -45,7 +45,7 @@
       }; # end of browsers
       terminal.enable = true; # sets terminal as foot
       terminal.font = "Monocraft"; # options: "IntoneMono Nerd Font" "Monocraft" "Miracode"
-      terminal.fontSize = 16; # font size (default: 14)
+      terminal.fontSize = 12; # font size (default: 14)
       syncthing.enable = true; # file sync (web UI at localhost:8384)
       editors = {
         enable = true; # sets editors
