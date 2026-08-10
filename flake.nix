@@ -30,7 +30,7 @@
       mkJar = hostName: nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = {
-          inherit inputs;
+          inherit inputs self;
           hostnm = hostName; # Dynamically sets hostnm for networking/Zsh
         }; # end of special args
         modules = [
@@ -43,7 +43,7 @@
       mkHjemJar = hostName: nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = {
-          inherit inputs;
+          inherit inputs self;
           hostnm = hostName;
         }; # end of special args
         modules = [
@@ -56,7 +56,7 @@
       urnJar = { hostName, arch }: nixpkgs.lib.nixosSystem {
         system = arch; # Dynamically sets the architecture
         specialArgs = {
-          inherit inputs;
+          inherit inputs self;
           hostnm = hostName;
         }; # end of special args
         modules = [
