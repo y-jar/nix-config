@@ -108,11 +108,6 @@ in
         ns = "nix-shell"; # load dev enviroment
         nsp = "nix search nixpkgs";
         shlvl = "echo $SHLVL";
-        # [ai... ew]
-        ols = "ollama list";
-        olrs = "sudo systemctl restart ollama-model-loader.service";
-        olpm = "pull-models";
-        olrm = "remove-models";
         # ========[util]
 
         # =========[Extra]

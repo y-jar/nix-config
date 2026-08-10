@@ -75,11 +75,6 @@ let
     alias rz="exec zsh"
     alias ns="nix-shell"
     alias nsp="nix search nixpkgs"
-    alias ols="ollama list"
-    alias olrs="sudo systemctl restart ollama-model-loader.service"
-    alias olpm="pull-models"
-    alias olrm="remove-models"
-
     # ==[extra]
     alias mcube="mangohud vkcube --present_mode 1"
     alias cs="cowsay"

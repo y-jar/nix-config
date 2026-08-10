@@ -159,7 +159,7 @@ Paste:
   `Jellyfin` · `nixdraw` · `webjar` · `sleepyjar`
 
   #### Other:
-  `KeePassXC` · `LocalSend` · `Discord` · `Bazaar` · `LibreOffice` · `Fastfetch` · `Ollama` · `Japanese input (fcitx5 + Mozc)`
+  `KeePassXC` · `LocalSend` · `Discord` · `Bazaar` · `LibreOffice` · `Fastfetch` · `llama.cpp` · `Japanese input (fcitx5 + Mozc)`
 </details>
 
 <details>

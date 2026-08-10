@@ -91,7 +91,7 @@
 
       # =========[management]
       inputmethods.japanese.enable = false; # sets japanese input
-      ai.enable = aiEnable; # sets AI tools like opencode, ollama
+      ai.enable = aiEnable; # sets AI tools like opencode, llama.cpp
       git.enable = true; # sets git
       bluetooth.enable = false; # sets blueman in home packages
       dev.enable = false; # sets dev tools and basic languages

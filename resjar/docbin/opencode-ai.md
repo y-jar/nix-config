@@ -15,31 +15,22 @@ This document covers the opencode configuration, available models, and custom ag
 ### Cloud Models (Default)
 Your default model is whichever cloud API key you have configured (e.g., Anthropic, OpenAI). This is used for the main `build` agent.
 
-### Local Models (Ollama)
-Local models run via Ollama on your machine. They are available in opencode via the `/models` command.
+### Local Models (llama.cpp)
+Local models run via llama.cpp's `llama-server` on your machine. They are available in opencode via the `/models` command.
 
 | Model | ID | Notes |
 | :--- | :--- | :--- |
-| **Qwen3.5 9B** | `ollama/qwen3.5:9b` | Solid all-rounder for code and general tasks. |
-| **Qwen3.5 9B (MLX)** | `ollama/qwen3.5:9b-mlx` | MLX variant of Qwen3.5 9B. |
-| **Ministral 3 14B** | `ollama/frob/ministral-3:14b` | Mistral's larger reasoning model, good for analysis. |
-| **Ministral 3 3B** | `ollama/frob/ministral-3:3b` | Lightweight Mistral model for quick tasks. |
-| **Mistral 7B** | `ollama/mistral:7b` | General-purpose Mistral model. |
-| **Gemma 4** | `ollama/gemma4:latest` | Google's latest Gemma model. |
+| **Qwen3.5 9B** | `llama/qwen3.5-9b` | Vision-language model, solid for code and general tasks. |
 
-### Pulling Models
-Before using a local model, pull it with Ollama:
+### Downloading Models
+Models are auto-downloaded by llama-server on first request (HuggingFace GGUF via `models-preset`). Models are cached in `/var/cache/llama-cpp`:
+
 ```bash
-ollama pull qwen3.5:9b
-ollama pull qwen3.5:9b-mlx
-ollama pull frob/ministral-3:14b
-ollama pull frob/ministral-3:3b
-ollama pull mistral:7b
-ollama pull gemma4:latest
+curl -s http://localhost:11434/v1/models
 ```
 
 ### Switching Models
-In opencode, type `/models` to see available models and select one. The local models appear under the "Ollama (local)" provider.
+In opencode, type `/models` to see available models and select one. The local models appear under the "llama.cpp (local)" provider.
 
 ## Custom Agents
 

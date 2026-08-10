@@ -22,7 +22,7 @@
 │   ├── homekey.nix             # Home-manager entry point
 │   ├── sysbin/                 # System-level modules (NixOS options under sysSettings.*)
 │   │   ├── base.nix            # Always-active: core system, CLI tools, Wayland basics
-│   │   ├── ai[cringe]/         # Ollama service (rocm/cuda/cpu)
+│   │   ├── ai[cringe]/         # llama.cpp + Open WebUI (rocm/cuda/cpu)
 │   │   ├── audio/              # PipeWire stack + audio tools
 │   │   ├── bluetooth/          # Bluetooth hardware + Blueman
 │   │   ├── cinnamon/           # Cinnamon desktop environment

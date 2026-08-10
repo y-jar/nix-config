@@ -85,7 +85,7 @@
       # =============[software]
       UseNixPkgsYoinks.enable = false;
       ai = {
-        enable = false; # ~2gib - Ollama + models If you run `pull-models` in terminal
+        enable = false; # ~2gib - llama.cpp + models (auto-downloaded via models-preset)
         port = 11434;
         webui = {
           enable = false; # Open WebUI chat interface (~2gib)

@@ -72,7 +72,7 @@
       # =============[software]
       UseNixPkgsYoinks.enable = false;
       ai = {
-        enable = false; # sets AI tools (Ollama, opencode, etc.)
+        enable = false; # sets AI tools (llama.cpp, opencode, etc.)
         port = 11434;
         webui = {
           enable = false; # Open WebUI chat interface

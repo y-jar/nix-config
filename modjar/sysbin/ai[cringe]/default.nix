@@ -6,14 +6,14 @@ in
 {
   options = {
     sysSettings.ai = {
-      enable = lib.mkEnableOption "Enable AI tools (~2GiB, Ollama + models)";
+      enable = lib.mkEnableOption "Enable AI tools (~2GiB, llama.cpp + models)";
       port = lib.mkOption {
         type = lib.types.port;
         default = 11434;
-        description = "Port for the Ollama API";
+        description = "Port for the llama.cpp API";
       };
       webui = {
-        enable = lib.mkEnableOption "Open WebUI — browser-based chat interface for Ollama";
+        enable = lib.mkEnableOption "Open WebUI — browser-based chat interface for llama.cpp";
         port = lib.mkOption {
           type = lib.types.port;
           default = 8080;
@@ -24,41 +24,45 @@ in
   }; # end of options
 
   config = lib.mkMerge [
-    # Ollama (always when ai is enabled)
+    # llama.cpp (always when ai is enabled)
     (lib.mkIf cfg.enable {
-      services.ollama = {
+      services.llama-cpp = {
         enable = true;
-        package = pkgs.ollama-rocm; # Swap to ollama-cuda for Nvidia, or ollama for CPU only
-        host = "0.0.0.0"; # The host address which the ollama server HTTP interface listens to.
+        package = pkgs.llama-cpp-rocm; # Swap to llama-cpp-cuda for Nvidia, or llama-cpp for CPU only
+        host = "0.0.0.0"; # The host address which the llama-server HTTP interface listens to.
         port = cfg.port;
-        syncModels = false; # set true + loadModels to auto-manage models (deletes undeclared ones)
-        # [models] this is causing issues.. just run `pull-models`
-        # loadModels = [
-        #   "qwen3.5:9b"
-        #   "qwen3.5:9b-mlx"
-        #   "frob/ministral-3:14b"
-        #   "frob/ministral-3:3b"
-        #   "mistral:7b"
-        #   "gemma4:latest"
-        # ];
-        # troubleshooting: if models don't pull after rebuild, run:
-        #   sudo systemctl restart ollama-model-loader.service
-      }; # end of ollama config
-      networking.firewall.allowedTCPPorts = [ cfg.port ];
-    }) # end of ollama config
+        openFirewall = true;
+        # [models] auto-downloaded from HuggingFace on first request into /var/cache/llama-cpp
+        modelsPreset = {
+          "qwen3.5-9b" = {
+            hf-repo = "unsloth/Qwen3.5-9B-GGUF";
+            hf-file = "Qwen3.5-9B-UD-Q4_K_XL.gguf";
+            alias = "qwen3.5-9b"; # model ID served by the API (matches opencode)
+            fit = "on";
+          }; # end of qwen3.5-9b preset
+        }; # end of models preset
+        extraFlags = [
+          "-ngl"
+          "999" # offload all layers to GPU
+        ];
+      }; # end of llama-cpp config
+      # llama-cpp runs as a DynamicUser; grant access to /dev/kfd + /dev/dri/renderD*
+      systemd.services.llama-cpp.serviceConfig.SupplementaryGroups = [ "render" "video" ];
+    }) # end of llama-cpp config
 
-    # Open WebUI (optional, uses host networking to reach Ollama on localhost)
+    # Open WebUI (optional, connects to llama.cpp on localhost)
     (lib.mkIf cfg.webui.enable {
-      virtualisation.docker.enable = true;
-      virtualisation.oci-containers.containers.open-webui = {
-        image = "ghcr.io/open-webui/open-webui:main";
-        networks = [ "host" ];
-        volumes = [ "open-webui:/app/backend/data" ];
+      services.open-webui = {
+        enable = true;
+        host = "0.0.0.0";
+        port = cfg.webui.port;
+        openFirewall = true;
         environment = {
+          OPENAI_API_BASE_URL = "http://127.0.0.1:${toString cfg.port}/v1";
+          OPENAI_API_KEY = "llama.cpp"; # llama-server accepts any API key
           WEBUI_AUTH = "true";
         };
-      };
-      networking.firewall.allowedTCPPorts = [ cfg.webui.port ];
+      }; # end of open-webui config
     }) # end of webui config
   ]; # end of config
 }
