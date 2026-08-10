@@ -80,7 +80,7 @@
 
       # =========[management]
       inputmethods.japanese.enable = true; # sets japanese input
-      inputmethods.korean.enable = true; # sets korean input
+      inputmethods.korean.enable = false; # sets korean input
       ai.enable = aiEnable; # sets AI tools like opencode, ollama
       git.enable = true; # sets git
       bluetooth.enable = false; # sets blueman in home packages
