@@ -91,7 +91,8 @@
       # =========[creative tools]^^^
 
       # =========[management]
-      japanese.enable = false; # ~100mib - fcitx5 + Mozc
+      inputmethods.japanese.enable = false; # ~100mib - fcitx5 + Mozc
+      inputmethods.korean.enable = false; # ~100mib - fcitx5 + Hangul
       ai.enable = aiEnable; # ~1.5gib - LM Studio + opencode-desktop
       git.enable = true; # ~10mib - git + gh + lazygit
       bluetooth.enable = false; # ~5mib - blueman

@@ -41,7 +41,8 @@
     obs.enable = true;
     kdenlive.enable = false;
 
-    japanese.enable = true;
+    inputmethods.japanese.enable = true;
+    inputmethods.korean.enable = true;
     ai.enable = false;
     git.enable = true;
     bluetooth.enable = false;

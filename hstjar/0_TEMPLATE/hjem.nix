@@ -49,7 +49,8 @@
     kdenlive.enable = false;
 
     # [management]
-    japanese.enable = false;
+    inputmethods.japanese.enable = false;
+    inputmethods.korean.enable = false;
     ai.enable = false;
     git.enable = true;
     bluetooth.enable = false;

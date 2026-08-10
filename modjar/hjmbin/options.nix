@@ -44,7 +44,10 @@
     kdenlive.enable = lib.mkEnableOption "kdenlive video editor";
 
     # [management]
-    japanese.enable = lib.mkEnableOption "japanese input (fcitx5 + mozc)";
+    inputmethods = {
+      japanese.enable = lib.mkEnableOption "japanese input (fcitx5 + mozc)";
+      korean.enable = lib.mkEnableOption "korean input (fcitx5 + hangul)";
+    };
     ai.enable = lib.mkEnableOption "ai tools (lm studio + opencode)";
     git.enable = lib.mkEnableOption "git tools (git + gh + lazygit)";
     bluetooth.enable = lib.mkEnableOption "bluetooth (blueman)";

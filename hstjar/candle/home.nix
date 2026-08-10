@@ -74,7 +74,7 @@
       # =========[creative tools]^^^
 
       # =========[management]
-      japanese.enable = true; # sets japanese input
+      inputmethods.japanese.enable = true; # sets japanese input
       ai.enable = aiEnable; # sets AI tools like opencode, ollama
       git.enable = true; # sets git
       bluetooth.enable = false; # sets blueman in home packages
