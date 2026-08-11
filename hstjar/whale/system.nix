@@ -34,7 +34,8 @@
       # =============[experience install]
       # [pick one or more if you know what you're doing]
       cinnamon.enable = false; # sets cinnamon
-      gnome.enable = true; # sets gnome [on by default]
+      gnome.enable = false; # sets gnome [on by default]
+      gdm.enable = false; # headless server, no login screen
       hyprland.enable = false; # sets hyprland ~19MiB
       niri.enable = false; # sets niri
       cosmic = {

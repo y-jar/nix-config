@@ -38,7 +38,6 @@
         hyprlandEnable = config.sysSettings.hyprland.enable or false;
         niriEnable = config.sysSettings.niri.enable or false;
         aiEnable = config.sysSettings.ai.enable or false;
-        komgaEnable = config.sysSettings.server.komga.enable or false;
         cosmicEnable = config.sysSettings.cosmic.enable or false;
       };
     };
