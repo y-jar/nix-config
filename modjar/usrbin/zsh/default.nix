@@ -69,6 +69,7 @@ in
         nht = "nh os test --accept-flake-config ~/nix-config#${hostnm}"; # base test
         nhs = "nh os switch --accept-flake-config ~/nix-config#${hostnm}"; # base switch
         nhc = "nh clean all --keep 7"; # base cleanup
+        nsr = "sudo nix-store --verify --check-contents --repair";
         nrs = "nixos-rebuild switch --sudo --flake ~/nix-config#${hostnm}"; # hard building
         nrt = "nixos-rebuild test --sudo --flake ~/nix-config#${hostnm}"; # testing
         buildiso = "sh ~/nix-config/resjar/nixbin/buildiso.sh"; # build recovery ISO
