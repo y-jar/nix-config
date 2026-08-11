@@ -15,7 +15,8 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   config = {
     system.stateVersion = "26.05"; # [CHANGE THIS]
     #            [system state version from first install]
@@ -24,8 +25,8 @@
     sysSettings = {
       # =============[users]
       mainUser = "jar";
-      users = ["jar"];
-      adminUsers = ["jar"];
+      users = [ "jar" ];
+      adminUsers = [ "jar" ];
       userDescriptions = {
         jar = "jar";
       };
@@ -45,7 +46,10 @@
       # =============[experience install]^^^
 
       # =============[hardware]
-      neverSleep.enable = true; # disable system idle sleep
+      nvidia = {
+        enable = false; # NVIDIA GPU drivers and CUDA support
+        open = false; # open-source NVIDIA kernel module (Turing/RTX 2000+ only)
+      };
       # [kernel] pick one: "default", "latest", "cachyos-latest", "cachyos-bore", "cachyos-lts"
       kernel.variant = "latest";
       # [TTY console font] bitmap fonts (set null for kernel default):
@@ -57,12 +61,18 @@
       console = {
         font = "ter-132n";
       };
+      boot.quiet = false; # silence kernel/udev/systemd startup logs
+      boot.fastMenu = false; # set boot loader timeout to 1 second
+      neverSleep.enable = true; # disable system idle sleep
       bluetooth.enable = false; # sets blueman in home packages
       automount.enable = true; # auto-mount removable media (udisks2)
       # [power management]
       tlp.enable = false; # NOTE: mutually exclusive with powerprofiles, pick one
       tlp.startChargeThreshold = 0;
       tlp.stopChargeThreshold = 100;
+      tlp.cpuEppOnBattery = "balance_power"; # (default|performance|balance_performance|balance_power|power)
+      tlp.platformProfileOnBattery = "balanced"; # (cool|quiet|balanced|performance)
+      tlp.pcieAspmOnBattery = "default"; # (default|performance|powersave|powersupersave)
       powerprofiles.enable = false;
       audio = {
         enable = true; # sets audio and adds some apps
@@ -96,15 +106,17 @@
         enable = false; # sets virtualization and installs virtualization tools
         isInVM = true; # enable if this system is in a vm [virtual mechine]
       };
+      portal.enable = true; # XDG portal file pickers
+      polkit.enable = true; # polkit authentication agent (gnome polkit)
       # =============[software]^^^
 
       # =============[Server]
       server = {
+        komga.enable = true; # manga/comic server (port 25600)
         jellyfin = {
           enable = true; # sets jellyfin server.  note: the default port is 8096.
           juser = "jar"; # sets jellyfin user for perms for file access
         }; # end of jellyfin
-        komga.enable = true; # manga/comic server (port 25600)
         sleepyjar = {
           enable = false; # sets sleepy service
           interval = "weekly"; # sets interval for sleepy service

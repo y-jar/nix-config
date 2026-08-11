@@ -15,7 +15,8 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   config = {
     system.stateVersion = "26.05"; # [CHANGE THIS]
     #            [system state version from first install]
@@ -24,8 +25,8 @@
     sysSettings = {
       # =============[users]
       mainUser = "jar";
-      users = ["jar"];
-      adminUsers = ["jar"];
+      users = [ "jar" ];
+      adminUsers = [ "jar" ];
       userDescriptions = {
         jar = "jar";
       };
@@ -35,6 +36,7 @@
       # [pick one or more if you know what you're doing]
       cinnamon.enable = true; # sets cinnamon ~800mib
       gnome.enable = false; # sets gnome [on by default]
+      gdm.enable = true; # sets GDM login manager
       hyprland.enable = false; # sets hyprland ~19MiB
       niri.enable = true; # sets niri
       cosmic = {
@@ -44,6 +46,10 @@
       # =============[experience install]^^^
 
       # =============[hardware]
+      nvidia = {
+        enable = false; # NVIDIA GPU drivers and CUDA support
+        open = false; # open-source NVIDIA kernel module (Turing/RTX 2000+ only)
+      };
       # [kernel] pick one: "default", "latest", "cachyos-latest", "cachyos-bore", "cachyos-lts"
       kernel.variant = "default";
       neverSleep.enable = false; # disable system idle sleep
@@ -57,12 +63,17 @@
       console = {
         font = "ter-132n";
       };
+      boot.quiet = false; # silence kernel/udev/systemd startup logs
+      boot.fastMenu = false; # set boot loader timeout to 1 second
       bluetooth.enable = true; # sets blueman in home packages
       # [power management]
       # NOTE: tlp and powerprofiles are mutually exclusive, pick one
       tlp.enable = true;
       tlp.startChargeThreshold = 0;
       tlp.stopChargeThreshold = 80;
+      tlp.cpuEppOnBattery = "balance_power"; # (default|performance|balance_performance|balance_power|power)
+      tlp.platformProfileOnBattery = "balanced"; # (cool|quiet|balanced|performance)
+      tlp.pcieAspmOnBattery = "default"; # (default|performance|powersave|powersupersave)
       # powerprofiles.enable = true;
       audio = {
         enable = true; # sets audio and adds some apps
@@ -96,15 +107,17 @@
         enable = true; # sets virtualization and installs virtualization tools
         isInVM = false; # enable if this system is in a vm
       };
+      portal.enable = true; # XDG portal file pickers
+      polkit.enable = true; # polkit authentication agent (gnome polkit)
       # =============[software]^^^
 
       # =============[Server]
       server = {
+        komga.enable = false; # manga/comic server (port 25600)
         jellyfin = {
           enable = false; # sets jellyfin server
           juser = "jar"; # sets jellyfin user for perms for file access
         }; # end of jellyfin
-        komga.enable = false; # manga/comic server (port 25600)
         sleepyjar = {
           enable = false; # sets sleepy service
           interval = "weekly"; # sets interval for sleepy service

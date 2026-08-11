@@ -39,10 +39,11 @@
 
       # =============[experience install]
       # [pick one or more if you know what you're doing] [sIZES ARE APPROXIMATE]
+      cinnamon.enable = false; # ~800mib - full Cinnamon desktop
       gnome.enable = true; # ~800mib - full GNOME desktop
+      gdm.enable = true; # sets GDM login manager
       hyprland.enable = true; # ~19mib - compositor only
       niri.enable = true; # ~20mib - compositor only
-      cinnamon.enable = false; # ~800mib - full Cinnamon desktop
       cosmic = {
         enable = false; # COSMIC desktop environment
         greeter = false; # COSMIC login manager (disables GDM if enabled)
@@ -50,7 +51,10 @@
       # =============[experience install]^^^
 
       # =============[hardware]
-      nvidia.enable = false;
+      nvidia = {
+        enable = false; # NVIDIA GPU drivers and CUDA support
+        open = false; # open-source NVIDIA kernel module (Turing/RTX 2000+ only)
+      };
       # [kernel] pick one: "default", "latest", "cachyos-latest", "cachyos-bore", "cachyos-lts"
       kernel.variant = "default";
 
@@ -73,8 +77,11 @@
       # NOTE: tlp and powerprofiles are mutually exclusive, pick one
       # tlp is better for battery capping (laptops), powerprofiles gives a tray selector
       tlp.enable = false;
-      tlp.startChargeThreshold = 0;   # 0 = always charge, 75 = resume charging at 75%
-      tlp.stopChargeThreshold = 100;  # 100 = no cap, 80 = stop charging at 80%
+      tlp.startChargeThreshold = 0; # 0 = always charge, 75 = resume charging at 75%
+      tlp.stopChargeThreshold = 100; # 100 = no cap, 80 = stop charging at 80%
+      tlp.cpuEppOnBattery = "balance_power"; # (default|performance|balance_performance|balance_power|power)
+      tlp.platformProfileOnBattery = "balanced"; # (cool|quiet|balanced|performance)
+      tlp.pcieAspmOnBattery = "default"; # (default|performance|powersave|powersupersave)
       powerprofiles.enable = true;
       audio = {
         enable = true; # ~100mib - PipeWire + audio tools
@@ -108,6 +115,8 @@
         enable = false; # ~1gib - QEMU + libvirtd + tools
         isInVM = false; # enable if this system is in a vm
       }; # end of virt
+      portal.enable = true; # XDG portal file pickers
+      polkit.enable = true; # polkit authentication agent (gnome polkit)
       # =============[software]^^^
 
       # =============[Server]

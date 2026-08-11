@@ -50,10 +50,14 @@
       # =========[experience]^^^
 
       # =========[appstream]
-      browsers.enable = true; # sets firefox and librewolf [work and personal]
+      browsers = {
+        enable = true; # sets firefox and librewolf [work and personal]
+        firefox = false; # disables firefox [work]
+        librewolf = true; # enables librewolf [personal]
+      };
       terminal.enable = true; # sets terminal as foot
       terminal.font = "IntoneMono Nerd Font"; # options: "IntoneMono Nerd Font" "Monocraft" "Miracode"
-      # terminal.fontSize = 14; # font size (default: 14)
+      terminal.fontSize = 14; # font size (default: 14)
       syncthing.enable = true; # file sync (web UI at localhost:8384)
       editors = {
         enable = false; # sets all editors
@@ -61,6 +65,7 @@
         zed.enable = true; # sets zed
         obsidian.enable = false; # sets obsidian
         nvf.enable = true; # sets nvf config for neovim [~2G]
+        helix.enable = false; # sets helix
       }; # end of editors
       discord.enable = false; # sets discord
       flatpak.enable = false; # sets flatpak and adds bazaar
@@ -82,11 +87,15 @@
       # godot.enable = true; # sets godot
       office.enable = false; # sets libreoffice and other apps
       obs.enable = false; # sets up obs studio
-      videoEditors.kdenlive.enable = false; # sets kdenlive
+      videoEditors = {
+        enable = false; # sets video editors
+        kdenlive.enable = false; # sets kdenlive
+      }; # end of videoEditors
       # =========[creative tools]^^^
 
       # =========[management]
       inputmethods.japanese.enable = true; # sets japanese input
+      inputmethods.korean.enable = false; # sets korean input
       ai.enable = aiEnable; # sets AI tools like opencode, llama.cpp
       git.enable = true; # sets git
       bluetooth.enable = true; # sets blueman in home packages
@@ -94,8 +103,11 @@
       # =========[management]^^^
       theming = {
         enable = true; # sets theme for gtk/qt
-        # cursorSize = 36; # cursor size in pixels (default: 36)
+        flavor = "mocha"; # catppuccin flavor (latte|frappe|macchiato|mocha)
+        accent = "blue"; # catppuccin accent color
+        cursorSize = 36; # cursor size in pixels (default: 36)
       };
+      fastfetch.enable = true; # sets fastfetch
     }; # end of usrSettings
 
   }; # end of config

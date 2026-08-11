@@ -42,11 +42,17 @@
     kdenlive.enable = false;
 
     inputmethods.japanese.enable = false;
+    inputmethods.korean.enable = false;
     ai.enable = false;
     git.enable = true;
     bluetooth.enable = false;
     dev.enable = false;
 
-    resYoink.enable = false;
+    resYoink = {
+      enable = false;
+      wallpapers = false;
+      icons = false;
+      profilePictures = false;
+    };
   };
 }

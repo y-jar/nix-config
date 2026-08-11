@@ -87,7 +87,10 @@
       # godot.enable = true; # ~500mib
       office.enable = false; # ~800mib - LibreOffice + Pandoc
       obs.enable = false; # ~400mib - OBS Studio + plugins
-      videoEditors.kdenlive.enable = false; # ~400mib
+      videoEditors = {
+        enable = false; # ~400mib
+        kdenlive.enable = false; # ~400mib
+      }; # end of videoEditors
       # =========[creative tools]^^^
 
       # =========[management]
@@ -100,8 +103,11 @@
       # =========[management]^^^
       theming = {
         enable = true; # sets theme for gtk/qt
+        flavor = "mocha"; # catppuccin flavor (latte|frappe|macchiato|mocha)
+        accent = "blue"; # catppuccin accent color
         cursorSize = 36; # cursor size in pixels (default: 36)
       };
+      fastfetch.enable = true; # sets fastfetch
     }; # end of usrSettings
 
   }; # end of config

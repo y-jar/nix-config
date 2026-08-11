@@ -23,10 +23,11 @@
 
       # =============[experience install]
       # [pick one or more if you know what you're doing]
+      cinnamon.enable = false; # sets cinnamon
       gnome.enable = true; # sets gnome [on by default]
+      gdm.enable = true; # sets GDM login manager
       hyprland.enable = false; # sets hyprland
       niri.enable = true; # sets niri
-      cinnamon.enable = false; # sets cinnamon
       cosmic = {
         enable = false; # sets cosmic desktop environment
         greeter = false; # sets cosmic login manager (disables GDM if enabled)
@@ -34,7 +35,10 @@
       # =============[experience install]^^^
 
       # =============[hardware]
-      nvidia.enable = false;
+      nvidia = {
+        enable = false; # NVIDIA GPU drivers and CUDA support
+        open = false; # open-source NVIDIA kernel module (Turing/RTX 2000+ only)
+      };
       # [kernel] pick one: "default", "latest", "cachyos-latest", "cachyos-bore", "cachyos-lts"
       kernel.variant = "cachyos-latest";
 
@@ -47,6 +51,8 @@
       console = {
         font = "ter-132n";
       };
+      boot.quiet = false; # silence kernel/udev/systemd startup logs
+      boot.fastMenu = false; # set boot loader timeout to 1 second
 
       bluetooth.enable = false; # sets blueman in home packages
       neverSleep.enable = false; # disable system idle sleep
@@ -55,6 +61,9 @@
       tlp.enable = false; # NOTE: mutually exclusive with powerprofiles, pick one
       tlp.startChargeThreshold = 0;
       tlp.stopChargeThreshold = 100;
+      tlp.cpuEppOnBattery = "balance_power"; # (default|performance|balance_performance|balance_power|power)
+      tlp.platformProfileOnBattery = "balanced"; # (cool|quiet|balanced|performance)
+      tlp.pcieAspmOnBattery = "default"; # (default|performance|powersave|powersupersave)
       powerprofiles.enable = true;
       audio = {
         enable = true; # sets audio and adds some apps
@@ -88,6 +97,8 @@
         enable = true; # sets virtualization and installs virtualization tools
         isInVM = false; # enable if this system is in a vm [virtual mechine]
       };
+      portal.enable = true; # XDG portal file pickers
+      polkit.enable = true; # polkit authentication agent (gnome polkit)
       # =============[software]^^^
 
       # =============[Server]
@@ -97,6 +108,15 @@
           enable = false; # sets jellyfin server
           juser = "jar"; # sets jellyfin user for perms for file access
         }; # end of jellyfin
+        sleepyjar = {
+          enable = false; # sets sleepy service
+          interval = "weekly"; # sets interval for sleepy service
+          # some* options for sleepy service:
+          # daily: reboots every midnight
+          # weekly: reboots every Sunday at midnight
+          # "Fri 03:00:00": reboots every Friday at 3am
+          # "*-*-1,15 02:00:00": reboots on the 1st and 15th of every month at 2am
+        }; # end of sleepyjar
         nixdraw = {
           enable = false; # sets up a self-hosted excalidraw Server.
           port = 3000; # sets the port for the excalidraw server
@@ -108,11 +128,8 @@
           enable = true; # self-hosted link page (nginx)
           port = 80;
         };
-        sleepyjar = {
-          enable = false; # sets sleepy service
-          interval = "weekly"; # sets interval for sleepy service
-        };
       }; # end of server
+      # =============[Server]^^^
     }; # end of sysSettings
   }; # end of config
 }

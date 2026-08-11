@@ -57,6 +57,11 @@
     dev.enable = true;
 
     # [resources]
-    resYoink.enable = false;
+    resYoink = {
+      enable = false;
+      wallpapers = false;
+      icons = false;
+      profilePictures = false;
+    };
   };
 }
