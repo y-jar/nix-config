@@ -24,6 +24,7 @@
       ~/kilnjar \
       ~/artjar \
       ~/entjar \
+      ~/entjar/mdachapters \
       ~/docjar \
       ~/vidjar \
       ~/downloads
