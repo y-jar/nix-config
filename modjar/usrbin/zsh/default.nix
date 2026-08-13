@@ -75,8 +75,6 @@ in
         buildiso = "sh ~/nix-config/resjar/nixbin/buildiso.sh"; # build recovery ISO
         ns = "nix-shell"; # load dev enviroment
         nsp = "nix search nixpkgs";
-        # ========[syst nix]^^^
-
         # ========[app aliases]
         nv = "nvim";
         zd = "zeditor";
@@ -84,8 +82,6 @@ in
         brw = "browsh"; # TUI based browser
         oc = "opencode"; # Ai thing
         b = "browsh"; # browser
-        # ========[app aliases]
-
         # ========[util]
         #[jar]
         jars = "git pull --rebase origin main";
@@ -117,7 +113,6 @@ in
         cs = "cowsay";
         csj = "cowsay IM JAR";
         ff = "fastfetch";
-        # =========[Extra]
       }; # end of aliases
     }; # end of zsh config
 
