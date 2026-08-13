@@ -106,6 +106,10 @@ in
         rniri = "niri msg action reload-config";
         dl = "ytdl"; # youtube downloader
         shlvl = "echo $SHLVL";
+        # [AI]
+        rllms = "sudo systemctl restart llama-cpp";
+        sllms = "sudo systemctl restart llama-cpp";
+        stllms = "sudo systemctl start llama-cpp";
         # ========[util]
 
         # =========[Extra]
