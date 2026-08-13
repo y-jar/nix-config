@@ -91,6 +91,7 @@
         };
       };
       localsend.enable = true; # sets localsend in the system
+      espanso.enable = false; # espanso daemon + Wayland security wrapper [headless server, no graphical session]
       flatpak.enable = false; # sets flatpak in the system [still needs to be enabled in user.nix]
       gaming = {
         drivers = {

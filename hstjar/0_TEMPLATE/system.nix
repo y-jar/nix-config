@@ -101,6 +101,7 @@
         };
       };
       localsend.enable = true; # ~30mib - local file sharing
+      espanso.enable = false; # ~30mib - espanso daemon + Wayland security wrapper
       flatpak.enable = false; # ~10mib - flatpak support [still needs to be enabled in user.nix]
       gaming = {
         drivers = {

@@ -23,7 +23,14 @@
 #   hjmbin modules --> hjemDotfiles options --> hjemkey.nix --> ~/.config/...
 # =-=-=[end hjemkey.nix] =-=-=
 
-{ config, lib, pkgs, inputs, hostnm, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  hostnm,
+  ...
+}:
 
 let
   # hjmbin modules expose generated dotfiles via the hjemDotfiles options,
@@ -32,8 +39,8 @@ let
 in
 {
   imports = [
-    inputs.hjem.nixosModules.default    # hjem: manages user home dirs
-    inputs.nvf.nixosModules.default     # nvf: neovim config (NixOS module)
+    inputs.hjem.nixosModules.default # hjem: manages user home dirs
+    inputs.nvf.nixosModules.default # nvf: neovim config (NixOS module)
   ];
 
   config = {
@@ -94,6 +101,14 @@ in
         }
         // lib.optionalAttrs (hjemDotfiles.mimeApps != null) {
           ".config/mimeapps.list".source = hjemDotfiles.mimeApps;
+        }
+        # [espanso config]
+        // lib.optionalAttrs (hjemDotfiles.espansoDefault != null) {
+          ".config/espanso/config/default.yml".source = hjemDotfiles.espansoDefault;
+          ".config/espanso/match/base.yml".source = hjemDotfiles.espansoBase;
+        }
+        // lib.optionalAttrs (hjemDotfiles.espansoGlobals != null) {
+          ".config/espanso/match/globals.yml".source = hjemDotfiles.espansoGlobals;
         }
         # [niri config]
         // lib.optionalAttrs (hjemDotfiles.niriFiles != null) {

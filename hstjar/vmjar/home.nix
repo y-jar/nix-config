@@ -68,6 +68,25 @@
         helix.enable = false; # sets helix
       }; # end of editors
       discord.enable = false; # sets discord
+      espanso = {
+        enable = true; # espanso text expander
+        shorts = {
+          ":addr" = "123 Jar Street, Warrington";
+          ":sig" = "Best,\nJar";
+          ":np" = "now playing: $|$";
+          ":gitadd" = "git add -A && git commit -m \"$|$\"";
+          ":date" = "{{mydate}}";
+        };
+        vars = [
+          {
+            name = "mydate";
+            type = "date";
+            params = {
+              format = "%Y-%m-%d";
+            };
+          }
+        ];
+      };
       flatpak.enable = false; # sets flatpak and adds bazaar
       # [file explorers]
       nautilus.enable = true; # sets nautilus

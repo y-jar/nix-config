@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 
 {
   options.hjmSettings = {
@@ -32,6 +32,24 @@
     ranger.enable = lib.mkEnableOption "ranger terminal file manager";
     media.enable = lib.mkEnableOption "media tools (mpv + ffmpeg)";
     keepass.enable = lib.mkEnableOption "keepassxc";
+    espanso = {
+      enable = lib.mkEnableOption "espanso text expander";
+      shorts = lib.mkOption {
+        type = lib.types.attrsOf lib.types.str;
+        default = { };
+        description = "Espanso trigger -> replacement pairs, editable per host";
+      }; # end of shorts
+      vars = lib.mkOption {
+        type = lib.types.listOf lib.types.attrs;
+        default = [ ];
+        description = "Espanso match vars (e.g. date/time), used as {{name}} in replacements";
+      }; # end of vars
+      settings = lib.mkOption {
+        type = (pkgs.formats.yaml { }).type;
+        default = { };
+        description = "Extra espanso config/default.yml settings";
+      }; # end of settings
+    }; # end of espanso
     gaming = {
       prism.enable = lib.mkEnableOption "prismlauncher (minecraft)";
       heroic.enable = lib.mkEnableOption "heroic (gog + epic)";
@@ -125,6 +143,25 @@
       internal = true;
       description = "Generated mimeapps.list path";
     };
+    # [espanso/default.nix]
+    espansoDefault = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      internal = true;
+      description = "Generated espanso config/default.yml path";
+    };
+    espansoBase = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      internal = true;
+      description = "Generated espanso match/base.yml path";
+    };
+    espansoGlobals = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      internal = true;
+      description = "Generated espanso match/globals.yml path";
+    };
     # [inputmethods/default.nix]
     mozcConfig1Db = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
@@ -140,16 +177,18 @@
     };
     # [niri/default.nix]
     niriFiles = lib.mkOption {
-      type = lib.types.nullOr (lib.types.submodule {
-        options = {
-          config = lib.mkOption { type = lib.types.path; };
-          base = lib.mkOption { type = lib.types.path; };
-          bindings = lib.mkOption { type = lib.types.path; };
-          rules = lib.mkOption { type = lib.types.path; };
-          startups = lib.mkOption { type = lib.types.path; };
-          hostInputs = lib.mkOption { type = lib.types.path; };
-        }; # end of niriFiles sub module options
-      }); # end of niriFiles sub modules
+      type = lib.types.nullOr (
+        lib.types.submodule {
+          options = {
+            config = lib.mkOption { type = lib.types.path; };
+            base = lib.mkOption { type = lib.types.path; };
+            bindings = lib.mkOption { type = lib.types.path; };
+            rules = lib.mkOption { type = lib.types.path; };
+            startups = lib.mkOption { type = lib.types.path; };
+            hostInputs = lib.mkOption { type = lib.types.path; };
+          }; # end of niriFiles sub module options
+        }
+      ); # end of niriFiles sub modules
       default = null;
       internal = true;
       description = "Niri KDL config files";
@@ -157,13 +196,15 @@
 
     # [resyoink/default.nix]
     resYoink = lib.mkOption {
-      type = lib.types.nullOr (lib.types.submodule {
-        options = {
-          wallpapers = lib.mkOption { type = lib.types.path; };
-          icons = lib.mkOption { type = lib.types.path; };
-          profilePictures = lib.mkOption { type = lib.types.path; };
-        };
-      });
+      type = lib.types.nullOr (
+        lib.types.submodule {
+          options = {
+            wallpapers = lib.mkOption { type = lib.types.path; };
+            icons = lib.mkOption { type = lib.types.path; };
+            profilePictures = lib.mkOption { type = lib.types.path; };
+          };
+        }
+      );
       default = null;
       internal = true;
       description = "Resource symlink paths (wallpapers, icons, pfps)";
