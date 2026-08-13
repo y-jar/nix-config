@@ -25,25 +25,7 @@
       helix.enable = false;
     };
     discord.enable = true;
-    espanso = {
-      enable = true; # espanso text expander
-      shorts = {
-        ":addr" = "123 Jar Street, Warrington";
-        ":sig" = "Best,\nJar";
-        ":np" = "now playing: $|$";
-        ":gitadd" = "git add -A && git commit -m \"$|$\"";
-        ":date" = "{{mydate}}";
-      };
-      vars = [
-        {
-          name = "mydate";
-          type = "date";
-          params = {
-            format = "%Y-%m-%d";
-          };
-        }
-      ];
-    };
+    espanso = (import ../espansoconf.nix { }); # espanso text expander
     flatpak.enable = false;
     nautilus.enable = true;
     yazi.enable = false;
