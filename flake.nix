@@ -27,43 +27,49 @@
     }@inputs:
     let
       # =-=-=[Systems that will be x86_64-linux] [also uses home-manager]
-      mkJar = hostName: nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = {
-          inherit inputs self;
-          hostnm = hostName; # Dynamically sets hostnm for networking/Zsh
-        }; # end of special args
-        modules = [
-          ./modjar/sysbin # Base system core entry
-          ./modjar/homekey.nix # Home-manager entry
-          ./hstjar/${hostName} # Host-specific directory entry [what happens here can depend on each system]
-        ]; # end of modules
-      }; # end of mkJar
+      mkJar =
+        hostName:
+        nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = {
+            inherit inputs self;
+            hostnm = hostName; # Dynamically sets hostnm for networking/Zsh
+          }; # end of special args
+          modules = [
+            ./modjar/sysbin # Base system core entry
+            ./modjar/homekey.nix # Home-manager entry
+            ./hstjar/${hostName} # Host-specific directory entry [what happens here can depend on each system]
+          ]; # end of modules
+        }; # end of mkJar
       # =-=-=[Systems that will be x86_64-linux] [uses hjem instead of home-manager]
-      mkHjemJar = hostName: nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = {
-          inherit inputs self;
-          hostnm = hostName;
-        }; # end of special args
-        modules = [
-          ./modjar/sysbin # Base system core entry
-          ./modjar/hjemkey.nix # Hjem entry (alternative to home-manager)
-          ./hstjar/${hostName} # Host-specific directory entry
-        ]; # end of modules
-      }; # end of mkHjemJar
+      mkHjemJar =
+        hostName:
+        nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = {
+            inherit inputs self;
+            hostnm = hostName;
+          }; # end of special args
+          modules = [
+            ./modjar/sysbin # Base system core entry
+            ./modjar/hjemkey.nix # Hjem entry (alternative to home-manager)
+            ./hstjar/${hostName} # Host-specific directory entry
+          ]; # end of modules
+        }; # end of mkHjemJar
       # =-=-=[Systems that will be non x86_64-linux] [WIP]
-      urnJar = { hostName, arch }: nixpkgs.lib.nixosSystem {
-        system = arch; # Dynamically sets the architecture
-        specialArgs = {
-          inherit inputs self;
-          hostnm = hostName;
-        }; # end of special args
-        modules = [
-          ./modjar/sysbin # Entry for The System
-          ./hstjar/${hostName} # Entry for The host
-        ]; # end of modules
-      }; # end of uurnJar
+      urnJar =
+        { hostName, arch }:
+        nixpkgs.lib.nixosSystem {
+          system = arch; # Dynamically sets the architecture
+          specialArgs = {
+            inherit inputs self;
+            hostnm = hostName;
+          }; # end of special args
+          modules = [
+            ./modjar/sysbin # Entry for The System
+            ./hstjar/${hostName} # Entry for The host
+          ]; # end of modules
+        }; # end of uurnJar
     in
     {
       # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=!!HOSTS!!=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -93,8 +99,13 @@
             "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
             ({ pkgs, lib, ... }: {
               environment.systemPackages = with pkgs; [
-                git vim nh fastfetch neovim
-                gum fzf
+                git
+                vim
+                nh
+                fastfetch
+                neovim
+                gum
+                fzf
                 (pkgs.writeShellScriptBin "jarhelp" (builtins.readFile ./resjar/nixbin/jarhelp))
                 (pkgs.writeShellScriptBin "installjar" (builtins.readFile ./resjar/nixbin/install.sh))
               ];
@@ -115,8 +126,13 @@
             "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-graphical-gnome.nix"
             ({ pkgs, lib, ... }: {
               environment.systemPackages = with pkgs; [
-                git vim nh fastfetch neovim
-                gum fzf
+                git
+                vim
+                nh
+                fastfetch
+                neovim
+                gum
+                fzf
                 (pkgs.writeShellScriptBin "jarhelp" (builtins.readFile ./resjar/nixbin/jarhelp))
                 (pkgs.writeShellScriptBin "installjar" (builtins.readFile ./resjar/nixbin/install.sh))
               ];

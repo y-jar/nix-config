@@ -12,19 +12,20 @@ let
   keymap = builtins.readFile ./keymap.tsv;
 
   # Escape TSV content into a protobuf string literal.
-  escape = builtins.replaceStrings
-    [
-      "\\"
-      "\""
-      "\n"
-      "\t"
-    ]
-    [
-      "\\\\"
-      "\\\""
-      "\\n"
-      "\\t"
-    ];
+  escape =
+    builtins.replaceStrings
+      [
+        "\\"
+        "\""
+        "\n"
+        "\t"
+      ]
+      [
+        "\\\\"
+        "\\\""
+        "\\n"
+        "\\t"
+      ];
 
   textproto = pkgs.writeText "mozc-config.textproto" ''
     session_keymap: CUSTOM
@@ -33,11 +34,13 @@ let
 
   mozcSrc = pkgs.mozc.src;
 in
-pkgs.runCommand "mozc-config1.db" {
-  nativeBuildInputs = [ pkgs.protobuf ];
-} ''
-  protoc --encode=mozc.config.Config \
-    --proto_path=${mozcSrc}/src \
-    protocol/config.proto \
-    < ${textproto} > $out
-''
+pkgs.runCommand "mozc-config1.db"
+  {
+    nativeBuildInputs = [ pkgs.protobuf ];
+  }
+  ''
+    protoc --encode=mozc.config.Config \
+      --proto_path=${mozcSrc}/src \
+      protocol/config.proto \
+      < ${textproto} > $out
+  ''

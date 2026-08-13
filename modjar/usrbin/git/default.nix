@@ -32,7 +32,10 @@ in
     ]; # end of home.packages
     programs.delta = {
       enable = true;
-      options = { side-by-side = true; line-numbers = true; };
+      options = {
+        side-by-side = true;
+        line-numbers = true;
+      };
     }; # end of delta config
   }; # end of config
 }

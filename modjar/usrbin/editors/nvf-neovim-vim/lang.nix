@@ -36,7 +36,9 @@
           cargo.buildScripts.enable = true;
         };
         gopls.settings = {
-          analyses = { unusedparams = true; };
+          analyses = {
+            unusedparams = true;
+          };
           staticcheck = true;
         };
       }; # end of lsp.servers

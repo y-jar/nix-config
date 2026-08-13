@@ -1,5 +1,7 @@
 # [shell.nix] This is a TEMPLATE file where other users can
-{pkgs ? import <nixpkgs> {}}:
+{
+  pkgs ? import <nixpkgs> { },
+}:
 # create a shell enviroment
 pkgs.mkShell {
   # [Install packages here] [refer to: https://search.nixos.org/packages for what pkgs]

@@ -1,11 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.usrSettings.ai;
 in
 {
   imports = [
     ./opencode-settings.nix # provider configuration
-    ./opencode-agents.nix   # custom agents
+    ./opencode-agents.nix # custom agents
   ]; # end of imports
 
   config = lib.mkIf cfg.enable {

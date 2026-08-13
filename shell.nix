@@ -1,5 +1,7 @@
 # shell.nix
-{pkgs ? import <nixpkgs> {}}:
+{
+  pkgs ? import <nixpkgs> { },
+}:
 # create a shell enviroment
 pkgs.mkShell {
   buildInputs = with pkgs; [

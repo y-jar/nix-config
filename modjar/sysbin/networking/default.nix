@@ -32,7 +32,7 @@
         allowedTCPPorts = [
           53317 # LocalSend
           25600 # Komga
-          8096  # Jellyfin (if not handled by services.jellyfin.openFirewall)
+          8096 # Jellyfin (if not handled by services.jellyfin.openFirewall)
         ];
         allowedUDPPorts = [
           53317

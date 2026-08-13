@@ -53,11 +53,12 @@
 
       # [perf & hygiene]
       auto-optimise-store = true; # dedupe identical store paths
-      trusted-users = [ "root" "@wheel" ]; # let wheel users run privileged nix ops
+      trusted-users = [
+        "root"
+        "@wheel"
+      ]; # let wheel users run privileged nix ops
       use-xdg-base-directories = true; # keep nix's user config/cache in ~/.config & ~/.cache
     }; # end of nix settings
-
-
 
   }; # end of config
 }

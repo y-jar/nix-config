@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   options = {
@@ -25,12 +30,14 @@
     # > `GitHub Container Registry` images stored alongside GitHub repos. These have the prefix ghcr.io/owner/image:tag
     # > `Self-hosted` can even run your own. Prefix domain like registry.example.com/image:tag
     virtualisation.oci-containers.containers.APPNAME = {
-      image = "owner/image:tag";       # from Docker Hub
-      ports = [ "HOSTPORT:APPPORT" ];  # check the app's docs for what port it uses internally
-      environment = {                  # optional, for env vars the app needs
+      image = "owner/image:tag"; # from Docker Hub
+      ports = [ "HOSTPORT:APPPORT" ]; # check the app's docs for what port it uses internally
+      environment = {
+        # optional, for env vars the app needs
         SOME_VAR = "value";
       };
-      volumes = [                      # optional, for persistent data
+      volumes = [
+        # optional, for persistent data
         "/host/path:/container/path"
       ];
     };

@@ -7,8 +7,14 @@ let
   # =-=-=[Scripts]
   # TEMPLATE: { name = "TEMPLATE"; path = ./scriptsbin/TEMPLATE.sh; }
   scriptList = [
-    { name = "nhu"; path = ./scriptsbin/nhu.sh; }
-    { name = "nru"; path = ./scriptsbin/nru.sh; }
+    {
+      name = "nhu";
+      path = ./scriptsbin/nhu.sh;
+    }
+    {
+      name = "nru";
+      path = ./scriptsbin/nru.sh;
+    }
   ]; # end of script list
 
   jarScripts = map (s: mkScript s.name s.path) scriptList; # dont touch me!

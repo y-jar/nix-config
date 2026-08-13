@@ -12,20 +12,25 @@ let
   cfg = config.hjmSettings.inputmethods;
 
   fcitx5Package = pkgs.qt6Packages.fcitx5-with-addons.override {
-    addons = with pkgs; [
-      fcitx5-gtk # GTK IM module for fcitx5
-      fcitx5-nord # Nord theme for fcitx5
-    ] ++ (lib.optionals cfg.japanese.enable [
-      fcitx5-mozc # Mozc input method for fcitx5
-    ]) ++ (lib.optionals cfg.korean.enable [
-      fcitx5-hangul # Hangul input method for fcitx5
-    ]);
+    addons =
+      with pkgs;
+      [
+        fcitx5-gtk # GTK IM module for fcitx5
+        fcitx5-nord # Nord theme for fcitx5
+      ]
+      ++ (lib.optionals cfg.japanese.enable [
+        fcitx5-mozc # Mozc input method for fcitx5
+      ])
+      ++ (lib.optionals cfg.korean.enable [
+        fcitx5-hangul # Hangul input method for fcitx5
+      ]);
   };
 
   iniFormat = pkgs.formats.ini { };
   iniGlobalFormat = pkgs.formats.iniWithGlobalSection { };
 
-  normalize = value:
+  normalize =
+    value:
     if lib.isAttrs value then
       lib.mapAttrs (_: normalize) value
     else if builtins.isList value then
@@ -47,10 +52,12 @@ let
       };
       # Item 0 is my absolute boot default
       "Groups/0/Items/0".Name = "keyboard-us";
-    } // lib.optionalAttrs cfg.japanese.enable {
+    }
+    // lib.optionalAttrs cfg.japanese.enable {
       # Item 1 is what i toggle into when want Japanese
       "Groups/0/Items/1".Name = "mozc";
-    } // lib.optionalAttrs cfg.korean.enable {
+    }
+    // lib.optionalAttrs cfg.korean.enable {
       # Item 2 is what i toggle into when want Korean
       # Layout=us is required for hangul (libhangul maps by key value)
       "Groups/0/Items/2" = {

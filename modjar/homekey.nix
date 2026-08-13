@@ -16,7 +16,13 @@
 #   - The actual module implementations
 # =-=-=[end homekey.nix] =-=-=
 
-{ config, lib, inputs, hostnm, ... }:
+{
+  config,
+  lib,
+  inputs,
+  hostnm,
+  ...
+}:
 
 {
   imports = [
@@ -47,8 +53,8 @@
     # Guest users get a Unix account via users/default.nix but no HM config.
     home-manager.users.${config.sysSettings.mainUser} = {
       imports = [
-        ../hstjar/${hostnm}/home.nix   # host toggles
-        ../modjar/usrbin                # shared modules
+        ../hstjar/${hostnm}/home.nix # host toggles
+        ../modjar/usrbin # shared modules
       ];
     };
   };

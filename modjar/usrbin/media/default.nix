@@ -39,7 +39,7 @@ in
       constrict # shrinks files
 
       # [other]
-      ffmpeg #
+      ffmpeg
       yt-dlp # Feature-rich command-line audio/video downloader
     ]; # end of packages
   }; # enf of config

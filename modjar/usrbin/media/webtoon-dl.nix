@@ -22,7 +22,10 @@ let
     # ^ paste the sha256-... hash you got from the nix-build run here
 
     env.CGO_ENABLED = 0;
-    ldflags = [ "-s" "-w" ];
+    ldflags = [
+      "-s"
+      "-w"
+    ];
 
     meta = with lib; {
       description = "A CLI for downloading webtoon.com comics as PDF or CBZ";

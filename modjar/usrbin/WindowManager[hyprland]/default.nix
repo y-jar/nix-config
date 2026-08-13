@@ -1,7 +1,8 @@
 {
   lib,
   config,
-  hostnm, pkgs,
+  hostnm,
+  pkgs,
   ...
 }:
 let

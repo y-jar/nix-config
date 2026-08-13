@@ -1,12 +1,20 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.sysSettings.ai;
 
   llamaPackage =
-    if cfg.gpu == "rocm" then pkgs.llama-cpp-rocm
-    else if cfg.gpu == "cuda" then pkgs.llama-cpp-cuda
-    else pkgs.llama-cpp;
+    if cfg.gpu == "rocm" then
+      pkgs.llama-cpp-rocm
+    else if cfg.gpu == "cuda" then
+      pkgs.llama-cpp-cuda
+    else
+      pkgs.llama-cpp;
 in
 {
   options = {
@@ -18,7 +26,11 @@ in
         description = "Port for the llama.cpp API";
       };
       gpu = lib.mkOption {
-        type = lib.types.enum [ "rocm" "cuda" "cpu" ];
+        type = lib.types.enum [
+          "rocm"
+          "cuda"
+          "cpu"
+        ];
         default = "rocm";
         description = "llama.cpp GPU backend: rocm (AMD), cuda (NVIDIA), or cpu";
       };
@@ -58,7 +70,10 @@ in
       }; # end of llama-cpp config
       # llama-cpp runs as a DynamicUser; grant access to /dev/kfd + /dev/dri/renderD*
       systemd.services.llama-cpp.serviceConfig = {
-        SupplementaryGroups = [ "render" "video" ];
+        SupplementaryGroups = [
+          "render"
+          "video"
+        ];
         # calender has an iGPU (gfx1036, no precompiled kernel in this ROCm build)
         # that llama.cpp otherwise splits the model across, causing GPU hangs and
         # ~4 t/s. Restrict ROCm to the dGPU (RX 9070 XT) only.

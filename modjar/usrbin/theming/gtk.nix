@@ -13,17 +13,19 @@ in
     home.packages = [ pkgs.papirus-folders ];
 
     # [cursor settings]
-    home.pointerCursor = let
-      jcsr = pkgs.runCommand "jcsr" {} ''
-        mkdir -p $out/share/icons/jcsr
-        cp -r ${./cursors/jcsr}/* $out/share/icons/jcsr/
-      '';
-    in {
-      name = "jcsr";
-      package = jcsr;
-      gtk.enable = true;
-      size = cfg.cursorSize;
-    }; # end of home.pointerCursor
+    home.pointerCursor =
+      let
+        jcsr = pkgs.runCommand "jcsr" { } ''
+          mkdir -p $out/share/icons/jcsr
+          cp -r ${./cursors/jcsr}/* $out/share/icons/jcsr/
+        '';
+      in
+      {
+        name = "jcsr";
+        package = jcsr;
+        gtk.enable = true;
+        size = cfg.cursorSize;
+      }; # end of home.pointerCursor
 
     # [gtk settings]
     gtk = {

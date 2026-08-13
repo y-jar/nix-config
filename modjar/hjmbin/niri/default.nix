@@ -19,8 +19,7 @@ let
   # [select host-specific input file]
   hostSpecificFile = hostInputsDir + "/${hostnm}.kdl";
   targetKdlSource =
-    if builtins.pathExists hostSpecificFile then hostSpecificFile
-    else hostInputsDir + "/0-unknown.kdl";
+    if builtins.pathExists hostSpecificFile then hostSpecificFile else hostInputsDir + "/0-unknown.kdl";
 in
 {
   config = lib.mkIf hjm.niri.enable {
