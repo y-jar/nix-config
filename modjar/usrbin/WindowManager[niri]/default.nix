@@ -1,7 +1,7 @@
 {
   config,
   lib,
-  hostnm,
+  hostnm, pkgs,
   ...
 }:
 let
@@ -30,5 +30,9 @@ in
       # [host specific]
       "niri/host-inputs.kdl".source = targetKdlSource;
     }; # end of xdg.configFile
+    home.packages = with pkgs; [
+      awww # animated wallpaper daemon for Wayland
+      waypaper # GUI wallpaper setter for Wayland-based window managers
+    ];
   }; # end of config
 }

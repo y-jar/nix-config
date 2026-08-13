@@ -1,7 +1,7 @@
 {
   lib,
   config,
-  hostnm,
+  hostnm, pkgs,
   ...
 }:
 let
@@ -25,5 +25,11 @@ in
       "hypr/hl".source = ./hl; # main config
       "hypr/host-inputs/input.lua".source = targetLUASource; # host-specific inputs
     }; # end of xdg.configFile
+    home.packages = with pkgs; [
+      awww # animated wallpaper daemon for Wayland
+      waypaper # GUI wallpaper setter for Wayland-based window managers
+      hyprpicker # The mouse-following color picker
+      woomer # Zoomer application for Wayland inspired by tsoding's boomer
+    ];
   }; # end of config
 }

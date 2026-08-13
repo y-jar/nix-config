@@ -14,22 +14,9 @@
     wine # Wine is a compatibility layer for running Windows programs on Unix-like systems
     lynx # text-based web browser
     popsicle # iso burner
-    kdePackages.isoimagewriter # iso burner
-    caligula # image burner
+    caligula # image burner in the cl
     jq # Lightweight and flexible command-line JSON processor [needed for my jsearch script]
     gnome-disk-utility # Udisks graphical front-end
-
-    # [management]
-    # gearlever # Manages app images
-    hyprpicker # The mouse-following color picker
-    woomer # Zoomer application for Wayland inspired by tsoding's boomer
-    # =======[Ness Jar] |>|>|>|>|>|>|>
-
-    # =======[Looks Jar] |>|>|>|>|>|>|>
-    # [cursors]
-    catppuccin-cursors # matches catppuccin theme
-    awww # animated wallpaper daemon for Wayland
-    # =======[Looks Jar] |>|>|>|>|>|>|>^^^
 
     # =======[Dev Jar] |>|>|>|>|>|>|>
     # [cli / tui / tools]
@@ -66,5 +53,6 @@
     # ====Unsorteds====
   ] ++ lib.optionals osConfig.sysSettings.UseNixPkgsYoinks.enable [
     inputs.rsakura.packages.x86_64-linux.default # a cool thing whisper did, awesone of them to add it as a pkgs in nix! ref: https://github.com/preprocessor/rsakura
-  ]; # end of systemPackages
+  ];
+  # end of systemPackages
 }
