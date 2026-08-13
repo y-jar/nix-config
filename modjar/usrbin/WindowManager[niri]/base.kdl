@@ -2,6 +2,8 @@
 // Find more information on the wiki:
 // https://yalter.github.io/niri/Configuration:-Layout
 layout {
+    // Transparent workspace background so the backdrop wallpaper (awww) shows through.
+    background-color "transparent"
     // Set gaps around windows in logical pixels.
     gaps 3
     // When to center a column when changing focus, options are:
@@ -112,6 +114,11 @@ layout {
 hotkey-overlay {
     // Uncomment this line to disable the "Important Hotkeys" pop-up at startup.
     skip-at-startup
+}
+
+/-overview {
+    // Fallback backdrop color shown behind the wallpaper (e.g. while awww loads).
+    backdrop-color "#1e1e2e"
 }
 
 // Additionally, clients will be informed that they are tiled, removing some client-side rounded corners.

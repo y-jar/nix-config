@@ -2,6 +2,8 @@
 // Find more information on the wiki:
 // https://yalter.github.io/niri/Configuration:-Layout
 layout {
+    // Transparent workspace background so the backdrop wallpaper (awww) shows through.
+    background-color "transparent"
     // Set gaps around windows in logical pixels.
     gaps 3
     // When to center a column when changing focus, options are:
@@ -142,4 +144,8 @@ cursor {
 	// First time? Just download the cursor, and extract it to that directory/folder
    	// xcursor-theme "Bibata-Modern-Ice"
    	// xcursor-size 48
+}
+
+overview {
+    backdrop-color "#1e1e2e"
 }

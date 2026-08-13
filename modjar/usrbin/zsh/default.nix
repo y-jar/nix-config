@@ -73,6 +73,8 @@ in
         nrs = "nixos-rebuild switch --sudo --flake ~/nix-config#${hostnm}"; # hard building
         nrt = "nixos-rebuild test --sudo --flake ~/nix-config#${hostnm}"; # testing
         buildiso = "sh ~/nix-config/resjar/nixbin/buildiso.sh"; # build recovery ISO
+        ns = "nix-shell"; # load dev enviroment
+        nsp = "nix search nixpkgs";
         # ========[syst nix]^^^
 
         # ========[app aliases]
@@ -97,6 +99,7 @@ in
         # [Tools]
         clfont = "fc-cache -f -v"; # clear font cache
         rfc5 = "fcitx5 -r -d"; # restart fcitx5
+        frfc5 = "fcitx5-remote -r"; # force reload fcitx5
         rz = "exec zsh"; # reload zsh
         ckhrd = "lsblk && fdisk -l";
         # ls = "ls";
@@ -104,10 +107,8 @@ in
         cl = "clear";
         ga = "git add .";
         gc = "git clone";
-        fcir = "fcitx5-remote -r"; # force reload fcitx5
+        rniri = "niri msg action reload-config";
         dl = "ytdl"; # youtube downloader
-        ns = "nix-shell"; # load dev enviroment
-        nsp = "nix search nixpkgs";
         shlvl = "echo $SHLVL";
         # ========[util]
 

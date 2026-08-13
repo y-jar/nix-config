@@ -29,6 +29,12 @@ in
       "niri/startups.kdl".source = ./startups.kdl;
       # [host specific]
       "niri/host-inputs.kdl".source = targetKdlSource;
+      # Pin waypaper to the awww backend and to the wallpaper folder.
+      "waypaper/config.ini".text = ''
+        [Settings]
+        backend = awww
+        folder = ~/resjar/wall-jar/wall-bin
+      '';
     }; # end of xdg.configFile
     home.packages = with pkgs; [
       awww # animated wallpaper daemon for Wayland

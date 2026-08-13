@@ -76,8 +76,14 @@ window-rule {
 }
 
 // Set the regular wallpaper on the backdrop.
+// swaybg registers with namespace "wallpaper",
+// awww registers with namespace "awww-daemon".
 layer-rule {
     match namespace="^wallpaper$"
+    place-within-backdrop true
+}
+layer-rule {
+    match namespace="^awww-daemon"
     place-within-backdrop true
 }
 // Float the wallpaper picker window
