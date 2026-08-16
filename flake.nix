@@ -74,7 +74,7 @@
     {
       # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=!!HOSTS!!=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
       nixosConfigurations = {
-        # ========[base 糸s]
+        # ========[base 糸s] Im gay
         # TEMPLATE = mkJar "TEMPLATE";
 
         # [Dont change the line below]
