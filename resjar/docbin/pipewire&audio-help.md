@@ -104,6 +104,21 @@ inside an audio block ive seen that there are always these things:
   - > ---- When media.class is *omitted*: The node remains hidden from standard software menus as a selectable device. It exists purely as a raw routing node meant to be linked behind the scenes inside graph engines like qpwgraph.
   - > -Explained By a Model
 
+### Streaming Audio (Discord Go-Live / OBS)
+
+Screen share through a portal (e.g. `xdg-desktop-portal-wlr`) is **video only** — no audio travels with it. Audio reaches a stream through a separate per-app capture node:
+
+- Discord creates `discord_capture` (a `Stream/Input/Audio` node) whenever a Go-Live stream is active.
+- Discord auto-links it to a specific app's output node (e.g. the LibreWolf tab playing Jellyfin). That link is **brittle** — browsers swap/remount media nodes and the capture can end up pointed at a silent node.
+- The **stable** capture point is the hub monitor `jar-cap.monitor` (contains browser+game+music+chat mix). In Discord's Go-Live modal, pick **Desktop audio** rather than a specific app so the capture lands on the default sink's monitor.
+- `discord_capture` volume is tracked by `module-stream-restore`; if it was ever dragged to 0% in pavucontrol, the stream encodes silence. Fix live:
+  ```sh
+  # find the id: pactl list source-outputs | grep -B1 -A4 discord_capture
+  pactl set-source-output-volume <id> 100%
+  pactl set-source-output-mute <id> 0
+  ```
+- `startups.kdl` pins `jar-cap` as default sink and `mic-out` as default source so "Desktop audio" always captures the full mix after reboot.
+
 ### The Master Bus (Headphones & Microphone)
 the Headphones and Microphone blocks. These are the "Master Buses" acording to [ @TomShreck @ https://github.com/UndefProphet/.nixos/blob/main/modules/nixos/audio.nix ]
 

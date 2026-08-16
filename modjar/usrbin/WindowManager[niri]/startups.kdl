@@ -10,6 +10,11 @@ spawn-at-startup "blanket"
 spawn-at-startup "pavucontrol"
 spawn-at-startup "easyeffects"
 spawn-at-startup "qpwgraph"
+// Pin the jar-audio hub as default sink/source so "Desktop audio" streams
+// (discord, obs) always capture jar-cap.monitor = the full mix. Retries until
+// pipewire is up, so it survives reboots and sink re-plugs. Weird stuff
+// spawn-sh-at-startup "until pactl info | grep -q 'Default Sink: jar-cap'; do pactl set-default-sink jar-cap; sleep 1; done"
+// spawn-sh-at-startup "until pactl info | grep -q 'Default Source: mic-out'; do pactl set-default-source mic-out; sleep 1; done"
 // spawn-at-startup "wayle"
 // enviroment sturff
 environment {
