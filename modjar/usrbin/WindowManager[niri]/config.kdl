@@ -2,4 +2,5 @@ include "base.kdl" // core
 include "bindings.kdl" // anything keybind related
 include "rules.kdl" // anything window or rule related
 include "startups.kdl" // any start up apps like noctalia
+include "startups-audio.kdl" // audio addon specific (jar-cap/mic-out pinning)
 include "host-inputs.kdl" // host specific stuff that is sysmlinked into

@@ -2,6 +2,7 @@
   config,
   lib,
   hostnm,
+  osConfig,
   pkgs,
   ...
 }:
@@ -28,6 +29,17 @@ in
       "niri/base.kdl".source = ./base.kdl;
       "niri/rules.kdl".source = ./rules.kdl;
       "niri/startups.kdl".source = ./startups.kdl;
+      # [channel pinning (jar-cap/mic-out) that only exists with the addon.]
+      "niri/startups-audio.kdl".text =
+        lib.optionalString (osConfig.sysSettings.audio.addon.enable or false)
+          ''
+            spawn-at-startup "qpwgraph"
+            // Pin the jar-audio hub as default sink/source so "Desktop audio" streams
+            // (discord, obs) always capture jar-cap.monitor = the full mix. Retries until
+            // pipewire is up, so it survives reboots and sink re-plugs. Weird stuff
+            spawn-sh-at-startup "until pactl info | grep -q 'Default Sink: jar-cap'; do pactl set-default-sink jar-cap; sleep 1; done"
+            spawn-sh-at-startup "until pactl info | grep -q 'Default Source: mic-out'; do pactl set-default-source mic-out; sleep 1; done"
+          '';
       # [host specific]
       "niri/host-inputs.kdl".source = targetKdlSource;
       # Pin waypaper to the awww backend and to the wallpaper folder.

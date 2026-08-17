@@ -92,6 +92,12 @@ window-rule {
     open-floating true
     default-column-width { fixed 700; }
 }
+// Float the waypaper GUI window
+window-rule {
+    match title=r#"^(Choose wallpaper)(.*)$"#
+    open-floating true
+    default-column-width { fixed 900; }
+}
 layer-rule {
   match namespace="^noctalia-backdrop"
   place-within-backdrop true
