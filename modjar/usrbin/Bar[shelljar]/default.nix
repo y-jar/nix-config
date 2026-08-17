@@ -22,7 +22,7 @@ in
 
   config = lib.mkIf cfg.enable {
     home.packages = [
-      inputs.shelljar.packages.${pkgs.system}.default # the shell binary
+      inputs.shelljar.packages.${pkgs.stdenv.hostPlatform.system}.default # the shell binary
     ];
   }; # end of config
 }
