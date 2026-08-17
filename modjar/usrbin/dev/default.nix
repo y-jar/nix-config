@@ -23,7 +23,6 @@ in
       [
         # [Development Essentials]
         dotnet-sdk_8 # Core functionality needed to create .NET Core projects, that is shared between Visual Studio and CLI (wrapper) (combined) (wrapper)
-        python315 # latest i can get
         nodejs # Event-driven I/O framework for the V8 JavaScript engine
         gcc # GNU Compiler Collection, version 15.2.0 (wrapper script)
         go # Go Programming language
