@@ -262,6 +262,7 @@
         "nvf": "nvf",
         "pfp-jar": "pfp-jar",
         "rsakura": "rsakura",
+        "shelljar": "shelljar",
         "wall-jar": "wall-jar"
       }
     },
@@ -280,6 +281,26 @@
       "original": {
         "owner": "preprocessor",
         "repo": "rsakura",
+        "type": "github"
+      }
+    },
+    "shelljar": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1786978443,
+        "narHash": "sha256-YPImIXseqeAALpGGRiwhKBNjWvC3yzwtCKxBxqF0krk=",
+        "owner": "y-jar",
+        "repo": "shelljar",
+        "rev": "a4199bfb90452c3868b21ebd59d9729c191caf02",
+        "type": "github"
+      },
+      "original": {
+        "owner": "y-jar",
+        "repo": "shelljar",
         "type": "github"
       }
     },

@@ -2,9 +2,8 @@
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
 
-// this starts the shell for noctalia-shell using qs as a command. kus it aint a pkg, duh
-spawn-at-startup "noctalia-shell"
-// spawn-at-startup "qs" "-c" "noctalia-shell"
+// Note: the desktop shell spawn (noctalia-shell or shelljar) is injected by
+// default.nix based on usrSettings.{shelljar,noctalia}.enable.
 spawn-at-startup "xwayland-satellite"
 spawn-at-startup "blanket"
 spawn-at-startup "pavucontrol"

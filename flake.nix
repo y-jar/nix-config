@@ -179,6 +179,11 @@
       url = "github:NotAShelf/nvf";
       inputs.nixpkgs.follows = "nixpkgs";
     }; # end of nvf
+    # [my quickshell island shell]
+    shelljar = {
+      url = "github:y-jar/shelljar";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     rsakura.url = "github:preprocessor/rsakura"; # whisper's cool rust rewite fork
     # [cachyos kernel]
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
