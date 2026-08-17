@@ -53,6 +53,7 @@
       };
       boot.quiet = false; # silence kernel/udev/systemd startup logs
       boot.fastMenu = false; # set boot loader timeout to 1 second
+      boot.plymouth.enable = true; # custom boot splash logo
 
       bluetooth.enable = false; # sets blueman in home packages
       neverSleep.enable = false; # disable system idle sleep

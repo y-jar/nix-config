@@ -63,6 +63,7 @@
       };
       boot.quiet = false; # silence kernel/udev/systemd startup logs
       boot.fastMenu = false; # set boot loader timeout to 1 second
+      boot.plymouth.enable = true; # custom boot splash logo
       neverSleep.enable = true; # disable system idle sleep
       bluetooth.enable = false; # sets blueman in home packages
       automount.enable = true; # auto-mount removable media (udisks2)
