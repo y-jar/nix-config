@@ -291,11 +291,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1786997556,
-        "narHash": "sha256-6/UUKSBPG/MllNPkp54gSe2x1GqhG69MMQiPzH2Aol8=",
+        "lastModified": 1787010395,
+        "narHash": "sha256-CtRakmE3I0CKlxNUDjePCJAaRxsiyPqqGiFwbruywFM=",
         "owner": "y-jar",
         "repo": "shelljar",
-        "rev": "f9ae0d81c09422df3a49577f016d37dc37c2e7cb",
+        "rev": "bd82cd9b60904935dadd651090aa30b3722cbfaf",
         "type": "github"
       },
       "original": {
