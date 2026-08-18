@@ -103,13 +103,15 @@ in
         cl = "clear";
         ga = "git add .";
         gc = "git clone";
+        s = "setsid";
+        pk = "pkill";
         rniri = "niri msg action reload-config";
         dl = "ytdl"; # youtube downloader
         shlvl = "echo $SHLVL";
         # [AI]
-        rllms = "sudo systemctl restart llama-cpp";
-        sllms = "sudo systemctl restart llama-cpp";
-        stllms = "sudo systemctl start llama-cpp";
+        rllm = "sudo systemctl restart llama-cpp";
+        sllm = "sudo systemctl restart llama-cpp";
+        stllm = "sudo systemctl start llama-cpp";
         # ========[util]
 
         # =========[Extra]
