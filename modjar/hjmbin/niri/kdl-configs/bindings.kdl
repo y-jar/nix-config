@@ -29,6 +29,8 @@ binds {
     Mod+C hotkey-overlay-title="Open [C]olor Picker" { spawn "hyprpicker" "-a"; } // color picker
     Mod+Shift+W hotkey-overlay-title="Open [W]allpaper Picker" { spawn "foot" "--window-size-pixels=1600x800" "--title=jwall-picker" "-e" "jwall"; }
     Mod+Ctrl+W hotkey-overlay-title="[W]allpaper GUI (waypaper)" { spawn "waypaper"; }
+    // [DICTATION] primary: hold F9 (voxtype built-in); Mod+Ctrl+X toggles
+    Mod+Ctrl+X hotkey-overlay-title="[D]ictation (voxtype)" { spawn "voxtype" "record" "toggle"; }
 
     // [OVERVIEW]
     Mod+Tab repeat=false hotkey-overlay-title="[T]oggle Overview" { toggle-overview; }

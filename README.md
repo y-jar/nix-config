@@ -186,6 +186,8 @@ Paste:
   | Navigation | `SUPER+HJKL` / `SUPER+arrows` | Focus direction |
   | | `SUPER+[1-0]` | Switch workspace |
   | | `SUPER+Shift+[1-0]` | Move window to workspace |
+  | Dictation | `Hold F9` | Dictate (push-to-talk, voxtype) |
+  | | `SUPER+Ctrl+V` | Toggle dictation |
   | Media | `XF86Audio*` | Volume / mute |
   | | `XF86MonBrightness*` | Brightness |
 
@@ -208,6 +210,8 @@ Paste:
   | Navigation | `Mod+HJKL` / `Mod+arrows` | Focus direction |
   | | `Mod+1-9` | Focus workspace |
   | | `Mod+Ctrl+1-9` | Move to workspace |
+  | Dictation | `Hold F9` | Dictate (push-to-talk, voxtype) |
+  | | `Mod+Ctrl+X` | Toggle dictation |
   | Media | `XF86Audio*` | Volume / mute |
   | | `XF86MonBrightness*` | Brightness |
 

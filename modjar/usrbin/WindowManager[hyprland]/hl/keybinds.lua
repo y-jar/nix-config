@@ -29,6 +29,9 @@ hl.bind(mainMod .. " + C", hl.dsp.exec_cmd(hyprpicker))
 hl.bind(mainMod .. " + Alt + Space", hl.dsp.exec_cmd("jemoji"))
 hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd("foot --window-size-pixels=1600x800 --title=jwall-picker -e jwall"))
 
+-- voxtype dictation (primary: hold F9 anywhere; SUPER+CTRL+V toggles)
+hl.bind(mainMod .. " + CTRL + V", hl.dsp.exec_cmd("voxtype record toggle"), { description = "Dictation: toggle voxtype" })
+
 -- noctalia-shell
 hl.bind(mainMod .. " + D", hl.dsp.exec_cmd(launcherPain))
 hl.bind(mainMod .. " + S", hl.dsp.exec_cmd("noctalia-shell ipc call panel-toggle control-center"))
