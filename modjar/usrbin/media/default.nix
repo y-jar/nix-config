@@ -37,6 +37,7 @@ in
       audacity # Audio editor +55mib
       yacreader # Reader for Ebooks, manga, etc..
       constrict # shrinks files
+      anki # Spaced repetition flashcard program
 
       # [other]
       ffmpeg

@@ -6,10 +6,11 @@ window {
 /* search entry */
 entry {
     background-color: rgba(0, 0, 0, 0.3);
-    color: #cdd6f4;
+    color: dimgrey;
 }
 
-button, image {
+button,
+image {
     background: none;
     border: none;
 }
@@ -18,7 +19,7 @@ button:hover {
     background-color: rgba(205, 214, 244, 0.12);
 }
 
-/* in case you wanted to give category buttons a different look */
+/* in case i? wanted to give category buttons a different look */
 #category-button {
     margin: 0 10px 0 10px;
 }

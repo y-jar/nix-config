@@ -1,4 +1,15 @@
 { pkgs, ... }:
+let
+  x5y8pxNegaTape = pkgs.stdenv.mkDerivation {
+    pname = "x5y8pxNegaTape";
+    version = "20260610";
+    src = ../../../resjar/fontbin/x5y8pxNegaTape;
+    installPhase = ''
+      install -Dm644 *.ttf -t $out/share/fonts/truetype/x5y8pxNegaTape
+      install -Dm644 OFL.txt -t $out/share/doc/x5y8pxNegaTape
+    '';
+  };
+in
 {
   fonts = {
     packages = with pkgs; [
@@ -16,6 +27,7 @@
       rounded-mgenplus # Japanese font based on Rounded M+ and Noto Sans Japanese
       koruri # Japanese TrueType font obtained by mixing M+ FONTS and Open Sans
       #nerd-fonts.m+ # Nerd Fonts: Multiple styles and weights, many glyph sets (e.g. Kana glyphs)
+      x5y8pxNegaTape # JP pixel font [vendored: resjar/fontbin/x5y8pxNegaTape]
 
       # [emojis]
       noto-fonts-emoji-blob-bin # Emoji font based on the Noto Emoji blob [ref:whisper]
@@ -25,6 +37,7 @@
     fontconfig = {
       enable = true;
       defaultFonts.emoji = [ "Blobmoji" ];
+      defaultFonts.monospace = [ "x5y8pxNegaTape" "IntoneMono Nerd Font" "ipaexgothic" ];
       localConf = ''
         <?xml version="1.0"?>
         <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
