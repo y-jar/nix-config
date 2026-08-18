@@ -58,6 +58,9 @@ in
     ++ lib.optionals hjm.ranger.enable [
       ranger
     ]
+    ++ lib.optionals hjm.niri.enable [
+      nwg-drawer # full-screen app drawer launcher (Mod+D)
+    ]
     ++ lib.optionals hjm.media.enable [
       constrict # shrinks files
       mpv

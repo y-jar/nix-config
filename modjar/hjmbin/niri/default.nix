@@ -27,28 +27,19 @@ let
   shelljarEnabled = hjm.niri.shelljar.enable or false;
   noctaliaEnabled = hjm.niri.noctalia.enable or false;
 
-  # exact bind lines in the static file that get swapped per shell
-  dLine = ''Mod+D hotkey-overlay-title="[D]isplay Noctalia Launcher" { spawn-sh "noctalia-shell ipc call launcher toggle "; }'';
+  # exact settings bind line in the static file that gets swapped per shell
+  # (Mod+D launcher is now always nwg-drawer, so it's no longer gated here.)
   sLine = ''Mod+S hotkey-overlay-title="Toggle Noctalia [S]ettings" { spawn "qs" "ipc" "-c" "noctalia-shell" "call" "settings" "toggle"; }'';
 
-  shellBinds =
+  shellBindS =
     if shelljarEnabled then
-      {
-        d = ''Mod+D hotkey-overlay-title="[D]isplay shelljar Launcher" { spawn-sh "shjctl toggleLauncher"; }'';
-        s = ''Mod+S hotkey-overlay-title="Toggle [S]helljar Control Center" { spawn-sh "shjctl toggleControlCenter"; }'';
-      }
+      ''Mod+S hotkey-overlay-title="Toggle [S]helljar Control Center" { spawn-sh "shjctl toggleControlCenter"; }''
     else if noctaliaEnabled then
-      {
-        d = dLine;
-        s = sLine;
-      }
+      sLine
     else
-      {
-        d = "    // Mod+D: no desktop shell enabled";
-        s = "    // Mod+S: no desktop shell enabled";
-      };
+      "    // Mod+S: no desktop shell enabled";
 
-  generatedBindings = lib.replaceStrings [ dLine sLine ] [ shellBinds.d shellBinds.s ] (
+  generatedBindings = lib.replaceStrings [ sLine ] [ shellBindS ] (
     builtins.readFile (kdlDir + "/bindings.kdl")
   );
 

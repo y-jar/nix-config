@@ -4,7 +4,7 @@ return {
     -- core
     mainMod = "SUPER",
     launcher = "fuzzel",
-    launcherPain = "noctalia-shell ipc call launcher toggle",
+    launcherPain = "nwg-drawer",
     -- apps
     terminal = "foot",
     fileManager = "nautilus",

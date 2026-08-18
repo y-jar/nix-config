@@ -12,30 +12,21 @@ let
   targetKdlSource =
     if builtins.pathExists hostSpecificFile then hostSpecificFile else ./host-inputs/0-unknown.kdl;
 
-  # Which desktop shell is running? Drives the spawn line + launcher/settings binds.
+  # Which desktop shell is running? Drives the spawn line + settings bind.
+  # (Mod+D launcher is now always nwg-drawer, so it's no longer gated here.)
   shelljarEnabled = config.usrSettings.shelljar.enable or false;
   noctaliaEnabled = config.usrSettings.noctalia.enable or false;
 
-  # exact bind lines in the static file that get swapped per shell
-  dLine = "    Mod+D hotkey-overlay-title=\"[D]isplay Noctalia Launcher\" { spawn-sh \"noctalia-shell ipc call launcher toggle \"; }";
+  # exact settings bind line in the static file that gets swapped per shell
   sLine = "    Mod+S hotkey-overlay-title=\"Toggle Noctalia [S]ettings\" { spawn \"qs\" \"ipc\" \"-c\" \"noctalia-shell\" \"call\" \"settings\" \"toggle\"; }";
 
-  shellBinds =
+  shellBindS =
     if shelljarEnabled then
-      {
-        d = "    Mod+D hotkey-overlay-title=\"[D]isplay shelljar Launcher\" { spawn-sh \"shjctl toggleLauncher\"; }";
-        s = "    Mod+S hotkey-overlay-title=\"Toggle [S]helljar Control Center\" { spawn-sh \"shjctl toggleControlCenter\"; }";
-      }
+      "    Mod+S hotkey-overlay-title=\"Toggle [S]helljar Control Center\" { spawn-sh \"shjctl toggleControlCenter\"; }"
     else if noctaliaEnabled then
-      {
-        d = dLine;
-        s = sLine;
-      }
+      sLine
     else
-      {
-        d = "    // Mod+D: no desktop shell enabled";
-        s = "    // Mod+S: no desktop shell enabled";
-      };
+      "    // Mod+S: no desktop shell enabled";
 in
 {
   options = {
@@ -50,7 +41,7 @@ in
     xdg.configFile = {
       "niri/config.kdl".source = ./config.kdl; # base linker
       # [global]
-      "niri/bindings.kdl".text = lib.replaceStrings [ dLine sLine ] [ shellBinds.d shellBinds.s ] (
+      "niri/bindings.kdl".text = lib.replaceStrings [ sLine ] [ shellBindS ] (
         builtins.readFile ./bindings.kdl
       );
       "niri/base.kdl".source = ./base.kdl;
@@ -91,6 +82,7 @@ in
     home.packages = with pkgs; [
       awww # animated wallpaper daemon for Wayland
       waypaper # GUI wallpaper setter for Wayland-based window managers
+      nwg-drawer # full-screen app drawer launcher (Mod+D)
     ];
   }; # end of config
 }

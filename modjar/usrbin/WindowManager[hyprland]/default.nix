@@ -17,9 +17,6 @@ let
   # strings to swap when shelljar is active
   autostartShell = ''hl.exec_cmd("noctalia-shell")                                    -- shell'';
   autostartShellNew = ''hl.exec_cmd("shelljar")                                        -- shell (quickshell island shell)'';
-
-  varsLauncher = ''launcherPain = "noctalia-shell ipc call launcher toggle",'';
-  varsLauncherNew = ''launcherPain = "shjctl toggleLauncher",'';
   varsSuper = ''superShell = "noctalia-shell"'';
   varsSuperNew = ''superShell = "shelljar"'';
 
@@ -33,7 +30,6 @@ let
       text:
       lib.pipe text [
         (lib.replaceStrings [ autostartShell ] [ autostartShellNew ])
-        (lib.replaceStrings [ varsLauncher ] [ varsLauncherNew ])
         (lib.replaceStrings [ varsSuper ] [ varsSuperNew ])
         (lib.replaceStrings [ keybindCtrl ] [ keybindCtrlNew ])
         (lib.replaceStrings [ keybindComma ] [ keybindCommaNew ])
@@ -64,6 +60,7 @@ in
       waypaper # GUI wallpaper setter for Wayland-based window managers
       hyprpicker # The mouse-following color picker
       woomer # Zoomer application for Wayland inspired by tsoding's boomer
+      nwg-drawer # full-screen app drawer launcher (Mod+D)
     ];
   }; # end of config
 }
