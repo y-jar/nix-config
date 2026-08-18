@@ -24,5 +24,8 @@ in
     home.packages = [
       inputs.shelljar.packages.${pkgs.stdenv.hostPlatform.system}.default # the shell binary
     ];
+    xdg.configFile = {
+      "shelljar/config.kdl".source = ./config.kdl; # synced shelljar config (wallpaper dir + carousel)
+    };
   }; # end of config
 }
