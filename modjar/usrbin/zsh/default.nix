@@ -112,7 +112,6 @@ in
         rllm = "sudo systemctl restart llama-cpp";
         sllm = "sudo systemctl restart llama-cpp";
         stllm = "sudo systemctl start llama-cpp";
-        # ========[util]
 
         # =========[Extra]
         mcube = "mangohud vkcube --present_mode 1"; # needs mangohud+vulkan-tools
