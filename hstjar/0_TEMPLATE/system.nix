@@ -69,6 +69,7 @@
       };
       boot.quiet = false;
       boot.fastMenu = false;
+      boot.plymouth.enable = false; # custom logo boot splash via plymouth
 
       neverSleep.enable = false; # disable system idle sleep
       bluetooth.enable = true; # ~10mib - sets blueman in home packages

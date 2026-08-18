@@ -89,6 +89,7 @@
       inputmethods.japanese.enable = true; # sets japanese input
       inputmethods.korean.enable = false; # sets korean input
       ai.enable = aiEnable; # sets AI tools like opencode, llama.cpp
+      dictation.enable = true; # push-to-talk dictation + meeting/VTT transcript (voxtype, F9)
       git.enable = true; # sets git
       bluetooth.enable = false; # sets blueman in home packages
       dev.enable = true; # sets dev tools and basic languages

@@ -7,7 +7,7 @@
 
 {
   config = {
-    system.stateVersion = "25.11"; # [CHANGE THIS]
+    system.stateVersion = "26.05"; # [CHANGE THIS]
     #            [system state version from first install]
 
     # Fill this out!
@@ -77,6 +77,7 @@
       ai = {
         enable = true; # sets AI tools (llama.cpp, opencode, etc.)
         gpu = "rocm"; # llama.cpp backend: rocm (AMD) | cuda (NVIDIA) | cpu
+        host = "127.0.0.1"; # keep llama.cpp local (not exposed on the LAN)
         port = 11434;
         webui = {
           enable = true; # Open WebUI chat interface

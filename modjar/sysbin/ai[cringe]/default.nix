@@ -34,6 +34,11 @@ in
         default = "rocm";
         description = "llama.cpp GPU backend: rocm (AMD), cuda (NVIDIA), or cpu";
       };
+      host = lib.mkOption {
+        type = lib.types.str;
+        default = "0.0.0.0";
+        description = "Address llama.cpp binds. Use 127.0.0.1 to keep it private to this machine";
+      };
       webui = {
         enable = lib.mkEnableOption "Open WebUI — browser-based chat interface for llama.cpp";
         port = lib.mkOption {
@@ -51,9 +56,9 @@ in
       services.llama-cpp = {
         enable = true;
         package = llamaPackage;
-        host = "0.0.0.0"; # The host address which the llama-server HTTP interface listens to.
+        host = cfg.host; # The host address which the llama-server HTTP interface listens to.
         port = cfg.port;
-        openFirewall = true;
+        openFirewall = lib.mkIf (cfg.host == "0.0.0.0") true;
         # [models] auto-downloaded from HuggingFace on first request into /var/cache/llama-cpp
         modelsPreset = {
           "qwen3.5-9b" = {

@@ -27,6 +27,9 @@
       # gnome.enable = gnomeEnable;
       hyprland.enable = hyprlandEnable;
       niri.enable = niriEnable;
+      # [desktop shell] pick one: noctalia (default) or shelljar (my quickshell island shell)
+      shelljar.enable = false; # my quickshell island shell
+      noctalia.enable = false; # noctalia desktop shell
       # [epr plus]
       launcher.enable = true; # sets launcher fuzzel
       resYoink = {
@@ -86,6 +89,7 @@
       inputmethods.japanese.enable = true; # sets japanese input
       inputmethods.korean.enable = false; # sets korean input
       ai.enable = aiEnable; # sets AI tools like opencode, llama.cpp
+      dictation.enable = false; # voxtype push-to-talk dictation + meeting/VTT transcript (F9)
       git.enable = true; # sets git
       bluetooth.enable = false; # sets blueman in home packages
       dev.enable = true; # sets dev tools and basic languages

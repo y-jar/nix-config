@@ -11,7 +11,15 @@
 
     # [experience]
     hyprland.enable = true;
-    niri.enable = false;
+    niri = {
+      enable = false;
+      shelljar = {
+        enable = false; # my quickshell island shell
+      };
+      noctalia = {
+        enable = false; # noctalia desktop shell
+      };
+    };
     launcher.enable = true;
 
     # [appstream]

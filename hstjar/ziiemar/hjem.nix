@@ -6,7 +6,15 @@
 
     shell.enable = true;
     hyprland.enable = false;
-    niri.enable = true;
+    niri = {
+      enable = true;
+      shelljar = {
+        enable = false; # my quickshell island shell
+      };
+      noctalia = {
+        enable = false; # noctalia desktop shell
+      };
+    };
     launcher.enable = true;
 
     browsers = {

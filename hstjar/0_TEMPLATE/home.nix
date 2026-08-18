@@ -39,6 +39,9 @@
       # gnome.enable = gnomeEnable;
       hyprland.enable = hyprlandEnable;
       niri.enable = niriEnable;
+      # [desktop shell] pick one: noctalia (default) or shelljar (my quickshell island shell)
+      shelljar.enable = false; # my quickshell island shell
+      noctalia.enable = false; # noctalia desktop shell
       # [epr plus]
       launcher.enable = true; # ~10mib - sets launcher fuzzel
       resYoink = {
@@ -98,6 +101,7 @@
       inputmethods.japanese.enable = false; # ~100mib - fcitx5 + Mozc
       inputmethods.korean.enable = false; # ~100mib - fcitx5 + Hangul
       ai.enable = aiEnable; # ~1.5gib - LM Studio + opencode-desktop
+      dictation.enable = false; # voxtype push-to-talk dictation + meeting/VTT transcript (F9)
       git.enable = true; # ~10mib - git + gh + lazygit
       bluetooth.enable = false; # ~5mib - blueman
       dev.enable = true; # ~1.5gib - dotnet + python + node + gcc + go + nix tools
