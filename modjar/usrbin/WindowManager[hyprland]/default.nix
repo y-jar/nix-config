@@ -54,6 +54,8 @@ in
       "hypr/hl/vars.lua".text = apply (builtins.readFile ./hl/vars.lua);
       "hypr/hl".source = ./hl; # main config (rest of hl)
       "hypr/host-inputs/input.lua".source = targetLUASource; # host-specific inputs
+      # nwg-drawer theme (shared in usrbin/, same as niri)
+      "nwg-drawer/drawer.css".source = ../nwg-drawer.css;
     }; # end of xdg.configFile
     home.packages = with pkgs; [
       awww # animated wallpaper daemon for Wayland

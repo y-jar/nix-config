@@ -176,6 +176,12 @@
       description = "Generated fcitx5 config dir path";
     };
     # [niri/default.nix]
+    nwgDrawerCss = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      internal = true;
+      description = "nwg-drawer drawer.css path";
+    };
     niriFiles = lib.mkOption {
       type = lib.types.nullOr (
         lib.types.submodule {

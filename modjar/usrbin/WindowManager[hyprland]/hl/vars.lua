@@ -4,7 +4,7 @@ return {
     -- core
     mainMod = "SUPER",
     launcher = "fuzzel",
-    launcherPain = "nwg-drawer",
+    launcherPain = "nwg-drawer -wm hyprland -fm nautilus -ovl -mt 40 -mb 40 -ml 20 -mr 20",
     -- apps
     terminal = "foot",
     fileManager = "nautilus",

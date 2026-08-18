@@ -72,6 +72,8 @@ in
           '';
       # [host specific]
       "niri/host-inputs.kdl".source = targetKdlSource;
+      # nwg-drawer theme (translucent, matches shell palette; shared in usrbin/)
+      "nwg-drawer/drawer.css".source = ../nwg-drawer.css;
       # Pin waypaper to the awww backend and to the wallpaper folder.
       "waypaper/config.ini".text = ''
         [Settings]

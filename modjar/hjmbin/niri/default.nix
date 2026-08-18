@@ -69,6 +69,7 @@ in
   }; # end of options
 
   config = lib.mkIf hjm.niri.enable {
+    hjemDotfiles.nwgDrawerCss = ../../usrbin/nwg-drawer.css;
     hjemDotfiles.niriFiles = {
       config = kdlDir + "/config.kdl";
       base = kdlDir + "/base.kdl";

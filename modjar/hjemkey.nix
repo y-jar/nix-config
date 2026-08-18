@@ -119,6 +119,10 @@ in
           ".config/niri/startups.kdl".source = hjemDotfiles.niriFiles.startups;
           ".config/niri/host-inputs.kdl".source = hjemDotfiles.niriFiles.hostInputs;
         }
+        # [nwg-drawer config]
+        // lib.optionalAttrs (hjemDotfiles.nwgDrawerCss != null) {
+          ".config/nwg-drawer/drawer.css".source = hjemDotfiles.nwgDrawerCss;
+        }
         # [resource symlinks]
         // lib.optionalAttrs (hjemDotfiles.resYoink != null) (
           lib.optionalAttrs (hjemDotfiles.resYoink ? wallpapers) {
