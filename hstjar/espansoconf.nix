@@ -9,7 +9,7 @@
   inherit enable;
   shorts = {
     ":addr" = "123 Jar Street, Warrington";
-    ":sig" = "Best,\nJar";
+    ":sign" = "Always Learning,\nJar / Park";
     ":np" = "now playing: $|$";
     ":gitadd" = "git add -A && git commit -m \"$|$\"";
     ":date" = "{{mydate}}";

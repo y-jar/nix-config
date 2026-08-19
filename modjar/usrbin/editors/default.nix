@@ -30,6 +30,7 @@ in
     programs.obsidian.enable = cfg.obsidian.enable;
 
     home.packages = with pkgs; [
+      gnome-text-editor
       lorem # Generate placeholder text
       qownnotes # markdown app editor
       buffer # Minimal editing space for all those things that don't need keeping
