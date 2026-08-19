@@ -21,6 +21,7 @@ in
   config = lib.mkIf cfg.enable {
     home.packages = with pkgs; [
       libreoffice # LibreOffice office suite
+      projectlibre # Project-Management Software similar to MS-Project
       jupyter # Web-based notebook environment for interactive computing; mainly used for school and notetaking
       # [Technical Writing]
       pandoc # Conversion between documentation formats
