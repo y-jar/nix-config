@@ -57,6 +57,7 @@
         enable = true; # ~500mib - librewolf + firefox
         firefox = false; # disables firefox [work]
         librewolf = true; # enables librewolf [personal]
+        chromium = true; # enables chromium [personal] [the default is `true`]
       };
       terminal.enable = true; # ~30mib - sets terminal as foot + kitty + alacritty
       terminal.font = "IntoneMono Nerd Font"; # options: "IntoneMono Nerd Font" "Monocraft" "Miracode"

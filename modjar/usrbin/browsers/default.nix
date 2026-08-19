@@ -23,7 +23,10 @@ in
         type = lib.types.bool;
         default = true;
       }; # end of librewolf option
-
+      chromium = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+      }; # end of chromium option
     }; # end of usrSettings.browsers
   }; # end of options
 
@@ -37,6 +40,7 @@ in
         policies.Preferences."widget.gtk.native-emoji-dialog" = false;
       };
       librewolf.enable = cfg.librewolf;
+      chromium.enable = cfg.chromium;
     }; # end of programs
 
     xdg.mimeApps = {
