@@ -79,6 +79,7 @@
         # hstjar/<hostname>/ directory must exist).
         # TEMPLATE = mkJar "TEMPLATE";
 
+        # ===[INSTALLER: append new hosts on the line below]===
         calender = mkJar "calender"; # main pc
         yilyonix = mkJar "yilyonix"; # test bench [Might need to FIX]
         ziiemar = mkJar "ziiemar"; # personal laptop
