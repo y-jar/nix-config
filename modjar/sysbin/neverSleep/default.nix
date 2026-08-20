@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Disable system idle sleep.
+# -=-=-=-=-=-=-=-=-=-=-=
 { lib, config, ... }:
 let
   cfg = config.sysSettings.neverSleep;

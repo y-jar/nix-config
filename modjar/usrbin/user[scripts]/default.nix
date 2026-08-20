@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Installs user helper scripts (bldjar, jwall, etc.).
+# -=-=-=-=-=-=-=-=-=-=-=
 # modules-jar/sys-bin/load-scripts.nix
 { pkgs, ... }:
 let

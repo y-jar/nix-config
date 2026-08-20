@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Yazi terminal file manager config.
+# -=-=-=-=-=-=-=-=-=-=-=
 { config, lib, ... }:
 let
   cfg = config.usrSettings.yazi;

@@ -12,7 +12,6 @@
 │   ├── 0_TEMPLATE/             # Template for new hosts [system.nix + user.nix + hw config]
 │   ├── calender/               # Main desktop PC
 │   ├── candle/                 # Gaming mini build
-│   ├── loom/                   # Silly PC
 │   ├── vmjar/                  # Virtual machine config
 │   ├── whale/                  # Server system
 │   ├── yilyonix/               # Test bench (laptop/tablet)

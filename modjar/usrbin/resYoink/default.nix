@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Symlink resource repos (wallpapers/icons/pfps) into ~/resjar.
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   config,
   lib,

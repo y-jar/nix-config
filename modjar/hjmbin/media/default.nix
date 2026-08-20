@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: hjem: mpv + mimeapps dotfiles.
+# -=-=-=-=-=-=-=-=-=-=-=
 # =-=-=[media] =-=-=
 # Generates mpv.conf and mimeapps.list configuration.
 # ref: modjar/usrbin/media/default.nix

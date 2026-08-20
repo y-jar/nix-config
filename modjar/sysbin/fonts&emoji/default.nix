@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Fonts and emoji packages for the system.
+# -=-=-=-=-=-=-=-=-=-=-=
 { pkgs, ... }:
 let
   x5y8pxNegaTape = pkgs.stdenv.mkDerivation {

@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Polkit authentication agent + rules.
+# -=-=-=-=-=-=-=-=-=-=-=
 # =-=-=[polkit] =-=-=
 # Enables the GNOME polkit authentication agent
 # as a systemd user service. Prompts for a password

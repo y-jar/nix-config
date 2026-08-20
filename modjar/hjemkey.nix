@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: hjem entry (WIP): imports hjem/nvf + host hjem.nix + hjmbin.
+# -=-=-=-=-=-=-=-=-=-=-=
 # =-=-=[hjemkey.nix] =-=-=
 # Hjem entry point. Sets up Hjem (alternative to HM)
 # for all users. Hjem manages dotfiles and user-level

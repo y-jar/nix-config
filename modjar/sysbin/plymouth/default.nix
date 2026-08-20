@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Plymouth boot splash with custom logo.
+# -=-=-=-=-=-=-=-=-=-=-=
 # =-=-=[plymouth] =-=-=
 # My custom boot splash logo. Toggle per-host via sysSettings.boot.plymouth.enable.
 # Logo lives at resjar/imagebin/boot-logo.png. PNG format only.

@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Host ziiemar: system-level toggle sheet (sysSettings).
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   inputs,
   config,

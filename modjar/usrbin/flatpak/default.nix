@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Flatpak user-level + bazaar app store.
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   config,
   lib,

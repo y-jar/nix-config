@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Virtual camera (v4l2 loopback) for OBS.
+# -=-=-=-=-=-=-=-=-=-=-=
 { config, lib, ... }:
 let
   cfg = config.sysSettings.virtcam;

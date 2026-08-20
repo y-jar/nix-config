@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Define main/guest/admin users + home-manager mapping.
+# -=-=-=-=-=-=-=-=-=-=-=
 { config, lib, ... }:
 
 let

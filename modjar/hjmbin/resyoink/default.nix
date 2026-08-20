@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: hjem: resource symlinks.
+# -=-=-=-=-=-=-=-=-=-=-=
 # =-=-=[resyoink]=-=-=
 # Symlinks wallpapers, icons, and profile pictures
 # from flake inputs into ~/resjar/.

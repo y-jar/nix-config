@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: hjem: niri kdl config generation.
+# -=-=-=-=-=-=-=-=-=-=-=
 # =-=-=[niri] =-=-=
 # Copies KDL config files and fuzzel scripts.
 # ref: modjar/usrbin/WindowManager[niri]/, launcher[fuzzel]/scriptsbin/

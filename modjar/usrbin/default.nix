@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Auto-imports all sibling usrbin modules (don't edit logic).
+# -=-=-=-=-=-=-=-=-=-=-=
 { lib, ... }:
 
 let

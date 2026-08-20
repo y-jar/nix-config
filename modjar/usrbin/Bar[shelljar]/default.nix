@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Shelljar quickshell island shell (wiring + kdl).
+# -=-=-=-=-=-=-=-=-=-=-=
 # =-=-=[shelljar] =-=-=
 # My custom Quickshell island shell (replaces noctalia on hosts that opt in).
 # ref: https://github.com/y-jar/shelljar (flake input, built via its own flake)

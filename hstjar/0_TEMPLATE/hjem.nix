@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Host 0_TEMPLATE: hjem toggle sheet (hjmSettings) — WIP.
+# -=-=-=-=-=-=-=-=-=-=-=
 { ... }:
 {
   # Fill this out! Same toggles as home.nix but for hjem.

@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Espanso user-level config wrappers.
+# -=-=-=-=-=-=-=-=-=-=-=
 # =-=-=[espanso] =-=-=
 # "Shorts" - text expansion abbreviations (trigger -> replacement).
 # Config lives in ~/.config/espanso/ (managed by this module).

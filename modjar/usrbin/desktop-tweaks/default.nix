@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Small desktop quality-of-life tweaks (home-level).
+# -=-=-=-=-=-=-=-=-=-=-=
 { ... }:
 
 {

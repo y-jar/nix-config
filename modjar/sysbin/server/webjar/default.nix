@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Self-hosted link page served via nginx.
+# -=-=-=-=-=-=-=-=-=-=-=
 { lib, config, ... }:
 
 let

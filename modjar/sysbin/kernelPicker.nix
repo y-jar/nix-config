@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Choose kernel: default, latest, or cachyos variants.
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   config,
   inputs,

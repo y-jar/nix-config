@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Editor master toggle + dispatches to sub-editors.
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   config,
   lib,

@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Self-hosted Excalidraw (nixdraw) server.
+# -=-=-=-=-=-=-=-=-=-=-=
 { lib, config, ... }:
 let
   cfg = config.sysSettings.server.nixdraw;

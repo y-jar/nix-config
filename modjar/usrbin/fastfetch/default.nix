@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Fastfetch system-fetch config + ascii logos.
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   config,
   lib,

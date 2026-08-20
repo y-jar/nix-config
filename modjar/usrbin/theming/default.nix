@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Theme options: gtk/qt flavor, accent, cursor size.
+# -=-=-=-=-=-=-=-=-=-=-=
 { lib, ... }: {
   imports = [
     ./gtk.nix # GTK theme

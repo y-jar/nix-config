@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Blueman GUI (user-level bluetooth tool).
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   config,
   lib,

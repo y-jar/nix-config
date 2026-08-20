@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: PipeWire audio stack + tools (system-level enable).
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   config,
   lib,

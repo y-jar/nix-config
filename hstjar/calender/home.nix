@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Host calender: user-level toggle sheet (usrSettings) for home-manager.
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   config,
   pkgs,
@@ -67,7 +74,15 @@
       yazi.enable = true; # sets yazi
       ranger.enable = true; # sets ranger
       # [media]
-      media.enable = true; # sets media tools + default apps (images, video, audio, archives)
+      media = {
+        enable = true; # media master toggle
+        mpv = true; # mpv video player + yt-dlp
+        downloaders = true; # ffmpeg + yt-dlp
+        musicApps = true; # quodlibet, gapless, blanket
+        audioEditor = true; # audacity
+        viewers = true; # yacreader, constrict, anki
+        defaultApps = true; # default mime apps + loupe/showtime/file-roller
+      };
       keepass.enable = true; # sets keepassxc
       gaming = {
         prism.enable = true; # sets prismlauncher [minecraft]
@@ -76,14 +91,19 @@
       # =========[appstream]^^^
 
       # =========[creative tools]
-      art.enable = true; # sets krita, blender +
+      art = {
+        enable = true; # art master toggle
+        imageTools = true; # krita, gimp, inkscape, ...
+        threeD = true; # blender, blockbench
+        astronomy = true; # stellarium, celestia
+      };
       # godot.enable = true; # sets godot
       office.enable = true; # sets libreoffice and other apps
       obs.enable = true; # sets up obs studio
       videoEditors = {
-        enable = false; # sets video editors
-        kdenlive.enable = false; # sets kdenlive
-      }; # end of videoEditors
+        enable = false; # video editors master toggle
+        kdenlive.enable = false; # Kdenlive
+      };
       # =========[creative tools]^^^
 
       # =========[management]
@@ -93,7 +113,15 @@
       dictation.enable = true; # push-to-talk dictation + meeting/VTT transcript (voxtype, F9)
       git.enable = true; # sets git
       bluetooth.enable = false; # sets blueman in home packages
-      dev.enable = true; # sets dev tools and basic languages
+      dev = {
+        enable = true; # dev master toggle
+        dotnet = true; # dotnet SDK
+        node = true; # nodejs
+        cc = true; # gcc
+        go = true; # go
+        nixTools = true; # nix language servers + formatters
+        sqlTools = true; # dbeaver
+      };
       # =========[management]^^^
       theming = {
         enable = true; # sets theme for gtk/qt

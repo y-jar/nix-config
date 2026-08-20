@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: XDG desktop portal setup for file pickers.
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   config,
   pkgs,

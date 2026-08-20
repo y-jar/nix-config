@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Nix settings (experimental features, substituters, garbage collection).
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   pkgs,
   inputs,

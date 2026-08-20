@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Voxtype push-to-talk dictation + transcript.
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   config,
   lib,

@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Flatpak support (system-level) + Bazaar setup.
+# -=-=-=-=-=-=-=-=-=-=-=
 { lib, config, ... }:
 
 let

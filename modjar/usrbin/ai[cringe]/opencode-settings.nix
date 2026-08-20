@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: OpenCode settings + specialArgs forwarding.
+# -=-=-=-=-=-=-=-=-=-=-=
 { config, lib, ... }:
 let
   cfg = config.usrSettings.ai;

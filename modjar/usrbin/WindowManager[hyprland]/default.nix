@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Hyprland user config entry + host inputs.
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   lib,
   config,

@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: COSMIC desktop environment + optional greeter.
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   lib,
   config,

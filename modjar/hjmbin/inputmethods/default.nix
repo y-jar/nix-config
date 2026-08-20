@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: hjem: fcitx5/mozc dotfiles.
+# -=-=-=-=-=-=-=-=-=-=-=
 # =-=-=[inputmethods] =-=-=
 # Japanese/Korean input for hjem hosts: fcitx5 + mozc/hangul.
 # Mirrors modjar/usrbin/inputmethods/.

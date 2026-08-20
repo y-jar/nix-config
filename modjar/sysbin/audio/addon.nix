@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Personal audio addon (extra audio setup on top of base audio).
+# -=-=-=-=-=-=-=-=-=-=-=
 { lib, config, ... }:
 let
   cfg = config.sysSettings.audio.addon;

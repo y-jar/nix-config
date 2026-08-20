@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: hjem: git config dotfiles.
+# -=-=-=-=-=-=-=-=-=-=-=
 # =-=-=[git] =-=-=
 # Generates ~/.gitconfig with user identity,
 # delta for diffs, and sensible defaults.

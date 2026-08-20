@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Jellyfin media server + media user.
+# -=-=-=-=-=-=-=-=-=-=-=
 # ref: https://wiki.nixos.org/wiki/Jellyfin
 {
   pkgs,

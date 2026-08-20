@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Host vmjar: imports system + hardware + boot for this machine.
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   inputs,
   hostnm,

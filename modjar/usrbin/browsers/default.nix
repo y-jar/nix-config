@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Browsers: firefox/librewolf (user-level home config).
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   config,
   lib,

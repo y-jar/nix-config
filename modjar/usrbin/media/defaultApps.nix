@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Default applications (images, video, audio, archives).
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   config,
   lib,
@@ -8,7 +15,7 @@ let
   cfg = config.usrSettings.media;
 in
 {
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (cfg.enable && cfg.defaultApps) {
     # [default applications]
     xdg.mimeApps = {
       enable = true;
@@ -56,14 +63,14 @@ in
         # [comic reader] yacreader
         "application/x-cbz" = "YACReader.desktop";
         "application/vnd.comicbook+zip" = "YACReader.desktop";
-      }; # end of defaultapplications
-    }; # end of default applications
+      };
+    };
 
     # [packages]
     home.packages = with pkgs; [
       loupe # image viewer (GTK4/Rust, Wayland-native)
       showtime # video player (GNOME)
       file-roller # archive manager (GNOME)
-    ]; # end of packages
-  }; # end of config
+    ];
+  };
 }

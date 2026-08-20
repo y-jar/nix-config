@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: NVIDIA proprietary GPU drivers + open/closed variant + CUDA.
+# -=-=-=-=-=-=-=-=-=-=-=
 { lib, config, ... }:
 let
   cfg = config.sysSettings.nvidia;

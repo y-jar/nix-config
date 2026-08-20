@@ -1,18 +1,15 @@
-#*/-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Hi, This is the system configuration file for the picked host.
-# If you're new here, just think of it as a checklist to fill out.
-# Things to note:
-# 1. You should change the stateVersion to the version you're using
-# 2. You should change the home-manager state version to the version you're using
-# 3. You should change all PLEASECHANGEME_* placeholders to your actual username
-#   or values.
-# 4. whether or not something is false or true is entirely up to you. enable what
-#    you need!
-#
-# And remember, your configuration is yours to customize.
-# After you're done, head over to ./home.nix to configure your user!
-#*/-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Host 0_TEMPLATE: system-level toggle sheet (sysSettings).
+# -=-=-=-=-=-=-=-=-=-=-=
+# This is the SYSTEM configuration file for this host.
+# - It's a checklist to fill out: enable what you need, leave the rest off.
+# - Replace every `PLEASECHANGEME_*` with real values.
+# - Set `system.stateVersion` to the NixOS version of first install.
+# - Pair options here with matching user toggles in ./home.nix.
 {
   inputs,
   config,
@@ -22,8 +19,7 @@
 
 {
   config = {
-    system.stateVersion = "VersionNumber"; # [CHANGE THIS]
-    #            [system state version from first install]
+    system.stateVersion = "VersionNumber"; # [CHANGE THIS] [from first install]
 
     # Fill this out!
     sysSettings = {
@@ -37,8 +33,20 @@
       };
       # =============[users]^^^
 
+      # =============[base / core packages]
+      # Always-on package groups. Default true keeps a useful baseline; disable
+      # groups you don't need to shrink the system/download.
+      base = {
+        coreTools = true; # neovim + nh + git
+        netArchives = true; # wget + curl + zip + rar + rsync
+        fsTools = true; # psmisc + pciutils + usbutils + ntfs3g
+        imaging = true; # image/video codec + thumbnail support
+        waylandEssentials = true; # swaybg + waybar + fuzzel + clipboard
+      };
+      # =============[base / core packages]^^^
+
       # =============[experience install]
-      # [pick one or more if you know what you're doing] [sIZES ARE APPROXIMATE]
+      # [pick one or more if you know what you're doing] [sizes approximate]
       cinnamon.enable = false; # ~800mib - full Cinnamon desktop
       gnome.enable = true; # ~800mib - full GNOME desktop
       gdm.enable = true; # sets GDM login manager

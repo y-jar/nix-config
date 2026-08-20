@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: hjem: yazi dotfiles.
+# -=-=-=-=-=-=-=-=-=-=-=
 # =-=-=[yazi] =-=-=
 # Generates yazi TOML config files.
 # ref: modjar/usrbin/file-explorers/yazi.nix

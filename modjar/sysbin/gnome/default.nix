@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: GNOME desktop environment (system enable).
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   config,
   lib,

@@ -69,17 +69,16 @@
             ./modjar/sysbin # Entry for The System
             ./hstjar/${hostName} # Entry for The host
           ]; # end of modules
-        }; # end of uurnJar
+        }; # end of urnJar
     in
     {
       # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=!!HOSTS!!=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
       nixosConfigurations = {
-        # ========[base 糸s] Im gay
+        # [TEMPLATE] scaffold a new host from hstjar/0_TEMPLATE via the installer.
+        # Append new hosts below using `mkJar "<hostname>"` (a matching
+        # hstjar/<hostname>/ directory must exist).
         # TEMPLATE = mkJar "TEMPLATE";
 
-        # [Dont change the line below]
-        # ===[INSTALLER: append new hosts on the line below]===
-        loom = mkJar "loom"; # silly pc
         calender = mkJar "calender"; # main pc
         yilyonix = mkJar "yilyonix"; # test bench [Might need to FIX]
         ziiemar = mkJar "ziiemar"; # personal laptop
@@ -150,7 +149,7 @@
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt; # nix fmt
       packages.x86_64-linux.iso = self.nixosConfigurations.iso.config.system.build.isoImage; # nix build .#iso
       packages.x86_64-linux.iso-gnome = self.nixosConfigurations.iso-gnome.config.system.build.isoImage; # nix build .#iso-gnome
-    }; # end of nixosConfigurations
+    }; # end of flake outputs
   # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=[INPUTS]=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   inputs = {
     # [nixpkgs]
@@ -191,5 +190,3 @@
     hjem.url = "github:feel-co/hjem";
   }; # end of inputs
 }
-
-# Go back Up!

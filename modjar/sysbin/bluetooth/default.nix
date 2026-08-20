@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Bluetooth support (daemon + pairing tools).
+# -=-=-=-=-=-=-=-=-=-=-=
 { lib, config, ... }:
 
 let

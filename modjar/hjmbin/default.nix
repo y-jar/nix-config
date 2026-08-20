@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Auto-imports all sibling hjmbin modules (don't edit logic).
+# -=-=-=-=-=-=-=-=-=-=-=
 { lib, ... }:
 
 let

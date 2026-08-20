@@ -28,7 +28,6 @@ hardto PICKEDHOST # <-- set your host name here [replace PICKEDHOST]
 > **My predefined PICKEDHOST options**: 
 > - `calender`: main desktop PC
 > - `candle`: gaming mini build
-> - `loom`: silly PC
 > - `vmjar`: virtual machine config
 > - `whale`: server system
 > - `yilyonix`: test bench (laptop/tablet)

@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: User-level AI tools (LM Studio, opencode).
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   config,
   lib,

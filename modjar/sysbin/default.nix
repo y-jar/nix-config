@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Auto-imports all sibling sysbin modules (don't edit logic).
+# -=-=-=-=-=-=-=-=-=-=-=
 { lib, ... }:
 
 let

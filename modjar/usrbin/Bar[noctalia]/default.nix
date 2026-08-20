@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Noctalia desktop shell (user-level toggle/wiring).
+# -=-=-=-=-=-=-=-=-=-=-=
 # =-=-=[noctalia] =-=-=
 # Noctalia desktop shell (Quickshell based). Kept optional so hosts can pick
 # the shell they want: noctalia vs shelljar.

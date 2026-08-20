@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Host vmjar: hjem toggle sheet (hjmSettings) — WIP.
+# -=-=-=-=-=-=-=-=-=-=-=
 { ... }:
 {
   hjmSettings = {

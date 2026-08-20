@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: LocalSend cross-device file sharing.
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   config,
   lib,

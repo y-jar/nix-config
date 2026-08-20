@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Discord client (home-level enable).
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   config,
   lib,

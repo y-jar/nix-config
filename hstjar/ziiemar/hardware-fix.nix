@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Ziiemar: extra hardware workarounds.
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   config,
   pkgs,

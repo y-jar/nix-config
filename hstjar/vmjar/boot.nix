@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Host vmjar: bootloader settings (systemd-boot).
+# -=-=-=-=-=-=-=-=-=-=-=
 { ... }: {
   # boot
   boot = {

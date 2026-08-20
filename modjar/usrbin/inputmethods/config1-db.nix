@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Shared mozc config1.db builder (HM + hjem).
+# -=-=-=-=-=-=-=-=-=-=-=
 # =-=-=[config1-db.nix] =-=-=
 # Builds mozc's binary config1.db from keymap.tsv.
 # Shared by home-manager (modjar/usrbin) and hjem (modjar/hjmbin).

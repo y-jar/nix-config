@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Host calender: hjem toggle sheet (hjmSettings) — WIP.
+# -=-=-=-=-=-=-=-=-=-=-=
 { ... }:
 {
   hjmSettings = {

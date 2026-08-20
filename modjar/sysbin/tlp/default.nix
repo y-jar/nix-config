@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: TLP power management + battery charge thresholds.
+# -=-=-=-=-=-=-=-=-=-=-=
 { config, lib, ... }:
 
 let

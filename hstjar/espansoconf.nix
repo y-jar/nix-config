@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Shared espanso triggers/replacements consumed by host home.nix/hjem.nix.
+# -=-=-=-=-=-=-=-=-=-=-=
 # espanso text expander — shared trigger/replacement config.
 # Consumed by host home.nix / hjem.nix:
 #   espanso = (import ../espansoconf.nix { });                     # enabled (default)

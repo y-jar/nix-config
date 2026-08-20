@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: NetworkManager + network configuration.
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   hostnm,
   ...

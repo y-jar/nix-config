@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: hjmSettings + internal hjemDotfiles option declarations.
+# -=-=-=-=-=-=-=-=-=-=-=
 { lib, pkgs, ... }:
 
 {

@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Espanso daemon + Wayland security wrapper (system-level).
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   config,
   lib,

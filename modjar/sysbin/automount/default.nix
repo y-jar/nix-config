@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Auto-mount removable media via udisks2.
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   config,
   lib,

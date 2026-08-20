@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Graphics/gaming drivers (Vulkan, Mesa, AMD/Intel/NVIDIA).
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   config,
   lib,

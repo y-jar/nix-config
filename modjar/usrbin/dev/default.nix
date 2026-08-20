@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Dev toolchain: dotnet/node/gcc/go + nix + sql tools.
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   config,
   pkgs,
@@ -10,38 +17,39 @@ in
 {
   options = {
     usrSettings.dev = {
-      enable = pkgs.lib.mkOption {
-        type = pkgs.lib.types.bool;
-        default = false;
-        description = "Enable dev tools (~1.5GiB, dotnet + python + node + gcc + go)";
-      };
-    }; # end of usrSettings.dev
-  }; # end of options
-  config = {
-    home.packages = lib.mkIf cfg.enable (
-      with pkgs;
-      [
-        # [Development Essentials]
-        dotnet-sdk_8 # Core functionality needed to create .NET Core projects, that is shared between Visual Studio and CLI (wrapper) (combined) (wrapper)
-        nodejs # Event-driven I/O framework for the V8 JavaScript engine
-        gcc # GNU Compiler Collection, version 15.2.0 (wrapper script)
-        go # Go Programming language
+      enable = lib.mkEnableOption "dev tools (master toggle)";
+      dotnet = lib.mkEnableOption "dotnet (C#/.NET) SDK";
+      node = lib.mkEnableOption "nodejs (JS/TS runtime)";
+      cc = lib.mkEnableOption "gcc (C/C++ compiler)";
+      go = lib.mkEnableOption "go toolchain";
+      nixTools = lib.mkEnableOption "nix language servers + formatters";
+      sqlTools = lib.mkEnableOption "dbeaver + sql clients";
+    };
+  };
 
-        # [Nix]
-        nixd # Feature-rich Nix language server interoperating with C++ nix
+  config = {
+    home.packages = lib.mkIf cfg.enable (lib.mkMerge [
+      (lib.mkIf cfg.dotnet (with pkgs; [
+        dotnet-sdk_8
+      ]))
+      (lib.mkIf cfg.node (with pkgs; [
+        nodejs
+      ]))
+      (lib.mkIf cfg.cc (with pkgs; [
+        gcc
+      ]))
+      (lib.mkIf cfg.go (with pkgs; [
+        go
+      ]))
+      (lib.mkIf cfg.nixTools (with pkgs; [
+        nixd # Nix language server
         nixfmt # Nix formatter
         nil # Nix language server
-        alejandra # formatter ~1.7mib
-
-        # [rust]
-        # rustc # Safe, concurrent, practical language (wrapper script)
-        # rust-analyzer # Language server for the Rust language
-        # rustfmt # Tool for formatting Rust code according to style guidelines
-        # cargo # Downloads your Rust project's dependencies and builds your project
-
-        # [Database GUI (optional but helpful for ERD work)]
-        dbeaver-bin # Universal SQL Client for developers, DBA and analysts. Supports MySQL, PostgreSQL, MariaDB, SQLite, and more
-      ]
-    ); # end of home.packages
-  }; # end of config
+        alejandra # alternate Nix formatter
+      ]))
+      (lib.mkIf cfg.sqlTools (with pkgs; [
+        dbeaver-bin # universal SQL client
+      ]))
+    ]);
+  };
 }

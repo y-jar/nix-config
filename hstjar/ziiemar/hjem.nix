@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Host ziiemar: hjem toggle sheet (hjmSettings) — WIP.
+# -=-=-=-=-=-=-=-=-=-=-=
 { ... }:
 {
   hjmSettings = {

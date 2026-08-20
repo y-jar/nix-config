@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: OpenCode CLI install/config (user-level AI).
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   config,
   lib,

@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: home-manager entry: imports HM + host home.nix + shared usrbin, sets specialArgs.
+# -=-=-=-=-=-=-=-=-=-=-=
 # =-=-=[homekey.nix] =-=-=
 # Home Manager entry point. Sets up HM for all users.
 # Imports the host-specific home.nix and shared usrbin

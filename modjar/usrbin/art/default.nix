@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Creative suite: Blender + Krita + GIMP + Inkscape.
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   config,
   lib,
@@ -10,37 +17,42 @@ in
 {
   options = {
     usrSettings.art = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Enable art tools (~3GiB, Blender + Krita + GIMP + Inkscape)";
-      }; # end of enable option
-    }; # end of art options
-  }; # end of options
+      enable = lib.mkEnableOption "art tools (master toggle)";
+      imageTools = lib.mkEnableOption "2D/painting tools (krita, gimp, inkscape, ...)";
+      threeD = lib.mkEnableOption "3D tools (blender, blockbench)";
+      astronomy = lib.mkEnableOption "astronomy apps (stellarium, celestia)";
+    };
+  };
 
   config = lib.mkIf cfg.enable {
     # bulk art appstream
-    home.packages = with pkgs; [
+    home.packages = lib.mkMerge [
       # [image processing]
-      upscayl # Free and Open Source AI Image Upscaler
-      converseen # Batch image converter and resizer
-      fontforge # Font editor
-      digikam # Photo management application
-      coulr # Color picker
-      halftone # Halftone effect generator
-      krita # Digital painting and illustration software
-      gimp # GNU Image Manipulation Program
-      inkscape # Vector graphics editor
-      mypaint # Digital painting and illustration software
-      drawpile # Collaborative drawing and annotation software
+      (lib.mkIf cfg.imageTools (with pkgs; [
+        upscayl # AI image upscaler
+        converseen # batch image converter/resizer
+        fontforge # font editor
+        digikam # photo manager
+        coulr # color picker
+        halftone # halftone effect generator
+        krita # digital painting
+        gimp # image manipulation
+        inkscape # vector graphics
+        mypaint # digital painting
+        drawpile # collaborative drawing
+      ]))
 
       # [3d]
-      blender # 3D modeling and animation software
-      blockbench # 3D model editor [mincraft stuff]
+      (lib.mkIf cfg.threeD (with pkgs; [
+        blender # 3D modeling/animation
+        blockbench # 3D model editor (mincraft)
+      ]))
 
       # [astronomy] ref: https://github.com/ryan4yin/nix-config
-      stellarium # See what you can see with your eyes, binoculars or a small telescope.
-      celestia # Real-time 3D simulation of space, travel throughout the solar system.
-    ]; # end of packages
-  }; # end of config
+      (lib.mkIf cfg.astronomy (with pkgs; [
+        stellarium # planetarium
+        celestia # 3D space simulation
+      ]))
+    ];
+  };
 }

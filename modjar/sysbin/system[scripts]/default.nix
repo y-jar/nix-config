@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Installs system management helper scripts (nhu/nru).
+# -=-=-=-=-=-=-=-=-=-=-=
 # modules-jar/sys-bin/load-scripts.nix
 { pkgs, ... }:
 let

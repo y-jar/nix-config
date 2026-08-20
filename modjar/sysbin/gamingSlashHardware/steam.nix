@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Steam client + 32-bit library support.
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   config,
   lib,

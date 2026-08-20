@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Virtualization: QEMU/libvirtd tools + VM guest tuning.
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   config,
   lib,

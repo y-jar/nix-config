@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Sleepy service: scheduled reboots/naps.
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   config,
   lib,

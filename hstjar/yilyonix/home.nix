@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Host yilyonix: user-level toggle sheet (usrSettings) for home-manager.
+# -=-=-=-=-=-=-=-=-=-=-=
 #*/-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Hi this is the user configuration file for the picked host.
 #
@@ -78,7 +85,15 @@
       yazi.enable = true; # sets yazi
       ranger.enable = false; # sets ranger
       # [media]
-      media.enable = true; # sets media tools + default apps (images, video, audio, archives)
+      media = {
+        enable = true; # media master toggle
+        mpv = true; # mpv video player + yt-dlp
+        downloaders = true; # ffmpeg + yt-dlp
+        musicApps = true; # quodlibet, gapless, blanket
+        audioEditor = true; # audacity
+        viewers = true; # yacreader, constrict, anki
+        defaultApps = true; # default mime apps + loupe/showtime/file-roller
+      };
       keepass.enable = true; # sets keepassxc
       gaming = {
         prism.enable = false; # sets prismlauncher [minecraft]
@@ -87,14 +102,19 @@
       # =========[appstream]^^^
 
       # =========[creative tools]
-      art.enable = false; # sets krita, blender +
+      art = {
+        enable = false; # art master toggle
+        imageTools = false; # krita, gimp, inkscape, ...
+        threeD = false; # blender, blockbench
+        astronomy = false; # stellarium, celestia
+      };
       # godot.enable = true; # sets godot
       office.enable = false; # sets libreoffice and other apps
       obs.enable = false; # sets up obs studio
       videoEditors = {
-        enable = false; # sets video editors
-        kdenlive.enable = false; # sets kdenlive
-      }; # end of videoEditors
+        enable = false; # video editors master toggle
+        kdenlive.enable = false; # Kdenlive
+      };
       # =========[creative tools]^^^
 
       # =========[management]
@@ -104,7 +124,15 @@
       dictation.enable = false; # voxtype push-to-talk dictation + meeting/VTT transcript (F9)
       git.enable = true; # sets git
       bluetooth.enable = true; # sets blueman in home packages
-      dev.enable = false; # sets dev tools and basic languages
+      dev = {
+        enable = false; # dev master toggle
+        dotnet = false; # dotnet SDK
+        node = false; # nodejs
+        cc = false; # gcc
+        go = false; # go
+        nixTools = false; # nix language servers + formatters
+        sqlTools = false; # dbeaver
+      };
       # =========[management]^^^
       theming = {
         enable = true; # sets theme for gtk/qt

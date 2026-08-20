@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Niri user config entry + host inputs.
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   config,
   lib,

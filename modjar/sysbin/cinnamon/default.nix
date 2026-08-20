@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Cinnamon desktop environment (system enable).
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   config,
   lib,

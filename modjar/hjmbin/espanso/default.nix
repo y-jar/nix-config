@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: hjem: espanso dotfile generation.
+# -=-=-=-=-=-=-=-=-=-=-=
 # =-=-=[espanso] =-=-=
 # "Shorts" - text expansion abbreviations (trigger -> replacement).
 # Config lives in ~/.config/espanso/ (managed by this module).

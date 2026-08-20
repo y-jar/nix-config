@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: OpenCode agent definitions for this repo.
+# -=-=-=-=-=-=-=-=-=-=-=
 { config, lib, ... }:
 let
   cfg = config.usrSettings.ai;

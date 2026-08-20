@@ -1,15 +1,15 @@
-#*/-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Hi this is the user configuration file for the picked host.
-#
-# And remember, your configuration is yours to customize.
-# After you're done, head over to ./system.nix to configure your system!
-#
-# Some notes for new systems:
-# 1. try to avoid disabling shell. It's the default shell for most systems.
-# 2. enable and disable only what you need.
-# 3. for hyprland and niri, there are some files you can tweak in modjar/usrbin for
-#   per system configuration. There is an unknown default to prevent issues.
-#*/-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Host 0_TEMPLATE: user-level toggle sheet (usrSettings) for home-manager.
+# -=-=-=-=-=-=-=-=-=-=-=
+# This is the USER configuration file for this host.
+# - Each option below is a toggle: enable only what you need (sizes are rough).
+# - Keep `shell.enable` true — it's the default shell for most systems.
+# - Pair options here with the matching system toggles in ./system.nix.
+# - For extra Hyprland/Niri per-host config see modjar/usrbin (host-inputs).
 {
   config,
   pkgs,
@@ -35,7 +35,7 @@
         enable = true;
       };
 
-      # =========[experience] [pick one or more if you know what you're doing] [sIZES ARE APPROXIMATE]
+      # =========[experience] [pick one or more if you know what you're doing] [sizes approximate]
       # gnome.enable = gnomeEnable;
       hyprland.enable = hyprlandEnable;
       niri.enable = niriEnable;
@@ -79,7 +79,15 @@
       yazi.enable = true; # ~10mib
       ranger.enable = false; # ~20mib
       # [media]
-      media.enable = true; # ~200mib - mpv + ffmpeg + music players + default apps (images, video, audio, archives)
+      media = {
+        enable = true; # media master toggle
+        mpv = true; # mpv video player + yt-dlp
+        downloaders = true; # ffmpeg + yt-dlp
+        musicApps = true; # quodlibet, gapless, blanket
+        audioEditor = true; # audacity
+        viewers = true; # yacreader, constrict, anki
+        defaultApps = true; # default mime apps + loupe/showtime/file-roller
+      };
       keepass.enable = true; # ~100mib
       gaming = {
         prism.enable = false; # ~200mib - Prism Launcher [minecraft]
@@ -88,14 +96,19 @@
       # =========[appstream]^^^
 
       # =========[creative tools]
-      art.enable = false; # ~3gib - Blender + Krita + GIMP + Inkscape + more
+      art = {
+        enable = false; # art master toggle
+        imageTools = false; # krita, gimp, inkscape, ...
+        threeD = false; # blender, blockbench
+        astronomy = false; # stellarium, celestia
+      };
       # godot.enable = true; # ~500mib
       office.enable = false; # ~800mib - LibreOffice + Pandoc
       obs.enable = false; # ~400mib - OBS Studio + plugins
       videoEditors = {
-        enable = false; # ~400mib
-        kdenlive.enable = false; # ~400mib
-      }; # end of videoEditors
+        enable = false; # video editors master toggle
+        kdenlive.enable = false; # Kdenlive
+      };
       # =========[creative tools]^^^
 
       # =========[management]
@@ -105,7 +118,15 @@
       dictation.enable = false; # voxtype push-to-talk dictation + meeting/VTT transcript (F9)
       git.enable = true; # ~10mib - git + gh + lazygit
       bluetooth.enable = false; # ~5mib - blueman
-      dev.enable = true; # ~1.5gib - dotnet + python + node + gcc + go + nix tools
+      dev = {
+        enable = true; # dev master toggle
+        dotnet = true; # dotnet SDK
+        node = true; # nodejs
+        cc = true; # gcc
+        go = true; # go
+        nixTools = true; # nix language servers + formatters
+        sqlTools = true; # dbeaver
+      };
       # =========[management]^^^
       theming = {
         enable = true; # sets theme for gtk/qt

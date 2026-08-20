@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Host vmjar: system-level toggle sheet (sysSettings).
+# -=-=-=-=-=-=-=-=-=-=-=
 #*/-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Hi, This is the system configuration file for the picked host.
 # If you're new here, just think of it as a checklist to fill out.

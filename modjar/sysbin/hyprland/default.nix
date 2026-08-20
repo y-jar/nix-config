@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Hyprland compositor (system-level enable).
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   lib,
   config,

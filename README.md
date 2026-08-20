@@ -63,7 +63,7 @@ Paste:
   <p>The system configuration is fully modular, functional, and split into system-level hardware declarations (<code>sysSettings</code>) and modular user-space profiles (<code>usrSettings</code>) managed via Home Manager and Flakes.</p>
   
   #### Core Features:
-  - **Modular Profiles:** Separate configs for real hardware hosts (`loom`, `whale`) and nested development spaces (`vmjar`).
+  - **Modular Profiles:** Separate configs for real hardware hosts (`whale`) and nested development spaces (`vmjar`).
   - **Automated Bootstrapping:** A custom interactive installer shell environment for smooth hardware onboarding and git deployment tracking.
   - **Robust Fallbacks:** Centralized templates and error safety guardrails built directly into our local module paths (`modjar/`).
 

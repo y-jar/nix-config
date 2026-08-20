@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: hjem: user directory setup.
+# -=-=-=-=-=-=-=-=-=-=-=
 # =-=-=[directories] =-=-=
 # Creates custom jar-prefixed directories in the
 # home folder. Runs once via .profile on login.

@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Video editors (Kdenlive).
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   config,
   lib,
@@ -10,21 +17,14 @@ in
 {
   options = {
     usrSettings.videoEditors = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Enable video editors";
-      };
-      kdenlive.enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Enable Kdenlive (~400MiB)";
-      }; # end of kdenlive
-    }; # end of videoEditors
-  }; # end of options
-  config = lib.mkIf cfg.kdenlive.enable {
+      enable = lib.mkEnableOption "video editors (master toggle)";
+      kdenlive.enable = lib.mkEnableOption "Kdenlive video editor";
+    };
+  };
+
+  config = lib.mkIf (cfg.enable && cfg.kdenlive.enable) {
     home.packages = with pkgs; [
-      kdePackages.kdenlive # for video editing
-    ]; # end of home.packages
+      kdePackages.kdenlive
+    ];
   };
 }

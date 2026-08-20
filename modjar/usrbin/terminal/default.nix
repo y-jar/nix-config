@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Terminal: foot + kitty + alacritty config.
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   config,
   lib,

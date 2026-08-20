@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Optional third-party nixpkgs overlay (nixYoinks).
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   config,
   inputs,

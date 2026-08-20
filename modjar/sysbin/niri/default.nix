@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Niri compositor (system-level enable).
+# -=-=-=-=-=-=-=-=-=-=-=
 {
   lib,
   config,

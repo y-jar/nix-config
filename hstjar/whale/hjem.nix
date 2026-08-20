@@ -1,3 +1,10 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Host whale: hjem toggle sheet (hjmSettings) — WIP.
+# -=-=-=-=-=-=-=-=-=-=-=
 { ... }:
 {
   hjmSettings = {
