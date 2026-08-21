@@ -141,7 +141,27 @@ in
           // lib.optionalAttrs (hjemDotfiles.resYoink ? profilePictures) {
             "resjar/pfp-jar".source = hjemDotfiles.resYoink.profilePictures;
           }
-        ); # end of resource symlinks
+        ) # end of resource symlinks
+        # [fastfetch config]
+        // lib.optionalAttrs (hjemDotfiles.fastfetchConfig != null) {
+          ".config/fastfetch/config.jsonc".source = hjemDotfiles.fastfetchConfig;
+          ".config/fastfetch/logos-bin".source = hjemDotfiles.fastfetchLogos;
+        }
+        # [theming: gtk / qt / cursor]
+        // lib.optionalAttrs (hjemDotfiles.gtkSettingsIni != null) {
+          ".config/gtk-3.0/settings.ini".source = hjemDotfiles.gtkSettingsIni;
+          ".config/gtk-4.0/settings.ini".source = hjemDotfiles.gtkSettingsIni;
+        }
+        // lib.optionalAttrs (hjemDotfiles.kvantumConfig != null) {
+          ".config/Kvantum/kvantum.kvconfig".source = hjemDotfiles.kvantumConfig;
+        }
+        // lib.optionalAttrs (hjemDotfiles.kvantumThemeDir != null) {
+          ".config/Kvantum/${hjemDotfiles.kvantumThemeName}".source = hjemDotfiles.kvantumThemeDir;
+        }
+        // lib.optionalAttrs (hjemDotfiles.pointerCursorIndex != null) {
+          ".icons/jcsr/index.theme".source = hjemDotfiles.pointerCursorIndex;
+          ".icons/default/index.theme".source = hjemDotfiles.pointerCursorIndex;
+        };
       };
     }; # end of hjem
 
@@ -149,6 +169,12 @@ in
     hjem.specialArgs = {
       inherit hostnm;
       inherit inputs;
+      hasDesktop =
+        (config.sysSettings.niri.enable or false)
+        || (config.sysSettings.hyprland.enable or false)
+        || (config.sysSettings.gnome.enable or false)
+        || (config.sysSettings.cinnamon.enable or false)
+        || (config.sysSettings.cosmic.enable or false);
       gnomeEnable = config.sysSettings.gnome.enable or false;
       hyprlandEnable = config.sysSettings.hyprland.enable or false;
       niriEnable = config.sysSettings.niri.enable or false;

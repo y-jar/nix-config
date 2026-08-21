@@ -76,6 +76,7 @@ in
         nht = "nh os test --accept-flake-config ~/nix-config#${hostnm}"; # base test
         nhs = "nh os switch --accept-flake-config ~/nix-config#${hostnm}"; # base switch
         nhc = "nh clean all --keep 7"; # base cleanup
+        nfu = "nix flake update"; # update flake
         nsr = "sudo nix-store --verify --check-contents --repair";
         nrs = "nixos-rebuild switch --sudo --flake ~/nix-config#${hostnm}"; # hard building
         nrt = "nixos-rebuild test --sudo --flake ~/nix-config#${hostnm}"; # testing
@@ -119,6 +120,9 @@ in
         rllm = "sudo systemctl restart llama-cpp";
         sllm = "sudo systemctl restart llama-cpp";
         stllm = "sudo systemctl start llama-cpp";
+        # [t480 related commands]
+        cbat = "acpi -b"; # check battery status combined
+
 
         # =========[Extra]
         mcube = "mangohud vkcube --present_mode 1"; # needs mangohud+vulkan-tools

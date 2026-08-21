@@ -74,8 +74,11 @@ let
   '';
 in
 {
-  config = lib.mkIf hjm.media.enable {
-    hjemDotfiles.mpvConf = mpvConf;
-    hjemDotfiles.mimeApps = mimeApps;
-  };
+  config =
+    lib.mkIf hjm.media.enable {
+      hjemDotfiles.mimeApps = mimeApps;
+    }
+    // lib.mkIf hjm.media.mpv {
+      hjemDotfiles.mpvConf = mpvConf;
+    };
 }

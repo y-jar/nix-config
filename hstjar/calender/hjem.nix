@@ -23,14 +23,24 @@
       };
     };
     launcher.enable = true;
+    theming = {
+      enable = true;
+      flavor = "mocha";
+      accent = "blue";
+      cursorSize = 48;
+    };
 
     browsers = {
       enable = true;
       firefox = true;
       librewolf = true;
+      chromium = true;
     };
-    terminal.enable = true;
-    terminal.font = "IntoneMono Nerd Font"; # options: "IntoneMono Nerd Font" "Monocraft" "Miracode"
+    terminal = {
+      enable = true;
+      font = "Monocraft"; # options: "IntoneMono Nerd Font" "Monocraft" "Miracode"
+      fontSize = 12;
+    };
     editors = {
       enable = true;
       vscodium.enable = true;
@@ -45,7 +55,15 @@
     nautilus.enable = true;
     yazi.enable = true;
     ranger.enable = true;
-    media.enable = true; # sets media tools + default apps (images, video, audio, archives)
+    media = {
+      enable = true;
+      mpv = true;
+      downloaders = true;
+      musicApps = true;
+      audioEditor = true;
+      viewers = true;
+      defaultApps = true;
+    };
     keepass.enable = true;
     gaming = {
       prism.enable = true;
@@ -62,7 +80,16 @@
     ai.enable = false;
     git.enable = true;
     bluetooth.enable = false;
-    dev.enable = true;
+    fastfetch.enable = true;
+    dev = {
+      enable = true;
+      dotnet = true;
+      node = true;
+      cc = true;
+      go = true;
+      nixTools = true;
+      sqlTools = true;
+    };
 
     resYoink = {
       enable = true;

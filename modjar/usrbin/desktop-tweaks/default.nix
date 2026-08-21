@@ -5,10 +5,15 @@
 # -=-=-=-=-=-=-=-=-=-=-=
 # goal: Small desktop quality-of-life tweaks (home-level).
 # -=-=-=-=-=-=-=-=-=-=-=
-{ ... }:
+{
+  config,
+  lib,
+  hasDesktop,
+  ...
+}:
 
 {
-  config = {
+  config = lib.mkIf hasDesktop {
     home.sessionVariables = {
       "NIXOS_OZONE_WL" = "1"; # enable native Wayland support for most Electron apps
       "MOZ_ENABLE_WAYLAND" = "1"; # for firefox to run on wayland

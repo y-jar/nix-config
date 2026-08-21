@@ -14,6 +14,15 @@
 let
   cfg = config.sysSettings.boot;
   base = config.sysSettings.base;
+
+  # Derived flag: does this host run any window manager / desktop environment?
+  # Headless/server/VM hosts (no WM/DE) skip WM-dependent session variables.
+  hasDesktop =
+    (config.sysSettings.niri.enable or false)
+    || (config.sysSettings.hyprland.enable or false)
+    || (config.sysSettings.gnome.enable or false)
+    || (config.sysSettings.cinnamon.enable or false)
+    || (config.sysSettings.cosmic.enable or false);
 in
 {
   options = {
@@ -37,7 +46,6 @@ in
       netArchives = lib.mkEnableOption "wget/curl/zip/rar/rsync archive+net tools";
       fsTools = lib.mkEnableOption "psmisc/pciutils/usbutils/killall/ntfs3g fs tools";
       imaging = lib.mkEnableOption "image/video codec + thumbnail support stack";
-      waylandEssentials = lib.mkEnableOption "basic Wayland tooling (swaybg/waybar/fuzzel/clipboard)";
     };
   };
 
@@ -63,17 +71,21 @@ in
     services.dbus.implementation = "broker"; # faster, lighter D-Bus than the reference implementation
     services.speechd.enable = lib.mkForce false; # text-to-speech daemon (off)
 
-    environment.sessionVariables = {
+    # WM/DE-dependent session variables. Skipped on headless/server/VM hosts.
+    environment.sessionVariables = lib.optionalAttrs hasDesktop {
       NIXOS_OZONE_WL = "1"; # nudges Electron/Chrome apps to use Wayland
       QT_QPA_PLATFORMTHEME = "qtct";
       QT_QPA_PLATFORMTHEME_QT6 = "qtct";
     };
 
     # tell NixOS to include these in the generated pixbuf loaders cache
-    programs.gdk-pixbuf.modulePackages = lib.mkIf base.imaging (with pkgs; [
-      librsvg
-      webp-pixbuf-loader
-    ]);
+    programs.gdk-pixbuf.modulePackages = lib.mkIf base.imaging (
+      with pkgs;
+      [
+        librsvg
+        webp-pixbuf-loader
+      ]
+    );
 
     # ==================================Boot========================================
     boot = {
@@ -92,56 +104,58 @@ in
     # use https://search.nixos.org/ to find more packages (and options).
     environment.systemPackages = lib.mkMerge [
       # [base]
-      (lib.mkIf base.coreTools (with pkgs; [
-        neovim # extensible terminal editor
-        vim # classic terminal editor
-        nh # nix helper (builds/deploys this config)
-        git # version control
-      ]))
+      (lib.mkIf base.coreTools (
+        with pkgs;
+        [
+          neovim # extensible terminal editor
+          vim # classic terminal editor
+          nh # nix helper (builds/deploys this config)
+          git # version control
+        ]
+      ))
 
       # [Archives & net serv]
-      (lib.mkIf base.netArchives (with pkgs; [
-        wget # file retrieval over HTTP/HTTPS/FTP
-        curl # URL-transfer CLI
-        zip # zip archiver
-        unzip # zip extractor
-        rar # rar archiver
-        rsync # incremental file transfer
-      ]))
+      (lib.mkIf base.netArchives (
+        with pkgs;
+        [
+          wget # file retrieval over HTTP/HTTPS/FTP
+          curl # URL-transfer CLI
+          zip # zip archiver
+          unzip # zip extractor
+          rar # rar archiver
+          rsync # incremental file transfer
+        ]
+      ))
 
       # [tools & file system]
-      (lib.mkIf base.fsTools (with pkgs; [
-        psmisc # killall + fuser
-        pciutils # lspci
-        usbutils # lsusb
-        killall # kill by name
-        ntfs3g # read/write NTFS
-      ]))
+      (lib.mkIf base.fsTools (
+        with pkgs;
+        [
+          psmisc # killall + fuser
+          pciutils # lspci
+          usbutils # lsusb
+          killall # kill by name
+          ntfs3g # read/write NTFS
+        ]
+      ))
 
       # [image format support]
-      (lib.mkIf base.imaging (with pkgs; [
-        webp-pixbuf-loader # webp support for GTK apps
-        libheif # heif/avif support
-        libjxl # jpeg-xl support
-        poppler-utils # PDF utilities
-        poppler # PDF rendering lib
-        ffmpegthumbnailer # video + image thumbnails
-        gdk-pixbuf # image loading/manipulation lib
-        librsvg # svg support + pixbuf loader rebuild
-        libjpeg # jpeg support
-        libpng # png support
-        libtiff # tiff support
-      ]))
-
-      # [Niri / Wayland Environment Essentials]
-      (lib.mkIf base.waylandEssentials (with pkgs; [
-        swaybg # wallpaper tool for Wayland compositors
-        waybar # Wayland status bar
-        fuzzel # Wayland-native launcher
-        xwayland-satellite # Xwayland outside the compositor
-        wl-clipboard # Wayland copy/paste CLI
-        xdg-utils # xdg-open / mime helpers
-      ]))
+      (lib.mkIf base.imaging (
+        with pkgs;
+        [
+          webp-pixbuf-loader # webp support for GTK apps
+          libheif # heif/avif support
+          libjxl # jpeg-xl support
+          poppler-utils # PDF utilities
+          poppler # PDF rendering lib
+          ffmpegthumbnailer # video + image thumbnails
+          gdk-pixbuf # image loading/manipulation lib
+          librsvg # svg support + pixbuf loader rebuild
+          libjpeg # jpeg support
+          libpng # png support
+          libtiff # tiff support
+        ]
+      ))
     ]; # end of environment.systemPackages
   }; # end of config
 }

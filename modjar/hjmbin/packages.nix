@@ -34,6 +34,7 @@ in
     ++ lib.optionals hjm.browsers.enable [
       firefox
       librewolf
+      chromium
     ]
     ++ lib.optionals hjm.terminal.enable [
       foot
@@ -68,19 +69,31 @@ in
     ++ lib.optionals hjm.niri.enable [
       nwg-drawer # full-screen app drawer launcher (Mod+D)
     ]
-    ++ lib.optionals hjm.media.enable [
-      constrict # shrinks files
-      mpv
-      ffmpeg
-      blanket
-      quodlibet
-      gapless
-      audacity
-      yt-dlp
-      loupe # image viewer
-      showtime # video player (GNOME)
-      file-roller # archive manager (GNOME)
-    ]
+    ++ lib.optionals hjm.media.enable (
+      (lib.optionals hjm.media.mpv [ mpv ])
+      ++ (lib.optionals hjm.media.musicApps [
+        blanket
+        quodlibet
+        gapless
+      ])
+      ++ (lib.optionals hjm.media.audioEditor [
+        audacity
+      ])
+      ++ (lib.optionals hjm.media.viewers [
+        yacreader
+        constrict
+        anki
+      ])
+      ++ (lib.optionals hjm.media.downloaders [
+        ffmpeg
+        yt-dlp
+      ])
+      ++ (lib.optionals hjm.media.defaultApps [
+        loupe # image viewer
+        showtime # video player (GNOME)
+        file-roller # archive manager (GNOME)
+      ])
+    )
     ++ lib.optionals hjm.keepass.enable [
       keepassxc
     ]
@@ -113,6 +126,29 @@ in
     ++ lib.optionals hjm.bluetooth.enable [
       blueman
     ]
+    ++ lib.optionals hjm.dev.enable (
+      (lib.optionals hjm.dev.dotnet [
+        dotnet-sdk_8
+      ])
+      ++ lib.optionals hjm.dev.node [
+        nodejs
+      ]
+      ++ lib.optionals hjm.dev.cc [
+        gcc
+      ]
+      ++ lib.optionals hjm.dev.go [
+        go
+      ]
+      ++ lib.optionals hjm.dev.nixTools [
+        nixd # Nix language server
+        nixfmt # Nix formatter
+        nil # Nix language server
+        alejandra # alternate Nix formatter
+      ]
+      ++ lib.optionals hjm.dev.sqlTools [
+        dbeaver-bin # universal SQL client
+      ]
+    )
     ++ lib.optionals hjm.niri.enable [
       # niri packages
       fuzzel

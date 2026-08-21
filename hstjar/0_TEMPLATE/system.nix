@@ -41,7 +41,6 @@
         netArchives = true; # wget + curl + zip + rar + rsync
         fsTools = true; # psmisc + pciutils + usbutils + ntfs3g
         imaging = true; # image/video codec + thumbnail support
-        waylandEssentials = true; # swaybg + waybar + fuzzel + clipboard
       };
       # =============[base / core packages]^^^
 

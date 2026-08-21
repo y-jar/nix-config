@@ -47,6 +47,12 @@
       extraSpecialArgs = {
         inherit inputs;
         inherit hostnm;
+        hasDesktop =
+          (config.sysSettings.niri.enable or false)
+          || (config.sysSettings.hyprland.enable or false)
+          || (config.sysSettings.gnome.enable or false)
+          || (config.sysSettings.cinnamon.enable or false)
+          || (config.sysSettings.cosmic.enable or false);
         gnomeEnable = config.sysSettings.gnome.enable or false;
         hyprlandEnable = config.sysSettings.hyprland.enable or false;
         niriEnable = config.sysSettings.niri.enable or false;

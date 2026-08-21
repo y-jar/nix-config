@@ -92,6 +92,8 @@ in
       awww # animated wallpaper daemon for Wayland
       waypaper # GUI wallpaper setter for Wayland-based window managers
       nwg-drawer # full-screen app drawer launcher (Mod+D)
+      xwayland-satellite # Xwayland outside the compositor
+      wl-clipboard # Wayland copy/paste CLI
     ];
   }; # end of config
 }

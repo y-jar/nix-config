@@ -11,19 +11,64 @@
   options.hjmSettings = {
     # [core]
     shell.enable = lib.mkEnableOption "zsh shell";
+    name = lib.mkOption {
+      type = lib.types.str;
+      description = "Git user name";
+    }; # end of name
+    email = lib.mkOption {
+      type = lib.types.str;
+      description = "Git user email";
+    }; # end of email
 
     # [experience]
     hyprland.enable = lib.mkEnableOption "hyprland";
     niri.enable = lib.mkEnableOption "niri";
     launcher.enable = lib.mkEnableOption "fuzzel launcher";
+    # [theming] gtk/qt/cursor theme
+    theming = {
+      enable = lib.mkEnableOption "theming (gtk + qt + cursor)";
+      flavor = lib.mkOption {
+        type = lib.types.enum [
+          "latte"
+          "frappe"
+          "macchiato"
+          "mocha"
+        ];
+        default = "mocha";
+        description = "Catppuccin flavor";
+      }; # end of flavor
+      accent = lib.mkOption {
+        type = lib.types.str;
+        default = "blue";
+        description = "Catppuccin accent color";
+      }; # end of accent
+      cursorSize = lib.mkOption {
+        type = lib.types.int;
+        default = 36;
+        description = "Cursor size in pixels";
+      }; # end of cursorSize
+    }; # end of theming
 
     # [appstream]
     browsers = {
       enable = lib.mkEnableOption "browsers (librewolf + firefox)";
       firefox = lib.mkEnableOption "firefox";
       librewolf = lib.mkEnableOption "librewolf";
+      chromium = lib.mkEnableOption "chromium";
     };
-    terminal.enable = lib.mkEnableOption "terminals (foot + kitty + alacritty)";
+    terminal = {
+      enable = lib.mkEnableOption "terminals (foot + kitty + alacritty)";
+      font = lib.mkOption {
+        type = lib.types.str;
+        default = "IntoneMono Nerd Font";
+        description = "Terminal font";
+      }; # end of font
+      fontSize = lib.mkOption {
+        type = lib.types.int;
+        default = 14;
+        description = "Terminal font size";
+      }; # end of fontSize
+    };
     editors = {
       enable = lib.mkEnableOption "editors";
       vscodium.enable = lib.mkEnableOption "vscodium";
@@ -37,7 +82,15 @@
     nautilus.enable = lib.mkEnableOption "nautilus file explorer";
     yazi.enable = lib.mkEnableOption "yazi terminal file manager";
     ranger.enable = lib.mkEnableOption "ranger terminal file manager";
-    media.enable = lib.mkEnableOption "media tools (mpv + ffmpeg)";
+    media = {
+      enable = lib.mkEnableOption "media tools (master toggle)";
+      mpv = lib.mkEnableOption "mpv video player + yt-dlp integration";
+      downloaders = lib.mkEnableOption "ffmpeg + yt-dlp download/transcode CLI";
+      musicApps = lib.mkEnableOption "music players (quodlibet, gapless, blanket)";
+      audioEditor = lib.mkEnableOption "audacity audio editor";
+      viewers = lib.mkEnableOption "misc viewers (yacreader, constrict, anki)";
+      defaultApps = lib.mkEnableOption "default mime apps + loupe/showtime/file-roller";
+    };
     keepass.enable = lib.mkEnableOption "keepassxc";
     espanso = {
       enable = lib.mkEnableOption "espanso text expander";
@@ -76,7 +129,16 @@
     ai.enable = lib.mkEnableOption "ai tools (lm studio + opencode)";
     git.enable = lib.mkEnableOption "git tools (git + gh + lazygit)";
     bluetooth.enable = lib.mkEnableOption "bluetooth (blueman)";
-    dev.enable = lib.mkEnableOption "dev tools (dotnet + python + node + gcc + go)";
+    fastfetch.enable = lib.mkEnableOption "fastfetch system fetch";
+    dev = {
+      enable = lib.mkEnableOption "dev tools (master toggle)";
+      dotnet = lib.mkEnableOption "dotnet (C#/.NET) SDK";
+      node = lib.mkEnableOption "nodejs (JS/TS runtime)";
+      cc = lib.mkEnableOption "gcc (C/C++ compiler)";
+      go = lib.mkEnableOption "go toolchain";
+      nixTools = lib.mkEnableOption "nix language servers + formatters";
+      sqlTools = lib.mkEnableOption "dbeaver + sql clients";
+    };
 
     # [resources]
     resYoink = {
@@ -222,5 +284,51 @@
       internal = true;
       description = "Resource symlink paths (wallpapers, icons, pfps)";
     }; # end of resYoink
+
+    # [fastfetch/default.nix]
+    fastfetchConfig = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      internal = true;
+      description = "Generated fastfetch config.jsonc path";
+    }; # end of fastfetchConfig
+    fastfetchLogos = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      internal = true;
+      description = "fastfetch logos-bin directory path";
+    }; # end of fastfetchLogos
+
+    # [theming/default.nix]
+    gtkSettingsIni = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      internal = true;
+      description = "Generated gtk-3.0/gtk-4.0 settings.ini path";
+    }; # end of gtkSettingsIni
+    kvantumThemeDir = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      internal = true;
+      description = "Generated Kvantum theme dir path";
+    }; # end of kvantumThemeDir
+    kvantumThemeName = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      internal = true;
+      description = "Kvantum theme directory name";
+    }; # end of kvantumThemeName
+    kvantumConfig = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      internal = true;
+      description = "Generated Kvantum kvantum.kvconfig path";
+    }; # end of kvantumConfig
+    pointerCursorIndex = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      internal = true;
+      description = "Generated cursor index.theme path";
+    }; # end of pointerCursorIndex
   }; # end of hjmbin options dotfiles
 }

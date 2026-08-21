@@ -1,6 +1,6 @@
 // shelljar config (KDL) - user editable via this repo (home-manager manages it).
 // Rebuild after editing (`nh os switch`).
 wallpaper-dir "/home/jar/resjar/wall-jar/wall-bin";
-wallpaper-thumb-width 150;
+wallpaper-thumb-width 300;
 wallpaper-settle-ms 800;
 color-scheme "tonal-spot";
