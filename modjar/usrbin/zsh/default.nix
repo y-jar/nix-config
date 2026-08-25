@@ -100,13 +100,14 @@ in
         # [hyprland]
         hle = "hyprctl configerrors";
         hlr = "hyprland reload";
-        # [Tools]
+        # [Management for Packages]
         clfont = "fc-cache -f -v"; # clear font cache
         rfc5 = "fcitx5 -r -d"; # restart fcitx5
         frfc5 = "fcitx5-remote -r"; # force reload fcitx5
         rz = "exec zsh"; # reload zsh
+        ksj = "pkill -f 'quickshell -p .*shelljar'"; # restart quickshell shell jar
+        # [Tools]
         ckhrd = "lsblk && fdisk -l";
-        # ls = "ls";
         grep = "grep --color=auto";
         cl = "clear";
         ga = "git add .";
