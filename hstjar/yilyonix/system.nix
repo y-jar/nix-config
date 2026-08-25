@@ -39,6 +39,15 @@
       };
       # =============[users]^^^
 
+      # =============[base / core packages]
+      base = {
+        coreTools = true;
+        netArchives = true;
+        fsTools = true;
+        imaging = true;
+      };
+      # =============[base / core packages]^^^
+
       # =============[experience install]
       # [pick one or more if you know what you're doing]
       cinnamon.enable = true; # sets cinnamon ~800mib
@@ -101,7 +110,7 @@
         };
       };
       localsend.enable = true; # sets localsend in the system
-      espanso.enable = true; # espanso daemon + Wayland security wrapper
+      espanso.enable = false; # espanso daemon + Wayland security wrapper
       flatpak.enable = false; # sets flatpak in the system [still needs to be enabled in user.nix]
       gaming = {
         drivers = {

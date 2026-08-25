@@ -67,7 +67,7 @@
         nvf.enable = true; # sets nvf config for neovim
       }; # end of editors
       discord.enable = true; # sets discord
-      espanso = (import ../espansoconf.nix { }); # espanso text expander
+      espanso = (import ../espansoconf.nix { enable = true; }); # espanso text expander
       flatpak.enable = true; # sets flatpak and adds bazaar
       # [file explorers]
       nautilus.enable = true; # sets nautilus
@@ -86,7 +86,7 @@
       keepass.enable = true; # sets keepassxc
       gaming = {
         prism.enable = true; # sets prismlauncher [minecraft]
-        heroic.enable = false; # sets heroic [gog, epic.. other]
+        heroic.enable = true; # sets heroic [gog, epic.. other]
       }; # end of gaming
       # =========[appstream]^^^
 

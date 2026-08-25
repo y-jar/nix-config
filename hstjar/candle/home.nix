@@ -52,6 +52,7 @@
         enable = true; # sets firefox and librewolf [work and personal]
         firefox = false; # disables firefox [work]
         librewolf = true; # enables librewolf [personal]
+        chromium = true; # enables chromium [personal] [the default is `true`]
       }; # end of browsers
       terminal.enable = true; # sets terminal as foot
       terminal.font = "Monocraft"; # options: "IntoneMono Nerd Font" "Monocraft" "Miracode"
@@ -66,7 +67,7 @@
         helix.enable = false; # sets helix
       }; # end of editors
       discord.enable = true; # sets discord
-      espanso = (import ../espansoconf.nix { }); # espanso text expander
+      espanso = (import ../espansoconf.nix { enable = false; }); # espanso text expander
       flatpak.enable = false; # sets flatpak and adds bazaar
       # [file explorers]
       nautilus.enable = true; # sets nautilus

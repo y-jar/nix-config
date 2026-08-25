@@ -94,6 +94,8 @@ in
       nwg-drawer # full-screen app drawer launcher (Mod+D)
       xwayland-satellite # Xwayland outside the compositor
       wl-clipboard # Wayland copy/paste CLI
+      brightnessctl # backlight control (shelljar BrightnessService)
+
     ];
   }; # end of config
 }

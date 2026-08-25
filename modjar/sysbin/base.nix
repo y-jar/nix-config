@@ -111,6 +111,7 @@ in
           vim # classic terminal editor
           nh # nix helper (builds/deploys this config)
           git # version control
+          eza
         ]
       ))
 

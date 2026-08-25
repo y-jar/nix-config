@@ -39,6 +39,15 @@
       };
       # =============[users]^^^
 
+      # =============[base / core packages]
+      base = {
+        coreTools = true;
+        netArchives = true;
+        fsTools = true;
+        imaging = true;
+      };
+      # =============[base / core packages]^^^
+
       # =============[experience install]
       # [pick one or more if you know what you're doing]
       cinnamon.enable = false; # sets cinnamon
