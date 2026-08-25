@@ -49,7 +49,7 @@
       cinnamon.enable = false; # ~800mib - full Cinnamon desktop
       gnome.enable = true; # ~800mib - full GNOME desktop
       gdm.enable = true; # sets GDM login manager
-      hyprland.enable = true; # ~19mib - compositor only
+      hyprland.enable = false; # ~19mib - compositor only
       niri.enable = true; # ~20mib - compositor only
       cosmic = {
         enable = false; # COSMIC desktop environment
@@ -118,15 +118,15 @@
           intel.enable = false; # Intel specific drivers
           nvidia.enable = false; # NVIDIA drivers (Vulkan + 32-bit)
         }; # end of drivers
-        steam.enable = true; # ~2gib - Steam client + 32-bit libs
+        steam.enable = false; # ~2gib - Steam client + 32-bit libs
       }; # end of gaming
       virtcam.enable = false; # ~5mib - virtual camera for OBS
       virt = {
         enable = false; # ~1gib - QEMU + libvirtd + tools
         isInVM = false; # enable if this system is in a vm
       }; # end of virt
-      portal.enable = true; # XDG portal file pickers
-      polkit.enable = true; # polkit authentication agent (gnome polkit)
+      portal.enable = false; # XDG portal file pickers
+      polkit.enable = false; # polkit authentication agent (gnome polkit)
       # =============[software]^^^
 
       # =============[Server]

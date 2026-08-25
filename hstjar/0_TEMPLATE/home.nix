@@ -56,8 +56,8 @@
       browsers = {
         enable = true; # ~500mib - librewolf + firefox
         firefox = false; # disables firefox [work]
-        librewolf = true; # enables librewolf [personal]
-        chromium = true; # enables chromium [personal] [the default is `true`]
+        librewolf = false; # enables librewolf [personal]
+        chromium = false; # enables chromium [personal] [the default is `true`]
       };
       terminal.enable = true; # ~30mib - sets terminal as foot + kitty + alacritty
       terminal.font = "IntoneMono Nerd Font"; # options: "IntoneMono Nerd Font" "Monocraft" "Miracode"
@@ -66,7 +66,7 @@
       editors = {
         enable = true; # ~600mib - VSCodium + Zed + Obsidian + Helix + NVF
         vscodium.enable = true; # ~300mib
-        zed.enable = true; # ~200mib
+        zed.enable = false; # ~200mib
         obsidian.enable = false; # ~200mib
         nvf.enable = true; # ~200mib - neovim config
         helix.enable = false; # ~20mib
@@ -82,10 +82,10 @@
       media = {
         enable = true; # media master toggle
         mpv = true; # mpv video player + yt-dlp
-        downloaders = true; # ffmpeg + yt-dlp
-        musicApps = true; # quodlibet, gapless, blanket
-        audioEditor = true; # audacity
-        viewers = true; # yacreader, constrict, anki
+        downloaders = false; # ffmpeg + yt-dlp
+        musicApps = false; # quodlibet, gapless, blanket
+        audioEditor = false; # audacity
+        viewers = false; # yacreader, constrict, anki
         defaultApps = true; # default mime apps + loupe/showtime/file-roller
       };
       keepass.enable = true; # ~100mib
@@ -119,7 +119,7 @@
       git.enable = true; # ~10mib - git + gh + lazygit
       bluetooth.enable = false; # ~5mib - blueman
       dev = {
-        enable = true; # dev master toggle
+        enable = false; # dev master toggle
         dotnet = true; # dotnet SDK
         node = true; # nodejs
         cc = true; # gcc
@@ -136,6 +136,5 @@
       };
       fastfetch.enable = true; # sets fastfetch
     }; # end of usrSettings
-
   }; # end of config
 }
