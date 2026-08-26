@@ -25,7 +25,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    # bulk art appstream
+    # [bulk art appstream]
     home.packages = lib.mkMerge [
       # [image processing]
       (lib.mkIf cfg.imageTools (with pkgs; [
@@ -54,6 +54,6 @@ in
         stellarium # planetarium
         celestia # 3D space simulation
       ]))
-    ];
-  };
+    ]; # end of home.packages
+  }; # end of config
 }
