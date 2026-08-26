@@ -29,6 +29,7 @@ in
     home.packages = lib.mkMerge [
       # [image processing]
       (lib.mkIf cfg.imageTools (with pkgs; [
+        drawio # Desktop version of draw.io for creating diagrams
         upscayl # AI image upscaler
         converseen # batch image converter/resizer
         fontforge # font editor
