@@ -69,7 +69,7 @@
       chatApps = {
         enable = true;
         discord.enable = true;
-        halloy.enable = false;
+        halloy.enable = true;
       };
       espanso = (import ../espansoconf.nix { enable = true; }); # espanso text expander
       flatpak.enable = true; # sets flatpak and adds bazaar
