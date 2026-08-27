@@ -72,6 +72,7 @@ in
         [
           ffmpeg
           yt-dlp # audio/video downloader
+          qbittorrent # torrent client
         ]
       ))
     ];
