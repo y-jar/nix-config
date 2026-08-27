@@ -71,14 +71,18 @@
         nvf.enable = true; # ~200mib - neovim config
         helix.enable = false; # ~20mib
       }; # end of editors
-      discord.enable = false; # ~300mib
+      chatApps = {
+       enable = true;
+       discord.enable = true; # ~300mib
+       halloy.enable = true;
+      };
       espanso = (import ../espansoconf.nix { enable = false; }); # ~30mib - espanso text expander
       flatpak.enable = false; # ~10mib - flatpak + bazaar
-      # [file explorers]
+      #[file explorers]
       nautilus.enable = true; # ~50mib
       yazi.enable = true; # ~10mib
       ranger.enable = false; # ~20mib
-      # [media]
+      #[media]
       media = {
         enable = true; # media master toggle
         mpv = true; # mpv video player + yt-dlp

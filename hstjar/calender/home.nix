@@ -66,7 +66,11 @@
         helix.enable = true; # sets helix
         nvf.enable = true; # sets nvf config for neovim
       }; # end of editors
-      discord.enable = true; # sets discord
+      chatApps = {
+        enable = true;
+        discord.enable = true;
+        halloy.enable = false;
+      };
       espanso = (import ../espansoconf.nix { enable = true; }); # espanso text expander
       flatpak.enable = true; # sets flatpak and adds bazaar
       # [file explorers]
