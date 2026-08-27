@@ -45,23 +45,35 @@ in
 
     # [media apps, bulk]
     home.packages = lib.mkMerge [
-      (lib.mkIf cfg.musicApps (with pkgs; [
-        blanket # background noises
-        quodlibet # media player
-        gapless # lightweight GTK4 music player
-      ]))
-      (lib.mkIf cfg.audioEditor (with pkgs; [
-        audacity # audio editor
-      ]))
-      (lib.mkIf cfg.viewers (with pkgs; [
-        yacreader # ebook/manga reader
-        constrict # file shrinker
-        anki # spaced-repetition flashcards
-      ]))
-      (lib.mkIf cfg.downloaders (with pkgs; [
-        ffmpeg
-        yt-dlp # audio/video downloader
-      ]))
+      (lib.mkIf cfg.musicApps (
+        with pkgs;
+        [
+          blanket # background noises
+          quodlibet # media player
+          gapless # lightweight GTK4 music player
+        ]
+      ))
+      (lib.mkIf cfg.audioEditor (
+        with pkgs;
+        [
+          audacity # audio editor
+        ]
+      ))
+      (lib.mkIf cfg.viewers (
+        with pkgs;
+        [
+          yacreader # ebook/manga reader
+          constrict # file shrinker
+          anki # spaced-repetition flashcards
+        ]
+      ))
+      (lib.mkIf cfg.downloaders (
+        with pkgs;
+        [
+          ffmpeg
+          yt-dlp # audio/video downloader
+        ]
+      ))
     ];
   };
 }

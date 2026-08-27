@@ -65,7 +65,7 @@
       enable = true; # media master toggle
       mpv = true;
       downloaders = true;
-      musicApps = false	;
+      musicApps = false;
       audioEditor = true;
       viewers = true;
       defaultApps = true;

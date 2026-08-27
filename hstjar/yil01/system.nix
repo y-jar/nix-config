@@ -92,8 +92,8 @@
       tlp.pcieAspmOnBattery = "default"; # (default|performance|powersave|powersupersave)
       powerprofiles.enable = true;
       audio = {
-        enable = true; # ~100mib - PipeWire + audio tools 
-        addon.enable = false; # adds my audio setup 
+        enable = true; # ~100mib - PipeWire + audio tools
+        addon.enable = false; # adds my audio setup
       };
       # =============[hardware]^^^
 

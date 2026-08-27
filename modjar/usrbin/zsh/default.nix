@@ -124,7 +124,6 @@ in
         # [t480 related commands]
         cbat = "acpi -b"; # check battery status combined
 
-
         # =========[Extra]
         mcube = "mangohud vkcube --present_mode 1"; # needs mangohud+vulkan-tools
         cs = "cowsay";

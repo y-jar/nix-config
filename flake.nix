@@ -89,8 +89,8 @@
         yil01 = mkJar "yil01"; # Thinkpad Laptop thats super cute
 
         # ========[hjem hosts (alternative to home-manager)] [Not fully implemented and toying with it]
-	yil02 = mkHjemJar "yil01"; # Thinkpad Laptop thats super cute
-	
+        yil02 = mkHjemJar "yil01"; # Thinkpad Laptop thats super cute
+
         # ========[for non x86 systems..] [WIP]
         # TEMPLATE  = urnJar { hostName = "TEMPLATE"; arch = "aarch64-linux"; };
 

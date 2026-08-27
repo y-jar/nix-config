@@ -44,7 +44,10 @@ in
     fontconfig = {
       enable = true;
       defaultFonts.emoji = [ "Blobmoji" ];
-      defaultFonts.monospace = [ "IntoneMono Nerd Font" "ipaexgothic" ];
+      defaultFonts.monospace = [
+        "IntoneMono Nerd Font"
+        "ipaexgothic"
+      ];
       localConf = ''
         <?xml version="1.0"?>
         <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">

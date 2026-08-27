@@ -72,9 +72,9 @@
         helix.enable = false; # ~20mib
       }; # end of editors
       chatApps = {
-       enable = true;
-       discord.enable = true;
-       halloy.enable = true;
+        enable = true;
+        discord.enable = true;
+        halloy.enable = true;
       };
       espanso = (import ../espansoconf.nix { enable = false; }); # ~30mib - espanso text expander
       flatpak.enable = false; # ~10mib - flatpak + bazaar
