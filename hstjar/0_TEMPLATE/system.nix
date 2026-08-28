@@ -156,6 +156,9 @@
           enable = true; # ~5mib - self-hosted link page (nginx)
           port = 80;
         }; # end of webjar
+        vpn = {
+          mullvad.enable = false;
+        };
       }; # end of server
       # =============[Server]^^^
     }; # end of sysSettings

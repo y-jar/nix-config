@@ -47,7 +47,7 @@ in
       fsTools = lib.mkEnableOption "psmisc/pciutils/usbutils/killall/ntfs3g fs tools";
       imaging = lib.mkEnableOption "image/video codec + thumbnail support stack";
     };
-  };
+  }; # end of options
 
   config = {
 

@@ -64,6 +64,7 @@ in
 
     home.packages = with pkgs; [
       browsh # Browser within a TUI
+      mullvad-vpn # VPN client 300Mib
     ]; # end of home.packages
   }; # end of config
 }

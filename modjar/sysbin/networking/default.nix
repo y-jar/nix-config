@@ -7,10 +7,23 @@
 # -=-=-=-=-=-=-=-=-=-=-=
 {
   hostnm,
+  config,
+  lib,
   ...
 }:
 # NOTE: this will be changes to a more modular layout, for now, this is a simple default config
+let
+  vpncfg = config.sysSettings.server.vpn;
+in
 {
+  options = {
+    sysSettings.server = {
+      vpn = {
+        mullvad.enable = lib.mkEnableOption "Mullvad VPN";
+      }; # end of sysSettings.server.vpn
+    }; # end of sysSettings.server
+  }; # end of options
+
   config = {
     # [Enable the OpenSSH daemon.]
     services.openssh.enable = true;
@@ -88,5 +101,10 @@
         domain = true;
       }; # end of publish
     }; # end of avahi
+
+    # [vpn]
+    services = {
+      mullvad-vpn.enable = vpncfg.mullvad.enable; # mullvad vpn
+    }; # end of services
   }; # end of config
 }

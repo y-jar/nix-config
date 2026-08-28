@@ -148,6 +148,9 @@
           enable = true; # self-hosted link page (nginx)
           port = 80;
         };
+        vpn = {
+          mullvad.enable = true; # mullvad vpn ~43Mib
+        };
       }; # end of server
       # =============[Server]^^^
     }; # end of sysSettings
