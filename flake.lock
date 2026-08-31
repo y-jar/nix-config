@@ -105,6 +105,22 @@
         "type": "github"
       }
     },
+    "mcskins-jar": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788214171,
+        "narHash": "sha256-KN+AaUbxGO/Z+rFGEikXyVo18x9JDpHEKermdhuUeOk=",
+        "owner": "y-jar",
+        "repo": "mcskins-jar",
+        "rev": "5b52e2e79763c1263b36607333021dd963181e58",
+        "type": "github"
+      },
+      "original": {
+        "owner": "y-jar",
+        "repo": "mcskins-jar",
+        "type": "github"
+      }
+    },
     "mnw": {
       "locked": {
         "lastModified": 1780772958,
@@ -257,6 +273,7 @@
         "hjem": "hjem",
         "home-manager": "home-manager",
         "icon-jar": "icon-jar",
+        "mcskins-jar": "mcskins-jar",
         "nix-cachyos-kernel": "nix-cachyos-kernel",
         "nixpkgs": "nixpkgs_3",
         "nvf": "nvf",

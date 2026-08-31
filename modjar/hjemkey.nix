@@ -141,6 +141,9 @@ in
           // lib.optionalAttrs (hjemDotfiles.resYoink ? profilePictures) {
             "resjar/pfp-jar".source = hjemDotfiles.resYoink.profilePictures;
           }
+          // lib.optionalAttrs (hjemDotfiles.resYoink ? minecraftSkins) {
+            "resjar/mcskins-jar".source = hjemDotfiles.resYoink.minecraftSkins;
+          }
         ) # end of resource symlinks
         # [fastfetch config]
         // lib.optionalAttrs (hjemDotfiles.fastfetchConfig != null) {

@@ -27,6 +27,7 @@ in
     home.packages = [
       pkgs.prismlauncher
       pkgs.mcpelauncher-ui-qt # bedrock
+      pkgs.zenity # mcpelauncher file picker / dialogs
     ]; # end of home.packages
   }; # end of config
 }

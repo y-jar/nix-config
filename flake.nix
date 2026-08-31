@@ -163,7 +163,7 @@
       inputs.nixpkgs.follows = "nixpkgs"; # locks version to the nixpkgs to reduce duplicate data
     }; # End of homemanager
 
-    # =====[addons]
+    # =====[ My addons]
     wall-jar = {
       url = "github:y-jar/wall-jar"; # [wallpapers i collected]
       flake = false;
@@ -176,16 +176,20 @@
       url = "github:y-jar/pfp-jar"; # [profile pictures i collected]
       flake = false;
     }; # end of pfp-jar
-    # [nix defined neovim config]
+    shelljar = {
+      # [my quickshell island shell]
+      url = "github:y-jar/shelljar";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    mcskins-jar = {
+      url = "github:y-jar/mcskins-jar";
+      flake = false;
+    };
+    # =====[nix defined neovim config]
     nvf = {
       url = "github:NotAShelf/nvf";
       inputs.nixpkgs.follows = "nixpkgs";
     }; # end of nvf
-    # [my quickshell island shell]
-    shelljar = {
-      url = "github:y-jar/shelljar";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     rsakura.url = "github:preprocessor/rsakura"; # whisper's cool rust rewite fork
     # [cachyos kernel]
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";

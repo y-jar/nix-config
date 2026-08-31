@@ -13,6 +13,7 @@
 {
   imports = [
     ./overlays-nixYoinks.nix
+    ./overlays-mcpe.nix
   ];
   config = {
     # set up nh

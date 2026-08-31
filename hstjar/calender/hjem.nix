@@ -96,6 +96,7 @@
       wallpapers = true;
       icons = true;
       profilePictures = true;
+      minecraftSkins = true;
     };
   };
 }

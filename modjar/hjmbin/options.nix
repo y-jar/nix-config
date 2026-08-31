@@ -146,6 +146,7 @@
       wallpapers = lib.mkEnableOption "wallpapers symlink";
       icons = lib.mkEnableOption "icons symlink";
       profilePictures = lib.mkEnableOption "profile pictures symlink";
+      minecraftSkins = lib.mkEnableOption "minecraft skins symlink";
     };
   };
 
@@ -277,6 +278,7 @@
             wallpapers = lib.mkOption { type = lib.types.path; };
             icons = lib.mkOption { type = lib.types.path; };
             profilePictures = lib.mkOption { type = lib.types.path; };
+            minecraftSkins = lib.mkOption { type = lib.types.path; };
           };
         }
       );

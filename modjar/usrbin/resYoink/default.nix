@@ -37,6 +37,11 @@ in
       default = false;
       description = "Symlink pfp-jar into picjar/";
     };
+    minecraftSkins = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Symlink minecraft-skins into picjar/";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -44,6 +49,7 @@ in
       (lib.mkIf cfg.wallpapers { "resjar/wall-jar".source = inputs.wall-jar; })
       (lib.mkIf cfg.icons { "resjar/icon-jar".source = inputs.icon-jar; })
       (lib.mkIf cfg.profilePictures { "resjar/pfp-jar".source = inputs.pfp-jar; })
-    ];
-  };
+      (lib.mkIf cfg.minecraftSkins { "resjar/mcskins-jar".source = inputs.mcskins-jar; })
+    ]; # end of home.file
+  }; # end of config
 }

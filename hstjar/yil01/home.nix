@@ -49,6 +49,7 @@
         wallpapers = true;
         icons = true;
         profilePictures = true;
+        minecraftSkins = false;
       };
       # =========[experience]^^^
 

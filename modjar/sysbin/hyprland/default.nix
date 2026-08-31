@@ -29,7 +29,7 @@ in
       xwayland.enable = true;
     }; # end of programs.hyprland
     environment.systemPackages = with pkgs; [
-      # [Hyprland Companion Apps]
+      # [Hyprland Companion Apps :P ]
       hyprshot # Utility to easily take screenshots in Hyprland using your mouse
       hyprlauncher # A multipurpose and versatile launcher / picker for Hyprland
       hyprlock # Hyprland’s GPU-accelerated screen locking utility
