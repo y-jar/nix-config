@@ -132,16 +132,16 @@ in
         }
         # [resource symlinks]
         // lib.optionalAttrs (hjemDotfiles.resYoink != null) (
-          lib.optionalAttrs (hjemDotfiles.resYoink ? wallpapers) {
+          lib.optionalAttrs (hjemDotfiles.resYoink.wallpapers != null) {
             "resjar/wall-jar".source = hjemDotfiles.resYoink.wallpapers;
           }
-          // lib.optionalAttrs (hjemDotfiles.resYoink ? icons) {
+          // lib.optionalAttrs (hjemDotfiles.resYoink.icons != null) {
             "resjar/icon-jar".source = hjemDotfiles.resYoink.icons;
           }
-          // lib.optionalAttrs (hjemDotfiles.resYoink ? profilePictures) {
+          // lib.optionalAttrs (hjemDotfiles.resYoink.profilePictures != null) {
             "resjar/pfp-jar".source = hjemDotfiles.resYoink.profilePictures;
           }
-          // lib.optionalAttrs (hjemDotfiles.resYoink ? minecraftSkins) {
+          // lib.optionalAttrs (hjemDotfiles.resYoink.minecraftSkins != null) {
             "resjar/mcskins-jar".source = hjemDotfiles.resYoink.minecraftSkins;
           }
         ) # end of resource symlinks

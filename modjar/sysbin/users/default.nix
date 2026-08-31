@@ -58,12 +58,5 @@ in
         };
       }) cfg.users
     );
-
-    home-manager.users = {
-      ${cfg.mainUser} = {
-        home.username = cfg.mainUser;
-        home.homeDirectory = "/home/${cfg.mainUser}";
-      };
-    };
   };
 }

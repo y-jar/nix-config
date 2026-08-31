@@ -34,6 +34,7 @@
 {
   imports = [
     inputs.home-manager.nixosModules.home-manager
+    inputs.nvf.nixosModules.default # provides programs.nvf at system level (matches hjemkey)
   ];
 
   config = {
@@ -65,6 +66,8 @@
     # Only the mainUser gets home-manager (shared usrbin + host-specific toggles).
     # Guest users get a Unix account via users/default.nix but no HM config.
     home-manager.users.${config.sysSettings.mainUser} = {
+      home.username = config.sysSettings.mainUser;
+      home.homeDirectory = "/home/${config.sysSettings.mainUser}";
       imports = [
         ../hstjar/${hostnm}/home.nix # host toggles
         ../modjar/usrbin # shared modules

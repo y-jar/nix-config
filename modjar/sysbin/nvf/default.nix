@@ -3,7 +3,7 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: hjem: nvf wiring.
+# goal: nvf wiring (system-level: hjem hosts have no programs.nvf at user scope).
 # -=-=-=-=-=-=-=-=-=-=-=
 {
   config,
@@ -11,7 +11,7 @@
   ...
 }:
 let
-  cfg = config.hjmSettings.nvf;
+  cfg = config.sysSettings.nvf;
   keymaps = import ./keybinds.nix;
 in
 {
@@ -24,7 +24,11 @@ in
     ./options.nix
   ];
 
-  config = lib.mkIf config.hjmSettings.nvf.enable {
+  options = {
+    sysSettings.nvf.enable = lib.mkEnableOption "nvf (neovim config) for hjem hosts";
+  };
+
+  config = lib.mkIf config.sysSettings.nvf.enable {
     programs.nvf = {
       enable = true;
 

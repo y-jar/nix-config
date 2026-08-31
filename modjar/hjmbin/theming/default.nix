@@ -75,7 +75,7 @@ in
     ];
 
     hjemDotfiles = {
-      inherit settingsIni;
+      gtkSettingsIni = settingsIni;
       inherit kvantumConfig;
       pointerCursorIndex = indexTheme;
       kvantumThemeDir = "${

@@ -4,7 +4,7 @@
   ...
 }:
 {
-  config = lib.mkIf config.hjmSettings.nvf.enable {
+  config = lib.mkIf config.sysSettings.nvf.enable {
     programs.nvf = {
       settings = {
         vim = {

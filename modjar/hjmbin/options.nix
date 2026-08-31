@@ -287,10 +287,10 @@
       type = lib.types.nullOr (
         lib.types.submodule {
           options = {
-            wallpapers = lib.mkOption { type = lib.types.path; };
-            icons = lib.mkOption { type = lib.types.path; };
-            profilePictures = lib.mkOption { type = lib.types.path; };
-            minecraftSkins = lib.mkOption { type = lib.types.path; };
+            wallpapers = lib.mkOption { type = lib.types.nullOr lib.types.path; default = null; };
+            icons = lib.mkOption { type = lib.types.nullOr lib.types.path; default = null; };
+            profilePictures = lib.mkOption { type = lib.types.nullOr lib.types.path; default = null; };
+            minecraftSkins = lib.mkOption { type = lib.types.nullOr lib.types.path; default = null; };
           };
         }
       );
