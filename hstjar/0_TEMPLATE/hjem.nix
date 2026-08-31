@@ -55,7 +55,11 @@
       nvf.enable = true;
       helix.enable = false;
     };
-    discord.enable = false;
+    chatApps = {
+      enable = false;
+      discord.enable = false;
+      halloy.enable = false;
+    };
     espanso = (import ../espansoconf.nix { enable = false; }); # ~30mib - espanso text expander
     flatpak.enable = false;
     nautilus.enable = true;

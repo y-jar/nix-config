@@ -145,6 +145,12 @@ in
             "resjar/mcskins-jar".source = hjemDotfiles.resYoink.minecraftSkins;
           }
         ) # end of resource symlinks
+        # [dictation: voxtype]
+        // lib.optionalAttrs (hjemDotfiles.voxtypeConfig != null) {
+          ".config/voxtype/config.toml".source = hjemDotfiles.voxtypeConfig;
+          ".config/systemd/user/voxtype-model.service".source = hjemDotfiles.voxtypeModelUnit;
+          ".config/systemd/user/voxtype.service".source = hjemDotfiles.voxtypeServiceUnit;
+        }
         # [fastfetch config]
         // lib.optionalAttrs (hjemDotfiles.fastfetchConfig != null) {
           ".config/fastfetch/config.jsonc".source = hjemDotfiles.fastfetchConfig;

@@ -12,14 +12,14 @@
     email = "park.7qs@gmail.com"; # [CHANGE THIS]
 
     shell.enable = true;
-    hyprland.enable = true;
+    hyprland.enable = false;
     niri = {
-      enable = false;
+      enable = true;
       shelljar = {
         enable = false; # my quickshell island shell
       };
       noctalia = {
-        enable = false; # noctalia desktop shell
+        enable = true; # noctalia desktop shell
       };
     };
     launcher.enable = true;
@@ -49,9 +49,13 @@
       nvf.enable = true;
       helix.enable = true;
     };
-    discord.enable = true;
+    chatApps = {
+      enable = true;
+      discord.enable = true;
+      halloy.enable = true;
+    };
     espanso = (import ../espansoconf.nix { }); # espanso text expander
-    flatpak.enable = false;
+    flatpak.enable = true;
     nautilus.enable = true;
     yazi.enable = true;
     ranger.enable = true;
@@ -67,17 +71,23 @@
     keepass.enable = true;
     gaming = {
       prism.enable = true;
-      heroic.enable = false;
+      heroic.enable = true;
     };
 
-    art.enable = true;
+    art = {
+      enable = true;
+      imageTools = true;
+      threeD = true;
+      astronomy = true;
+    };
     office.enable = true;
     obs.enable = true;
     kdenlive.enable = false;
 
     inputmethods.japanese.enable = true;
-    inputmethods.korean.enable = true;
+    inputmethods.korean.enable = false;
     ai.enable = false;
+    dictation.enable = true;
     git.enable = true;
     bluetooth.enable = false;
     fastfetch.enable = true;

@@ -51,9 +51,10 @@ in
     ++ lib.optionals hjm.editors.helix.enable [
       helix
     ]
-    ++ lib.optionals hjm.discord.enable [
-      discord
-    ]
+    ++ lib.optionals hjm.chatApps.enable (
+      (lib.optionals hjm.chatApps.discord.enable [ discord ])
+      ++ (lib.optionals hjm.chatApps.halloy.enable [ halloy ])
+    )
     ++ lib.optionals hjm.flatpak.enable [
       bazaar
     ]
@@ -103,12 +104,30 @@ in
     ++ lib.optionals hjm.gaming.heroic.enable [
       heroic
     ]
-    ++ lib.optionals hjm.art.enable [
-      blender
-      krita
-      gimp
-      inkscape
-    ]
+    ++ lib.optionals hjm.art.enable (
+      (lib.optionals hjm.art.imageTools [
+        drawio # desktop diagram editor
+        upscayl # AI image upscaler
+        converseen # batch image converter/resizer
+        fontforge # font editor
+        digikam # photo manager
+        coulr # color picker
+        halftone # halftone effect generator
+        krita # digital painting
+        gimp # image manipulation
+        inkscape # vector graphics
+        mypaint # digital painting
+        drawpile # collaborative drawing
+      ])
+      ++ (lib.optionals hjm.art.threeD [
+        blender # 3D modeling/animation
+        blockbench # 3D model editor (minecraft)
+      ])
+      ++ (lib.optionals hjm.art.astronomy [
+        stellarium # planetarium
+        celestia # 3D space simulation
+      ])
+    )
     ++ lib.optionals hjm.office.enable [
       libreoffice
       pandoc

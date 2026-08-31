@@ -77,7 +77,11 @@
       nvf.enable = lib.mkEnableOption "nvf (neovim config)";
       helix.enable = lib.mkEnableOption "helix";
     };
-    discord.enable = lib.mkEnableOption "discord";
+    chatApps = {
+      enable = lib.mkEnableOption "chat apps (discord + halloy)";
+      discord.enable = lib.mkEnableOption "discord";
+      halloy.enable = lib.mkEnableOption "halloy irc client";
+    };
     flatpak.enable = lib.mkEnableOption "flatpak + bazaar";
     nautilus.enable = lib.mkEnableOption "nautilus file explorer";
     yazi.enable = lib.mkEnableOption "yazi terminal file manager";
@@ -116,10 +120,18 @@
     };
 
     # [creative]
-    art.enable = lib.mkEnableOption "creative tools (blender + krita + gimp + inkscape)";
+    art = {
+      enable = lib.mkEnableOption "art tools (master toggle)";
+      imageTools = lib.mkEnableOption "2D/painting tools (krita, gimp, inkscape, ...)";
+      threeD = lib.mkEnableOption "3D tools (blender, blockbench)";
+      astronomy = lib.mkEnableOption "astronomy apps (stellarium, celestia)";
+    };
     office.enable = lib.mkEnableOption "office (libreoffice + pandoc)";
     obs.enable = lib.mkEnableOption "obs studio";
     kdenlive.enable = lib.mkEnableOption "kdenlive video editor";
+
+    # [management]
+    dictation.enable = lib.mkEnableOption "push-to-talk dictation + transcript (voxtype)";
 
     # [management]
     inputmethods = {
@@ -286,6 +298,26 @@
       internal = true;
       description = "Resource symlink paths (wallpapers, icons, pfps)";
     }; # end of resYoink
+
+    # [dictation/default.nix]
+    voxtypeConfig = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      internal = true;
+      description = "Generated voxtype config.toml path";
+    }; # end of voxtypeConfig
+    voxtypeModelUnit = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      internal = true;
+      description = "Generated voxtype whisper model bootstrap unit";
+    }; # end of voxtypeModelUnit
+    voxtypeServiceUnit = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      internal = true;
+      description = "Generated voxtype dictation daemon unit";
+    }; # end of voxtypeServiceUnit
 
     # [fastfetch/default.nix]
     fastfetchConfig = lib.mkOption {

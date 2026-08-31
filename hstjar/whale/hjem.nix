@@ -49,7 +49,11 @@
       nvf.enable = true;
       helix.enable = false;
     };
-    discord.enable = false;
+    chatApps = {
+      enable = false;
+      discord.enable = false;
+      halloy.enable = false;
+    };
     espanso = (import ../espansoconf.nix { enable = false; }); # espanso text expander [headless server, no graphical session]
     flatpak.enable = false;
     nautilus.enable = true;
