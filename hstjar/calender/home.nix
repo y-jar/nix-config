@@ -35,8 +35,8 @@
       hyprland.enable = hyprlandEnable;
       niri.enable = niriEnable;
       # [desktop shell] pick one: noctalia (default) or shelljar (my quickshell island shell)
-      shelljar.enable = false; # my quickshell island shell
-      noctalia.enable = true; # disable noctalia on calender (shelljar replaces it)
+      shelljar.enable = true; # my quickshell island shell
+      noctalia.enable = false; # disable noctalia on calender (shelljar replaces it)
       # [epr plus]
       launcher.enable = true; # sets launcher fuzzel
       resYoink = {

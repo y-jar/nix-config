@@ -55,6 +55,7 @@ in
       "niri/rules.kdl".source = ./rules.kdl;
       "niri/startups.kdl".text =
         builtins.readFile ./startups.kdl
+        + lib.concatMapStringsSep "" (c: "spawn-at-startup \"${c}\"\n") (osConfig.sysSettings.autostart.commands or [ ])
         + lib.optionalString (config.usrSettings.shelljar.enable or false) ''
           spawn-at-startup "shelljar"
           // desktop shell (quickshell island shell) spawned by Bar[shelljar]

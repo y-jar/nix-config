@@ -261,8 +261,8 @@ in
         }; # End of 97-jars block
         "99-quantum" = {
           "context.properties" = {
-            "default.clock.quantum" = 1024; # 1024 or 2048
-            "default.clock.min-quantum" = 256;
+            "default.clock.quantum" = 256; # lower quantum = smaller per-stream buffers (less RAM under load) + lower latency
+            "default.clock.min-quantum" = 64;
             "default.clock.rate" = 48000;
             "default.clock.allowed-rates" = [ 48000 ];
           }; # End of context.properties

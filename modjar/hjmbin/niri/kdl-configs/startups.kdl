@@ -4,10 +4,8 @@
 
 // Note: the desktop shell spawn (noctalia-shell or shelljar) is injected by
 // default.nix based on hjmSettings.niri.{shelljar,noctalia}.enable.
+// Per-host autostart apps (from sysSettings.autostart.commands) are appended below.
 spawn-at-startup "xwayland-satellite"
-spawn-at-startup "blanket"
-spawn-at-startup "pavucontrol"
-spawn-at-startup "easyeffects"
 // spawn-at-startup "wayle"
 // enviroment sturff
 environment {

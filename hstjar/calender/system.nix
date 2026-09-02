@@ -96,7 +96,7 @@
         host = "127.0.0.1"; # keep llama.cpp local (not exposed on the LAN)
         port = 11434;
         webui = {
-          enable = true; # Open WebUI chat interface
+          enable = false; # Open WebUI chat interface
           port = 8080;
         };
       };

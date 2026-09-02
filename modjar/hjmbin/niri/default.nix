@@ -16,6 +16,7 @@
   config,
   lib,
   pkgs,
+  osConfig,
   hostnm,
   ...
 }:
@@ -52,6 +53,7 @@ let
 
   generatedStartups =
     builtins.readFile (kdlDir + "/startups.kdl")
+    + lib.concatMapStringsSep "" (c: "spawn-at-startup \"${c}\"\n") (osConfig.sysSettings.autostart.commands or [ ])
     + lib.optionalString shelljarEnabled ''
       spawn-at-startup "shelljar"
       // desktop shell (quickshell island shell) spawned by Bar[shelljar]
