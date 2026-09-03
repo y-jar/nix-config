@@ -241,7 +241,7 @@ binds {
     Mod+T { toggle-column-tabbed-display; }
 
     // [WALLPAPER] full-screen calm picker (shelljar). Mod+O slides backward.
-    Super+W hotkey-overlay-title="Wallpaper [W] Picker (next)" { spawn-sh "shjctl wallpaperCycle"; }
+    Mod+W hotkey-overlay-title="Wallpaper [W] Picker (next)" { spawn-sh "shjctl wallpaperCycle"; }
     Mod+O hotkey-overlay-title="Wallpaper Picke[r] (prev)" { spawn-sh "shjctl wallpaperCycle prev"; }
 
 
