@@ -11,6 +11,6 @@ if [[ -z "$WALL" ]]; then
     exit 1
 fi
 
-awww img "$WALL" --transition-type fade --transition-duration 1
+awww img "$WALL"
 mkdir -p "$HOME/.cache/shelljar"
 printf '%s\n' "$WALL" > "$HOME/.cache/shelljar/current-wall"

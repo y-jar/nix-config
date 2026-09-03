@@ -90,7 +90,6 @@ in
       '';
     }; # end of xdg.configFile
     home.packages = with pkgs; [
-      awww # animated wallpaper daemon for Wayland
       waypaper # GUI wallpaper setter for Wayland-based window managers
       nwg-drawer # full-screen app drawer launcher (Mod+D)
       xwayland-satellite # Xwayland outside the compositor

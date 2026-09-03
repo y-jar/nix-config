@@ -257,6 +257,14 @@
       internal = true;
       description = "Generated fcitx5 config dir path";
     };
+    # [fuzzel/default.nix]
+    fuzzelIni = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      internal = true;
+      description = "Generated fuzzel.ini (launcher look) path";
+    }; # end of fuzzelIni
+
     # [niri/default.nix]
     nwgDrawerCss = lib.mkOption {
       type = lib.types.nullOr lib.types.path;

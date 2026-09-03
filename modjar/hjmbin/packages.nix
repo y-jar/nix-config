@@ -171,7 +171,6 @@ in
     ++ lib.optionals hjm.niri.enable [
       # niri packages
       fuzzel
-      awww
       wayshot
       wl-clipboard
       wlr-randr

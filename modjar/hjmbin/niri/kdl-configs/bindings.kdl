@@ -238,7 +238,11 @@ binds {
     // Toggle tabbed column display mode.
     // Windows in this column will appear as vertical tabs,
     // rather than stacked on top of each other.
-    Mod+W { toggle-column-tabbed-display; }
+    Mod+T { toggle-column-tabbed-display; }
+
+    // [WALLPAPER] full-screen calm picker (shelljar). Mod+O slides backward.
+    Mod+W hotkey-overlay-title="Wallpaper [W] Picker (next)" { spawn-sh "shjctl wallpaperCycle next"; }
+    Mod+O hotkey-overlay-title="Wallpaper Picke[r] (prev)" { spawn-sh "shjctl wallpaperCycle prev"; }
 
 
 

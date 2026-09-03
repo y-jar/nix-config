@@ -65,7 +65,6 @@ in
       "nwg-drawer/drawer.css".source = ../nwg-drawer.css;
     }; # end of xdg.configFile
     home.packages = with pkgs; [
-      awww # animated wallpaper daemon for Wayland
       waypaper # GUI wallpaper setter for Wayland-based window managers
       hyprpicker # The mouse-following color picker
       woomer # Zoomer application for Wayland inspired by tsoding's boomer

@@ -130,6 +130,10 @@ in
         // lib.optionalAttrs (hjemDotfiles.nwgDrawerCss != null) {
           ".config/nwg-drawer/drawer.css".source = hjemDotfiles.nwgDrawerCss;
         }
+        # [fuzzel launcher config]
+        // lib.optionalAttrs (hjemDotfiles.fuzzelIni != null) {
+          ".config/fuzzel/fuzzel.ini".source = hjemDotfiles.fuzzelIni;
+        }
         # [resource symlinks]
         // lib.optionalAttrs (hjemDotfiles.resYoink != null) (
           lib.optionalAttrs (hjemDotfiles.resYoink.wallpapers != null) {

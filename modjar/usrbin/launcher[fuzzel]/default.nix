@@ -36,13 +36,19 @@ in
           horizontal-pad = 20; # the horizontal padding of the fuzzel window
           exit-on-keyboard-focus-loss = true; # close if clicked away
         }; # end of main
+        # translucent colorless "glass": no hue, alpha background so the desktop
+        # shows through, faint white border/selection for a clean glassy look.
+        border = {
+          width = 1; # border width in pixels
+          radius = 8; # border radius in pixels
+        }; # end of border
         colors = {
-          background = "2b2622bf"; # the background color
-          text = "e6dfd3ff"; # the text color
-          match = "d79921ff"; # the match color
-          selection = "45403dff"; # the selection color
-          selection-text = "ebdbb2ff"; # the selection text color
-          border = "d79921ff"; # the border color
+          background = "1b1b1b66"; # the background color (translucent smoke)
+          text = "d8dee9ff"; # the text color (neutral light gray)
+          match = "9aa0b4ff"; # the match color (neutral slate)
+          selection = "33ffffff"; # the selection color (translucent white)
+          selection-text = "ffffffff"; # the selection text color
+          border = "66ffffff"; # the border color (faint white)
         }; # end of colors
       }; # end of settings
     }; # end of fuzzel
