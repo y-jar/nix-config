@@ -110,7 +110,7 @@ in
         # [Tools]
         ckhrd = "lsblk && fdisk -l";
         grep = "grep --color=auto";
-        cl = "clear";
+        c = "clear";
         ga = "git add .";
         gc = "git clone";
         s = "setsid";

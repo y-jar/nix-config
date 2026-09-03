@@ -29,16 +29,16 @@ let
       exit-on-keyboard-focus-loss = true; # close if clicked away
     };
     border = {
-      width = 1; # border width in pixels
-      radius = 8; # border radius in pixels
+      width = 0; # border width in pixels (0 = no outline)
+      radius = 0; # border radius in pixels
     };
     colors = {
-      background = "1b1b1b66"; # translucent smoke (colorless glass)
+      background = "0d0d0d38"; # subtle frosted neutral tint over the compositor blur
       text = "d8dee9ff"; # neutral light gray
-      match = "9aa0b4ff"; # neutral slate
-      selection = "33ffffff"; # translucent white
-      selection-text = "ffffffff";
-      border = "66ffffff"; # faint white
+      match = "a6adb8ff"; # neutral gray
+      selection = "2e3440ff"; # dark slate gray selection (readable)
+      selection-text = "d8dee9ff";
+      border = "00000000"; # unused: border width is 0
     };
   };
 in

@@ -30,8 +30,8 @@ hl.bind(mainMod .. " + Alt + Space", hl.dsp.exec_cmd("jemoji"))
 hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd("foot --window-size-pixels=1600x800 --title=jwall-picker -e jwall"))
 
 -- Shelljar wallpaper: full-screen calm picker (Mod+W next, Mod+O prev)
-hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("shjctl wallpaperCycle next"))
-hl.bind(mainMod .. " + O", hl.dsp.exec_cmd("shjctl wallpaperCycle prev"))
+hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("shjctl wallpaperNext"))
+hl.bind(mainMod .. " + O", hl.dsp.exec_cmd("shjctl wallpaperPrev"))
 
 -- voxtype dictation (primary: hold F9 anywhere; SUPER+CTRL+V toggles)
 hl.bind(mainMod .. " + CTRL + V", hl.dsp.exec_cmd("voxtype record toggle"), { description = "Dictation: toggle voxtype" })

@@ -106,3 +106,10 @@ layer-rule {
   match namespace="^noctalia-overview*"
   place-within-backdrop true
 }
+// Frosted-glass blur behind the fuzzel launcher (fuzzel's layer namespace is "launcher").
+layer-rule {
+  match namespace="^launcher$"
+  background-effect {
+    blur true
+  }
+}
