@@ -15,11 +15,17 @@
 {
   inherit enable;
   shorts = {
-    ":addr" = "123 Jar Street, Warrington";
-    ":sign" = "Always Learning,\nJar / Park";
-    ":np" = "now playing: $|$";
-    ":gitadd" = "git add -A && git commit -m \"$|$\"";
-    ":date" = "{{mydate}}";
+    ":jaddr" = "123 Jar Street, Warrington";
+    ":jsign" = "Always Learning,\nJar / Park";
+    ":jnp" = "now playing: $|$";
+    ":jgitadd" = "git add -A && git commit -m \"$|$\"";
+    ":jdate" = "{{mydate}}";
+    ":jart" = ''
+      ╃
+       .▀▀█▀▀ .
+         :▓.:
+      . ▀▀ : ╃
+    '';
   };
   vars = [
     {
