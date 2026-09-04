@@ -98,6 +98,7 @@
       # =============[hardware]^^^
 
       # =============[software]
+      unfree.enable = true; # allow unfree packages (spotify, chromium, vscodium, steam, ...)
       UseNixPkgsYoinks.enable = false;
       ai = {
         enable = false; # ~2gib - llama.cpp + models (auto-downloaded via models-preset)

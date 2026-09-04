@@ -66,6 +66,7 @@
         firefox = true; # disables firefox [work]
         librewolf = false; # enables librewolf [personal]
         chromium = true; # enables chromium [personal] [the default is `true`]
+        default = "firefox"; # preferred browser: WM Super+B + default mime browser
       };
       terminal.enable = true; # sets terminal as foot
       terminal.font = "IntoneMono Nerd Font"; # options: "IntoneMono Nerd Font" "Monocraft" "Miracode"

@@ -87,6 +87,7 @@
       # =============[hardware]^^^
 
       # =============[software]
+      unfree.enable = true; # allow unfree packages (spotify, chromium, vscodium, steam, ...)
       UseNixPkgsYoinks.enable = false;
       ai = {
         enable = true; # sets AI tools (llama.cpp, opencode, etc.)
