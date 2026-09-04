@@ -9,10 +9,13 @@
   config,
   lib,
   hostnm,
+  osConfig,
   ...
 }:
 let
   cfg = config.usrSettings.shell;
+  # Whether this host allows unfree packages (drives the modern `,` temp-install).
+  uf = osConfig.sysSettings.unfree.enable or false;
 in
 {
   # declare options for the zsh shell [good to keep this on]
@@ -35,15 +38,21 @@ in
       # [prompt]
       # guide: https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html
       initContent = ''
-        # quick nix-shell: , git curl  or  , git curl -- ls
+        # quick nix shell: , git curl   or   , git curl -- ls   (modern, flake-based)
+        # Boots an interactive shell (no `-- <cmd>`) or runs a one-off command (`-- <cmd>`).
+        # Unfree temp installs are allowed only on hosts where sysSettings.unfree.enable is true.
         ,() {
-          local pkgs cmd
-          if [[ " $* " == *" -- "* ]]; then
-            pkgs="''${1%% -- *}"
-            cmd="''${1#* -- }"
-            nix-shell -p $pkgs --run "$cmd"
+          local -a pref=() pkgs=() args=()
+          local sep=0 p
+          ${lib.optionalString uf "pref=(env NIXPKGS_ALLOW_UNFREE=1)"}
+          for p in "$@"; do
+            if [[ "$p" == "--" ]]; then sep=1; continue; fi
+            if (( sep )); then args+=("$p"); else pkgs+=("nixpkgs#$p"); fi
+          done
+          if [[ ''${#args[@]} -gt 0 ]]; then
+            "''$pref[@]" nix shell ${lib.optionalString uf "--impure"} "''${pkgs[@]}" -c "''${args[@]}"
           else
-            nix-shell -p "$@"
+            "''$pref[@]" nix shell ${lib.optionalString uf "--impure"} "''${pkgs[@]}"
           fi
         }
 

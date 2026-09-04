@@ -51,6 +51,7 @@ in
           blanket # background noises
           quodlibet # media player
           gapless # lightweight GTK4 music player
+          spotify # music streaming (unfree) ~300miB
         ]
       ))
       (lib.mkIf cfg.audioEditor (

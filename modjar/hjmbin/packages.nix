@@ -76,6 +76,7 @@ in
         blanket
         quodlibet
         gapless
+        spotify # music streaming (unfree)
       ])
       ++ (lib.optionals hjm.media.audioEditor [
         audacity

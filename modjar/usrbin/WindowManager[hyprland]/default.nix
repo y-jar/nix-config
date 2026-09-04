@@ -32,6 +32,10 @@ let
   keybindComma = ''hl.bind(mainMod .. " + comma", hl.dsp.exec_cmd("noctalia-shell ipc call settings-toggle"))'';
   keybindCommaNew = ''hl.bind(mainMod .. " + comma", hl.dsp.exec_cmd("shjctl close"))'';
 
+  # Swap the hardcoded preferred browser var to the per-host browser.
+  varsBrowser = ''browser = "librewolf"'';
+  varsBrowserNew = ''browser = "${config.usrSettings.browsers.default or "firefox"}"'';
+
   apply =
     if shelljarEnabled then
       text:
@@ -40,9 +44,10 @@ let
         (lib.replaceStrings [ varsSuper ] [ varsSuperNew ])
         (lib.replaceStrings [ keybindCtrl ] [ keybindCtrlNew ])
         (lib.replaceStrings [ keybindComma ] [ keybindCommaNew ])
+        (lib.replaceStrings [ varsBrowser ] [ varsBrowserNew ])
       ]
     else
-      text: text;
+      text: lib.replaceStrings [ varsBrowser ] [ varsBrowserNew ] text;
 in
 {
   options = {

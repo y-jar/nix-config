@@ -83,7 +83,7 @@
         enable = true; # media master toggle
         mpv = true; # mpv video player + yt-dlp
         downloaders = true; # ffmpeg + yt-dlp
-        musicApps = true; # quodlibet, gapless, blanket
+        musicApps = false; # quodlibet, gapless, blanket
         audioEditor = true; # audacity
         viewers = true; # yacreader, constrict, anki
         defaultApps = true; # default mime apps + loupe/showtime/file-roller

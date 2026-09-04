@@ -19,16 +19,16 @@
 
 {
   config = {
-    system.stateVersion = "VersionNumber"; # [CHANGE THIS] [from first install]
+    system.stateVersion = "26.05"; # [CHANGE THIS] [from first install]
 
     # Fill this out!
     sysSettings = {
       # =============[users]
-      mainUser = "PLEASECHANGEME_USERNAME"; # primary user (gets home-manager)
-      users = [ "PLEASECHANGEME_USERNAME" ]; # all users (main + any guests)
-      adminUsers = [ "PLEASECHANGEME_USERNAME" ]; # users with sudo access
+      mainUser = "kway"; # primary user (gets home-manager)
+      users = [ "kway" ]; # all users (main + any guests)
+      adminUsers = [ "kway" ]; # users with sudo access
       userDescriptions = {
-        PLEASECHANGEME_USERNAME = "NAME";
+        kway = "kt";
         # add more users as needed
       };
       # =============[users]^^^
@@ -79,7 +79,7 @@
       boot.plymouth.enable = false; # custom logo boot splash via plymouth
 
       neverSleep.enable = false; # disable system idle sleep
-      bluetooth.enable = true; # ~10mib - sets blueman in home packages
+      bluetooth.enable = false; # ~10mib - sets blueman in home packages
       automount.enable = true; # auto-mount removable media (udisks2)
       # [power management]
       # NOTE: tlp and powerprofiles are mutually exclusive, pick one
@@ -98,7 +98,7 @@
       # =============[hardware]^^^
 
       # =============[software]
-      # unfree.enable = false; # OPT-OUT: forbid unfree packages (spotify, chromium, vscodium, steam, ...). Defaults to true.
+      unfree.enable = true; # allow unfree packages (spotify, chromium, vscodium, steam, ...)
       UseNixPkgsYoinks.enable = false;
       ai = {
         enable = false; # ~2gib - llama.cpp + models (auto-downloaded via models-preset)
@@ -119,15 +119,15 @@
           intel.enable = false; # Intel specific drivers
           nvidia.enable = false; # NVIDIA drivers (Vulkan + 32-bit)
         }; # end of drivers
-        steam.enable = false; # ~2gib - Steam client + 32-bit libs
+        steam.enable = true; # ~2gib - Steam client + 32-bit libs
       }; # end of gaming
-      virtcam.enable = false; # ~5mib - virtual camera for OBS
+      virtcam.enable = true; # ~5mib - virtual camera for OBS
       virt = {
-        enable = false; # ~1gib - QEMU + libvirtd + tools
+        enable = true; # ~1gib - QEMU + libvirtd + tools
         isInVM = false; # enable if this system is in a vm
       }; # end of virt
-      portal.enable = false; # XDG portal file pickers
-      polkit.enable = false; # polkit authentication agent (gnome polkit)
+      portal.enable = true; # XDG portal file pickers
+      polkit.enable = true; # polkit authentication agent (gnome polkit)
       # =============[software]^^^
 
       # =============[Server]
@@ -135,7 +135,7 @@
         komga.enable = false; # manga/comic server (port 25600)
         jellyfin = {
           enable = false; # sets jellyfin server.  note: the default port is 8096.
-          juser = "PLEASECHANGEME_USERNAME"; # sets jellyfin user for perms for file access
+          juser = "kway"; # sets jellyfin user for perms for file access
         }; # end of jellyfin
         sleepyjar = {
           enable = false; # sets sleepy service

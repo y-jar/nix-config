@@ -22,12 +22,12 @@
 
 {
   config = {
-    home.stateVersion = "HomeManagerVersionNumber"; # [CHANGE THIS]
+    home.stateVersion = "26.05"; # [CHANGE THIS]
 
     # Fill this out!
     usrSettings = {
-      name = "PLEASECHANGEME_NAME"; # [CHANGE THIS] for git
-      email = "PLEASECHANGEME_EMAIL"; # [CHANGE THIS] for git
+      name = "kway"; # [CHANGE THIS] for git
+      email = "kwayckyle@gmail.com"; # [CHANGE THIS] for git
 
       # core [users, shell, basic things]
       # enables zsh shell with aliases [should be on by default]
@@ -40,14 +40,14 @@
       hyprland.enable = hyprlandEnable;
       niri.enable = niriEnable;
       # [desktop shell] pick one: noctalia (default) or shelljar (my quickshell island shell)
-      shelljar.enable = false; # my quickshell island shell
+      shelljar.enable = true; # my quickshell island shell
       noctalia.enable = false; # noctalia desktop shell
       # [epr plus]
       launcher.enable = true; # ~10mib - sets launcher fuzzel
       resYoink = {
-        enable = false; # symlinks resources into ~/resjar/ [~300+mib for wallpapers]
-        wallpapers = false;
-        icons = false;
+        enable = true; # symlinks resources into ~/resjar/ [~300+mib for wallpapers]
+        wallpapers = true;
+        icons = true;
         profilePictures = false;
         minecraftSkins = false;
       };
@@ -56,14 +56,14 @@
       # =========[appstream]
       browsers = {
         enable = true; # ~500mib - librewolf + firefox
-        firefox = false; # disables firefox [work]
+        firefox = true; # disables firefox [work]
         librewolf = false; # enables librewolf [personal]
         chromium = false; # enables chromium [personal] [the default is `true`]
-        # default = "firefox"; # preferred browser: pick one that's enabled (firefox|librewolf|chromium). WM Super+B + default mime browser.
+        default = "firefox"; # preferred browser: WM Super+B/Mod+B + default mime browser
       };
       terminal.enable = true; # ~30mib - sets terminal as foot + kitty + alacritty
-      terminal.font = "IntoneMono Nerd Font"; # options: "IntoneMono Nerd Font" "Monocraft" "Miracode"
-      terminal.fontSize = 14; # font size (default: 14)
+      terminal.font = "monocraft"; # options: "IntoneMono Nerd Font" "Monocraft" "Miracode"
+      terminal.fontSize = 16; # font size (default: 14)
       syncthing.enable = false; # file sync (web UI at localhost:8384)
       editors = {
         enable = true; # ~600mib - VSCodium + Zed + Obsidian + Helix + NVF
@@ -76,10 +76,10 @@
       chatApps = {
         enable = true;
         discord.enable = true; # ~300mib
-        halloy.enable = true; # ~69mib nice
+        halloy.enable = false; # ~69mib nice
       };
       espanso = (import ../espansoconf.nix { enable = false; }); # ~30mib - espanso text expander
-      flatpak.enable = false; # ~10mib - flatpak + bazaar
+      flatpak.enable = true; # ~10mib - flatpak + bazaar
       #[file explorers]
       nautilus.enable = true; # ~50mib
       yazi.enable = true; # ~10mib
@@ -89,28 +89,28 @@
         enable = true; # media master toggle
         mpv = true; # mpv video player + yt-dlp
         downloaders = false; # ffmpeg + yt-dlp
-        musicApps = false; # quodlibet, gapless, blanket
+        musicApps = true; # quodlibet, gapless, blanket
         audioEditor = false; # audacity
-        viewers = false; # yacreader, constrict, anki
+        viewers = true; # yacreader, constrict, anki
         defaultApps = true; # default mime apps + loupe/showtime/file-roller
       };
       keepass.enable = true; # ~100mib
       gaming = {
-        prism.enable = false; # ~200mib - Prism Launcher [minecraft]
-        heroic.enable = false; # ~300mib - Heroic [gog, epic.. other]
+        prism.enable = true; # ~200mib - Prism Launcher [minecraft]
+        heroic.enable = true; # ~300mib - Heroic [gog, epic.. other]
       }; # end of gaming
       # =========[appstream]^^^
 
       # =========[creative tools]
       art = {
-        enable = false; # art master toggle
-        imageTools = false; # krita, gimp, inkscape, ...
+        enable = true; # art master toggle
+        imageTools = true; # krita, gimp, inkscape, ...
         threeD = false; # blender, blockbench
-        astronomy = false; # stellarium, celestia
+        astronomy = true; # stellarium, celestia
       };
       # godot.enable = true; # ~500mib
-      office.enable = false; # ~800mib - LibreOffice + Pandoc
-      obs.enable = false; # ~400mib - OBS Studio + plugins
+      office.enable = true; # ~800mib - LibreOffice + Pandoc
+      obs.enable = true; # ~400mib - OBS Studio + plugins
       videoEditors = {
         enable = false; # video editors master toggle
         kdenlive.enable = false; # Kdenlive
@@ -131,7 +131,7 @@
         cc = true; # gcc
         go = true; # go
         nixTools = true; # nix language servers + formatters
-        sqlTools = true; # dbeaver
+        sqlTools = false; # dbeaver
       };
       # =========[management]^^^
       theming = {

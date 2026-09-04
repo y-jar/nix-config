@@ -8,13 +8,24 @@
 {
   pkgs,
   inputs,
+  lib,
+  config,
   ...
 }:
+let
+  cfg = config.sysSettings.unfree;
+in
 {
   imports = [
     ./overlays-nixYoinks.nix
     ./overlays-mcpe.nix
   ];
+  options.sysSettings.unfree.enable = lib.mkOption {
+    type = lib.types.bool;
+    default = true; # opt-out per host: set false on hosts that forbid unfree packages
+    description = "Allow unfree nixpkgs packages (nixpkgs.config.allowUnfree). Default true so existing hosts keep working.";
+  }; # end of sysSettings.unfree.enable
+
   config = {
     # set up nh
     programs.nh = {
@@ -26,8 +37,8 @@
       }; # end of clean config
     }; # end of nh config
 
-    # Allow unfree packages
-    nixpkgs.config.allowUnfree = true;
+    # Allow unfree packages (per-host toggle)
+    nixpkgs.config.allowUnfree = cfg.enable;
 
     # Enables nix-ld to run unpatched binaries (like in my neovim config)
     # acts as a compatability thing, if this has an issue, or i dont like it, SHUT OFF HEHEHE

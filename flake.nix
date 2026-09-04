@@ -87,6 +87,7 @@
         whale = mkJar "whale"; # Server system under loomjar (proxmox server)
         vmjar = mkJar "vmjar"; # Virtual config
         yil01 = mkJar "yil01"; # Thinkpad Laptop thats super cute
+        petrichor = mkJar "petrichor"; # kwaytea's Pewta
 
         # ========[hjem hosts (alternative to home-manager)] [Not fully implemented and toying with it]
         yil02 = mkHjemJar "yil01"; # Thinkpad Laptop thats super cute
@@ -152,6 +153,7 @@
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt; # nix fmt
       packages.x86_64-linux.iso = self.nixosConfigurations.iso.config.system.build.isoImage; # nix build .#iso
       packages.x86_64-linux.iso-gnome = self.nixosConfigurations.iso-gnome.config.system.build.isoImage; # nix build .#iso-gnome
+      packages.x86_64-linux.rsakura = inputs.rsakura.packages.x86_64-linux.default; # nix shell ~/nix-config#rsakura
     }; # end of flake outputs
   # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=[INPUTS]=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   inputs = {

@@ -34,6 +34,11 @@ in
         type = lib.types.bool;
         default = true;
       }; # end of chromium option
+      default = lib.mkOption {
+        type = lib.types.str;
+        default = "firefox";
+        description = "Preferred browser (command name): used for the WM Super+B/Mod+B keybind and as the default mime browser.";
+      }; # end of default option
     }; # end of usrSettings.browsers
   }; # end of options
 
@@ -53,12 +58,12 @@ in
     xdg.mimeApps = {
       enable = true;
       defaultApplications = {
-        # [browser defaults]
-        "text/html" = "firefox.desktop";
-        "x-scheme-handler/http" = "firefox.desktop";
-        "x-scheme-handler/https" = "firefox.desktop";
-        "x-scheme-handler/about" = "firefox.desktop";
-        "x-scheme-handler/unknown" = "firefox.desktop";
+        # [browser defaults] follow the preferred browser (usrSettings.browsers.default)
+        "text/html" = "${cfg.default}.desktop";
+        "x-scheme-handler/http" = "${cfg.default}.desktop";
+        "x-scheme-handler/https" = "${cfg.default}.desktop";
+        "x-scheme-handler/about" = "${cfg.default}.desktop";
+        "x-scheme-handler/unknown" = "${cfg.default}.desktop";
       }; # end of default application
     }; # end of mime apps
 

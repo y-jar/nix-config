@@ -41,7 +41,7 @@
       firefox = true;
       librewolf = true;
       chromium = true;
-      # default = "firefox"; # preferred browser: WM Mod+B + default mime browser
+      default = "firefox"; # preferred browser: WM Mod+B + default mime browser
     };
     terminal = {
       enable = true;

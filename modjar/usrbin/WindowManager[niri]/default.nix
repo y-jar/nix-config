@@ -27,6 +27,11 @@ let
   # exact settings bind line in the static file that gets swapped per shell
   sLine = "    Mod+S hotkey-overlay-title=\"Toggle Noctalia [S]ettings\" { spawn \"qs\" \"ipc\" \"-c\" \"noctalia-shell\" \"call\" \"settings\" \"toggle\"; }";
 
+  # exact browser bind line swapped to the per-host preferred browser.
+  bLine = "    Mod+B hotkey-overlay-title=\"Open [B]rowser\" { spawn \"librewolf\"; }";
+  browserCmd = config.usrSettings.browsers.default or "firefox";
+  browserBind = "    Mod+B hotkey-overlay-title=\"Open [B]rowser\" { spawn \"${browserCmd}\"; }";
+
   shellBindS =
     if shelljarEnabled then
       "    Mod+S hotkey-overlay-title=\"Toggle [S]helljar Control Center\" { spawn-sh \"shjctl toggleControlCenter\"; }"
@@ -48,7 +53,7 @@ in
     xdg.configFile = {
       "niri/config.kdl".source = ./config.kdl; # base linker
       # [global]
-      "niri/bindings.kdl".text = lib.replaceStrings [ sLine ] [ shellBindS ] (
+      "niri/bindings.kdl".text = lib.replaceStrings [ sLine bLine ] [ shellBindS browserBind ] (
         builtins.readFile ./bindings.kdl
       );
       "niri/base.kdl".source = ./base.kdl;

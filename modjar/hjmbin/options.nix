@@ -55,6 +55,11 @@
       firefox = lib.mkEnableOption "firefox";
       librewolf = lib.mkEnableOption "librewolf";
       chromium = lib.mkEnableOption "chromium";
+      default = lib.mkOption {
+        type = lib.types.str;
+        default = "firefox";
+        description = "Preferred browser (command name): WM Mod+B keybind + default mime browser.";
+      };
     };
     terminal = {
       enable = lib.mkEnableOption "terminals (foot + kitty + alacritty)";
@@ -90,7 +95,7 @@
       enable = lib.mkEnableOption "media tools (master toggle)";
       mpv = lib.mkEnableOption "mpv video player + yt-dlp integration";
       downloaders = lib.mkEnableOption "ffmpeg + yt-dlp download/transcode CLI";
-      musicApps = lib.mkEnableOption "music players (quodlibet, gapless, blanket)";
+      musicApps = lib.mkEnableOption "music players (quodlibet, gapless, blanket, spotify)";
       audioEditor = lib.mkEnableOption "audacity audio editor";
       viewers = lib.mkEnableOption "misc viewers (yacreader, constrict, anki)";
       defaultApps = lib.mkEnableOption "default mime apps + loupe/showtime/file-roller";
@@ -295,10 +300,22 @@
       type = lib.types.nullOr (
         lib.types.submodule {
           options = {
-            wallpapers = lib.mkOption { type = lib.types.nullOr lib.types.path; default = null; };
-            icons = lib.mkOption { type = lib.types.nullOr lib.types.path; default = null; };
-            profilePictures = lib.mkOption { type = lib.types.nullOr lib.types.path; default = null; };
-            minecraftSkins = lib.mkOption { type = lib.types.nullOr lib.types.path; default = null; };
+            wallpapers = lib.mkOption {
+              type = lib.types.nullOr lib.types.path;
+              default = null;
+            };
+            icons = lib.mkOption {
+              type = lib.types.nullOr lib.types.path;
+              default = null;
+            };
+            profilePictures = lib.mkOption {
+              type = lib.types.nullOr lib.types.path;
+              default = null;
+            };
+            minecraftSkins = lib.mkOption {
+              type = lib.types.nullOr lib.types.path;
+              default = null;
+            };
           };
         }
       );

@@ -65,12 +65,12 @@ let
     # comic reader (yacreader)
     application/x-cbz=YACReader.desktop
     application/vnd.comicbook+zip=YACReader.desktop
-    # browser (firefox)
-    text/html=firefox.desktop
-    x-scheme-handler/http=firefox.desktop
-    x-scheme-handler/https=firefox.desktop
-    x-scheme-handler/about=firefox.desktop
-    x-scheme-handler/unknown=firefox.desktop
+    # browser (${hjm.browsers.default or "firefox"})
+    text/html=${hjm.browsers.default or "firefox"}.desktop
+    x-scheme-handler/http=${hjm.browsers.default or "firefox"}.desktop
+    x-scheme-handler/https=${hjm.browsers.default or "firefox"}.desktop
+    x-scheme-handler/about=${hjm.browsers.default or "firefox"}.desktop
+    x-scheme-handler/unknown=${hjm.browsers.default or "firefox"}.desktop
   '';
 in
 {
