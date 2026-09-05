@@ -59,6 +59,7 @@
         niriEnable = config.sysSettings.niri.enable or false;
         aiEnable = config.sysSettings.ai.enable or false;
         cosmicEnable = config.sysSettings.cosmic.enable or false;
+        webapps = config.sysSettings.webapps; # browser-apps-as-desktop-apps (webapps.nix)
       };
     };
 

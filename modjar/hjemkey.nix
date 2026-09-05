@@ -130,6 +130,11 @@ in
         // lib.optionalAttrs (hjemDotfiles.nwgDrawerCss != null) {
           ".config/nwg-drawer/drawer.css".source = hjemDotfiles.nwgDrawerCss;
         }
+        # [web app desktop entries + launchers]
+        // lib.optionalAttrs (hjemDotfiles.webapps != null) {
+          ".local/share/applications".source = hjemDotfiles.webapps.desktopDir;
+          ".local/bin".source = hjemDotfiles.webapps.binDir;
+        }
         # [fuzzel launcher config]
         // lib.optionalAttrs (hjemDotfiles.fuzzelIni != null) {
           ".config/fuzzel/fuzzel.ini".source = hjemDotfiles.fuzzelIni;
@@ -193,6 +198,7 @@ in
       niriEnable = config.sysSettings.niri.enable or false;
       aiEnable = config.sysSettings.ai.enable or false;
       cosmicEnable = config.sysSettings.cosmic.enable or false;
+      webapps = config.sysSettings.webapps; # browser-apps-as-desktop-apps (webapps.nix)
     };
   };
 }

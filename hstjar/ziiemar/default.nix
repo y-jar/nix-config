@@ -18,5 +18,6 @@
     ./system.nix # loads the system part of the system, root loves me
     ./hardware-fix.nix # applies hardware fixes for the Gyro issue
     ./autostart.nix # per-host autostart apps (Window Managers only)
+    ./webapps.nix # per-host browser apps as desktop apps (webapps)
   ];
 }

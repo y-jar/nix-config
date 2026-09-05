@@ -262,6 +262,21 @@
       internal = true;
       description = "Generated fcitx5 config dir path";
     };
+    # [webapps/default.nix]
+    webapps = lib.mkOption {
+      type = lib.types.nullOr (
+        lib.types.submodule {
+          options = {
+            desktopDir = lib.mkOption { type = lib.types.path; };
+            binDir = lib.mkOption { type = lib.types.path; };
+          };
+        }
+      );
+      default = null;
+      internal = true;
+      description = "Generated webapp desktop entries + launcher scripts dirs";
+    }; # end of webapps
+
     # [fuzzel/default.nix]
     fuzzelIni = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
