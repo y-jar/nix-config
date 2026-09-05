@@ -8,12 +8,17 @@
 {
   config,
   lib,
+  pkgs,
   hasDesktop,
   ...
 }:
 
 {
   config = lib.mkIf hasDesktop {
+    home.packages = with pkgs; [
+      ddcutil # desktop monitor brightness via DDC/CI (shelljar BrightnessService)
+    ];
+
     home.sessionVariables = {
       "NIXOS_OZONE_WL" = "1"; # enable native Wayland support for most Electron apps
       "MOZ_ENABLE_WAYLAND" = "1"; # for firefox to run on wayland

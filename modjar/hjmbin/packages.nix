@@ -177,6 +177,7 @@ in
       wlr-randr
       playerctl
       brightnessctl
+      ddcutil # desktop monitor brightness via DDC/CI (shelljar BrightnessService)
       libnotify
       dunst
       grim

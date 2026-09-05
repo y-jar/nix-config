@@ -116,6 +116,7 @@ in
         frfc5 = "fcitx5-remote -r"; # force reload fcitx5
         rz = "exec zsh"; # reload zsh
         ksj = "pkill -f 'shelljar/qml'"; # restart quickshell shell jar
+        rsj = "pkill -f 'quickshell -n -p .*shelljar' && shelljar &"; # restart quickshell shell jar
         # [Tools]
         ckhrd = "lsblk && fdisk -l";
         grep = "grep --color=auto";

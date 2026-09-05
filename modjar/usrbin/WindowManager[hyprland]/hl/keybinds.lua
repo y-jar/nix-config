@@ -55,7 +55,8 @@ hl.bind("SUPER + ALT + S", hl.dsp.exec_cmd("hyprshot window"), { description = "
 -- Window manipulation
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + Backslash", function() utils.float_center() end)
-hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
+hl.bind(mainMod .. " + P", hl.dsp.exec_cmd("shjctl toggleSession")) -- power menu (shelljar)
+hl.bind(mainMod .. " + SHIFT + P", hl.dsp.window.pseudo(), { description = "Window: Pseudo toggle" })
 hl.bind(mainMod .. " + F", function()
     hl.dispatch(hl.dsp.window.fullscreen({ mode = "fullscreen", action = "toggle" }))
 end)

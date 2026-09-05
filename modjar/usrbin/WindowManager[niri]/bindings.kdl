@@ -24,7 +24,9 @@ binds {
     // [OTHER]
     Mod+G hotkey-overlay-title="Open [G]apless" { spawn "g4music"; } // spawns gapless
     // Mod+Shift+C hotkey-overlay-title="Open [C]alculator" { spawn "gnome-calculator"; } // spawns calculator
-    Mod+P hotkey-overlay-title="Open [P]ower Menu" { spawn "jpower"; } // power menu using fuzzel
+    
+Mod+P hotkey-overlay-title="Power [P]menu (shelljar)" { spawn-sh "shjctl toggleSession"; } // power menu (shelljar)
+Mod+Shift+P hotkey-overlay-title="Open [P]ower Menu (fuzzel)" { spawn "jpower"; } // power menu using fuzzel
     Mod+Z hotkey-overlay-title="Open [Z]oom" { spawn "woomer"; } // zoom
     Mod+C hotkey-overlay-title="Open [C]olor Picker" { spawn "hyprpicker" "-a"; } // color picker
     Mod+Shift+W hotkey-overlay-title="Open [W]allpaper Picker" { spawn "foot" "--window-size-pixels=1600x800" "--title=jwall-picker" "-e" "jwall"; }
