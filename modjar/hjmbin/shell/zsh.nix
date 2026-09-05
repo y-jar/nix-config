@@ -67,6 +67,9 @@ let
     alias nrt="nixos-rebuild test --sudo --flake ~/nix-config#${hostnm}"
     alias buildiso="sh ~/nix-config/resjar/nixbin/buildiso.sh"
 
+    # update the lock, or only specific inputs (nfu shelljar ; nfu shelljar nvf)
+    nfu() { nix flake update "$@"; }
+
     # ==[app aliases]
     alias nv="nvim"
     alias zd="zeditor"

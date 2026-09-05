@@ -9,7 +9,7 @@ binds {
     Mod+Shift+D hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel";}
     // Mod+D hotkey-overlay-title="[D]isplay Noctalia Launcher" { spawn "qs" "ipc" "-c" "noctalia-shell" "call" "launcher" "toggle"; }
     // Mod+D hotkey-overlay-title="[D]isplay Noctalia Launcher" { spawn-sh "noctalia msg panel-toggle launcher"; }
-    Mod+D hotkey-overlay-title="[D]isplay Launcher (nwg-drawer)" { spawn "nwg-drawer" "-wm" "niri" "-fm" "nautilus" "-ovl" "-mt" "40" "-mb" "40" "-ml" "20" "-mr" "20"; }
+    Mod+D hotkey-overlay-title="[D]isplay Launcher (shelljar)" { spawn-sh "shjctl toggleLauncher"; }
     // [LOCK-SCREEN]
     Mod+Alt+L hotkey-overlay-title="[L]ock the Screen" { spawn "swaylock"; }
     // [BROWSER]

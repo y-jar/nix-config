@@ -74,6 +74,9 @@ in
           nixos-rebuild switch --sudo --flake ~/nix-config#"$target"
         }
 
+        # [update the lock, or only specific inputs] e.g. nfu shelljar ; nfu shelljar nvf
+        nfu() { nix flake update "$@"; }
+
         # [prompt]
         PROMPT='%F{#5F7CB8}%n|%f'
         RPROMPT='%F{#5F7CB8}%~ %F{#5F7CB8}%m%f %F{cyan}%*%f'
@@ -85,7 +88,6 @@ in
         nht = "nh os test --accept-flake-config ~/nix-config#${hostnm}"; # base test
         nhs = "nh os switch --accept-flake-config ~/nix-config#${hostnm}"; # base switch
         nhc = "nh clean all --keep 7"; # base cleanup
-        nfu = "nix flake update"; # update flake
         nsr = "sudo nix-store --verify --check-contents --repair";
         nrs = "nixos-rebuild switch --sudo --flake ~/nix-config#${hostnm}"; # hard building
         nrt = "nixos-rebuild test --sudo --flake ~/nix-config#${hostnm}"; # testing
