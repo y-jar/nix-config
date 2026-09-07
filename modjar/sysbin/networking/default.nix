@@ -32,8 +32,10 @@ in
       # 	~/nix-config/modules/home/shell/zsh.nix
       networkmanager.enable = true;
       hostName = "${hostnm}"; # sets HOSTNAME
+      #[ for resolving local ip info]
+      # ip -4 addr show | grep inet
       extraHosts = ''
-        192.168.1.101 whale whale.local
+        192.168.1.199 whale whale.local
       '';
 
       # [for dns issues i keep running into]

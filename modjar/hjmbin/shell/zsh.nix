@@ -58,14 +58,35 @@ let
       fi
     }
 
+    # host-target rebuild/test (mirrors home-manager zsh: default to current host)
+    nhtm() {
+      local target="''${1:-${hostnm}}"
+      nh os test --accept-flake-config ~/nix-config#"$target"
+    }
+    nhsm() {
+      local target="''${1:-${hostnm}}"
+      nh os switch --accept-flake-config ~/nix-config#"$target"
+    }
+    nrtm() {
+      local target="''${1:-${hostnm}}"
+      nixos-rebuild test --sudo --flake ~/nix-config#"$target"
+    }
+    nrsm() {
+      local target="''${1:-${hostnm}}"
+      nixos-rebuild switch --sudo --flake ~/nix-config#"$target"
+    }
+
     # aliases
     # ==[syst]
     alias nht="nh os test --accept-flake-config ~/nix-config#${hostnm}"
     alias nhs="nh os switch --accept-flake-config ~/nix-config#${hostnm}"
     alias nhc="nh clean all --keep 7"
+    alias nsr="sudo nix-store --verify --check-contents --repair"
     alias nrs="nixos-rebuild switch --sudo --flake ~/nix-config#${hostnm}"
     alias nrt="nixos-rebuild test --sudo --flake ~/nix-config#${hostnm}"
     alias buildiso="sh ~/nix-config/resjar/nixbin/buildiso.sh"
+    alias ns="nix-shell"
+    alias nsp="nix search nixpkgs"
 
     # update the lock, or only specific inputs (nfu shelljar ; nfu shelljar nvf)
     nfu() { nix flake update "$@"; }
@@ -76,6 +97,7 @@ let
     alias code="codium"
     alias yy="yazi"
     alias brw="browsh"
+    alias b="browsh"
     alias oc="opencode"
 
     # ==[util]
@@ -86,15 +108,30 @@ let
     alias jkrconf="cd ~/kilnjar/reposjar"
     alias hle="hyprctl configerrors"
     alias hlr="hyprland reload"
+    alias rpw="systemctl --user restart pipewire pipewire-pulse wireplumber"
+    alias clfont="fc-cache -f -v"
+    alias rfc5="fcitx5 -r -d"
+    alias frfc5="fcitx5-remote -r"
+    alias rz="exec zsh"
+    alias ksj="pkill -f 'shelljar/qml'"
+    alias rsj="pkill -f 'quickshell -n -p .*shelljar' && shelljar &"
+    alias jip="ip -4 addr show | grep inet"
     alias ckhrd="lsblk && fdisk -l"
     alias grep="grep --color=auto"
     alias cl="clear"
+    alias c="clear"
     alias ga="git add ."
     alias gc="git clone"
-    alias fcir="fcitx5-remote -r"
-    alias rz="exec zsh"
-    alias ns="nix-shell"
-    alias nsp="nix search nixpkgs"
+    alias s="setsid"
+    alias pk="pkill"
+    alias rniri="niri msg action reload-config"
+    alias dl="ytdl"
+    alias shlvl="echo $SHLVL"
+    # ==[AI]
+    alias rllm="sudo systemctl restart llama-cpp"
+    alias sllm="sudo systemctl restart llama-cpp"
+    alias stllm="sudo systemctl start llama-cpp"
+    alias cbat="acpi -b"
     # ==[extra]
     alias mcube="mangohud vkcube --present_mode 1"
     alias cs="cowsay"

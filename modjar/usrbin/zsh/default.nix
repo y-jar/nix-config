@@ -120,6 +120,7 @@ in
         ksj = "pkill -f 'shelljar/qml'"; # restart quickshell shell jar
         rsj = "pkill -f 'quickshell -n -p .*shelljar' && shelljar &"; # restart quickshell shell jar
         # [Tools]
+        jip = "ip -4 addr show | grep inet"; # show ip info
         ckhrd = "lsblk && fdisk -l";
         grep = "grep --color=auto";
         c = "clear";
