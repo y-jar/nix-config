@@ -17,19 +17,21 @@ let
   mkScript = name: path: pkgs.writeShellScriptBin name (builtins.readFile path);
 
   # =-=-=[Scripts]
-  # TEMPLATE: { name = "TEMPLATE"; path = ./scriptsbin/TEMPLATE.sh; }
+  # Shared WM tool scripts live in resjar/wmconfigs/bin.
+  scriptDir = ../../../resjar/wmconfigs/bin;
+  # TEMPLATE: { name = "TEMPLATE"; path = <script>; }
   scriptList = [
     {
       name = "jsearch";
-      path = ./scriptsbin/searchweb.sh;
+      path = scriptDir + "/jsearch.sh";
     }
     {
       name = "jpower";
-      path = ./scriptsbin/powermenu.sh;
+      path = scriptDir + "/jpower.sh";
     }
     {
       name = "jemoji";
-      path = ./scriptsbin/emoji_picker.sh;
+      path = scriptDir + "/jemoji.sh";
     }
   ]; # end of script list
 

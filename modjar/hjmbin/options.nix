@@ -286,12 +286,6 @@
     }; # end of fuzzelIni
 
     # [niri/default.nix]
-    nwgDrawerCss = lib.mkOption {
-      type = lib.types.nullOr lib.types.path;
-      default = null;
-      internal = true;
-      description = "nwg-drawer drawer.css path";
-    };
     niriFiles = lib.mkOption {
       type = lib.types.nullOr (
         lib.types.submodule {
@@ -301,6 +295,7 @@
             bindings = lib.mkOption { type = lib.types.path; };
             rules = lib.mkOption { type = lib.types.path; };
             startups = lib.mkOption { type = lib.types.path; };
+            startupsAudio = lib.mkOption { type = lib.types.path; };
             hostInputs = lib.mkOption { type = lib.types.path; };
           }; # end of niriFiles sub module options
         }
@@ -309,6 +304,32 @@
       internal = true;
       description = "Niri KDL config files";
     }; # end of niriFiles
+
+    # [WM-mango/default.nix]
+    mangowm = lib.mkOption {
+      type = lib.types.nullOr (
+        lib.types.submodule {
+          options = {
+            config = lib.mkOption { type = lib.types.path; };
+            env = lib.mkOption { type = lib.types.path; };
+            looks = lib.mkOption { type = lib.types.path; };
+            animation = lib.mkOption { type = lib.types.path; };
+            layouts = lib.mkOption { type = lib.types.path; };
+            input = lib.mkOption { type = lib.types.path; };
+            rule = lib.mkOption { type = lib.types.path; };
+            binds = lib.mkOption { type = lib.types.path; };
+            startups = lib.mkOption { type = lib.types.path; };
+            nixStartups = lib.mkOption { type = lib.types.path; };
+            hostInputs = lib.mkOption { type = lib.types.path; };
+            jshot = lib.mkOption { type = lib.types.package; };
+            jclip = lib.mkOption { type = lib.types.package; };
+          }; # end of mangowm sub module options
+        }
+      ); # end of mangowm sub modules
+      default = null;
+      internal = true;
+      description = "mango (mangowm) category config files";
+    }; # end of mangowm
 
     # [resyoink/default.nix]
     resYoink = lib.mkOption {

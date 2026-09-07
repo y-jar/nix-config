@@ -11,6 +11,7 @@
   gnomeEnable,
   hyprlandEnable,
   niriEnable,
+  mangoEnable,
   aiEnable,
   ...
 }:
@@ -34,6 +35,7 @@
       # gnome.enable = gnomeEnable;
       hyprland.enable = hyprlandEnable;
       niri.enable = niriEnable;
+      mango.enable = mangoEnable;
       # [desktop shell] pick one: noctalia (default) or shelljar (my quickshell island shell)
       shelljar.enable = true; # my quickshell island shell
       noctalia.enable = false; # disable noctalia on calender (shelljar replaces it)

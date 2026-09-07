@@ -18,6 +18,15 @@
 let
   hjm = config.hjmSettings;
 
+  # shared WM tool scripts (jsearch/jpower/jemoji), built for hjem hosts too.
+  scriptDir = ../../../resjar/wmconfigs/bin;
+  mkScript = name: path: pkgs.writeShellScriptBin name (builtins.readFile path);
+  jarScripts = [
+    (mkScript "jsearch" (scriptDir + "/jsearch.sh"))
+    (mkScript "jpower" (scriptDir + "/jpower.sh"))
+    (mkScript "jemoji" (scriptDir + "/jemoji.sh"))
+  ];
+
   ini = pkgs.formats.ini { };
   fuzzelIni = ini.generate "fuzzel.ini" {
     main = {
@@ -44,6 +53,7 @@ let
 in
 {
   config = lib.mkIf (hjm.niri.enable || hjm.hyprland.enable || hjm.launcher.enable) {
+    packages = jarScripts;
     hjemDotfiles.fuzzelIni = fuzzelIni;
   }; # end of config
 }

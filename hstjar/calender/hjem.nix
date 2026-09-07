@@ -22,6 +22,7 @@
         enable = true; # noctalia desktop shell
       };
     };
+    mango.enable = false; # mango (mangowm)
     launcher.enable = true;
     theming = {
       enable = true;

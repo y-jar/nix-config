@@ -51,6 +51,7 @@
       gdm.enable = true; # sets GDM login manager
       hyprland.enable = false; # ~19mib - compositor only
       niri.enable = true; # ~20mib - compositor only
+      mango.enable = false; # ~5mib sets mango (mangowm)
       cosmic = {
         enable = false; # COSMIC desktop environment
         greeter = false; # COSMIC login manager (disables GDM if enabled)

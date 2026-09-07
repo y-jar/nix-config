@@ -27,6 +27,7 @@
         enable = false; # noctalia desktop shell
       };
     };
+    mango.enable = false; # mango (mangowm)
     launcher.enable = true;
     theming = {
       enable = true; # catppuccin gtk/qt + kvantum + cursor

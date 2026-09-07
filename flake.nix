@@ -165,6 +165,12 @@
       inputs.nixpkgs.follows = "nixpkgs"; # locks version to the nixpkgs to reduce duplicate data
     }; # End of homemanager
 
+    # [mangowm] wayland compositor (dwl-based) — ships nixosModules.mango
+    mangowm = {
+      url = "github:mangowm/mango";
+      inputs.nixpkgs.follows = "nixpkgs";
+    }; # end of mangowm
+
     # =====[ My addons]
     wall-jar = {
       url = "github:y-jar/wall-jar"; # [wallpapers i collected]

@@ -55,6 +55,7 @@
       gdm.enable = true; # headless server, no login screen
       hyprland.enable = false; # sets hyprland ~19MiB
       niri.enable = false; # sets niri
+      mango.enable = false; # sets mango (mangowm)
       cosmic = {
         enable = false; # sets cosmic desktop environment
         greeter = false; # sets cosmic login manager (disables GDM if enabled)

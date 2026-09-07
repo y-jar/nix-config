@@ -44,6 +44,7 @@
       gdm.enable = true; # sets GDM login manager
       hyprland.enable = false; # sets hyprland
       niri.enable = true; # sets niri
+      mango.enable = true; # sets mango (mangowm)
       cosmic = {
         enable = false; # sets cosmic desktop environment
         greeter = false; # sets cosmic login manager (disables GDM if enabled)

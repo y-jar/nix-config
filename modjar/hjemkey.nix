@@ -124,11 +124,22 @@ in
           ".config/niri/bindings.kdl".source = hjemDotfiles.niriFiles.bindings;
           ".config/niri/rules.kdl".source = hjemDotfiles.niriFiles.rules;
           ".config/niri/startups.kdl".source = hjemDotfiles.niriFiles.startups;
+          ".config/niri/startups-audio.kdl".source = hjemDotfiles.niriFiles.startupsAudio;
           ".config/niri/host-inputs.kdl".source = hjemDotfiles.niriFiles.hostInputs;
         }
-        # [nwg-drawer config]
-        // lib.optionalAttrs (hjemDotfiles.nwgDrawerCss != null) {
-          ".config/nwg-drawer/drawer.css".source = hjemDotfiles.nwgDrawerCss;
+        # [mango config]
+        // lib.optionalAttrs (hjemDotfiles.mangowm != null) {
+          ".config/mango/config.conf".source = hjemDotfiles.mangowm.config;
+          ".config/mango/env.conf".source = hjemDotfiles.mangowm.env;
+          ".config/mango/looks.conf".source = hjemDotfiles.mangowm.looks;
+          ".config/mango/animation.conf".source = hjemDotfiles.mangowm.animation;
+          ".config/mango/layouts.conf".source = hjemDotfiles.mangowm.layouts;
+          ".config/mango/input.conf".source = hjemDotfiles.mangowm.input;
+          ".config/mango/rule.conf".source = hjemDotfiles.mangowm.rule;
+          ".config/mango/binds.conf".source = hjemDotfiles.mangowm.binds;
+          ".config/mango/startups.conf".source = hjemDotfiles.mangowm.startups;
+          ".config/mango/nix-startups.conf".source = hjemDotfiles.mangowm.nixStartups;
+          ".config/mango/host-inputs.conf".source = hjemDotfiles.mangowm.hostInputs;
         }
         # [web app desktop entries + launchers]
         // lib.optionalAttrs (hjemDotfiles.webapps != null) {
@@ -190,12 +201,14 @@ in
       hasDesktop =
         (config.sysSettings.niri.enable or false)
         || (config.sysSettings.hyprland.enable or false)
+        || (config.sysSettings.mango.enable or false)
         || (config.sysSettings.gnome.enable or false)
         || (config.sysSettings.cinnamon.enable or false)
         || (config.sysSettings.cosmic.enable or false);
       gnomeEnable = config.sysSettings.gnome.enable or false;
       hyprlandEnable = config.sysSettings.hyprland.enable or false;
       niriEnable = config.sysSettings.niri.enable or false;
+      mangoEnable = config.sysSettings.mango.enable or false;
       aiEnable = config.sysSettings.ai.enable or false;
       cosmicEnable = config.sysSettings.cosmic.enable or false;
       webapps = config.sysSettings.webapps; # browser-apps-as-desktop-apps (webapps.nix)

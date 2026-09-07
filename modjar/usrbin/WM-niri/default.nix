@@ -4,6 +4,8 @@
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
 # goal: Niri user config entry + host inputs.
+# KDL configs live in resjar/wmconfigs/niri (single source of truth).
+# Mod+D launcher follows the desktop shell: shelljar -> noctalia -> fuzzel.
 # -=-=-=-=-=-=-=-=-=-=-=
 {
   config,
@@ -15,12 +17,16 @@
 }:
 let
   cfg = config.usrSettings.niri;
-  hostSpecificFile = ./host-inputs + "/${hostnm}.kdl"; # host-specific input
-  targetKdlSource =
-    if builtins.pathExists hostSpecificFile then hostSpecificFile else ./host-inputs/0-unknown.kdl;
+  wmc = ../../../resjar/wmconfigs/niri; # shared niri wm configs (resjar)
 
-  # Which desktop shell is running? Drives the spawn line + settings bind.
-  # (Mod+D launcher is now always nwg-drawer, so it's no longer gated here.)
+  hostSpecificFile = wmc + "/host-inputs/${hostnm}.kdl"; # host-specific input
+  targetKdlSource =
+    if builtins.pathExists hostSpecificFile then
+      hostSpecificFile
+    else
+      wmc + "/host-inputs/0-unknown.kdl";
+
+  # Which desktop shell is running? Drives the Mod+S settings bind + Mod+D launcher.
   shelljarEnabled = config.usrSettings.shelljar.enable or false;
   noctaliaEnabled = config.usrSettings.noctalia.enable or false;
 
@@ -32,6 +38,20 @@ let
   browserCmd = config.usrSettings.browsers.default or "firefox";
   browserBind = "    Mod+B hotkey-overlay-title=\"Open [B]rowser\" { spawn \"${browserCmd}\"; }";
 
+  # exact Mod+D launcher line in the static file, swapped per shell.
+  dLine = "    Mod+D hotkey-overlay-title=\"[D]isplay Launcher (shelljar)\" { spawn-sh \"shjctl toggleLauncher\"; }";
+  dShellBind = dLine; # shelljar launcher
+  dNoctaliaBind = "    Mod+D hotkey-overlay-title=\"[D]isplay Noctalia Launcher\" { spawn \"qs\" \"ipc\" \"-c\" \"noctalia-shell\" \"call\" \"launcher\" \"toggle\"; }";
+  dFuzzelBind = "    Mod+D hotkey-overlay-title=\"[D]isplay Launcher (fuzzel)\" { spawn \"fuzzel\"; }";
+  launcherBind =
+    if shelljarEnabled then
+      dShellBind
+    else if noctaliaEnabled then
+      dNoctaliaBind
+    else
+      dFuzzelBind;
+
+  # exact Mod+S settings bind, swapped per shell.
   shellBindS =
     if shelljarEnabled then
       "    Mod+S hotkey-overlay-title=\"Toggle [S]helljar Control Center\" { spawn-sh \"shjctl toggleControlCenter\"; }"
@@ -51,27 +71,26 @@ in
 
   config = lib.mkIf cfg.enable {
     xdg.configFile = {
-      "niri/config.kdl".source = ./config.kdl; # base linker
-      # [global]
-      "niri/bindings.kdl".text = lib.replaceStrings [ sLine bLine ] [ shellBindS browserBind ] (
-        builtins.readFile ./bindings.kdl
-      );
-      "niri/base.kdl".source = ./base.kdl;
-      "niri/rules.kdl".source = ./rules.kdl;
+      "niri/config.kdl".source = wmc + "/config.kdl"; # base linker
+      # [global] (shell/browser/launcher swapped per host + shell)
+      "niri/bindings.kdl".text =
+        lib.replaceStrings [ sLine bLine dLine ] [ shellBindS browserBind launcherBind ]
+          (builtins.readFile (wmc + "/bindings.kdl"));
+      "niri/base.kdl".source = wmc + "/base.kdl";
+      "niri/rules.kdl".source = wmc + "/rules.kdl";
       "niri/startups.kdl".text =
-        builtins.readFile ./startups.kdl
-        + lib.concatMapStringsSep "" (c: "spawn-at-startup \"${c}\"\n") (osConfig.sysSettings.autostart.commands or [ ])
-        + lib.optionalString (config.usrSettings.shelljar.enable or false) ''
+        builtins.readFile (wmc + "/startups.kdl")
+        + lib.concatMapStringsSep "" (c: "spawn-at-startup \"${c}\"\n") (
+          osConfig.sysSettings.autostart.commands or [ ]
+        )
+        + lib.optionalString shelljarEnabled ''
           spawn-at-startup "shelljar"
           // desktop shell (quickshell island shell) spawned by Bar[shelljar]
         ''
-        +
-          lib.optionalString
-            ((config.usrSettings.noctalia.enable or false) && !(config.usrSettings.shelljar.enable or false))
-            ''
-              spawn-at-startup "noctalia-shell"
-              // desktop shell spawned by Bar[noctalia]
-            '';
+        + lib.optionalString (noctaliaEnabled && !shelljarEnabled) ''
+          spawn-at-startup "noctalia-shell"
+          // desktop shell spawned by Bar[noctalia]
+        '';
       # [channel pinning (jar-cap/mic-out) that only exists with the addon.]
       "niri/startups-audio.kdl".text =
         lib.optionalString (osConfig.sysSettings.audio.addon.enable or false)
@@ -85,22 +104,11 @@ in
           '';
       # [host specific]
       "niri/host-inputs.kdl".source = targetKdlSource;
-      # nwg-drawer theme (translucent, matches shell palette; shared in usrbin/)
-      "nwg-drawer/drawer.css".source = ../nwg-drawer.css;
-      # Pin waypaper to the awww backend and to the wallpaper folder.
-      "waypaper/config.ini".text = ''
-        [Settings]
-        backend = awww
-        folder = ~/resjar/wall-jar/wall-bin
-      '';
     }; # end of xdg.configFile
     home.packages = with pkgs; [
-      waypaper # GUI wallpaper setter for Wayland-based window managers
-      nwg-drawer # full-screen app drawer launcher (Mod+D)
       xwayland-satellite # Xwayland outside the compositor
       wl-clipboard # Wayland copy/paste CLI
       brightnessctl # backlight control (shelljar BrightnessService)
-
     ];
   }; # end of config
 }

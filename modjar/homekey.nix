@@ -51,12 +51,14 @@
         hasDesktop =
           (config.sysSettings.niri.enable or false)
           || (config.sysSettings.hyprland.enable or false)
+          || (config.sysSettings.mango.enable or false)
           || (config.sysSettings.gnome.enable or false)
           || (config.sysSettings.cinnamon.enable or false)
           || (config.sysSettings.cosmic.enable or false);
         gnomeEnable = config.sysSettings.gnome.enable or false;
         hyprlandEnable = config.sysSettings.hyprland.enable or false;
         niriEnable = config.sysSettings.niri.enable or false;
+        mangoEnable = config.sysSettings.mango.enable or false;
         aiEnable = config.sysSettings.ai.enable or false;
         cosmicEnable = config.sysSettings.cosmic.enable or false;
         webapps = config.sysSettings.webapps; # browser-apps-as-desktop-apps (webapps.nix)
