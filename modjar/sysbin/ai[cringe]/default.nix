@@ -9,9 +9,9 @@ let
   cfg = config.sysSettings.ai;
 
   llamaPackage =
-    if cfg.gpu == "rocm" then
+    if cfg.llama.gpu == "rocm" then
       pkgs.llama-cpp-rocm
-    else if cfg.gpu == "cuda" then
+    else if cfg.llama.gpu == "cuda" then
       pkgs.llama-cpp-cuda
     else
       pkgs.llama-cpp;
@@ -19,26 +19,33 @@ in
 {
   options = {
     sysSettings.ai = {
-      enable = lib.mkEnableOption "Enable AI tools (~2GiB, llama.cpp + models)";
+      enable = lib.mkEnableOption "Enable AI tools (opencode / llama.cpp / webui)";
       port = lib.mkOption {
         type = lib.types.port;
         default = 11434;
         description = "Port for the llama.cpp API";
-      };
-      gpu = lib.mkOption {
-        type = lib.types.enum [
-          "rocm"
-          "cuda"
-          "cpu"
-        ];
-        default = "rocm";
-        description = "llama.cpp GPU backend: rocm (AMD), cuda (NVIDIA), or cpu";
       };
       host = lib.mkOption {
         type = lib.types.str;
         default = "0.0.0.0";
         description = "Address llama.cpp binds. Use 127.0.0.1 to keep it private to this machine";
       };
+      llama = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          description = "Local llama.cpp server (~2GiB, GPU backend). Set false to skip local inference entirely";
+        }; # end of llama.enable
+        gpu = lib.mkOption {
+          type = lib.types.enum [
+            "rocm"
+            "cuda"
+            "cpu"
+          ];
+          default = "rocm";
+          description = "llama.cpp GPU backend: rocm (AMD), cuda (NVIDIA), or cpu. ROCm adds ~2.7GiB";
+        }; # end of llama.gpu
+      }; # end of llama options
       webui = {
         enable = lib.mkEnableOption "Open WebUI — browser-based chat interface for llama.cpp";
         port = lib.mkOption {
@@ -51,8 +58,8 @@ in
   }; # end of options
 
   config = lib.mkMerge [
-    # llama.cpp (always when ai is enabled)
-    (lib.mkIf cfg.enable {
+    # llama.cpp (only when ai.enable AND ai.llama.enable)
+    (lib.mkIf (cfg.enable && cfg.llama.enable) {
       services.llama-cpp = {
         enable = true;
         package = llamaPackage;
@@ -82,15 +89,15 @@ in
         # calender has an iGPU (gfx1036, no precompiled kernel in this ROCm build)
         # that llama.cpp otherwise splits the model across, causing GPU hangs and
         # ~4 t/s. Restrict ROCm to the dGPU (RX 9070 XT) only.
-        Environment = lib.mkIf (cfg.gpu == "rocm") [ "ROCR_VISIBLE_DEVICES=0" ];
+        Environment = lib.mkIf (cfg.llama.gpu == "rocm") [ "ROCR_VISIBLE_DEVICES=0" ];
         # the nixpkgs llama-cpp module hardcodes ProcSubset=pid, which hides
         # /proc/meminfo and breaks llama-server's `--fit on` memory detection.
         ProcSubset = lib.mkForce "all";
       };
     }) # end of llama-cpp config
 
-    # Open WebUI (optional, connects to llama.cpp on localhost)
-    (lib.mkIf cfg.webui.enable {
+    # Open WebUI (optional, needs llama.cpp running; connects to it on localhost)
+    (lib.mkIf (cfg.enable && cfg.webui.enable) {
       services.open-webui = {
         enable = true;
         host = "0.0.0.0";

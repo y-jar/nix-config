@@ -20,7 +20,7 @@
         name = "YouTube";
         url = "https://www.youtube.com";
         mode = "pwa";
-        browser = "chromium";
+        browser = "librewolf";
       }
       {
         name = "Gmail";

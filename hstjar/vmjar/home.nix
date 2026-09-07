@@ -130,6 +130,8 @@
       inputmethods.japanese.enable = false; # sets japanese input
       inputmethods.korean.enable = false; # sets korean input
       ai.enable = aiEnable; # sets AI tools like opencode, llama.cpp
+      ai.opencode.enable = true; # opencode CLI + GUI (keep even if local llama is off)
+      ai.lmstudio.enable = true; # LM Studio (~2.3GiB) — set false to save space
       dictation.enable = false; # voxtype push-to-talk dictation + meeting/VTT transcript (F9)
       git.enable = true; # sets git
       bluetooth.enable = false; # sets blueman in home packages

@@ -103,7 +103,10 @@
       UseNixPkgsYoinks.enable = false;
       ai = {
         enable = false; # ~2gib - llama.cpp + models (auto-downloaded via models-preset)
-        gpu = "rocm"; # llama.cpp backend: rocm (AMD) | cuda (NVIDIA) | cpu
+        llama = {
+          enable = true; # local llama.cpp (set false to use opencode/non-local only)
+          gpu = "rocm"; # llama.cpp backend: rocm (AMD) | cuda (NVIDIA) | cpu
+        };
         port = 11434;
         webui = {
           enable = false; # Open WebUI chat interface (~2gib)

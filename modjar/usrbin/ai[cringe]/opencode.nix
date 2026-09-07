@@ -20,7 +20,7 @@ in
     ./opencode-agents.nix # custom agents
   ]; # end of imports
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (cfg.enable && cfg.opencode.enable) {
     programs.opencode = {
       enable = true;
       package = pkgs.opencode;

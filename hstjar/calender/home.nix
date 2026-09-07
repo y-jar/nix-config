@@ -55,32 +55,32 @@
         enable = true; # sets firefox and librewolf [work and personal]
         firefox = true; # disables firefox [work]
         librewolf = true; # enables librewolf [personal] [the default is `true`]
-        chromium = true; # enables chromium [personal] [the default is `true`]
+        chromium = false; # enables chromium [personal] [the default is `true`]
         default = "firefox"; # preferred browser: WM Super+B + default mime browser
       }; # end of browsers
       terminal.enable = true; # sets terminal as foot
       terminal.font = "Monocraft"; # options: "IntoneMono Nerd Font" "Monocraft" "Miracode"
       terminal.fontSize = 12; # font size (default: 14)
-      syncthing.enable = true; # file sync (web UI at localhost:8384)
+      syncthing.enable = false; # file sync (web UI at localhost:8384)
       editors = {
         enable = true; # sets editors
         vscodium.enable = true; # sets vscodium
         zed.enable = true; # sets zed
         obsidian.enable = true; # sets obsidian
-        helix.enable = true; # sets helix
+        helix.enable = false; # sets helix
         nvf.enable = true; # sets nvf config for neovim
       }; # end of editors
       chatApps = {
         enable = true;
         discord.enable = true;
-        halloy.enable = true;
+        halloy.enable = false;
       };
       espanso = (import ../espansoconf.nix { enable = true; }); # espanso text expander
-      flatpak.enable = true; # sets flatpak and adds bazaar
+      flatpak.enable = false; # sets flatpak and adds bazaar
       # [file explorers]
       nautilus.enable = true; # sets nautilus
       yazi.enable = true; # sets yazi
-      ranger.enable = true; # sets ranger
+      ranger.enable = false; # sets ranger
       # [media]
       media = {
         enable = true; # media master toggle
@@ -103,7 +103,7 @@
         enable = true; # art master toggle
         imageTools = true; # krita, gimp, inkscape, ...
         threeD = true; # blender, blockbench
-        astronomy = true; # stellarium, celestia
+        astronomy = false; # stellarium, celestia
       };
       # godot.enable = true; # sets godot
       office.enable = true; # sets libreoffice and other apps
@@ -118,17 +118,19 @@
       inputmethods.japanese.enable = true; # sets japanese input
       inputmethods.korean.enable = false; # sets korean input
       ai.enable = aiEnable; # sets AI tools like opencode, llama.cpp
+      ai.opencode.enable = true; # opencode CLI + GUI (keep even if local llama is off)
+      ai.lmstudio.enable = false; # LM Studio (~2.3GiB) — set false to save space
       dictation.enable = true; # push-to-talk dictation + meeting/VTT transcript (voxtype, F9)
       git.enable = true; # sets git
       bluetooth.enable = false; # sets blueman in home packages
       dev = {
         enable = true; # dev master toggle
-        dotnet = true; # dotnet SDK
-        node = true; # nodejs
-        cc = true; # gcc
-        go = true; # go
+        dotnet = false; # dotnet SDK
+        node = false; # nodejs
+        cc = false; # gcc
+        go = false; # go
         nixTools = true; # nix language servers + formatters
-        sqlTools = true; # dbeaver
+        sqlTools = false; # dbeaver
       };
       # =========[management]^^^
       theming = {

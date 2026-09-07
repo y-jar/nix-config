@@ -3,7 +3,7 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Host calender: browser apps treated as desktop apps (webapps).
+# goal: Host 0_MINIMAL: browser apps treated as desktop apps (webapps).
 # -=-=-=-=-=-=-=-=-=-=-=
 # Each entry becomes a fuzzel/rofi-searchable app. Fill in real apps below.
 #
@@ -25,26 +25,20 @@
 
 {
   sysSettings.webapps = {
-    enable = true; # ship disabled by default; set true when you add apps below
+    enable = false; # ship disabled by default; set true when you add apps below
     apps = [
       # EXAMPLE:
-      {
-        name = "YouTube Music";
-        url = "https://music.youtube.com";
-        mode = "pwa";
-        browser = "chromium";
-      }
-      {
-        name = "YouTube";
-        url = "https://www.youtube.com";
-        mode = "pwa";
-        browser = "librewolf";
-      }
-      {
-        name = "Gmail";
-        url = "https://mail.google.com";
-        mode = "tabbed";
-      }
+      # {
+      #   name = "YouTube Music";
+      #   url = "https://music.youtube.com";
+      #   mode = "pwa";
+      #   browser = "chromium";
+      # }
+      # {
+      #   name = "Gmail";
+      #   url = "https://mail.google.com";
+      #   mode = "tabbed";
+      # }
     ]; # end of apps
   }; # end of sysSettings.webapps
 }

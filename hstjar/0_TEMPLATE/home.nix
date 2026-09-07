@@ -122,7 +122,9 @@
       # =========[management]
       inputmethods.japanese.enable = false; # ~100mib - fcitx5 + Mozc
       inputmethods.korean.enable = false; # ~100mib - fcitx5 + Hangul
-      ai.enable = aiEnable; # ~1.5gib - LM Studio + opencode-desktop
+      ai.enable = aiEnable;
+      ai.opencode.enable = true; # opencode CLI + GUI (keep even if local llama is off)
+      ai.lmstudio.enable = true; # LM Studio (~2.3GiB) — set false to save space
       dictation.enable = false; # voxtype push-to-talk dictation + meeting/VTT transcript (F9)
       git.enable = true; # ~10mib - git + gh + lazygit
       bluetooth.enable = false; # ~5mib - blueman

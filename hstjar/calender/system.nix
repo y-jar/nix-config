@@ -33,14 +33,14 @@
         coreTools = true;
         netArchives = true;
         fsTools = true;
-        imaging = true;
+        imaging = false;
       };
       # =============[base / core packages]^^^
 
       # =============[experience install]
       # [pick one or more if you know what you're doing]
       cinnamon.enable = false; # sets cinnamon
-      gnome.enable = true; # sets gnome [on by default]
+      gnome.enable = false; # sets gnome [on by default]
       gdm.enable = true; # sets GDM login manager
       hyprland.enable = false; # sets hyprland
       niri.enable = true; # sets niri
@@ -70,7 +70,7 @@
       };
       boot.quiet = false; # silence kernel/udev/systemd startup logs
       boot.fastMenu = false; # set boot loader timeout to 1 second
-      boot.plymouth.enable = true; # custom boot splash logo
+      boot.plymouth.enable = false; # custom boot splash logo
 
       bluetooth.enable = false; # sets blueman in home packages
       neverSleep.enable = false; # disable system idle sleep
@@ -93,8 +93,11 @@
       unfree.enable = true; # allow unfree packages (spotify, chromium, vscodium, steam, ...)
       UseNixPkgsYoinks.enable = true;
       ai = {
-        enable = true; # sets AI tools (llama.cpp, opencode, etc.)
-        gpu = "rocm"; # llama.cpp backend: rocm (AMD) | cuda (NVIDIA) | cpu
+        enable = true; # sets AI tools (opencode, llama.cpp)
+        llama = {
+          enable = false; # local llama.cpp (set false to keep opencode/non-local only)
+          gpu = "rocm"; # llama.cpp backend: rocm (AMD) | cuda (NVIDIA) | cpu
+        };
         host = "127.0.0.1"; # keep llama.cpp local (not exposed on the LAN)
         port = 11434;
         webui = {
@@ -103,7 +106,7 @@
         };
       };
       localsend.enable = true;
-      syncthing.enable = true; # continuous file sync (web UI :8384)
+      syncthing.enable = false; # continuous file sync (web UI :8384)
       espanso.enable = true; # espanso daemon + Wayland security wrapper
       flatpak.enable = false; # sets flatpak in the system [still needs to be enabled in user.nix]
       gaming = {

@@ -4,9 +4,19 @@
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
 # goal: Fonts and emoji packages for the system.
+# sysSettings.fonts.enable (master, default true) + fonts.minimal (default false)
+# lets lean hosts install only the terminal font + a handful, dropping the heavy
+# JP/emoji packs (e.g. rounded-mgenplus ~700MiB) to save space.
 # -=-=-=-=-=-=-=-=-=-=-=
-{ pkgs, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 let
+  cfg = config.sysSettings.fonts;
+
   x5y8pxNegaTape = pkgs.stdenv.mkDerivation {
     pname = "x5y8pxNegaTape";
     version = "20260610";
@@ -18,47 +28,67 @@ let
   };
 in
 {
-  fonts = {
-    packages = with pkgs; [
-      # ADD FONTS HERE, then add Return Name After
-      # [ltn]
-      nerd-fonts.intone-mono # RN: IntoneMono Nerd Font
-      comfortaa # Clean and modern font suitable for headings and logos
-      cascadia-code # Monospaced font that includes programming ligatures and is designed to enhance the modern look and feel of the Windows Terminal
-      excalifont # Font based on the original handwritten Virgil font carefully curated to improve legibility while preserving its hand-drawn nature
-      monocraft # Programming font based on the typeface used in Minecraft
-      miracode # Sharp, readable, vector-y version of Monocraft
+  options = {
+    sysSettings.fonts = {
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = "Install the font set (master toggle)";
+      };
+      minimal = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Install only the terminal font + essentials (drops heavy JP/emoji packs)";
+      };
+    }; # end of sysSettings.fonts
+  }; # end of options
 
-      # [jp]
-      ipaexfont # japanese font
-      rounded-mgenplus # Japanese font based on Rounded M+ and Noto Sans Japanese
-      koruri # Japanese TrueType font obtained by mixing M+ FONTS and Open Sans
-      #nerd-fonts.m+ # Nerd Fonts: Multiple styles and weights, many glyph sets (e.g. Kana glyphs)
-      x5y8pxNegaTape # JP pixel font [vendored: resjar/fontbin/x5y8pxNegaTape]
+  config = lib.mkIf cfg.enable {
+    fonts = {
+      packages =
+        (with pkgs; [
+          nerd-fonts.intone-mono # terminal font (always)
+          # [basic]
+          comfortaa
+          cascadia-code
+        ])
+        ++ (lib.optionals (!cfg.minimal) (
+          with pkgs;
+          [
+            # [extras]
+            excalifont
+            monocraft
+            miracode
+            # [jp]
+            ipaexfont
+            rounded-mgenplus # ~700MiB - the heavy one
+            koruri
+            x5y8pxNegaTape # JP pixel font [vendored]
+            # [emojis]
+            noto-fonts-emoji-blob-bin # Blobmoji
+          ]
+        )); # end of packages
 
-      # [emojis]
-      noto-fonts-emoji-blob-bin # Emoji font based on the Noto Emoji blob [ref:whisper]
-    ]; # end of packages
-
-    # emoji
-    fontconfig = {
-      enable = true;
-      defaultFonts.emoji = [ "Blobmoji" ];
-      defaultFonts.monospace = [
-        "IntoneMono Nerd Font"
-        "ipaexgothic"
-      ];
-      localConf = ''
-        <?xml version="1.0"?>
-        <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
-        <fontconfig>
-          <match target="pattern">
-            <edit name="family" mode="append" binding="weak">
-              <string>Blobmoji</string>
-            </edit>
-          </match>
-        </fontconfig>
-      ''; # end of localConf
-    }; # end of fontconfig
-  }; # end of fonts
+      # emoji
+      fontconfig = {
+        enable = true;
+        defaultFonts.emoji = [ "Blobmoji" ];
+        defaultFonts.monospace = [
+          "IntoneMono Nerd Font"
+          "ipaexgothic"
+        ];
+        localConf = ''
+          <?xml version="1.0"?>
+          <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
+          <fontconfig>
+            <match target="pattern">
+              <edit name="family" mode="append" binding="weak">
+                <string>Blobmoji</string>
+              </edit>
+            </match>
+          </fontconfig>
+        ''; # end of localConf
+      }; # end of fontconfig
+    }; # end of fonts
+  }; # end of config
 }
