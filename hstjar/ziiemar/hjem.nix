@@ -19,10 +19,12 @@
         enable = false; # my quickshell island shell
       };
       noctalia = {
-        enable = false; # noctalia desktop shell
+        enable = true; # noctalia desktop shell
       };
     };
     mango.enable = false; # mango (mangowm)
+    # NOTE: home.nix also ships a niri-refresh-on-battery systemd user service
+    # (eDP-1 48Hz on battery / 120Hz on AC) — not yet ported to hjmbin.
     launcher.enable = true;
     theming = {
       enable = true;
@@ -33,16 +35,17 @@
 
     browsers = {
       enable = true;
-      firefox = true;
+      firefox = false;
       librewolf = true;
       chromium = true;
-      default = "firefox"; # preferred browser: WM Mod+B + default mime browser
+      default = "librewolf"; # preferred browser: WM Mod+B + default mime browser
     };
     terminal = {
       enable = true;
       font = "IntoneMono Nerd Font"; # options: "IntoneMono Nerd Font" "Monocraft" "Miracode"
       fontSize = 14;
     };
+    # syncthing: home-manager only (modjar/usrbin/syncthing.nix) — no hjmbin port yet, skipped here.
     editors = {
       enable = true;
       vscodium.enable = true;
@@ -56,13 +59,13 @@
       discord.enable = true;
       halloy.enable = false;
     };
-    espanso = (import ../espansoconf.nix { }); # espanso text expander
+    espanso = (import ../espansoconf.nix { enable = false; }); # espanso text expander
     flatpak.enable = false;
     nautilus.enable = true;
     yazi.enable = true;
     ranger.enable = false;
     media = {
-      enable = true; # media master toggle
+      enable = true;
       mpv = true;
       downloaders = true;
       musicApps = true;
@@ -76,19 +79,29 @@
       heroic.enable = false;
     };
 
-    art.enable = false;
+    art = {
+      enable = false;
+      imageTools = false;
+      threeD = false;
+      astronomy = false;
+    };
     office.enable = true;
     obs.enable = false;
     kdenlive.enable = false;
 
     inputmethods.japanese.enable = true;
     inputmethods.korean.enable = false;
-    ai.enable = false;
+    ai = {
+      enable = true; # sets AI tools like opencode, llama.cpp
+      opencode.enable = true; # opencode CLI + GUI (keep even if local llama is off)
+      lmstudio.enable = true; # LM Studio (~2.3GiB) — set false to save space
+    };
+    dictation.enable = false;
     git.enable = true;
     bluetooth.enable = true;
     fastfetch.enable = true;
     dev = {
-      enable = false; # dev master toggle
+      enable = false;
       dotnet = false;
       node = false;
       cc = false;
@@ -98,10 +111,10 @@
     };
 
     resYoink = {
-      enable = false;
-      wallpapers = false;
-      icons = false;
-      profilePictures = false;
+      enable = true;
+      wallpapers = true;
+      icons = true;
+      profilePictures = true;
       minecraftSkins = false;
     };
   };

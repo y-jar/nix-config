@@ -12,7 +12,7 @@
     email = "park.7qs@gmail.com"; # [CHANGE THIS]
 
     shell.enable = true;
-    hyprland.enable = true;
+    hyprland.enable = false;
     niri = {
       enable = false;
       shelljar = {
@@ -33,10 +33,10 @@
 
     browsers = {
       enable = true;
-      firefox = false;
-      librewolf = true;
+      firefox = true;
+      librewolf = false;
       chromium = true;
-      default = "librewolf"; # preferred browser: WM Mod+B + default mime browser
+      default = "firefox"; # preferred browser: WM Mod+B + default mime browser
     };
     terminal = {
       enable = true;
@@ -52,8 +52,8 @@
       helix.enable = false;
     };
     chatApps = {
-      enable = false;
-      discord.enable = false;
+      enable = true;
+      discord.enable = true;
       halloy.enable = false;
     };
     espanso = (import ../espansoconf.nix { enable = false; }); # espanso text expander [headless server, no graphical session]
@@ -62,7 +62,7 @@
     yazi.enable = true;
     ranger.enable = false;
     media = {
-      enable = true; # media master toggle
+      enable = true;
       mpv = true;
       downloaders = true;
       musicApps = true;
@@ -76,19 +76,29 @@
       heroic.enable = false;
     };
 
-    art.enable = false;
+    art = {
+      enable = false;
+      imageTools = false;
+      threeD = false;
+      astronomy = false;
+    };
     office.enable = false;
     obs.enable = false;
     kdenlive.enable = false;
 
-    inputmethods.japanese.enable = false;
+    inputmethods.japanese.enable = true;
     inputmethods.korean.enable = false;
-    ai.enable = false;
+    ai = {
+      enable = false; # sets AI tools like opencode, llama.cpp
+      opencode.enable = true; # opencode CLI + GUI (keep even if local llama is off)
+      lmstudio.enable = true; # LM Studio (~2.3GiB) — set false to save space
+    };
+    dictation.enable = false;
     git.enable = true;
     bluetooth.enable = false;
     fastfetch.enable = true;
     dev = {
-      enable = false; # dev master toggle
+      enable = false;
       dotnet = false;
       node = false;
       cc = false;
@@ -98,10 +108,10 @@
     };
 
     resYoink = {
-      enable = false;
-      wallpapers = false;
-      icons = false;
-      profilePictures = false;
+      enable = true;
+      wallpapers = true;
+      icons = true;
+      profilePictures = true;
       minecraftSkins = false;
     };
   };

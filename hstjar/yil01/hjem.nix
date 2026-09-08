@@ -3,45 +3,40 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Host 0_TEMPLATE: hjem toggle sheet (hjmSettings) — WIP.
+# goal: Host yil01: hjem toggle sheet (hjmSettings) — WIP.
+# (live via yil02 = mkHjemJar "yil01")
 # -=-=-=-=-=-=-=-=-=-=-=
 { ... }:
 {
-  # Fill this out! Same toggles as home.nix but for hjem.
   hjmSettings = {
-    # personal [for git]
     name = "y-jar"; # [CHANGE THIS]
     email = "park.7qs@gmail.com"; # [CHANGE THIS]
 
-    # [core]
     shell.enable = true;
-
-    # [experience]
-    hyprland.enable = true;
+    hyprland.enable = false;
     niri = {
-      enable = false;
+      enable = true;
       shelljar = {
         enable = false; # my quickshell island shell
       };
       noctalia = {
-        enable = false; # noctalia desktop shell
+        enable = true; # noctalia desktop shell
       };
     };
     mango.enable = false; # mango (mangowm)
     launcher.enable = true;
     theming = {
-      enable = true; # catppuccin gtk/qt + kvantum + cursor
+      enable = true;
       flavor = "mocha";
       accent = "blue";
       cursorSize = 36;
     };
 
-    # [appstream]
     browsers = {
       enable = true;
       firefox = true;
-      librewolf = true;
-      chromium = true;
+      librewolf = false;
+      chromium = false;
       default = "firefox"; # preferred browser: WM Mod+B + default mime browser
     };
     terminal = {
@@ -58,22 +53,22 @@
       helix.enable = false;
     };
     chatApps = {
-      enable = false;
-      discord.enable = false;
-      halloy.enable = false;
+      enable = true;
+      discord.enable = true;
+      halloy.enable = true;
     };
-    espanso = (import ../espansoconf.nix { enable = false; }); # ~30mib - espanso text expander
+    espanso = (import ../espansoconf.nix { enable = false; }); # espanso text expander
     flatpak.enable = false;
     nautilus.enable = true;
     yazi.enable = true;
     ranger.enable = false;
     media = {
-      enable = true; # media master toggle
+      enable = true;
       mpv = true;
-      downloaders = true;
+      downloaders = false;
       musicApps = false;
-      audioEditor = true;
-      viewers = true;
+      audioEditor = false;
+      viewers = false;
       defaultApps = true;
     };
     keepass.enable = true;
@@ -82,30 +77,37 @@
       heroic.enable = false;
     };
 
-    # [creative]
-    art.enable = false;
+    art = {
+      enable = false;
+      imageTools = false;
+      threeD = false;
+      astronomy = false;
+    };
     office.enable = false;
     obs.enable = false;
     kdenlive.enable = false;
 
-    # [management]
     inputmethods.japanese.enable = true;
     inputmethods.korean.enable = false;
-    ai.enable = false;
+    ai = {
+      enable = false; # sets AI tools like opencode, llama.cpp
+      opencode.enable = true; # opencode CLI + GUI (keep even if local llama is off)
+      lmstudio.enable = true; # LM Studio (~2.3GiB) — set false to save space
+    };
+    dictation.enable = false;
     git.enable = true;
     bluetooth.enable = false;
     fastfetch.enable = true;
     dev = {
-      enable = true; # dev master toggle
-      dotnet = false;
-      node = false;
+      enable = false;
+      dotnet = true;
+      node = true;
       cc = false;
       go = false;
       nixTools = true;
       sqlTools = false;
     };
 
-    # [resources]
     resYoink = {
       enable = true;
       wallpapers = true;

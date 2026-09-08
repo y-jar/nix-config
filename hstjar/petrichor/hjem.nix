@@ -3,113 +3,119 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Host 0_TEMPLATE: hjem toggle sheet (hjmSettings) — WIP.
+# goal: Host petrichor: hjem toggle sheet (hjmSettings) — WIP.
 # -=-=-=-=-=-=-=-=-=-=-=
 { ... }:
 {
-  # Fill this out! Same toggles as home.nix but for hjem.
   hjmSettings = {
-    # personal [for git]
-    name = "PLEASECHANGEME_NAME"; # [CHANGE THIS]
-    email = "PLEASECHANGEME_EMAIL"; # [CHANGE THIS]
+    name = "kway"; # [CHANGE THIS]
+    email = "kwayckyle@gmail.com"; # [CHANGE THIS]
 
-    # [core]
     shell.enable = true;
-
-    # [experience]
-    hyprland.enable = true;
+    hyprland.enable = false;
     niri = {
-      enable = false;
+      enable = true;
       shelljar = {
-        enable = false; # my quickshell island shell
+        enable = true; # my quickshell island shell
       };
       noctalia = {
         enable = false; # noctalia desktop shell
       };
     };
-    mango.enable = false; # mango (mangowm)
+    mango = {
+      enable = true; # mango (mangowm)
+      shelljar = {
+        enable = true; # my quickshell island shell
+      };
+    };
     launcher.enable = true;
     theming = {
-      enable = false; # catppuccin gtk/qt + kvantum + cursor
+      enable = true;
       flavor = "mocha";
       accent = "blue";
       cursorSize = 36;
     };
 
-    # [appstream]
     browsers = {
       enable = true;
       firefox = true;
-      librewolf = true;
-      chromium = true;
+      librewolf = false;
+      chromium = false;
       default = "firefox"; # preferred browser: WM Mod+B + default mime browser
     };
     terminal = {
       enable = true;
-      font = "IntoneMono Nerd Font"; # options: "IntoneMono Nerd Font" "Monocraft" "Miracode"
-      fontSize = 14;
+      font = "monocraft"; # options: "IntoneMono Nerd Font" "Monocraft" "Miracode"
+      fontSize = 16;
     };
     editors = {
       enable = true;
       vscodium.enable = true;
-      zed.enable = true;
+      zed.enable = false;
       obsidian.enable = false;
       nvf.enable = true;
       helix.enable = false;
     };
     chatApps = {
-      enable = false;
-      discord.enable = false;
+      enable = true;
+      discord.enable = true;
       halloy.enable = false;
     };
-    espanso = (import ../espansoconf.nix { enable = false; }); # ~30mib - espanso text expander
-    flatpak.enable = false;
+    espanso = (import ../espansoconf.nix { enable = false; }); # espanso text expander
+    flatpak.enable = true;
     nautilus.enable = true;
     yazi.enable = true;
     ranger.enable = false;
     media = {
-      enable = true; # media master toggle
+      enable = true;
       mpv = true;
-      downloaders = true;
+      downloaders = false;
       musicApps = true;
-      audioEditor = true;
+      audioEditor = false;
       viewers = true;
       defaultApps = true;
     };
     keepass.enable = true;
     gaming = {
-      prism.enable = false;
-      heroic.enable = false;
+      prism.enable = true;
+      heroic.enable = true;
     };
 
-    # [creative]
-    art.enable = false;
-    office.enable = false;
-    obs.enable = false;
+    art = {
+      enable = true;
+      imageTools = true;
+      threeD = false;
+      astronomy = true;
+    };
+    office.enable = true;
+    obs.enable = true;
     kdenlive.enable = false;
 
-    # [management]
     inputmethods.japanese.enable = false;
     inputmethods.korean.enable = false;
-    ai.enable = false;
+    ai = {
+      enable = false; # sets AI tools like opencode, llama.cpp
+      opencode.enable = true; # opencode CLI + GUI (keep even if local llama is off)
+      lmstudio.enable = false; # LM Studio (~2.3GiB) — set false to save space
+    };
+    dictation.enable = false;
     git.enable = true;
     bluetooth.enable = false;
     fastfetch.enable = true;
     dev = {
-      enable = true; # dev master toggle
+      enable = false;
       dotnet = true;
       node = true;
       cc = true;
       go = true;
       nixTools = true;
-      sqlTools = true;
+      sqlTools = false;
     };
 
-    # [resources]
     resYoink = {
-      enable = false;
-      wallpapers = false;
-      icons = false;
+      enable = true;
+      wallpapers = true;
+      icons = true;
       profilePictures = false;
       minecraftSkins = false;
     };
