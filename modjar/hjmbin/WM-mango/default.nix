@@ -15,6 +15,7 @@
   config,
   lib,
   pkgs,
+  inputs,
   hostnm,
   osConfig,
   ...
@@ -31,7 +32,7 @@ let
     else
       wmc + "/host-inputs/0-unknown.conf";
 
-  shelljarEnabled = hjm.shelljar.enable or false;
+  shelljarEnabled = hjm.mango.shelljar.enable or false;
   generatedStartups = ''
     # mango (mangowm) — nix-generated startups
     # Contents injected by hjmbin/WM-mango/default.nix.
@@ -51,19 +52,25 @@ in
 {
   options = {
     hjmSettings.mango.enable = lib.mkEnableOption "mango (mangowm) compositor for hjem";
+    hjmSettings.mango.shelljar.enable = lib.mkEnableOption "shelljar (my quickshell island shell) for mango";
   }; # end of options
 
   config = lib.mkIf hjm.mango.enable {
-    packages = with pkgs; [
-      jshot # wayland screenshot tool (region/screen/window) via grim+slurp+swappy
-      jclip # clipboard history menu (cliphist + fuzzel)
-      grim # wayland screenshot capture
-      slurp # wayland region select for grim
-      swappy # wayland screenshot annotation
-      hyprpicker # color picker (SUPER+C)
-      cliphist # clipboard history storage (jclip)
-      xwayland-satellite # Xwayland outside the compositor
-    ];
+    packages =
+      with pkgs; [
+        jshot # wayland screenshot tool (region/screen/window) via grim+slurp+swappy
+        jclip # clipboard history menu (cliphist + fuzzel)
+        grim # wayland screenshot capture
+        slurp # wayland region select for grim
+        swappy # wayland screenshot annotation
+        hyprpicker # color picker (SUPER+C)
+        cliphist # clipboard history storage (jclip)
+        xwayland-satellite # Xwayland outside the compositor
+      ]
+      ++ lib.optionals shelljarEnabled [
+        # desktop shell (binds.conf + generated startups use shjctl)
+        inputs.shelljar.packages.${pkgs.stdenv.hostPlatform.system}.default
+      ];
     hjemDotfiles.mangowm = {
       config = wmc + "/config.conf"; # linker
       env = wmc + "/env.conf";

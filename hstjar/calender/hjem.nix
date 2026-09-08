@@ -16,13 +16,18 @@
     niri = {
       enable = true;
       shelljar = {
-        enable = false; # my quickshell island shell
+        enable = true; # my quickshell island shell
       };
       noctalia = {
-        enable = true; # noctalia desktop shell
+        enable = false; # noctalia desktop shell
       };
     };
-    mango.enable = false; # mango (mangowm)
+    mango = {
+      enable = true; # mango (mangowm) — the compositor calender runs
+      shelljar = {
+        enable = true; # my quickshell island shell (binds.conf is all shjctl)
+      };
+    };
     launcher.enable = true;
     theming = {
       enable = true;
@@ -35,13 +40,13 @@
       enable = true;
       firefox = true;
       librewolf = true;
-      chromium = true;
+      chromium = false;
       default = "firefox"; # preferred browser: WM Mod+B + default mime browser
     };
     terminal = {
       enable = true;
       font = "Monocraft"; # options: "IntoneMono Nerd Font" "Monocraft" "Miracode"
-      fontSize = 12;
+      fontSize = 16;
     };
     editors = {
       enable = true;
@@ -49,18 +54,18 @@
       zed.enable = true;
       obsidian.enable = true;
       nvf.enable = true;
-      helix.enable = true;
+      helix.enable = false;
     };
     chatApps = {
       enable = true;
       discord.enable = true;
-      halloy.enable = true;
+      halloy.enable = false;
     };
     espanso = (import ../espansoconf.nix { }); # espanso text expander
-    flatpak.enable = true;
+    flatpak.enable = false;
     nautilus.enable = true;
     yazi.enable = true;
-    ranger.enable = true;
+    ranger.enable = false;
     media = {
       enable = true;
       mpv = true;
@@ -79,7 +84,7 @@
     art = {
       enable = true;
       imageTools = true;
-      threeD = true;
+      threeD = false;
       astronomy = true;
     };
     office.enable = true;
@@ -88,17 +93,17 @@
 
     inputmethods.japanese.enable = true;
     inputmethods.korean.enable = false;
-    ai.enable = false;
+    ai.enable = true;
     dictation.enable = true;
     git.enable = true;
     bluetooth.enable = false;
     fastfetch.enable = true;
     dev = {
       enable = true;
-      dotnet = true;
-      node = true;
-      cc = true;
-      go = true;
+      dotnet = false;
+      node = false;
+      cc = false;
+      go = false;
       nixTools = true;
       sqlTools = true;
     };

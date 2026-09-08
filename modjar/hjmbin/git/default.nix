@@ -58,5 +58,8 @@ in
 {
   config = lib.mkIf hjm.git.enable {
     hjemDotfiles.gitconfig = gitconfig;
+    packages = with pkgs; [
+      delta # diff pager + side-by-side diffs (the generated .gitconfig uses it)
+    ];
   };
 }

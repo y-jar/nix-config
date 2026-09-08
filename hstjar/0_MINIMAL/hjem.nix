@@ -27,7 +27,12 @@
         enable = false; # noctalia desktop shell
       };
     };
-    mango.enable = true; # default WM on the minimal host
+    mango = {
+      enable = true; # default WM on the minimal host
+      shelljar = {
+        enable = false; # raw mango, no desktop shell (minimal)
+      };
+    };
     launcher.enable = true;
     theming = {
       enable = false; # catppuccin gtk/qt + kvantum + cursor

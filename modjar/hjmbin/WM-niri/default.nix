@@ -16,6 +16,7 @@
   config,
   lib,
   pkgs,
+  inputs,
   osConfig,
   hostnm,
   ...
@@ -107,6 +108,14 @@ in
   }; # end of options
 
   config = lib.mkIf hjm.niri.enable {
+    # install the desktop shell exactly when it would be spawned
+    packages =
+      lib.optionals shelljarEnabled [
+        inputs.shelljar.packages.${pkgs.stdenv.hostPlatform.system}.default # spawned by generatedStartups when shelljar is the shell
+      ]
+      ++ lib.optionals (noctaliaEnabled && !shelljarEnabled) [
+        pkgs.noctalia-shell # spawned by generatedStartups when noctalia is the shell
+      ];
     hjemDotfiles.niriFiles = {
       config = kdlDir + "/config.kdl";
       base = kdlDir + "/base.kdl";

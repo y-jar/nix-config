@@ -425,5 +425,11 @@
       internal = true;
       description = "Generated cursor index.theme path";
     }; # end of pointerCursorIndex
+    pointerCursorTheme = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      internal = true;
+      description = "Cursor theme dir path (symlinked whole to ~/.icons/jcsr, like home-manager's pointerCursor)";
+    }; # end of pointerCursorTheme
   }; # end of hjmbin options dotfiles
 }

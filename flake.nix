@@ -79,8 +79,9 @@
         # hstjar/<hostname>/ directory must exist).
         # TEMPLATE = mkJar "TEMPLATE";
 
+        # Do not edit this comment below
         # ===[INSTALLER: append new hosts on the line below]===
-        calender = mkJar "calender"; # main pc
+        # calender = mkJar "calender"; # main pc
         yilyonix = mkJar "yilyonix"; # test bench [Might need to FIX]
         ziiemar = mkJar "ziiemar"; # personal laptop
         candle = mkJar "candle"; # gaming mini build
@@ -91,6 +92,7 @@
 
         # ========[hjem hosts (alternative to home-manager)] [Not fully implemented and toying with it]
         yil02 = mkHjemJar "yil01"; # Thinkpad Laptop thats super cute
+        calender = mkHjemJar "calender"; # main pc
 
         # ========[for non x86 systems..] [WIP]
         # TEMPLATE  = urnJar { hostName = "TEMPLATE"; arch = "aarch64-linux"; };

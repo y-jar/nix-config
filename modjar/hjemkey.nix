@@ -187,8 +187,10 @@ in
         // lib.optionalAttrs (hjemDotfiles.kvantumThemeDir != null) {
           ".config/Kvantum/${hjemDotfiles.kvantumThemeName}".source = hjemDotfiles.kvantumThemeDir;
         }
+        // lib.optionalAttrs (hjemDotfiles.pointerCursorTheme != null) {
+          ".icons/jcsr".source = hjemDotfiles.pointerCursorTheme;
+        }
         // lib.optionalAttrs (hjemDotfiles.pointerCursorIndex != null) {
-          ".icons/jcsr/index.theme".source = hjemDotfiles.pointerCursorIndex;
           ".icons/default/index.theme".source = hjemDotfiles.pointerCursorIndex;
         };
       };

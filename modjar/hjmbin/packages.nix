@@ -9,6 +9,7 @@
   config,
   lib,
   pkgs,
+  hasDesktop ? false,
   ...
 }:
 let
@@ -28,23 +29,24 @@ in
       fzf
       zoxide
       noogle-search # search Nix functions from CLI
+      jq # json cli (jsearch/jshot script dep)
 
       # editors (base)
     ]
-    ++ lib.optionals hjm.browsers.enable [
-      firefox
-      librewolf
-      chromium
-    ]
+    ++ lib.optionals hjm.browsers.enable (
+      (lib.optionals hjm.browsers.firefox [ firefox ])
+      ++ (lib.optionals hjm.browsers.librewolf [ librewolf ])
+      ++ (lib.optionals hjm.browsers.chromium [ chromium ])
+    )
     ++ lib.optionals hjm.terminal.enable [
       foot
       kitty
       alacritty
     ]
-    ++ lib.optionals hjm.editors.enable [
-      vscodium
-      zed
-    ]
+    ++ lib.optionals hjm.editors.enable (
+      (lib.optionals hjm.editors.vscodium.enable [ vscodium ])
+      ++ (lib.optionals hjm.editors.zed.enable [ zed-editor ])
+    )
     ++ lib.optionals hjm.editors.obsidian.enable [
       obsidian
     ]
@@ -66,9 +68,6 @@ in
     ]
     ++ lib.optionals hjm.ranger.enable [
       ranger
-    ]
-    ++ lib.optionals hjm.niri.enable [
-      nwg-drawer # full-screen app drawer launcher (Mod+D)
     ]
     ++ lib.optionals hjm.media.enable (
       (lib.optionals hjm.media.mpv [ mpv ])
@@ -171,17 +170,23 @@ in
     )
     ++ lib.optionals hjm.niri.enable [
       # niri packages
-      fuzzel
       wayshot
       wl-clipboard
       wlr-randr
       playerctl
       brightnessctl
-      ddcutil # desktop monitor brightness via DDC/CI (shelljar BrightnessService)
       libnotify
       dunst
       grim
       slurp
       wf-recorder
+    ]
+    # fuzzel launcher binary: same gate as the fuzzel dotfile module
+    ++ lib.optionals (hjm.niri.enable || hjm.hyprland.enable || hjm.launcher.enable) [
+      fuzzel
+    ]
+    # desktop monitor brightness via DDC/CI (shelljar BrightnessService)
+    ++ lib.optionals hasDesktop [
+      ddcutil
     ];
 }

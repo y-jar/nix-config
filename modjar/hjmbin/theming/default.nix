@@ -30,6 +30,7 @@ let
     gtk-theme-name=${gtkThemeName}
     gtk-icon-theme-name=${iconThemeName}
     gtk-cursor-theme-name=${cursorName}
+    gtk-cursor-theme-size=${toString hjm.theming.cursorSize}
     gtk-application-prefer-dark-theme=1
   '';
 
@@ -78,6 +79,7 @@ in
       gtkSettingsIni = settingsIni;
       inherit kvantumConfig;
       pointerCursorIndex = indexTheme;
+      pointerCursorTheme = "${cursor}/share/icons/jcsr";
       kvantumThemeDir = "${
         pkgs.catppuccin-kvantum.override {
           accent = accent;
