@@ -51,7 +51,7 @@
       gdm.enable = true; # sets GDM login manager
       hyprland.enable = false; # ~19mib - compositor only
       niri.enable = true; # ~20mib - compositor only
-      mango.enable = false; # sets mango (mangowm)
+      mango.enable = true; # sets mango (mangowm)
       cosmic = {
         enable = false; # COSMIC desktop environment
         greeter = false; # COSMIC login manager (disables GDM if enabled)
@@ -104,7 +104,7 @@
       ai = {
         enable = false; # ~2gib - llama.cpp + models (auto-downloaded via models-preset)
         llama = {
-          enable = true; # local llama.cpp (set false to use opencode/non-local only)
+          enable = false; # local llama.cpp (set false to use opencode/non-local only)
           gpu = "rocm"; # llama.cpp backend: rocm (AMD) | cuda (NVIDIA) | cpu
         };
         port = 11434;
@@ -119,7 +119,7 @@
       gaming = {
         drivers = {
           enable = true; # ~1.5gib - Vulkan + Mesa + codecs
-          amd.enable = false; # AMD specific drivers
+          amd.enable = true; # AMD specific drivers
           intel.enable = false; # Intel specific drivers
           nvidia.enable = false; # NVIDIA drivers (Vulkan + 32-bit)
         }; # end of drivers
