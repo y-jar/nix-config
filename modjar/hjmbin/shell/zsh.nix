@@ -33,6 +33,9 @@ let
     # syntax highlighting
     source ${zshSyntax}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
+    # user-local binaries (webapp launchers, user scripts)
+    export PATH="$HOME/.local/bin:$PATH"
+
     # zoxide (smart cd)
     eval "$(zoxide init zsh)"
 

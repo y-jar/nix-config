@@ -107,7 +107,7 @@ let
       [Desktop Entry]
       Type=Application
       Name=${entry.a.name}
-      Exec=webapp-${entry.slug}
+      Exec=$out/bin/webapp-${entry.slug}
       Icon=${if entry.a.icon != null then entry.a.icon else defaultIcon}
       Categories=${entry.a.category};
       Terminal=false
@@ -118,12 +118,25 @@ let
     '') builtApps
   );
 
+  # per-file entries (relative home path -> store path): hjemkey writes these
+  # individually so ~/.local/bin and ~/.local/share/applications keep
+  # user-owned content instead of being replaced by whole-dir symlinks.
+  # Exec uses the absolute store path so launching works from fuzzel/DE
+  # sessions where ~/.local/bin is not on PATH.
   result =
     if cfg.enable then
-      {
-        desktopDir = "${webappsPkg}/applications";
-        binDir = "${webappsPkg}/bin";
-      }
+      builtins.listToAttrs (
+        lib.concatMap (entry: [
+          {
+            name = ".local/share/applications/${entry.slug}.desktop";
+            value = "${webappsPkg}/applications/${entry.slug}.desktop";
+          }
+          {
+            name = ".local/bin/webapp-${entry.slug}";
+            value = "${webappsPkg}/bin/webapp-${entry.slug}";
+          }
+        ]) builtApps
+      )
     else
       null;
 in

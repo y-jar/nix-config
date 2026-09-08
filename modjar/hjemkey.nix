@@ -142,10 +142,27 @@ in
           ".config/mango/host-inputs.conf".source = hjemDotfiles.mangowm.hostInputs;
         }
         # [web app desktop entries + launchers]
-        // lib.optionalAttrs (hjemDotfiles.webapps != null) {
-          ".local/share/applications".source = hjemDotfiles.webapps.desktopDir;
-          ".local/bin".source = hjemDotfiles.webapps.binDir;
+        # per-file entries (relative path -> store file) so ~/.local/bin and
+        # ~/.local/share/applications keep user-owned content
+        // lib.optionalAttrs (hjemDotfiles.webapps != null) (
+          lib.mapAttrs' (rel: path: lib.nameValuePair rel { source = path; }) hjemDotfiles.webapps
+        )
+        # [foot terminal config]
+        // lib.optionalAttrs (hjemDotfiles.footIni != null) {
+          ".config/foot/foot.ini".source = hjemDotfiles.footIni;
         }
+        # [opencode config]
+        // lib.optionalAttrs (hjemDotfiles.opencodeJson != null) {
+          ".config/opencode/opencode.json".source = hjemDotfiles.opencodeJson;
+        }
+        // lib.optionalAttrs (hjemDotfiles.opencodeContext != null) {
+          ".config/opencode/AGENTS.md".source = hjemDotfiles.opencodeContext;
+        }
+        // lib.optionalAttrs (hjemDotfiles.opencodeAgents != null) (
+          lib.mapAttrs' (
+            name: path: lib.nameValuePair ".config/opencode/agents/${name}.md" { source = path; }
+          ) hjemDotfiles.opencodeAgents
+        )
         # [fuzzel launcher config]
         // lib.optionalAttrs (hjemDotfiles.fuzzelIni != null) {
           ".config/fuzzel/fuzzel.ini".source = hjemDotfiles.fuzzelIni;
@@ -215,5 +232,12 @@ in
       cosmicEnable = config.sysSettings.cosmic.enable or false;
       webapps = config.sysSettings.webapps; # browser-apps-as-desktop-apps (webapps.nix)
     };
+
+    # [nvf bridge]
+    # hjmSettings.editors.nvf.enable lives inside the hjem user submodule;
+    # surface it to the system-level nvf gate (modjar/sysbin/nvf) so the
+    # host's hjem.nix toggle sheet stays the source of truth.
+    sysSettings.nvf.enable =
+      config.hjem.users.${config.sysSettings.mainUser}.hjmSettings.editors.nvf.enable or false;
   };
 }

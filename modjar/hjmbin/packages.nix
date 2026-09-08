@@ -142,6 +142,15 @@ in
       gh
       lazygit
     ]
+    # ai tools (lm studio + opencode) — config files via hjmbin/ai
+    ++ lib.optionals (hjm.ai.enable && hjm.ai.opencode.enable) [
+      opencode # AI coding agent (TUI)
+      opencode-desktop # AI coding agent (desktop GUI)
+      uv # rust based python package installer (opencode dep)
+    ]
+    ++ lib.optionals (hjm.ai.enable && hjm.ai.lmstudio.enable) [
+      lmstudio # local LLM runtime (~2.3GiB)
+    ]
     ++ lib.optionals hjm.bluetooth.enable [
       blueman
     ]

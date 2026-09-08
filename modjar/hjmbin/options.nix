@@ -143,7 +143,19 @@
       japanese.enable = lib.mkEnableOption "japanese input (fcitx5 + mozc)";
       korean.enable = lib.mkEnableOption "korean input (fcitx5 + hangul)";
     };
-    ai.enable = lib.mkEnableOption "ai tools (lm studio + opencode)";
+    ai = {
+      enable = lib.mkEnableOption "ai tools (lm studio + opencode)";
+      opencode.enable = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = "Install opencode (CLI + desktop GUI) + write its config. On by default when ai.enable";
+      }; # end of ai.opencode.enable
+      lmstudio.enable = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = "Install LM Studio (~2.3GiB). Disable to keep opencode only";
+      }; # end of ai.lmstudio.enable
+    }; # end of ai
     git.enable = lib.mkEnableOption "git tools (git + gh + lazygit)";
     bluetooth.enable = lib.mkEnableOption "bluetooth (blueman)";
     fastfetch.enable = lib.mkEnableOption "fastfetch system fetch";
@@ -264,18 +276,39 @@
     };
     # [webapps/default.nix]
     webapps = lib.mkOption {
-      type = lib.types.nullOr (
-        lib.types.submodule {
-          options = {
-            desktopDir = lib.mkOption { type = lib.types.path; };
-            binDir = lib.mkOption { type = lib.types.path; };
-          };
-        }
-      );
+      type = lib.types.nullOr (lib.types.attrsOf lib.types.path);
       default = null;
       internal = true;
-      description = "Generated webapp desktop entries + launcher scripts dirs";
+      description = "Generated webapp files (relative home path -> store path)";
     }; # end of webapps
+
+    # [terminal/default.nix]
+    footIni = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      internal = true;
+      description = "Generated foot.ini (terminal look) path";
+    }; # end of footIni
+
+    # [ai/default.nix]
+    opencodeJson = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      internal = true;
+      description = "Generated opencode.json path";
+    }; # end of opencodeJson
+    opencodeContext = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      internal = true;
+      description = "Generated opencode AGENTS.md (global instructions) path";
+    }; # end of opencodeContext
+    opencodeAgents = lib.mkOption {
+      type = lib.types.nullOr (lib.types.attrsOf lib.types.path);
+      default = null;
+      internal = true;
+      description = "Generated opencode agent files (name -> path, written to ~/.config/opencode/agents/<name>.md)";
+    }; # end of opencodeAgents
 
     # [fuzzel/default.nix]
     fuzzelIni = lib.mkOption {
