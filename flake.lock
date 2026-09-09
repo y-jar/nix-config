@@ -332,11 +332,11 @@
     "pfp-jar": {
       "flake": false,
       "locked": {
-        "lastModified": 1786156174,
-        "narHash": "sha256-fwNoDxLecmSbqXRszY4dpqAv+k8bx6cQ/Ll3x2UmGhE=",
+        "lastModified": 1788923595,
+        "narHash": "sha256-VIazR+NaQQUrKkf4Mavw1mBgtf1505jGjC4b0OU1ltM=",
         "owner": "y-jar",
         "repo": "pfp-jar",
-        "rev": "63b6e7025821a4cca8bd740d9d6f783ebf5dadd2",
+        "rev": "2633619d6c2b6beb0256e2c04f828d1d5fccd954",
         "type": "github"
       },
       "original": {
@@ -440,11 +440,11 @@
     "wall-jar": {
       "flake": false,
       "locked": {
-        "lastModified": 1788918999,
-        "narHash": "sha256-I0xmfGjJLFn3tZk59FQetafpadGGli88S3P9u2IISgM=",
+        "lastModified": 1788924494,
+        "narHash": "sha256-7nnO2kHr+CVv4QbUDPWBOFnXrGnRFMMy8DkWZowtpMQ=",
         "owner": "y-jar",
         "repo": "wall-jar",
-        "rev": "11999abfccb5a104bcb4ae403a2114f2d1b77268",
+        "rev": "db25d6e8f1c192010f455e5073fd815173ce9595",
         "type": "github"
       },
       "original": {
