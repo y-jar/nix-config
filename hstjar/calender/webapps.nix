@@ -27,7 +27,6 @@
   sysSettings.webapps = {
     enable = true; # ship disabled by default; set true when you add apps below
     apps = [
-      # EXAMPLE:
       {
         name = "YouTube Music";
         url = "https://music.youtube.com";
@@ -38,7 +37,7 @@
         name = "YouTube";
         url = "https://www.youtube.com";
         mode = "pwa";
-        browser = "librewolf";
+        browser = "chromium";
       }
       {
         name = "Gmail";

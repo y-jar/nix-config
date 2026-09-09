@@ -57,46 +57,56 @@ let
   # icon-jar input / resYoink being enabled.
   defaultIcon = ./../../../resjar/imagebin/JarOnPar.png;
 
+  # Effective browser for an app: explicit override, else tabbed -> default, app/pwa -> chromium.
+  resolveBrowser =
+    a:
+    if a.browser != null then
+      a.browser
+    else if a.mode == "tabbed" then
+      defaultBrowser
+    else
+      "chromium";
+
   buildApp =
     a:
     let
-      slug = toSlug a.name;
-      browser =
-        if a.browser != null then
-          a.browser
-        else
-          (if a.mode == "tabbed" then defaultBrowser else "chromium");
+      browser = resolveBrowser a;
+      app = lib.warnIf (a.mode != "tabbed" && lib.elem browser [ "firefox" "librewolf" ]) ''
+        webapp '${a.name}' (mode '${a.mode}') uses ${browser}, which has no --app/frameless mode —
+        it will open as a regular browser window with the tab UI. Set browser = "chromium" (and
+        enable a chromium-based browser) for a true standalone app window.
+      '' a;
+      slug = toSlug app.name;
       isChromy = browser == "chromium";
       isFirefoxFamily = lib.elem browser [
         "firefox"
         "librewolf"
       ];
-      isolate = a.isolate || a.mode == "pwa";
+      isolate = app.isolate || app.mode == "pwa";
       profileDir = "$HOME/.local/share/webapps/${slug}";
       # isolation flags (only meaningful outside tabbed mode)
       isoFlags =
-        if (a.mode == "tabbed") then
+        if (app.mode == "tabbed") then
           ""
         else if isChromy && isolate then
           "--user-data-dir=\"${profileDir}\" --no-first-run"
-        else if isFirefoxFamily && (a.mode != "tabbed") then
+        else if isFirefoxFamily && (app.mode != "tabbed") then
           "--new-instance --no-remote --profile \"${profileDir}\""
         else
           "";
-      extra = lib.concatStringsSep " " a.extraArgs;
-
+      extra = lib.concatStringsSep " " app.extraArgs;
       launcher = pkgs.writeShellScriptBin "webapp-${slug}" (
-        if a.mode == "tabbed" then
+        if app.mode == "tabbed" then
           ''
-            exec ${browser} "${a.url}"
+            exec ${browser} "${app.url}"
           ''
         else if isChromy then
           ''
-            exec ${browser} --app="${a.url}" ${isoFlags} ${extra}
+            exec ${browser} --app="${app.url}" ${isoFlags} ${extra}
           ''
         else
           ''
-            exec ${browser} ${isoFlags} "${a.url}" ${extra}
+            exec ${browser} ${isoFlags} "${app.url}" ${extra}
           ''
       );
     in
@@ -104,18 +114,23 @@ let
       pkg = launcher;
       desktopItem = pkgs.makeDesktopItem {
         name = slug;
-        desktopName = a.name;
+        desktopName = app.name;
         exec = "${launcher}/bin/webapp-${slug}";
-        icon = if a.icon != null then a.icon else defaultIcon;
-        categories = [ a.category ];
+        icon = if app.icon != null then app.icon else defaultIcon;
+        categories = [ app.category ];
         type = "Application";
       };
     };
 
   apps = map buildApp cfg.apps;
+  # pwa/app webapps run chromium --app; auto-install it so picking pwa/app just works.
+  needsChromium = lib.any (a: a.mode != "tabbed" && resolveBrowser a == "chromium") cfg.apps;
 in
 lib.mkIf cfg.enable {
   # launcher scripts + their .desktop entries; the makeDesktopItem output lands
   # the desktop file in ~/.local/share/applications so fuzzel/rofi find the app.
-  home.packages = map (x: x.pkg) apps ++ map (x: x.desktopItem) apps;
+  home.packages =
+    map (x: x.pkg) apps
+    ++ map (x: x.desktopItem) apps
+    ++ lib.optionals needsChromium [ pkgs.chromium ]; # auto-install chromium for pwa/app
 }

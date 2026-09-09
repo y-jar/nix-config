@@ -54,15 +54,21 @@ let
   defaultBrowser = config.hjmSettings.browsers.default or "chromium";
   defaultIcon = ./../../../resjar/imagebin/JarOnPar.png;
 
+  # Effective browser for an app: explicit override, else tabbed -> default, app/pwa -> chromium.
+  resolveBrowser =
+    a:
+    if a.browser != null then
+      a.browser
+    else if a.mode == "tabbed" then
+      defaultBrowser
+    else
+      "chromium";
+
   mkLauncher =
     a:
     let
       slug = toSlug a.name;
-      browser =
-        if a.browser != null then
-          a.browser
-        else
-          (if a.mode == "tabbed" then defaultBrowser else "chromium");
+      browser = resolveBrowser a;
       isChromy = browser == "chromium";
       isFirefoxFamily = lib.elem browser [
         "firefox"
@@ -93,10 +99,17 @@ let
       exec ${cmd}
     '';
 
-  builtApps = map (a: {
-    inherit a;
-    slug = toSlug a.name;
-    launcher = mkLauncher a;
+  builtApps = map (a: let
+    browser = resolveBrowser a;
+    app = lib.warnIf (a.mode != "tabbed" && lib.elem browser [ "firefox" "librewolf" ]) ''
+      webapp '${a.name}' (mode '${a.mode}') uses ${browser}, which has no --app/frameless mode —
+      it will open as a regular browser window with the tab UI. Set browser = "chromium" (and
+      enable a chromium-based browser) for a true standalone app window.
+    '' a;
+  in {
+    a = app;
+    slug = toSlug app.name;
+    launcher = mkLauncher app;
   }) cfg.apps;
 
   webappsPkg = pkgs.runCommand "webapps-entries" { nativeBuildInputs = [ ]; } (
@@ -139,7 +152,13 @@ let
       )
     else
       null;
+needsChromium = lib.any (a: a.mode != "tabbed" && resolveBrowser a == "chromium") cfg.apps;
 in
 {
-  config.hjemDotfiles.webapps = result;
+  config = {
+    hjemDotfiles.webapps = result;
+    # pwa/app webapps run chromium --app; make sure it's installed even if the
+    # browsers sheet has chromium off (installing chrome is implied by picking pwa/app).
+    packages = lib.mkIf (cfg.enable && needsChromium) [ pkgs.chromium ];
+  };
 }

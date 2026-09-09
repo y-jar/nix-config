@@ -40,7 +40,7 @@
       enable = true;
       firefox = true;
       librewolf = true;
-      chromium = false;
+      chromium = true; # needed for native webapps (`--app` mode)
       default = "firefox"; # preferred browser: WM Mod+B + default mime browser
     };
     terminal = {

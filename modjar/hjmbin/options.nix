@@ -356,6 +356,8 @@
             hostInputs = lib.mkOption { type = lib.types.path; };
             jshot = lib.mkOption { type = lib.types.package; };
             jclip = lib.mkOption { type = lib.types.package; };
+            jlayout = lib.mkOption { type = lib.types.package; };
+            jbinds = lib.mkOption { type = lib.types.package; };
           }; # end of mangowm sub module options
         }
       ); # end of mangowm sub modules

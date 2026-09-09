@@ -48,6 +48,8 @@ let
 
   jshot = pkgs.writeShellScriptBin "jshot" (builtins.readFile (bin + "/jshot.sh"));
   jclip = pkgs.writeShellScriptBin "jclip" (builtins.readFile (bin + "/jclip.sh"));
+  jlayout = pkgs.writeShellScriptBin "jlayout" (builtins.readFile (bin + "/jlayout.sh"));
+  jbinds = pkgs.writeShellScriptBin "jbinds" (builtins.readFile (bin + "/jbinds.sh"));
 in
 {
   options = {
@@ -60,6 +62,8 @@ in
       with pkgs; [
         jshot # wayland screenshot tool (region/screen/window) via grim+slurp+swappy
         jclip # clipboard history menu (cliphist + fuzzel)
+        jlayout # toggle current tag between scroller and vertical_scroller (SUPER+CTRL+Slash)
+        jbinds # keybind cheat sheet overlay in foot (SUPER+SHIFT+Slash)
         grim # wayland screenshot capture
         slurp # wayland region select for grim
         swappy # wayland screenshot annotation
@@ -85,6 +89,8 @@ in
       hostInputs = targetConfSource;
       jshot = jshot;
       jclip = jclip;
+      jlayout = jlayout;
+      jbinds = jbinds;
     };
   }; # end of config
 }

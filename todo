@@ -7,3 +7,19 @@ apps tow work:
 web app integration
 speechnote # translator?
 fuck
+
+"" whisper's window picker to add a window to hide, migrate to mango
+hl.bind("SUPER + PERIOD", function()
+  local win = hl.get_active_window()
+  if not win then return end
+  hl.dispatch(hl.dsp.window.tag({ tag = "hidden", window = win }))
+end)
+
+hl.window_rule({
+  match = {
+    tag = "hidden",
+  },
+  border_color = "#ff0d2d #ff0d2d",
+  no_screen_share = true,
+})
+""

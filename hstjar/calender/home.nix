@@ -55,7 +55,7 @@
         enable = true; # sets firefox and librewolf [work and personal]
         firefox = true; # disables firefox [work]
         librewolf = true; # enables librewolf [personal] [the default is `true`]
-        chromium = false; # enables chromium [personal] [the default is `true`]
+        chromium = true; # enables chromium [needed for native webapps (`--app` mode)]
         default = "firefox"; # preferred browser: WM Super+B + default mime browser
       }; # end of browsers
       terminal.enable = true; # sets terminal as foot
