@@ -16,50 +16,52 @@
     niri = {
       enable = true;
       shelljar = {
-        enable = false; # my quickshell island shell
+        enable = true; # my quickshell island shell
       };
       noctalia = {
-        enable = true; # noctalia desktop shell
+        enable = false; # noctalia desktop shell
       };
     };
-    mango.enable = false; # mango (mangowm)
-    # NOTE: home.nix also ships a niri-refresh-on-battery systemd user service
-    # (eDP-1 48Hz on battery / 120Hz on AC) — not yet ported to hjmbin.
+    mango = {
+      enable = true; # mango (mangowm) — the compositor calender runs
+      shelljar = {
+        enable = true; # my quickshell island shell (binds.conf is all shjctl)
+      };
+    };
     launcher.enable = true;
     theming = {
       enable = true;
       flavor = "mocha";
       accent = "blue";
-      cursorSize = 36;
+      cursorSize = 48;
     };
 
     browsers = {
       enable = true;
-      firefox = false;
+      firefox = true;
       librewolf = true;
-      chromium = true;
-      default = "librewolf"; # preferred browser: WM Mod+B + default mime browser
+      chromium = true; # needed for native webapps (`--app` mode)
+      default = "firefox"; # preferred browser: WM Mod+B + default mime browser
     };
     terminal = {
       enable = true;
-      font = "IntoneMono Nerd Font"; # options: "IntoneMono Nerd Font" "Monocraft" "Miracode"
-      fontSize = 14;
+      font = "Monocraft"; # options: "IntoneMono Nerd Font" "Monocraft" "Miracode"
+      fontSize = 16;
     };
-    # syncthing: home-manager only (modjar/usrbin/syncthing.nix) — no hjmbin port yet, skipped here.
     editors = {
       enable = true;
       vscodium.enable = true;
       zed.enable = true;
       obsidian.enable = true;
       nvf.enable = true;
-      helix.enable = true;
+      helix.enable = false;
     };
     chatApps = {
       enable = true;
       discord.enable = true;
       halloy.enable = false;
     };
-    espanso = (import ../espansoconf.nix { enable = false; }); # espanso text expander
+    espanso = (import ../espansoconf.nix { }); # espanso text expander
     flatpak.enable = false;
     nautilus.enable = true;
     yazi.enable = true;
@@ -68,8 +70,8 @@
       enable = true;
       mpv = true;
       downloaders = true;
-      musicApps = true;
-      audioEditor = true;
+      musicApps = false;
+      audioEditor = false;
       viewers = true;
       defaultApps = true;
     };
@@ -80,8 +82,8 @@
     };
 
     art = {
-      enable = false;
-      imageTools = false;
+      enable = true;
+      imageTools = true;
       threeD = false;
       astronomy = false;
     };
@@ -94,20 +96,20 @@
     ai = {
       enable = true; # sets AI tools like opencode, llama.cpp
       opencode.enable = true; # opencode CLI + GUI (keep even if local llama is off)
-      lmstudio.enable = true; # LM Studio (~2.3GiB) — set false to save space
+      lmstudio.enable = false; # LM Studio (~2.3GiB) — set false to save space
     };
     dictation.enable = false;
     git.enable = true;
-    bluetooth.enable = true;
+    bluetooth.enable = false;
     fastfetch.enable = true;
     dev = {
-      enable = false;
+      enable = true;
       dotnet = false;
       node = false;
       cc = false;
       go = false;
-      nixTools = false;
-      sqlTools = false;
+      nixTools = true;
+      sqlTools = true;
     };
 
     resYoink = {
@@ -115,7 +117,7 @@
       wallpapers = true;
       icons = true;
       profilePictures = true;
-      minecraftSkins = false;
+      minecraftSkins = true;
     };
   };
 }

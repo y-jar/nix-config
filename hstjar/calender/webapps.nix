@@ -42,7 +42,7 @@
       {
         name = "Gmail";
         url = "https://mail.google.com";
-        mode = "tabbed";
+        mode = "pwa";
       }
     ]; # end of apps
   }; # end of sysSettings.webapps

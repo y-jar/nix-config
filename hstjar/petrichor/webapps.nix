@@ -17,15 +17,21 @@
     enable = true;
     apps = [
       {
+        name = "YouTube Music";
+        url = "https://music.youtube.com";
+        mode = "pwa";
+        browser = "chromium";
+      }
+      {
         name = "YouTube";
         url = "https://www.youtube.com";
         mode = "pwa";
-        browser = "librewolf";
+        browser = "chromium";
       }
       {
         name = "Gmail";
         url = "https://mail.google.com";
-        mode = "tabbed";
+        mode = "pwa";
       }
       {
         name = "Proton Mail";
