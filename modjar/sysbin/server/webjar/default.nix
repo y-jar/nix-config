@@ -51,7 +51,7 @@ in
 
     system.activationScripts.webjar = ''
       mkdir -p /var/lib/webjar
-      cp ${webroot}/index.html ${webroot}/style.css ${webroot}/script.js ${webroot}/JarOnPar.png /var/lib/webjar/
+      cp ${webroot}/index.html ${webroot}/support.html ${webroot}/style.css ${webroot}/script.js ${webroot}/JarOnPar.png /var/lib/webjar/
     ''; # End of activation script
   }; # End of config
 }

@@ -1,0 +1,365 @@
+/* reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* particles canvas fixed behind all content */
+#particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* page layout */
+body {
+    font-family:
+        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+    background: #1a1a1a;
+    color: #e0e0e0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem;
+}
+
+/* header */
+h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #d79921;
+    margin-bottom: 0.25rem;
+}
+
+.subtitle {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+.subtitle a {
+    color: #d79921;
+    text-decoration: none;
+}
+
+.subtitle a:hover {
+    text-decoration: underline;
+}
+
+/* sections */
+.section {
+    width: 100%;
+    max-width: 1100px;
+    margin-bottom: 2.5rem;
+}
+
+.section h2 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #d79921;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+}
+
+.section h2 .count {
+    font-size: 0.75rem;
+    color: #666;
+    font-weight: 400;
+}
+
+/* brief description */
+.intro-text {
+    max-width: 760px;
+    margin: 0 auto 2.5rem;
+    font-size: 0.9rem;
+    color: #999;
+    line-height: 1.6;
+    text-align: center;
+}
+
+/* card grid responsive, wraps on small screens */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+}
+
+/* narrower standalone grid (support page) */
+.grid.support-grid {
+    width: 100%;
+    max-width: 900px;
+}
+
+/* individual card */
+.card {
+    background: #242424;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 1.25rem;
+    text-decoration: none;
+    color: inherit;
+    transition:
+        border-color 0.2s,
+        background 0.2s;
+}
+
+.card:hover {
+    border-color: #d79921;
+    background: #2a2a2a;
+}
+
+.card-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.card-icon svg {
+    display: block;
+}
+
+.card-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #e0e0e0;
+    margin-bottom: 0.25rem;
+}
+
+.card-desc {
+    font-size: 0.8rem;
+    color: #888;
+    line-height: 1.4;
+}
+
+/* host label at bottom of card */
+.card-host {
+    font-size: 0.7rem;
+    color: #555;
+    margin-top: 0.5rem;
+}
+
+/* screenshot mini thumbs */
+.grid.shots {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+
+.grid.shots .card {
+    padding: 0;
+    overflow: hidden;
+    cursor: pointer;
+    transition:
+        border-color 0.2s,
+        transform 0.2s,
+        box-shadow 0.2s;
+}
+
+.grid.shots .card:hover {
+    border-color: #d79921;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 14px rgba(215, 153, 33, 0.15);
+}
+
+.grid.shots .card img {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s;
+}
+
+.grid.shots .card:hover img {
+    transform: scale(1.03);
+}
+
+.card .card-cap {
+    font-size: 0.68rem;
+    color: #888;
+    padding: 0.45rem 0.6rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* lightbox hidden by default, shown via the .open class */
+.lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 10, 10, 0.92);
+    z-index: 100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+}
+
+.lightbox.open {
+    display: flex;
+}
+
+.lightbox-inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    max-width: min(1500px, 95vw);
+    max-height: 95vh;
+    overflow: auto;
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 5;
+    background: #242424;
+    color: #e0e0e0;
+    border: 1px solid #333;
+    border-radius: 6px;
+    width: 2rem;
+    height: 2rem;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.lightbox-close:hover {
+    border-color: #d79921;
+    color: #d79921;
+}
+
+#lightbox-img {
+    max-width: 100%;
+    max-height: 72vh;
+    object-fit: contain;
+    border-radius: 6px;
+    border: 1px solid #333;
+    background: #000;
+}
+
+.lightbox-meta {
+    width: 100%;
+    background: #242424;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+}
+
+.lightbox-meta .card-name {
+    font-size: 0.95rem;
+    color: #e0e0e0;
+    margin-bottom: 0.35rem;
+    word-break: break-word;
+}
+
+.download {
+    display: inline-block;
+    text-decoration: none;
+    font-size: 0.85rem;
+    color: #d79921;
+    border: 1px solid #d79921;
+    border-radius: 6px;
+    padding: 0.45rem 1rem;
+    transition:
+        background 0.2s,
+        color 0.2s;
+}
+
+.download:hover {
+    background: #d79921;
+    color: #1a1a1a;
+}
+
+/* shell command table */
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    background: #242424;
+    border: 1px solid #333;
+    border-radius: 8px;
+}
+
+.shell-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.shell-table th {
+    text-align: left;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #d79921;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.75rem 0.9rem;
+    border-bottom: 1px solid #333;
+}
+
+.shell-table td {
+    padding: 0.6rem 0.9rem;
+    border-bottom: 1px solid #2a2a2a;
+    color: #aaa;
+    vertical-align: top;
+}
+
+.shell-table tr:last-child td {
+    border-bottom: none;
+}
+
+.shell-table tbody tr:hover td {
+    background: #2a2a2a;
+}
+
+.shell-table td:first-child {
+    white-space: nowrap;
+}
+
+code {
+    font-family: monospace;
+    font-size: 0.85em;
+    color: #d79921;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 4px;
+    padding: 0.1rem 0.45rem;
+}
+
+/* dev tools line */
+.dev-tools {
+    font-size: 0.8rem;
+    color: #666;
+    margin-bottom: 1rem;
+}
+
+/* footer */
+footer {
+    margin-top: 3rem;
+    font-size: 0.7rem;
+    color: #444;
+}
+
+footer a {
+    color: #666;
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: #d79921;
+}
+
+/* mobile */
+@media (max-width: 768px) {
+    .grid.shots {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+    #lightbox-img {
+        max-height: 60vh;
+    }
+}

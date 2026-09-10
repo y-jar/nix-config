@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>jar's nix-config</title>
+        <link rel="icon" href="resjar/imagebin/JarOnPar.png" />
+        <link rel="stylesheet" href="style.css?v=1" />
+    </head>
+    <body>
+        <!-- floating particles background -->
+        <canvas id="particles"></canvas>
+
+        <h1>jar's nix-config</h1>
+        <p class="subtitle">
+            NixOS in a Jar &#10052; · flake showcase · click shots to enlarge ·
+            <a href="support.html">support</a>
+        </p>
+
+        <!-- brief description -->
+        <p class="intro-text">
+            Hi! I am Jar (or Park if you hip). And this is my NixOS
+            configuration centered around homelabing and personal use. This is
+            constantly being updated and improved. Much love!
+        </p>
+
+        <!-- core functionality cards -->
+        <section class="section">
+            <h2>Core Functionality <span class="count">· 4</span></h2>
+            <div class="grid">
+                <a
+                    class="card"
+                    href="https://github.com/y-jar/nix-config/blob/main/README.md"
+                >
+                    <div class="card-icon">&#9776;</div>
+                    <div class="card-name">Apps</div>
+                    <div class="card-desc">
+                        Everything toggled per host with simple true/false
+                        sheets: Hyprland(L), Niri, GNOME, Cinnamon, terminals,
+                        editors, browsers, creative and gaming stacks.
+                    </div>
+                    <div class="card-host">system.nix / user.nix</div>
+                </a>
+
+                <a
+                    class="card"
+                    href="https://github.com/y-jar/nix-config/blob/main/shell.nix"
+                >
+                    <div class="card-icon">&#9881;</div>
+                    <div class="card-name">Functions</div>
+                    <div class="card-desc">
+                        One-command workflow: nh-powered deploys, host
+                        scaffolding via hardto, clean commits, and generation
+                        cleanup.
+                    </div>
+                    <div class="card-host">shell.nix / zsh module</div>
+                </a>
+
+                <a
+                    class="card"
+                    href="https://github.com/y-jar/nix-config/blob/main/resjar/docbin/directory-key.md"
+                >
+                    <div class="card-icon">&#9636;</div>
+                    <div class="card-name">Codebase</div>
+                    <div class="card-desc">
+                        Flake-driven layout: hstjar/ per-host configs, modjar/
+                        shared sysSettings + usrSettings modules, resjar/
+                        resources.
+                    </div>
+                    <div class="card-host">flake.nix</div>
+                </a>
+
+                <a
+                    class="card"
+                    href="https://github.com/y-jar/nix-config/blob/main/resjar/docbin/opencode-ai.md"
+                >
+                    <div class="card-icon">&#9825;</div>
+                    <div class="card-name">AI Disclaimer</div>
+                    <div class="card-desc">
+                        Parts of this config were tinkered with using AI,
+                        always with human review. All code is read and
+                        understood before it lands. Human-first config &lt;3
+                    </div>
+                    <div class="card-host">used with human review</div>
+                </a>
+            </div>
+        </section>
+
+        <!-- screenshots -->
+        <section class="section">
+            <h2>Screenshots <span class="count" id="count-shots"></span></h2>
+            <div class="grid shots" id="grid-shots"></div>
+        </section>
+
+        <!-- lightbox -->
+        <div id="lightbox" class="lightbox" hidden>
+            <div class="lightbox-inner">
+                <button
+                    id="lightbox-close"
+                    class="lightbox-close"
+                    aria-label="close"
+                >
+                    &#10005;
+                </button>
+                <img id="lightbox-img" alt="" />
+                <div class="lightbox-meta">
+                    <div class="card-name" id="lightbox-name"></div>
+                    <a id="lightbox-dl" class="download" href="#"
+                        >&#8681; Download</a
+                    >
+                </div>
+            </div>
+        </div>
+
+        <!-- shell stuff -->
+        <section class="section">
+            <h2>Shell Stuff</h2>
+            <div class="table-wrap">
+                <table class="shell-table">
+                    <thead>
+                        <tr>
+                            <th>Command</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>nhs</code></td>
+                            <td>
+                                deploy system config: <code>nh os switch</code>,
+                                auto-detects the active host
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><code>nht</code></td>
+                            <td>
+                                test a build without writing to the bootloader
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><code>hms</code></td>
+                            <td>deploy the home-manager profile only</td>
+                        </tr>
+                        <tr>
+                            <td><code>nhc</code></td>
+                            <td>clean old generations, keep the last 7</td>
+                        </tr>
+                        <tr>
+                            <td><code>jc "message"</code></td>
+                            <td>
+                                auto-commit handler that joins multi-word
+                                messages cleanly
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><code>nrs</code> / <code>nrt</code></td>
+                            <td>
+                                hard rebuild fallback:
+                                <code>nixos-rebuild switch/test</code> via sudo
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><code>hardto &lt;host&gt;</code></td>
+                            <td>
+                                (installer shell only) scaffold a fresh host
+                                profile from 0_TEMPLATE with the live hardware
+                                configs
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><code>jnconf</code></td>
+                            <td>
+                                jump to the config dir:
+                                <code>cd ~/nix-config</code>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><code>jars</code></td>
+                            <td>
+                                pull the latest config:
+                                <code>git pull --rebase origin main</code>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><code>ff</code></td>
+                            <td>fastfetch system info</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <code>nv</code> / <code>zd</code> /
+                                <code>code</code>
+                            </td>
+                            <td>editor shortcuts nvim / zeditor / codium</td>
+                        </tr>
+                        <tr>
+                            <td><code>chkhrd</code></td>
+                            <td>
+                                storage check:
+                                <code>lsblk &amp;&amp; fdisk -l</code>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><code>,</code></td>
+                            <td>
+                                quick nix-shell: <code>, git curl</code> for
+                                interactive, <code>, git curl -- ls</code> for
+                                one-shot
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- dev section -->
+        <section class="section">
+            <h2>Dev <span class="count">· 4</span></h2>
+            <p class="dev-tools">
+                dev tools: OpenCode · Lazygit · dotnet · Python · Node ·
+                GCC · Go
+            </p>
+            <div class="grid">
+                <a
+                    class="card"
+                    href="https://github.com/y-jar/nix-config/blob/main/resjar/docbin/dev-key.md"
+                >
+                    <div class="card-icon">&#10022;</div>
+                    <div class="card-name">Dev Key</div>
+                    <div class="card-desc">
+                        Index of all development docs where everything
+                        dev-related lives.
+                    </div>
+                    <div class="card-host">resjar/docbin</div>
+                </a>
+
+                <a
+                    class="card"
+                    href="https://github.com/y-jar/nix-config/blob/main/resjar/docbin/dev-goals.md"
+                >
+                    <div class="card-icon">&#9733;</div>
+                    <div class="card-name">Dev Goals</div>
+                    <div class="card-desc">
+                        Notes, goals, and working projects per system and
+                        compositor.
+                    </div>
+                    <div class="card-host">resjar/docbin</div>
+                </a>
+
+                <a
+                    class="card"
+                    href="https://github.com/y-jar/nix-config/blob/main/resjar/docbin/adding-modules.md"
+                >
+                    <div class="card-icon">&#10010;</div>
+                    <div class="card-name">Adding Modules</div>
+                    <div class="card-desc">
+                        How to wire new NixOS modules into the flake.
+                    </div>
+                    <div class="card-host">resjar/docbin</div>
+                </a>
+
+                <a
+                    class="card"
+                    href="https://github.com/y-jar/nix-config/blob/main/resjar/docbin/add-new-config-guide.md"
+                >
+                    <div class="card-icon">&#10001;</div>
+                    <div class="card-name">New Config Guide</div>
+                    <div class="card-desc">
+                        Step-by-step for adding a new host config from
+                        0_TEMPLATE.
+                    </div>
+                    <div class="card-host">resjar/docbin</div>
+                </a>
+            </div>
+        </section>
+
+        <footer>
+            hosted on
+            <a href="https://github.com/y-jar/nix-config">nix-config</a> via
+            github pages · <a href="support.html">support</a>
+        </footer>
+
+        <!-- particles + lightbox -->
+        <script src="script.js?v=1"></script>
+    </body>
+</html>
