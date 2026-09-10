@@ -161,6 +161,7 @@
     fastfetch.enable = lib.mkEnableOption "fastfetch system fetch";
     dev = {
       enable = lib.mkEnableOption "dev tools (master toggle)";
+      python = lib.mkEnableOption "python (pyenv + pip)";
       dotnet = lib.mkEnableOption "dotnet (C#/.NET) SDK";
       node = lib.mkEnableOption "nodejs (JS/TS runtime)";
       cc = lib.mkEnableOption "gcc (C/C++ compiler)";

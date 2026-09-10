@@ -155,7 +155,15 @@ in
       blueman
     ]
     ++ lib.optionals hjm.dev.enable (
-      (lib.optionals hjm.dev.dotnet [
+      (lib.optionals hjm.dev.python [
+        python311
+        uv
+        gcc
+        zlib
+        openssl
+        direnv
+      ])
+      ++ (lib.optionals hjm.dev.dotnet [
         dotnet-sdk_8
       ])
       ++ lib.optionals hjm.dev.node [
