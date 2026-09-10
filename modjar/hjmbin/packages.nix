@@ -156,7 +156,7 @@ in
     ]
     ++ lib.optionals hjm.dev.enable (
       (lib.optionals hjm.dev.python [
-        python311
+        python3
         uv
         gcc
         zlib

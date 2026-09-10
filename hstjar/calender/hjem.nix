@@ -104,6 +104,7 @@
     fastfetch.enable = true;
     dev = {
       enable = true;
+      python = true;
       dotnet = false;
       node = false;
       cc = false;
