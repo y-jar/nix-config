@@ -5,10 +5,8 @@
 # -=-=-=-=-=-=-=-=-=-=-=
 # goal: Shared zsh alias set (single source of truth).
 # -=-=-=-=-=-=-=-=-=-=-=
-# Consumed by BOTH shell backends so home-manager and hjem hosts get
-# the exact same aliases:
-#   - juajar/liijar/zsh/hm.nix     (home-manager: programs.zsh.shellAliases)
-#   - juajar/liijar/zsh/hjem.nix   (hjem: generated `alias k=v` lines)
+# Consumed by the zsh module so every host gets the exact same aliases:
+#   - juajar/liijar/zsh/default.nix (generated `alias k=v` lines)
 # Takes `hostnm` so per-host rebuild aliases target the right system.
 # -=-=-=-=-=-=-=-=-=-=-=
 { hostnm }:

@@ -25,7 +25,7 @@
     # Fill this out!
     sysset = {
       # =============[users]
-      mainUser = "PLEASECHANGEME_USERNAME"; # primary user (gets home-manager)
+      mainUser = "PLEASECHANGEME_USERNAME"; # primary user (gets hjem)
       users = [ "PLEASECHANGEME_USERNAME" ]; # all users (main + any guests)
       adminUsers = [ "PLEASECHANGEME_USERNAME" ]; # users with sudo access
       userDescriptions = {

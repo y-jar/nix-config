@@ -24,7 +24,7 @@
     # Fill this out!
     sysset = {
       # =============[users]
-      mainUser = "jar"; # primary user (gets home-manager)
+      mainUser = "jar"; # primary user (gets hjem)
       users = [ "jar" ]; # all users (main + any guests)
       adminUsers = [ "jar" ]; # users with sudo access
       userDescriptions = {

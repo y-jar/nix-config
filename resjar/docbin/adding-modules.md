@@ -15,23 +15,20 @@ Here is an example of adding a module to the flake.nix file *(with a fair amount
   #   they're just downloaded.
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05"; # this sets the nixpkgs version
-    home-manager = {
-        url = "github:nix-community/home-manager/release-26.05"; # this grabs a specific release of home-manager
-        inputs.nixpkgs.follows = "nixpkgs"; # tells HM to reuse YOUR nixpkgs, not download its own
-    }; # end of home-manager
+    hjem.url = "github:feel-co/hjem"; # the user backend (manages dotfiles + user packages)
   }; # end of inputs
 
   # within a outputs set, you can define the specific outputs from your inputs. 
-  #   when declaring specific things like `nixpkgs` or `home-manager`, you can use said 
+  #   when declaring specific things like `nixpkgs` or `hjem`, you can use said 
   #   specific inputs to configure them to preform functions within your flake.
   outputs = { 
     self, 
     nixpkgs, 
-    # home-manager 
+    # hjem
     # This is commented out to state that we can still use it, but it will not 
-    #   be used in this flake, but later on in the system like in the system entry. As it is 
-    #   commented out, it will still be avalible because it is within the inputs set. 
-    #   And inputs is inherited within the modules list below within `YouNameAConfigurationHere`.
+    #   be used in this flake directly, but later on in the system entry (hjemkey). 
+    #   As it is commented out, it will still be avalible because it is within 
+    #   the inputs set. And inputs is inherited within the modules list below.
   }@inputs: # `@inputs` captures the entire inputs set, so you can use it within the configuration below.
     {
       # this is where you define your nixos configurations like hardware specifications, packages, and other settings if you want.
@@ -54,56 +51,44 @@ Here is an example of adding a module to the flake.nix file *(with a fair amount
 }
 ```
 
-after it is done, if you configure Home Manager this is what you need to do:
+in this repo the user side is handled by hjem (home-manager is long gone). the wiring lives in one place `juajar/hjemkey.nix` which imports the hjem NixOS module and points it at the app tree:
 ```nix
-# example file
+# (the real thing, simplified from juajar/hjemkey.nix)
 {
-  pkgs,
-  inputs,
-  hostnm,
-  ...
-}:
-{
-  imports = [
-    inputs.home-manager.nixosModules.home-manager # Pull in home-manager module
-  ];
+  imports = [ inputs.hjem.nixosModules.default ]; # pull hjem in
 
-  # home-manager
-  home-manager = {
-    useGlobalPkgs = true;
-    useUserPackages = true;
-    backupFileExtension = "backup";
-
-    # Passes my inputs
-    extraSpecialArgs = {
-      # inside is where you inherit any important inputs or varibles like my hostname 
-      #   and any other important settings you want to pass to home-manager
-      inherit inputs; # sends the entire inputs set over as a single argument to home-manager and all inputs you placed in it.
-    };
-    users = {
-      jar = import ./path/to/user.nix; # user entry
+  config = {
+    hjem = {
+      clobberByDefault = true; # hjem overwrites conflicting files instead of backing them up
+      extraModules = [
+        ../juajar/liijar # the app tree (auto-imported)
+        ../hstjar/''${hostnm}/user.nix # the host's toggle sheet
+      ];
+      users.''${mainUser} = {
+        enable = true;
+        directory = "/home/''${mainUser}";
+        # .profile = dirSetup lines + the hjem environment (packages, sessionVariables)
+      };
     };
   };
 }
 ```
-
+hjem modules are evaluated *inside* the user submodule, so an app module writes `packages` and `files."~/.config/app/config".source` directly no home.* / programs.* anything.
 
 ## Adding an app to the jar (the modern way)
 
-since the big reorg, user-level apps live in ONE tree: [juajar/liijar/](../../juajar/liijar). every app gets a dir with up to three files, and both backends (home-manager + hjem) read the same app:
+since the big reorg, user-level apps live in ONE tree: [juajar/liijar/](../../juajar/liijar). every app is one dir with a single module file, the same shape as sysjar:
 
 ```
 juajar/liijar/<app>/
-  shared.nix   # the app's data: packages + generated files (single source)
-  hm.nix       # home-manager adapter (home.packages, home.file, programs.*)
-  hjem.nix     # hjem adapter (packages, files."...".source)
+  default.nix   # the module: toggle gates + packages + generated config files
 ```
 
-**cowsay is the commented reference example** read [juajar/liijar/cowsay/](../../juajar/liijar/cowsay), every file explains itself + the gotchas. the short version:
+**cowsay is the commented reference example** read [juajar/liijar/cowsay/](../../juajar/liijar/cowsay), it explains itself + the gotchas. the short version:
 
 1. `juajar/liijar/options.nix` declare your toggle (`usrset.<app>.enable = ...`) there and ONLY there
-2. copy `cowsay/` to `liijar/<app>/`, put your packages in `shared.nix`
+2. copy `cowsay/` to `liijar/<app>/`, put your packages in `default.nix`
 3. flip the toggle in the host's `hstjar/<host>/user.nix`
-4. done both `liijar/hm.nix` and `liijar/hjem.nix` auto-import the app. no registration, no key edits
+4. done `liijar/default.nix` auto-imports every app dir. no registration, no key edits
 
-gotchas the example comments cover: `//` does not compose `lib.mkIf` (use `lib.mkMerge`), programs.* wraps binaries (filter raw pkgs out on the hm side), hjem has no programs.*/user units (write unit files + the dirSetup bus).
+gotchas the example comments cover: `//` does not compose `lib.mkIf` (use `lib.mkMerge`), hjem config files are read-only store symlinks (self-saving apps can't persist), no user systemd units (write the unit file + the dirSetup bus), need a system service? that's sysjar territory.

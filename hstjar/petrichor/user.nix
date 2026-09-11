@@ -3,7 +3,7 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Host petrichor: user toggle sheet (usrset) shared by home-manager and hjem.
+# goal: Host petrichor: user toggle sheet (usrset).
 # (kwaytea's Pewta)
 # -=-=-=-=-=-=-=-=-=-=-=
 {
@@ -16,7 +16,6 @@
 
 {
   usrset = {
-    stateVersion = "26.05"; # [CHANGE THIS]
     name = "kway"; # [CHANGE THIS] for git
     email = "kwayckyle@gmail.com"; # [CHANGE THIS] for git
 

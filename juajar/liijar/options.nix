@@ -6,21 +6,15 @@
 # goal: The usrset toggle sheet single source of truth for user options.
 # -=-=-=-=-=-=-=-=-=-=-=
 # =-=-=[liijar/options.nix] =-=-=
-# Declares every `usrset.*` option ONCE. Imported by BOTH user backends:
-#   - juajar/homekey.nix  (into the home-manager user scope)
-#   - juajar/hjemkey.nix  (into the hjem user scope)
-# Hosts set their values in hstjar/<host>/user.nix; app modules in liijar
-# (and later liijar) read them. Never declare usrset options anywhere else.
+# Declares every `usrset.*` option ONCE. Auto-imported by liijar/default.nix
+# into the hjem user scope (via hjemkey). Hosts set their values in
+# hstjar/<host>/user.nix; the app modules read them. Never declare usrset
+# options anywhere else.
 # =-=-=[end liijar/options.nix] =-=-=
 { lib, pkgs, ... }:
 {
   options.usrset = {
     # [core]
-    stateVersion = lib.mkOption {
-      type = lib.types.str;
-      default = "26.05";
-      description = "home-manager stateVersion (consumed by homekey; ignored by hjem)";
-    };
     name = lib.mkOption {
       type = lib.types.str;
       default = "";
@@ -149,7 +143,7 @@
         description = "Terminal font size";
       };
     };
-    syncthing.enable = lib.mkEnableOption "syncthing (home-manager backend only)";
+    syncthing.enable = lib.mkEnableOption "syncthing (bridged to the system service, runs as mainUser)";
     editors = {
       enable = lib.mkEnableOption "editors";
       vscodium.enable = lib.mkEnableOption "vscodium";

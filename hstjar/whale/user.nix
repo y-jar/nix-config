@@ -3,7 +3,7 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Host whale: user toggle sheet (usrset) shared by home-manager and hjem.
+# goal: Host whale: user toggle sheet (usrset).
 # (server system mostly headless)
 # -=-=-=-=-=-=-=-=-=-=-=
 {
@@ -16,7 +16,6 @@
 
 {
   usrset = {
-    stateVersion = "26.05"; # [CHANGE THIS]
     name = "y-jar"; # [CHANGE THIS] for git
     email = "park.7qs@gmail.com"; # [CHANGE THIS] for git
 

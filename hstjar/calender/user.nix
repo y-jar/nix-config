@@ -3,9 +3,9 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Host calender: user toggle sheet (usrset) shared by home-manager and hjem.
+# goal: Host calender: user toggle sheet (usrset).
 # -=-=-=-=-=-=-=-=-=-=-=
-# This is the USER configuration file for this host (one sheet, both backends).
+# This is the USER configuration file for this host (one sheet).
 # - Each option below is a toggle: enable only what you need.
 # - Keep `shell.enable` true it's the default shell for most systems.
 # - WM toggles mirror the system sheet (./system.nix) via the *Enable args.
@@ -20,7 +20,6 @@
 
 {
   usrset = {
-    stateVersion = "26.05"; # [CHANGE THIS]
     name = "y-jar"; # [CHANGE THIS] for git
     email = "park.7qs@gmail.com"; # [CHANGE THIS] for git
 

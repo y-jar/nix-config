@@ -3,7 +3,7 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Host 0_MINIMAL: lean user toggle sheet (usrset) shared by both backends.
+# goal: Host 0_MINIMAL: lean user toggle sheet (usrset).
 # -=-=-=-=-=-=-=-=-=-=-=
 # Bare essentials: shell + terminal + a browser + opencode (non-local AI).
 # Heavy groups (editors, chat, media, art, office, dev, gaming) default OFF.
@@ -18,7 +18,6 @@
 
 {
   usrset = {
-    stateVersion = "HomeManagerVersionNumber"; # [CHANGE THIS]
     name = "PLEASECHANGEME_NAME"; # [CHANGE THIS] for git
     email = "PLEASECHANGEME_EMAIL"; # [CHANGE THIS] for git
 

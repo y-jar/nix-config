@@ -3,7 +3,7 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Host candle: user toggle sheet (usrset) shared by home-manager and hjem.
+# goal: Host candle: user toggle sheet (usrset).
 # -=-=-=-=-=-=-=-=-=-=-=
 {
   hyprlandEnable,
@@ -15,7 +15,6 @@
 
 {
   usrset = {
-    stateVersion = "26.05"; # [CHANGE THIS]
     name = "y-jar"; # [CHANGE THIS] for git
     email = "park.7qs@gmail.com"; # [CHANGE THIS] for git
 

@@ -3,33 +3,32 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: hjem entry: imports hjem/nvf + host user.nix + liijar hjem entry, sets specialArgs.
+# goal: hjem entry: imports hjem/nvf + liijar + host user.nix, sets specialArgs.
 # -=-=-=-=-=-=-=-=-=-=-=
 # =-=-=[hjemkey.nix] =-=-=
-# Hjem entry point. Sets up Hjem (alternative to HM)
-# for the main user. This file ONLY holds the overarching settings:
+# Hjem entry point. Hjem is THE user backend (home-manager is gone). This
+# file ONLY holds the overarching settings:
 #
 #   - Hjem + NixOS module imports
 #   - Global hjem settings (clobberByDefault)
-#   - extraModules loading (liijar options + liijar hjem entry + host user.nix)
+#   - extraModules loading (liijar auto-import + host user.nix)
 #   - The .profile (dirSetup bootstrap + hjem environment loadEnv)
-#   - specialArgs (feature flags for liijar hjem modules)
-#   - The nvf bridge (usrset.editors.nvf -> sysset.nvf)
+#   - specialArgs (feature flags for liijar modules)
+#   - The bridges (usrset.editors.nvf -> sysset.nvf,
+#                   usrset.syncthing -> sysset.syncthing)
 #
 # What goes in hstjar/<host>/user.nix:
-#   - Per-host toggle switches (usrset.*) shared with the home-manager backend
+#   - Per-host toggle switches (usrset.*)
 #
 # What goes in juajar/liijar/:
-#   - The actual app modules. Every liijar/<app>/hjem.nix is auto-imported by
-#     juajar/liijar/hjem.nix (below), along with the .profile dirSetup bus.
-#     Modules are evaluated INSIDE the hjem user submodule, so they write
-#     dotfiles directly:
+#   - The app modules. liijar/default.nix auto-imports every app dir's
+#     default.nix (plus options.nix + profile-bus.nix at the root). Modules
+#     are evaluated INSIDE the hjem user submodule, so they write dotfiles
+#     directly:
 #       files."~/.config/app/config".source = <generated>;
 #       packages = [ ... ];
-#     New app = drop a dir in liijar/<app>/ with an hm.nix and/or hjem.nix.
+#     New app = copy liijar/cowsay (the commented reference example).
 #     No central wiring needed.
-#   - liijar/options.nix declares the usrset sheet (shared backend-agnostic).
-#   - package configs, sysmlinks for resources within resjar/
 # =-=-=[end hjemkey.nix] =-=-=
 
 {
@@ -53,13 +52,10 @@
       clobberByDefault = true;
 
       # [hjem modules]
-      # liijar/hjem.nix auto-imports every liijar/<app>/hjem.nix + the
-      # .profile dirSetup bus. liijar/options.nix declares the shared usrset
-      # sheet; the host user.nix (same file the home-manager backend reads)
-      # sets the per-host toggles.
+      # liijar/ auto-imports every app + the usrset option declarations;
+      # the host user.nix sets the per-host toggles.
       extraModules = [
-        ../juajar/liijar/options.nix
-        ../juajar/liijar/hjem.nix
+        ../juajar/liijar
         ../hstjar/${hostnm}/user.nix
       ];
 
@@ -88,7 +84,7 @@
       };
     }; # end of hjem
 
-    # [feature flags for liijar hjem modules]
+    # [feature flags for liijar modules]
     hjem.specialArgs = {
       inherit hostnm;
       inherit inputs;
@@ -108,10 +104,12 @@
       webapps = config.sysset.webapps; # browser-apps-as-desktop-apps (webapps.nix)
     };
 
-    # [nvf bridge]
-    # usrset.editors.nvf.enable lives inside the hjem user submodule;
-    # surface it to the system-level nvf gate (juajar/sysjar/nvf) so the
-    # host's user.nix toggle sheet stays the source of truth.
+    # [bridges]
+    # These usrset toggles live inside the hjem user submodule; surface them
+    # to their system-level gates so the host's user.nix stays the source of
+    # truth. nvf: sysjar/nvf. syncthing: sysjar/syncthing (runs as mainUser).
     sysset.nvf.enable = config.hjem.users.${config.sysset.mainUser}.usrset.editors.nvf.enable or false;
+    sysset.syncthing.enable =
+      config.hjem.users.${config.sysset.mainUser}.usrset.syncthing.enable or false;
   };
 }

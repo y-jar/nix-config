@@ -249,20 +249,6 @@ fresh_install() {
         gum log --level info "System deployed!"
     fi
 
-    # Step 7: Home Manager
-    if gum confirm "Deploy home-manager profile? (hms)"; then
-        local user
-        user=$(gum input --placeholder "Username (e.g., jar)" --width 30 --value "jar")
-        if [ -n "$user" ]; then
-            gum log --level info "Deploying home-manager for $user..."
-            nh home switch ~/nix-config#"$user" || {
-                gum log --level error "Home-manager deploy failed"
-                return 1
-            }
-            gum log --level info "Home-manager deployed!"
-        fi
-    fi
-
     gum style --border double --foreground 2 "Install complete for $host!"
 }
 
@@ -336,19 +322,6 @@ update_existing() {
             return 1
         }
         gum log --level info "System deployed!"
-    fi
-
-    if gum confirm "Deploy home-manager profile? (hms)"; then
-        local user
-        user=$(gum input --placeholder "Username" --width 30 --value "jar")
-        if [ -n "$user" ]; then
-            gum log --level info "Deploying home-manager for $user..."
-            nh home switch ~/nix-config#"$user" || {
-                gum log --level error "Home-manager deploy failed"
-                return 1
-            }
-            gum log --level info "Home-manager deployed!"
-        fi
     fi
 
     gum style --border double --foreground 2 "Update complete for $host!"
@@ -734,7 +707,7 @@ copy_config_to_home() {
     fi
 
     # Chown the ENTIRE home directory nixos-install runs as root, so
-    # home-manager activation creates root-owned files (~/.zshrc, ~/.config/*,
+    # hjem activation creates root-owned files (~/.zshrc, ~/.config/*,
     # XDG dirs, etc.). Without this, GDM authenticates the user but the
     # session crashes on permission errors, looping back to the login screen.
     local uid_gid
@@ -1372,7 +1345,6 @@ $guide"
 
             # Replace placeholders in new host's system.nix
             local sys_file="$clone_dir/hstjar/$new_host/system.nix"
-            local home_file="$clone_dir/hstjar/$new_host/user.nix"
             local sv
             sv=$(nixos-version 2>/dev/null | cut -d. -f1-2 || echo "26.05")
             if [ -f "$sys_file" ]; then
@@ -1382,12 +1354,6 @@ $guide"
             else
                 gum log --level warn "system.nix not found in new host dir skipping placeholder replacement"
             fi
-            # Replace HomeManagerVersionNumber in user.nix (same version as system)
-            if [ -f "$home_file" ]; then
-                [ -n "$sv" ] && sed -i "s/HomeManagerVersionNumber/$sv/" "$home_file"
-                gum log --level info "Replaced usrset.stateVersion in hstjar/$new_host/user.nix"
-            fi
-
             # Git-add new files so flake eval sees them
             ( cd "$clone_dir" && git add flake.nix "hstjar/$new_host" 2>/dev/null ) || true
             gum log --level info "Scaffolded $new_host"

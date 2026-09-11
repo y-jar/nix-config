@@ -5,9 +5,7 @@
 # -=-=-=-=-=-=-=-=-=-=-=
 # goal: Shared zsh function block (single source of truth).
 # -=-=-=-=-=-=-=-=-=-=-=
-# Consumed by BOTH shell backends:
-#   - juajar/liijar/zsh/hm.nix     (home-manager: programs.zsh.initContent)
-#   - juajar/liijar/zsh/hjem.nix   (hjem: generated .zshrc text)
+# Consumed by the zsh module (generated .zshrc text):
 # Takes:
 #   hostnm - host name for the *tm rebuild helpers (defaults to current host)
 #   uf     - whether this host allows unfree packages (drives the `,` helper)

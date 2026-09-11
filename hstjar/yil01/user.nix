@@ -3,8 +3,8 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Host yil01: user toggle sheet (usrset) shared by home-manager and hjem.
-# (live as yil01 = mkJar / yil02 = mkHjemJar, both read this sheet)
+# goal: Host yil01: user toggle sheet (usrset).
+# (live as yil01 / yil02 both read this sheet)
 # -=-=-=-=-=-=-=-=-=-=-=
 {
   hyprlandEnable,
@@ -16,7 +16,6 @@
 
 {
   usrset = {
-    stateVersion = "26.05"; # [CHANGE THIS]
     name = "y-jar"; # [CHANGE THIS] for git
     email = "park.7qs@gmail.com"; # [CHANGE THIS] for git
 

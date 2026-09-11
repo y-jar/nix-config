@@ -10,7 +10,7 @@
 # declares the option shape and, for apps with `autostart = true`, appends their
 # launcher to sysset.autostart.commands so the WM spawns them at session start.
 # The actual desktop entries + launchers are built user-level:
-#   home-manager hosts  -> juajar/liijar/webapps/hm.nix
+#   all hosts            -> juajar/liijar/webapps/default.nix
 #   hjem hosts          -> juajar/liijar/webapps/hjem.nix
 # -=-=-=-=-=-=-=-=-=-=-=
 {

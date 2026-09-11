@@ -21,19 +21,14 @@
 │   └── ziiemar/                # Personal laptop (HP)
 │
 ├── juajar/                     # Shared NixOS modules
-│   ├── homekey.nix             # Home-manager entry point
-│   ├── hjemkey.nix             # Hjem entry point (alternative to home-manager)
-│   ├── liijar/                 # User-level apps shared by BOTH backends
-│   │   ├── options.nix         # The usrset.* option declarations (single source)
-│   │   ├── hm.nix              # HM entry: auto-imports every <app>/hm.nix
-│   │   ├── hjem.nix            # hjem entry: auto-imports every <app>/hjem.nix
-│   │   ├── profile-bus.nix     # .profile dirSetup lines bus (hjem backend)
-│   │   ├── shell/              # Shared zsh aliases + functions + repl (both backends)
-│   │   ├── wmconfigs/          # Raw niri/mango KDL/conf + j* wm tool scripts
-│   │   └── <app>/              # One dir per app:
-│   │       ├── shared.nix      #   single-sourced packages + generated files
-│   │       ├── hm.nix          #   home-manager adapter (programs.*/home.file)
-│   │       └── hjem.nix        #   hjem adapter (files/packages, direct writes)
+│   ├── hjemkey.nix             # Hjem entry point (THE user backend)
+│   └── liijar/                 # User-level apps (hjem scope)
+│       ├── default.nix         # Auto-importer (same as sysjar) every app dir
+│       ├── options.nix         # The usrset.* option declarations (single source)
+│       ├── profile-bus.nix     # .profile dirSetup lines bus
+│       ├── shell/              # Shared zsh aliases + functions + repl
+│       ├── wmconfigs/          # Raw niri/mango KDL/conf + j* wm tool scripts
+│       └── <app>/              # One dir per app: default.nix (+ asset siblings)
 │   ├── sysjar/                 # System-level modules (NixOS options under sysset.*)
 │   │   ├── base.nix            # Always-active: core system, CLI tools, Wayland basics
 │   │   ├── kernelPicker.nix    # Kernel variant picker (default/cachyos-latest/...)

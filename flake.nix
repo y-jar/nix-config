@@ -26,7 +26,7 @@
       ...
     }@inputs:
     let
-      # =-=-=[Systems that will be x86_64-linux] [also uses home-manager]
+      # =-=-=[Systems that will be x86_64-linux] [hjem is THE user backend]
       mkJar =
         hostName:
         nixpkgs.lib.nixosSystem {
@@ -37,25 +37,10 @@
           }; # end of special args
           modules = [
             ./juajar/sysjar # Base system core entry
-            ./juajar/homekey.nix # Home-manager entry
+            ./juajar/hjemkey.nix # Hjem entry (user backend)
             ./hstjar/${hostName} # Host-specific directory entry [what happens here can depend on each system]
           ]; # end of modules
         }; # end of mkJar
-      # =-=-=[Systems that will be x86_64-linux] [uses hjem instead of home-manager]
-      mkHjemJar =
-        hostName:
-        nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = {
-            inherit inputs self;
-            hostnm = hostName;
-          }; # end of special args
-          modules = [
-            ./juajar/sysjar # Base system core entry
-            ./juajar/hjemkey.nix # Hjem entry (alternative to home-manager)
-            ./hstjar/${hostName} # Host-specific directory entry
-          ]; # end of modules
-        }; # end of mkHjemJar
       # =-=-=[Systems that will be non x86_64-linux] [WIP]
       urnJar =
         { hostName, arch }:
@@ -81,7 +66,6 @@
 
         # Do not edit this comment below
         # ===[INSTALLER: append new hosts on the line below]===
-        # calender = mkJar "calender"; # main pc
         yilyonix = mkJar "yilyonix"; # test bench [Might need to FIX]
         ziiemar = mkJar "ziiemar"; # personal laptop
         candle = mkJar "candle"; # gaming mini build
@@ -89,10 +73,8 @@
         vmjar = mkJar "vmjar"; # Virtual config
         yil01 = mkJar "yil01"; # Thinkpad Laptop thats super cute
         petrichor = mkJar "petrichor"; # kwaytea's Pewta
-
-        # ========[hjem hosts (alternative to home-manager)] [Not fully implemented and toying with it]
-        yil02 = mkHjemJar "yil01"; # Thinkpad Laptop thats super cute
-        calender = mkHjemJar "calender"; # main pc
+        yil02 = mkJar "yil01"; # yil01 evaluated under the same sheet (live test twin)
+        calender = mkJar "calender"; # main pc
 
         # ========[for non x86 systems..] [WIP]
         # TEMPLATE  = urnJar { hostName = "TEMPLATE"; arch = "aarch64-linux"; };
@@ -161,11 +143,6 @@
   inputs = {
     # [nixpkgs]
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
-    # [home-manager]
-    home-manager = {
-      url = "github:nix-community/home-manager/release-26.05";
-      inputs.nixpkgs.follows = "nixpkgs"; # locks version to the nixpkgs to reduce duplicate data
-    }; # End of homemanager
 
     # [mangowm] wayland compositor (dwl-based) ships nixosModules.mango
     mangowm = {
@@ -203,7 +180,7 @@
     rsakura.url = "github:preprocessor/rsakura"; # whisper's cool rust rewite fork
     # [cachyos kernel]
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
-    # [hjem] alternative to home-manager [https://github.com/feel-co/hjem]
+    # [hjem] THE user backend (home-manager is gone) [https://github.com/feel-co/hjem]
     hjem.url = "github:feel-co/hjem";
   }; # end of inputs
 }

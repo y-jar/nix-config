@@ -3,9 +3,9 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Host 0_TEMPLATE: user toggle sheet (usrset) shared by home-manager and hjem.
+# goal: Host 0_TEMPLATE: user toggle sheet (usrset).
 # -=-=-=-=-=-=-=-=-=-=-=
-# This is the USER configuration file for this host (one sheet, both backends).
+# This is the USER configuration file for this host (one sheet).
 # - Each option below is a toggle: enable only what you need (sizes are rough).
 # - Keep `shell.enable` true it's the default shell for most systems.
 # - WM toggles mirror the system sheet (./system.nix) via the *Enable args.
@@ -21,7 +21,6 @@
 
 {
   usrset = {
-    stateVersion = "HomeManagerVersionNumber"; # [CHANGE THIS]
     name = "PLEASECHANGEME_NAME"; # [CHANGE THIS] for git
     email = "PLEASECHANGEME_EMAIL"; # [CHANGE THIS] for git
 

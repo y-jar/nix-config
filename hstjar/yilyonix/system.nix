@@ -10,7 +10,7 @@
 # If you're new here, just think of it as a checklist to fill out.
 # Things to note:
 # 1. You should change the stateVersion to the version you're using
-# 2. You should change the home-manager state version to the version you're using
+# 2. You should change the system state version to the version you're using
 # 3. whether or not something is false or true is entirely up to you. enable what
 #    you need!
 #

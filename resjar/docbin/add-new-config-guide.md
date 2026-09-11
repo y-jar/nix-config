@@ -12,12 +12,11 @@ Adding a new config is pretty straightforward.
 4. After those two files, check the `boot.nix` file for the bootloader issues and make any necessary adjustments(you shouldnt need to but im not gonna say no).
 5. now that you have set up the host config, you now need to hop into the [flake.nix](../../flake.nix) and add the new config to the `nixosConfigurations` block:
     > NOTE: all instances of `HOSTNAME` should be replaced to what you want `[Or keep it, HOSTNAME is a good name too]`
-    > the `mkJar`/`mkHjemJar` helpers already wire everything for you (sysjar base + the user backend key + your host dir) so it's just one line. **dont** hand-write `nixpkgs.lib.nixosSystem` unless you know why, a host added that way gets no user config at all (no shell, no apps)
+    > `mkJar` already wires everything for you (sysjar base + hjemkey + your host dir) so it's just one line. **dont** hand-write `nixpkgs.lib.nixosSystem` unless you know why, a host added that way gets no user config at all (no shell, no apps)
     ```nix
     nixosConfigurations = {
         # this line below is what you add :)  
-        HOSTNAME = mkJar "HOSTNAME"; # home-manager backend [the usual pick]
-        # HOSTNAME = mkHjemJar "HOSTNAME"; # hjem backend [alternative to home-manager, see calender]
+        HOSTNAME = mkJar "HOSTNAME"; # hjem is the user backend, wired for you
     }; # end of nixosConfigurations block
     ```
 6. **While still in the installer shell..**: same as the [install guide](./install-guide.md), run: `ga` in `~/nix-config` and then either of these options:

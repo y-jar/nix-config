@@ -60,7 +60,7 @@ Paste:
 
 <details>
   <summary><b>Current State</b></summary>
-  <p>The system configuration is fully modular, functional, and split into system-level hardware declarations (<code>sysset</code>) and modular user-space profiles (<code>usrset</code>) managed via Home Manager or hjem (both backends read the same app tree), on Flakes.</p>
+  <p>The system configuration is fully modular, functional, and split into system-level hardware declarations (<code>sysset</code>) and modular user-space profiles (<code>usrset</code>) managed via hjem on Flakes.</p>
   
   #### Core Features:
   - **Modular Profiles:** Separate configs for real hardware hosts (`whale`) and nested development spaces (`vmjar`).
@@ -81,7 +81,6 @@ Paste:
   | :--- | :--- | :--- |
   | `hardto <host>` | Function | **(Installer Shell Only)** Generates a fresh profile folder layout from `0_TEMPLATE` and drops the system's live hardware configurations inside. |
   | `nhs <host>` | Function | Builds and instantly deploys the global NixOS configuration utilizing `nh`. <br>*(Note: **No argument required** after install; typing `nhs` on your deployed system automatically targets your active host).* |
-  | `hms <user>` | Function | **(Installer Shell Only)** Isolates, updates, and activates strictly the user-space Home Manager profile (e.g. `hms jar`). |
   | `nht <host>` | Function | Safely tests a configuration compilation run without writing to the active bootloader profile. <br>*(Note: **No argument required** after install; typing `nht` automatically tests your current host).* |
   | `jc <message>`| Function | **(Installer Shell Only)** Automated commit handler that joins multi-word sentences cleanly. |
   | `nhc` | Alias | System sanitation maintenance rule (cleans all generations, keeps the last 7 profiles). |
@@ -259,7 +258,7 @@ Paste:
 2. [hstjar/](./hstjar): per-host configs (one folder per machine, each with `system.nix` + `user.nix` toggle sheets).
 3. [juajar/](./juajar): shared NixOS modules:
    - [sysjar/](./juajar/sysjar): system-level modules (NixOS options under `sysset.*`).
-   - [liijar/](./juajar/liijar): user-level apps, shared by BOTH backends every `<app>/` has an `hm.nix` (home-manager) and/or `hjem.nix` (hjem) plus a `shared.nix` (single-sourced packages + generated files). Also holds the `usrset.*` option declarations, shared shell aliases/functions, and raw WM configs.
+   - [liijar/](./juajar/liijar): user-level apps one `<app>/default.nix` per app (auto-imported, same shape as sysjar). Also holds the `usrset.*` option declarations, shared shell aliases/functions, and raw WM configs.
 4. [resjar/](./resjar): resources docs, templates, images.
 5. `.rotjar/`: temporary files in rotation (gitignored). Anything in here won't be around for long.
 
@@ -273,6 +272,7 @@ The most useful aliases available after install:
 | :--- | :--- | :--- |
 | `nhs` | `nh os switch` | Deploy system config (auto-detects host) |
 | `nht` | `nh os test` | Test config without writing to bootloader |
+| `updatejar` | pull + test + (ask) deploy | One-command host update: jars → nht → prompt for nhs → jar art |
 | `nhc` | `nh clean all --keep 7` | Clean old generations, keep last 7 |
 | `nrs` / `nrt` | `nixos-rebuild switch/test` | Hard rebuild fallback (uses sudo) |
 | `jnconf` | `cd ~/nix-config` | Jump to config dir |
@@ -282,12 +282,13 @@ The most useful aliases available after install:
 | `ckhrd` | `lsblk && fdisk -l` | Check storage blocks |
 | `,` | `nix shell` (function) | Quick flake-based shell `, git curl` for interactive, `, git curl -- ls` for one-shot |
 
-Full alias list: [liijar/shell](juajar/liijar/shell/) (shared by both backends) · [installer shell](shell.nix)
+Full alias list: [liijar/shell](juajar/liijar/shell/) · [installer shell](shell.nix)
 
 ## Core Usage & Tips
 
 **Day-to-day workflow:**
 ```bash
+updatejar    # the whole loop: pull, test, ask to deploy, jar art
 nhs          # deploy system config (auto-detects host)
 nht          # test before deploying
 nhc          # clean up old generations

@@ -117,11 +117,7 @@ printf 'sysset.virt.isInVM = true;\nmainUser = "mainuser";\n' > "$dir/hstjar/vmh
 printf '{}\n' > "$dir/hstjar/vmhost/user.nix"
 printf '{}\n' > "$dir/hstjar/vmhost/boot.nix"
 printf '{}\n' > "$dir/hstjar/0_TEMPLATE/default.nix"
-cat > "$dir/hstjar/0_TEMPLATE/user.nix" <<'HOMETPL'
-{
-  usrset.stateVersion = "HomeManagerVersionNumber";
-}
-HOMETPL
+printf '{}\n' > "$dir/hstjar/0_TEMPLATE/user.nix"
 cat > "$dir/hstjar/0_TEMPLATE/system.nix" <<'TPL'
 { config, lib, ... }: {
   config = {
@@ -415,7 +411,6 @@ else
 fi
 assert_contains 'mainUser = "newuser"' "$CLONE_DIR/hstjar/newtest/system.nix" "do_new_host: PLEASECHANGEME_USERNAME replaced with newuser"
 assert_contains 'system.stateVersion = "26.05"' "$CLONE_DIR/hstjar/newtest/system.nix" "do_new_host: stateVersion replaced (VersionNumber -> 26.05)"
-assert_contains 'stateVersion = "26.05"' "$CLONE_DIR/hstjar/newtest/user.nix" "do_new_host: HomeManagerVersionNumber replaced in user.nix"
 assert_contains 'newtest = mkJar "newtest"' "$CLONE_DIR/flake.nix" "do_new_host: host registered in flake.nix after marker line"
 assert_contains '--show-trace' "$STUB_DIR/nixos_install.log" "do_new_host: nixos-install runs (auto-proceed past Step 11)"
 

@@ -40,12 +40,9 @@ in
           | `hstjar/<host>/boot.nix` | Boot loader settings |
           | `hstjar/0_TEMPLATE/` | Template host with ALL available sysset/usrset options |
           | `juajar/sysjar/<feature>/default.nix` | System-level module (where sysset options are defined) |
-          | `juajar/liijar/<app>/hm.nix` | User-level app, home-manager backend (usrset options) |
-          | `juajar/liijar/<app>/hjem.nix` | User-level app, hjem backend |
-          | `juajar/liijar/<app>/shared.nix` | Single-sourced packages + generated files (both backends) |
+          | `juajar/liijar/<app>/default.nix` | User-level app module (usrset options, hjem scope) |
           | `juajar/liijar/options.nix` | ALL usrset option declarations (single source) |
           | `juajar/sysjar/default.nix` | Auto-imports all sysjar modules (no manual registration) |
-          | `juajar/homekey.nix` | Home Manager entry point (wires sysset.users → HM) |
           | `juajar/hjemkey.nix` | Hjem entry point |
           | `resjar/docbin/directory-key.md` | Full directory tree reference |
           | `resjar/docbin/` | Documentation (install guide, per-feature guides) |
@@ -68,7 +65,7 @@ in
           - Boolean toggle pattern: `lib.mkOption { type = lib.types.bool; default = true/false; }`
           - Conditional config: wrap in `lib.mkIf cfg.enable { ... }`
           - `juajar/sysjar/default.nix` auto-imports everything no manual registration needed
-          - Follow the project's naming: `sysjar` for system, `liijar` for user apps (both backends)
+          - Follow the project's naming: `sysjar` for system, `liijar` for user apps
 
           ## Rules
 
