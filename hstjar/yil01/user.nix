@@ -32,7 +32,7 @@
     };
     mango = {
       enable = mangoEnable;
-      shelljar.enable = false; # my quickshell island shell
+      shelljar.enable = true; # my quickshell island shell
     };
     launcher.enable = true; # sets launcher fuzzel
     theming = {
@@ -77,13 +77,13 @@
       discord.enable = true;
       halloy.enable = true;
     };
-    espanso = (import ../espansoconf.nix { enable = false; }); # espanso text expander
+    espanso = (import ../espansoconf.nix { enable = true; }); # espanso text expander
     flatpak.enable = false;
     nautilus.enable = true;
     yazi.enable = true;
     ranger.enable = false;
     media = {
-      enable = true;
+      enable = false;
       mpv = true;
       downloaders = false;
       musicApps = false;
@@ -116,11 +116,11 @@
     ai = {
       enable = aiEnable; # sets AI tools like opencode, llama.cpp
       opencode.enable = true; # opencode CLI + GUI (keep even if local llama is off)
-      lmstudio.enable = true; # LM Studio (~2.3GiB) set false to save space
+      lmstudio.enable = false; # LM Studio (~2.3GiB) set false to save space
     };
     dictation.enable = false;
     git.enable = true;
-    bluetooth.enable = false;
+    bluetooth.enable = true;
     fastfetch.enable = true;
     dev = {
       enable = false; # dev master toggle

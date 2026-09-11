@@ -50,8 +50,8 @@
       gnome.enable = true; # ~800mib - full GNOME desktop
       gdm.enable = true; # sets GDM login manager
       hyprland.enable = false; # ~19mib - compositor only
-      niri.enable = true; # ~20mib - compositor only
-      mango.enable = false; # sets mango (mangowm)
+      niri.enable = false; # ~20mib - compositor only
+      mango.enable = true; # sets mango (mangowm)
       cosmic = {
         enable = false; # COSMIC desktop environment
         greeter = false; # COSMIC login manager (disables GDM if enabled)
@@ -91,7 +91,7 @@
       tlp.cpuEppOnBattery = "balance_power"; # (default|performance|balance_performance|balance_power|power)
       tlp.platformProfileOnBattery = "balanced"; # (cool|quiet|balanced|performance)
       tlp.pcieAspmOnBattery = "default"; # (default|performance|powersave|powersupersave)
-      powerprofiles.enable = true;
+      powerprofiles.enable = false;
       audio = {
         enable = true; # ~100mib - PipeWire + audio tools
         addon.enable = false; # adds my audio setup
@@ -100,7 +100,7 @@
 
       # =============[software]
       unfree.enable = true; # allow unfree packages (spotify, chromium, vscodium, steam, ...)
-      UseNixPkgsYoinks.enable = false;
+      UseNixPkgsYoinks.enable = true;
       ai = {
         enable = false; # ~2gib - llama.cpp + models (auto-downloaded via models-preset)
         llama = {
@@ -114,7 +114,7 @@
         };
       };
       localsend.enable = true; # ~30mib - local file sharing
-      espanso.enable = false; # ~30mib - espanso daemon + Wayland security wrapper
+      espanso.enable = true; # ~30mib - espanso daemon + Wayland security wrapper
       flatpak.enable = false; # ~10mib - flatpak support [still needs to be enabled in user.nix]
       gaming = {
         drivers = {

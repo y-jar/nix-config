@@ -12,7 +12,7 @@
 
 {
   sysset.webapps = {
-    enable = true;
+    enable = false;
     apps = [
       {
         name = "YouTube Music";
