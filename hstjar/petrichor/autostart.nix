@@ -17,7 +17,7 @@
   ...
 }:
 {
-  config.sysSettings.autostart.commands = [
+  config.sysset.autostart.commands = [
     # put programs to autostart here
   ];
 }

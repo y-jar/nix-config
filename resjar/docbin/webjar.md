@@ -35,7 +35,7 @@ Type `webjar` in the fuzzel launcher (`SUPER+Shift+B`) to open the page directly
 Enabled per-host in `system.nix`:
 
 ```nix
-sysSettings.server.webjar = {
+sysset.server.webjar = {
   enable = true;
   port = 80; # default
 };
@@ -45,10 +45,10 @@ sysSettings.server.webjar = {
 
 | File | Purpose |
 |---|---|
-| `modjar/sysbin/server/webjar/index.html` | Page structure — service cards |
-| `modjar/sysbin/server/webjar/style.css` | Dark theme, responsive grid |
-| `modjar/sysbin/server/webjar/script.js` | Floating particles background (canvas) |
-| `modjar/sysbin/server/webjar/default.nix` | NixOS module — nginx + activation script |
+| `juajar/sysjar/server/webjar/index.html` | Page structure — service cards |
+| `juajar/sysjar/server/webjar/style.css` | Dark theme, responsive grid |
+| `juajar/sysjar/server/webjar/script.js` | Floating particles background (canvas) |
+| `juajar/sysjar/server/webjar/default.nix` | NixOS module — nginx + activation script |
 
 ## Adding a service
 

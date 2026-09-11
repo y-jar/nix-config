@@ -23,7 +23,7 @@
     system.stateVersion = "VersionNumber"; # [CHANGE THIS] [from first install]
 
     # Fill this out!
-    sysSettings = {
+    sysset = {
       # =============[users]
       mainUser = "PLEASECHANGEME_USERNAME"; # primary user (gets home-manager)
       users = [ "PLEASECHANGEME_USERNAME" ]; # all users (main + any guests)
@@ -148,6 +148,6 @@
         };
       }; # end of server
       # =============[Server]^^^
-    }; # end of sysSettings
+    }; # end of sysset
   }; # end of config
 }

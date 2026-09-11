@@ -24,7 +24,7 @@
 { lib, ... }:
 
 {
-  sysSettings.webapps = {
+  sysset.webapps = {
     enable = false; # ship disabled by default; set true when you add apps below
     apps = [
       # EXAMPLE:
@@ -40,5 +40,5 @@
       #   mode = "tabbed";
       # }
     ]; # end of apps
-  }; # end of sysSettings.webapps
+  }; # end of sysset.webapps
 }

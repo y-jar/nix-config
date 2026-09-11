@@ -1,0 +1,40 @@
+# ╃
+#  .▀▀█▀▀ .
+#    :▓.:   ar <3
+# . ▀▀ : ╃
+# -=-=-=-=-=-=-=-=-=-=-=
+# goal: Small desktop quality-of-life tweaks (home-level).
+# -=-=-=-=-=-=-=-=-=-=-=
+# =-=-=[liijar/desktop-tweaks/hm.nix] =-=-=
+# Gated on the hasDesktop specialArg (a WM/desktop being enabled), not a
+# usrset toggle. The hjem side only ever shipped ddcutil (see hjem.nix).
+# =-=-=[end liijar/desktop-tweaks/hm.nix] =-=-=
+{
+  config,
+  lib,
+  pkgs,
+  hasDesktop,
+  ...
+}:
+
+{
+  config = lib.mkIf hasDesktop {
+    home.packages = with pkgs; [
+      ddcutil # desktop monitor brightness via DDC/CI (shelljar BrightnessService)
+    ]; # end of home.packages
+
+    home.sessionVariables = {
+      "NIXOS_OZONE_WL" = "1"; # enable native Wayland support for most Electron apps
+      "MOZ_ENABLE_WAYLAND" = "1"; # for firefox to run on wayland
+      "MOZ_WEBRENDER" = "1"; # enable web rendering for firefox on wayland
+      # enable native Wayland support for most Electron apps
+      "ELECTRON_OZONE_PLATFORM_HINT" = "auto";
+      # misc
+      "_JAVA_AWT_WM_NONREPARENTING" = "1";
+      "QT_WAYLAND_DISABLE_WINDOWDECORATION" = "1";
+      "SDL_VIDEODRIVER" = "wayland";
+      "GDK_BACKEND" = "wayland";
+      "XDG_SESSION_TYPE" = "wayland";
+    }; # end of sessionVariables
+  }; # end of config
+}

@@ -16,4 +16,4 @@ Self-hosted services and server configuration.
 
 ## Other
 
-- **sleepyjar** — Scheduled server reboots. Enabled via `sysSettings.server.sleepyjar.enable`. Interval is configurable with `sysSettings.server.sleepyjar.interval` using systemd calendar expressions (e.g. `"daily"`, `"weekly"`, `"*-*-* 04:00:00"`). Defaults to `"weekly"`.
+- **sleepyjar** — Scheduled server reboots. Enabled via `sysset.server.sleepyjar.enable`. Interval is configurable with `sysset.server.sleepyjar.interval` using systemd calendar expressions (e.g. `"daily"`, `"weekly"`, `"*-*-* 04:00:00"`). Defaults to `"weekly"`.

@@ -39,7 +39,7 @@ Try `http://localhost:3000` first in a regular browser on the server machine —
 The port is configurable in your host's `system.nix`:
 
 ```nix
-sysSettings.server.nixdraw = {
+sysset.server.nixdraw = {
   enable = true;
   port = 3000; # default, change to any available port
 };

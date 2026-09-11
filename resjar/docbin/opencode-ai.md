@@ -34,7 +34,7 @@ In opencode, type `/models` to see available models and select one. The local mo
 
 ## Custom Agents
 
-These agents are defined declaratively in the Nix config (`modjar/usrbin/ai[cringe]/opencode.nix`):
+These agents are defined declaratively in the Nix config (`juajar/liijar/ai/opencode.nix`):
 
 ### nix-helper
 A specialist for NixOS configuration help. Understands:
@@ -70,7 +70,7 @@ Use `@conlang-writer` in the chat to invoke this agent for conlang tasks.
 ## Configuration Location
 
 The opencode configuration is managed declaratively through Nix:
-- **Nix module:** `modjar/usrbin/ai[cringe]/opencode.nix`
+- **Nix module:** `juajar/liijar/ai/opencode.nix`
 - **Generated config:** `~/.config/opencode/opencode.json`
 - **Generated agents:** `~/.config/opencode/agent/*.md`
 - **Global instructions:** `~/.config/opencode/AGENTS.md`

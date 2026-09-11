@@ -3,7 +3,7 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Host candle: system-level toggle sheet (sysSettings).
+# goal: Host candle: system-level toggle sheet (sysset).
 # -=-=-=-=-=-=-=-=-=-=-=
 {
   inputs,
@@ -18,7 +18,7 @@
     #            [system state version from first install]
 
     # Fill this out!
-    sysSettings = {
+    sysset = {
       # =============[users]
       mainUser = "wax";
       users = [ "wax" ];
@@ -149,7 +149,7 @@
         };
       }; # end of server
       # =============[Server]^^^
-    }; # end of sysSettings
+    }; # end of sysset
 
   }; # end of config
 }

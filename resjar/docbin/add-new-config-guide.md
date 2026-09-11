@@ -22,7 +22,7 @@ Adding a new config is pretty straightforward.
                 hostnm = "HOSTNAME"; # sends over the hostname of the config the the system
             };
             modules = [ # more or less dont change this
-                ./modjar/sysbin # this is where the base system options are defined. [you shouldnt need to change this or enter it. unless you got apps or things to add on top.]
+                ./juajar/sysjar # this is where the base system options are defined. [you shouldnt need to change this or enter it. unless you got apps or things to add on top.]
                 ./hstjar/HOSTNAME # change this [this makes sure the config you just made is ensured to work]
             ]; # end of modules
         }; # end of HOSTNAME config

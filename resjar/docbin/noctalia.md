@@ -6,4 +6,4 @@
 
 # Noctalia
 
-Configured via `modjar/usrbin/Bar[noctalia]/`. Noctalia is a lightweight Wayland bar/shell built on Quickshell. Installed as a user-level package with no system-level toggle.
+Configured via the per-WM toggles `usrset.<wm>.noctalia.enable` in the WM modules (`juajar/liijar/WM-niri` etc.). Noctalia is a lightweight Wayland bar/shell built on Quickshell. Installed as a user-level package alongside the compositor that spawns it.

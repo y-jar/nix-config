@@ -3,12 +3,13 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Host ziiemar: system-level toggle sheet (sysSettings).
+# goal: Host ziiemar: system-level toggle sheet (sysset).
 # -=-=-=-=-=-=-=-=-=-=-=
 {
   inputs,
   config,
   lib,
+  pkgs,
   ...
 }:
 
@@ -17,8 +18,42 @@
     system.stateVersion = "25.11"; # [CHANGE THIS]
     #            [system state version from first install]
 
+    # [host hardware quirk] Drop the OLED panel to 48Hz on battery, 120Hz on AC,
+    # to save power. (Moved here from the old home.nix so user.nix stays a pure
+    # toggle sheet that both backends can read.)
+    systemd.user.services.niri-refresh-on-battery = {
+      description = "Switch niri eDP-1 refresh rate based on power source";
+      after = [ "graphical-session.target" ];
+      wantedBy = [ "graphical-session.target" ];
+      environment = {
+        WAYLAND_DISPLAY = "wayland-1";
+      };
+      serviceConfig = {
+        Type = "simple";
+        ExecStart = "${pkgs.writeShellScriptBin "niri-refresh-on-battery" ''
+          set -eu
+          last=""
+          while :; do
+            ac=$(cat /sys/class/power_supply/AC/online 2>/dev/null || echo 0)
+            if [ "$ac" = "0" ]; then
+              mode="2880x1800@48.001"
+            else
+              mode="2880x1800@120.001"
+            fi
+            if [ "$mode" != "$last" ]; then
+              niri msg output eDP-1 mode "$mode" 2>/dev/null || true
+              last="$mode"
+            fi
+            sleep 10
+          done
+        ''}/bin/niri-refresh-on-battery";
+        Restart = "on-failure";
+        RestartSec = 10;
+      };
+    };
+
     # Fill this out!
-    sysSettings = {
+    sysset = {
       # =============[users]
       mainUser = "jar";
       users = [ "jar" ];
@@ -149,7 +184,7 @@
           port = 80;
         };
       }; # end of server
-    }; # end of sysSettings
+    }; # end of sysset
 
   }; # end of config
 }

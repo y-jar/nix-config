@@ -17,9 +17,21 @@
 │   ├── yilyonix/               # Test bench (laptop/tablet)
 │   └── ziiemar/                # Personal laptop (HP)
 │
-├── modjar/                     # Shared NixOS modules
+├── juajar/                     # Shared NixOS modules
 │   ├── homekey.nix             # Home-manager entry point
-│   ├── sysbin/                 # System-level modules (NixOS options under sysSettings.*)
+│   ├── hjemkey.nix             # Hjem entry point (alternative to home-manager)
+│   ├── liijar/                 # User-level apps — shared by BOTH backends
+│   │   ├── options.nix         # The usrset.* option declarations (single source)
+│   │   ├── hm.nix              # HM entry: auto-imports every <app>/hm.nix
+│   │   ├── hjem.nix            # hjem entry: auto-imports every <app>/hjem.nix
+│   │   ├── profile-bus.nix     # .profile dirSetup lines bus (hjem backend)
+│   │   ├── shell/              # Shared zsh aliases + functions + repl (both backends)
+│   │   ├── wmconfigs/          # Raw niri/mango KDL/conf + j* wm tool scripts
+│   │   └── <app>/              # One dir per app:
+│   │       ├── shared.nix      #   single-sourced packages + generated files
+│   │       ├── hm.nix          #   home-manager adapter (programs.*/home.file)
+│   │       └── hjem.nix        #   hjem adapter (files/packages, direct writes)
+│   ├── sysjar/                 # System-level modules (NixOS options under sysset.*)
 │   │   ├── base.nix            # Always-active: core system, CLI tools, Wayland basics
 │   │   ├── ai[cringe]/         # llama.cpp + Open WebUI (rocm/cuda/cpu)
 │   │   ├── audio/              # PipeWire stack + audio tools
@@ -44,40 +56,6 @@
 │   │   ├── users/              # User account creation + groups
 │   │   ├── v412/               # v4l2loopback kernel module (OBS virtual cam)
 │   │   └── virt/               # libvirtd, QEMU, virt-manager
-│   │
-│   └── usrbin/                 # User-level modules (Home Manager options under usrSettings.*)
-│       ├── ai[cringe]/         # LM Studio, opencode-desktop, AI scripts
-│       ├── art/                # Blender, Krita, GIMP, Inkscape, Stellarium
-│       ├── Bar[noctalia]/      # Noctalia shell (Wayland bar)
-│       ├── bluetooth/          # Blueman GUI package
-│       ├── browsers/           # Firefox / LibreWolf + browsh
-│       ├── desktop-tweaks/     # Wayland session variables
-│       ├── dev/                # Dev tools (dotnet, python, node, gcc, go, nix tools)
-│       ├── discord/            # Discord client
-│       ├── editors/            # VSCodium, Zed, Obsidian, Helix, NVF neovim
-│       ├── fastfetch/          # Fastfetch system info
-│       ├── file-explorers/     # Nautilus, Yazi, Ranger
-│       ├── flatpak/            # Flatpak CLI + Bazaar
-│       ├── gaming/             # Heroic launcher, Prism Launcher
-│       ├── git/                # Git + gh + lazygit
-│       ├── japanese/           # fcitx5 + Mozc input method
-│       ├── keepass/            # KeePassXC password manager
-│       ├── launcher[fuzzel]/   # Fuzzel launcher + custom scripts
-│       ├── media/              # MPV, blanket, quodlibet, ffmpeg, yt-dlp
-│       ├── obs/                # OBS Studio + plugins
-│       ├── office/             # LibreOffice + Pandoc
-│       ├── polkit/             # Polkit agent systemd service
-│       ├── resYoink/           # Resource symlinks (wallpapers, icons, pfps → ~/resjar/)
-│       ├── terminal/           # Foot + Kitty + Alacritty
-│       ├── theming/            # GTK/Qt Catppuccin theming
-│       ├── user[directories]/  # XDG dirs + custom jar-directories
-│       ├── user[info]/         # Username + email options (used by git)
-│       ├── user[packages]/     # General packages (bat, fzf, fd, btop, etc.)
-│       ├── user[scripts]/      # User-level scripts (bldjar, fixzsh)
-│       ├── video-editors/      # Kdenlive
-│       ├── WindowManager[hyprland]/ # Hyprland config files (Lua, per-host inputs)
-│       ├── WindowManager[niri]/     # Niri config files (KDL, per-host inputs)
-│       └── zsh/                # Zsh config + aliases + fzf integration
 │
 └── resjar/                     # Resources (docs, nix templates, images)
     ├── docbin/                 # Documentation (this file lives here)

@@ -13,7 +13,7 @@
 { lib, ... }:
 
 {
-  sysSettings.webapps = {
+  sysset.webapps = {
     enable = true;
     apps = [
       {
@@ -41,5 +41,5 @@
         autostart = true;
       }
     ]; # end of apps
-  }; # end of sysSettings.webapps
+  }; # end of sysset.webapps
 }

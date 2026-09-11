@@ -81,7 +81,7 @@ after it is done, if you configure Home Manager this is what you need to do:
       inherit inputs; # sends the entire inputs set over as a single argument to home-manager and all inputs you placed in it.
     };
     users = {
-      jar = import ./path/to/home.nix; # user entry
+      jar = import ./path/to/user.nix; # user entry
     };
   };
 }

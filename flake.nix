@@ -36,8 +36,8 @@
             hostnm = hostName; # Dynamically sets hostnm for networking/Zsh
           }; # end of special args
           modules = [
-            ./modjar/sysbin # Base system core entry
-            ./modjar/homekey.nix # Home-manager entry
+            ./juajar/sysjar # Base system core entry
+            ./juajar/homekey.nix # Home-manager entry
             ./hstjar/${hostName} # Host-specific directory entry [what happens here can depend on each system]
           ]; # end of modules
         }; # end of mkJar
@@ -51,8 +51,8 @@
             hostnm = hostName;
           }; # end of special args
           modules = [
-            ./modjar/sysbin # Base system core entry
-            ./modjar/hjemkey.nix # Hjem entry (alternative to home-manager)
+            ./juajar/sysjar # Base system core entry
+            ./juajar/hjemkey.nix # Hjem entry (alternative to home-manager)
             ./hstjar/${hostName} # Host-specific directory entry
           ]; # end of modules
         }; # end of mkHjemJar
@@ -66,7 +66,7 @@
             hostnm = hostName;
           }; # end of special args
           modules = [
-            ./modjar/sysbin # Entry for The System
+            ./juajar/sysjar # Entry for The System
             ./hstjar/${hostName} # Entry for The host
           ]; # end of modules
         }; # end of urnJar

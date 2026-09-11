@@ -3,7 +3,7 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Host 0_TEMPLATE: system-level toggle sheet (sysSettings).
+# goal: Host 0_TEMPLATE: system-level toggle sheet (sysset).
 # -=-=-=-=-=-=-=-=-=-=-=
 # This is the SYSTEM configuration file for this host.
 # - It's a checklist to fill out: enable what you need, leave the rest off.
@@ -22,7 +22,7 @@
     system.stateVersion = "VersionNumber"; # [CHANGE THIS] [from first install]
 
     # Fill this out!
-    sysSettings = {
+    sysset = {
       # =============[users]
       mainUser = "PLEASECHANGEME_USERNAME"; # primary user (gets home-manager)
       users = [ "PLEASECHANGEME_USERNAME" ]; # all users (main + any guests)
@@ -166,6 +166,6 @@
         };
       }; # end of server
       # =============[Server]^^^
-    }; # end of sysSettings
+    }; # end of sysset
   }; # end of config
 }

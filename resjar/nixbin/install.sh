@@ -217,14 +217,14 @@ fresh_install() {
     gum style --border normal --align center --width 50 \
         "Now edit your configs!" \
         "hstjar/$host/system.nix  — system toggles" \
-        "hstjar/$host/home.nix    — user toggles"
+        "hstjar/$host/user.nix    — user toggles"
 
     if gum confirm "Open system.nix in editor?"; then
         open_editor "$target_dir/system.nix"
     fi
 
-    if gum confirm "Open home.nix in editor?"; then
-        open_editor "$target_dir/home.nix"
+    if gum confirm "Open user.nix in editor?"; then
+        open_editor "$target_dir/user.nix"
     fi
 
     # Step 6: Test & Deploy
@@ -315,8 +315,8 @@ update_existing() {
         open_editor "$target_dir/system.nix"
     fi
 
-    if gum confirm "Edit home.nix?"; then
-        open_editor "$target_dir/home.nix"
+    if gum confirm "Edit user.nix?"; then
+        open_editor "$target_dir/user.nix"
     fi
 
     # Step 5: Test & Deploy
@@ -396,7 +396,7 @@ hardto YOURHOST'
 vim hstjar/YOURHOST/system.nix
 
 # Edit user toggles:
-vim hstjar/YOURHOST/home.nix'
+vim hstjar/YOURHOST/user.nix'
     if ! gum confirm "Done?"; then
         return 0
     fi
@@ -1372,7 +1372,7 @@ $guide"
 
             # Replace placeholders in new host's system.nix
             local sys_file="$clone_dir/hstjar/$new_host/system.nix"
-            local home_file="$clone_dir/hstjar/$new_host/home.nix"
+            local home_file="$clone_dir/hstjar/$new_host/user.nix"
             local sv
             sv=$(nixos-version 2>/dev/null | cut -d. -f1-2 || echo "26.05")
             if [ -f "$sys_file" ]; then
@@ -1382,10 +1382,10 @@ $guide"
             else
                 gum log --level warn "system.nix not found in new host dir — skipping placeholder replacement"
             fi
-            # Replace HomeManagerVersionNumber in home.nix (same version as system)
+            # Replace HomeManagerVersionNumber in user.nix (same version as system)
             if [ -f "$home_file" ]; then
                 [ -n "$sv" ] && sed -i "s/HomeManagerVersionNumber/$sv/" "$home_file"
-                gum log --level info "Replaced home.stateVersion in hstjar/$new_host/home.nix"
+                gum log --level info "Replaced usrset.stateVersion in hstjar/$new_host/user.nix"
             fi
 
             # Git-add new files so flake eval sees them

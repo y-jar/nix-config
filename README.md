@@ -60,12 +60,12 @@ Paste:
 
 <details>
   <summary><b>Current State</b></summary>
-  <p>The system configuration is fully modular, functional, and split into system-level hardware declarations (<code>sysSettings</code>) and modular user-space profiles (<code>usrSettings</code>) managed via Home Manager and Flakes.</p>
+  <p>The system configuration is fully modular, functional, and split into system-level hardware declarations (<code>sysset</code>) and modular user-space profiles (<code>usrset</code>) managed via Home Manager and Flakes.</p>
   
   #### Core Features:
   - **Modular Profiles:** Separate configs for real hardware hosts (`whale`) and nested development spaces (`vmjar`).
   - **Automated Bootstrapping:** A custom interactive installer shell environment for smooth hardware onboarding and git deployment tracking.
-  - **Robust Fallbacks:** Centralized templates and error safety guardrails built directly into our local module paths (`modjar/`).
+  - **Robust Fallbacks:** Centralized templates and error safety guardrails built directly into our local module paths (`juajar/`).
 
   #### What this Config isn't:
   - **A Flake-Parts Config:** The reason why is simple, Simplicity is my best policy.
@@ -100,7 +100,7 @@ Paste:
   - **Cinnamon:** Full classic desktop environment infrastructure for standardized app layout support.
 
   #### Aesthetic Highlights:
-  - Custom user themes and specific environment styling configurations managed loosely under `usrSettings`.
+  - Custom user themes and specific environment styling configurations managed loosely under `usrset`.
   - Transparent layouts hints.
 </details>
 
@@ -165,7 +165,7 @@ Paste:
 <details>
   <summary><b>Keybinds Quick Ref</b></summary>
 
-  Full reference: [Niri](resjar/docbin/niri.md) · [Hyprland](resjar/docbin/hyprland.md) · [mozc keymap](modjar/usrbin/inputmethods/keymap.tsv)
+  Full reference: [Niri](resjar/docbin/niri.md) · [Hyprland](resjar/docbin/hyprland.md) · [mozc keymap](juajar/liijar/inputmethods/keymap.tsv)
 
   #### Hyprland
 
@@ -247,9 +247,9 @@ Paste:
 
 1. [flake.nix](flake.nix): main flake — defines hosts, inputs, and per-system configurations.
 2. [hstjar/](./hstjar): per-host configs (one folder per machine, each with `system.nix` + `user.nix` toggle sheets).
-3. [modjar/](./modjar): shared NixOS modules:
-   - [sysbin/](./modjar/sysbin): system-level modules (NixOS options under `sysSettings.*`).
-   - [usrbin/](./modjar/usrbin): user-level modules (Home Manager options under `usrSettings.*`).
+3. [juajar/](./juajar): shared NixOS modules:
+   - [sysjar/](./juajar/sysjar): system-level modules (NixOS options under `sysset.*`).
+   - [liijar/](./juajar/liijar): user-level apps, shared by BOTH backends — every `<app>/` has an `hm.nix` (home-manager) and/or `hjem.nix` (hjem) plus a `shared.nix` (single-sourced packages + generated files). Also holds the `usrset.*` option declarations, shared shell aliases/functions, and raw WM configs.
 4. [resjar/](./resjar): resources — docs, templates, images.
 5. [rotjar/](./rotjar): temporary files in rotation. Anything in here won't be around for long.
 
@@ -274,7 +274,7 @@ The most useful aliases available after install:
 | `ckhrd` | `lsblk && fdisk -l` | Check storage blocks |
 | `,` | `nix-shell -p` (function) | Quick nix-shell — `, git curl` for interactive, `, git curl -- ls` for one-shot |
 
-Full alias list: [zsh module](modjar/usrbin/zsh/) · [installer shell](shell.nix)
+Full alias list: [liijar/shell](juajar/liijar/shell/) (shared by both backends) · [installer shell](shell.nix)
 
 ## Core Usage & Tips
 

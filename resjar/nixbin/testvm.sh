@@ -192,10 +192,10 @@ gen_overlay() {
   case "$COMBO" in
     newhost)
       echo "== generating overlay (minimal 0_TEMPLATE for newhost scaffolding) =="
-      # Overlay 0_TEMPLATE with minimal system.nix + home.nix so nixos-install
-      # fits in 20G. Without this, 0_TEMPLATE/home.nix defaults (browsers ~500mib,
+      # Overlay 0_TEMPLATE with minimal system.nix + user.nix so nixos-install
+      # fits in 20G. Without this, 0_TEMPLATE/user.nix defaults (browsers ~500mib,
       # editors ~600mib, media ~200mib, dev ~1.5gib, theming, nautilus, yazi)
-      # exceed the disk. Also disable gdm (defaults true in modjar/sysbin/gdm).
+      # exceed the disk. Also disable gdm (defaults true in juajar/sysjar/gdm).
       local d="$TEST_ROOT/overlay/hstjar/0_TEMPLATE"
       mkdir -p "$d"
       cat > "$d/default.nix" <<'EOF'
@@ -212,7 +212,7 @@ EOF
   config = {
     isInVM = true;
     system.stateVersion = "VersionNumber";
-    sysSettings = {
+    sysset = {
       mainUser = "PLEASECHANGEME_USERNAME";
       users = [ "PLEASECHANGEME_USERNAME" ];
       adminUsers = [ "PLEASECHANGEME_USERNAME" ];

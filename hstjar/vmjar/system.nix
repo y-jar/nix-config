@@ -3,7 +3,7 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Host vmjar: system-level toggle sheet (sysSettings).
+# goal: Host vmjar: system-level toggle sheet (sysset).
 # -=-=-=-=-=-=-=-=-=-=-=
 #*/-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Hi, This is the system configuration file for the picked host.
@@ -29,7 +29,7 @@
     #            [system state version from first install]
 
     # Fill this out!
-    sysSettings = {
+    sysset = {
       # =============[users]
       mainUser = "jar";
       users = [ "jar" ];
@@ -160,7 +160,7 @@
         };
       }; # end of server
       # =============[Server]^^^
-    }; # end of sysSettings
+    }; # end of sysset
 
   }; # end of config
 }

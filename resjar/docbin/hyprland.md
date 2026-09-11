@@ -6,10 +6,10 @@
 
 # Hyprland
 
-Configured via `modjar/usrbin/WindowManager[hyprland]/`. Symlinks Lua config files into `~/.config/hypr/` with per-host inputs for different machines.
+Configured via `juajar/liijar/WM-hyprland/`. Symlinks Lua config files into `~/.config/hypr/` with per-host inputs for different machines.
 
-System-level: enabled in `sysSettings.hyprland.enable` (~19MiB).
-User-level: enabled in `usrSettings.hyprland.enable`.
+System-level: enabled in `sysset.hyprland.enable` (~19MiB).
+User-level: enabled in `usrset.hyprland.enable`.
 
 ## Config structure
 

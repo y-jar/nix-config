@@ -5,13 +5,13 @@
 # -=-=-=-=-=-=-=-=-=-=-=
 # goal: Host yil01: browser apps treated as desktop apps (webapps) — hjem host.
 # -=-=-=-=-=-=-=-=-=-=-=
-# Hjem flavor of the webapp sheet. Same data shape as sysSettings.webapps so the
-# shared system module (autostart) + modjar/hjmbin/webapps build launchers/entries.
+# Hjem flavor of the webapp sheet. Same data shape as sysset.webapps so the
+# shared system module (autostart) + juajar/liijar/webapps build launchers/entries.
 # -=-=-=-=-=-=-=-=-=-=-=
 { lib, ... }:
 
 {
-  sysSettings.webapps = {
+  sysset.webapps = {
     enable = true;
     apps = [
       {
@@ -28,5 +28,5 @@
         autostart = true;
       }
     ]; # end of apps
-  }; # end of sysSettings.webapps
+  }; # end of sysset.webapps
 }

@@ -24,7 +24,7 @@
 { lib, ... }:
 
 {
-  sysSettings.webapps = {
+  sysset.webapps = {
     enable = true; # ship disabled by default; set true when you add apps below
     apps = [
       {
@@ -45,5 +45,5 @@
         mode = "pwa";
       }
     ]; # end of apps
-  }; # end of sysSettings.webapps
+  }; # end of sysset.webapps
 }
