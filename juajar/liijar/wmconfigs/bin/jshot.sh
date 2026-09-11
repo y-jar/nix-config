@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# jshot — wayland screenshot tool (grim + slurp + swappy)
+# jshot wayland screenshot tool (grim + slurp + swappy)
 # Usage: jshot [region|screen|window]
 # Saves to ~/picjar/shotbin with a date/timestamp filename (matches niri's path).
 set -eu

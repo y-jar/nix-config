@@ -6,22 +6,24 @@
 # goal: home-manager entry: imports HM + liijar hm entry + host user.nix, sets specialArgs.
 # -=-=-=-=-=-=-=-=-=-=-=
 # =-=-=[homekey.nix] =-=-=
-# Home Manager entry point. Sets up HM for the main user.
+# Home Manager entry point. Sets up HM for the main user within the system.
 #
 # What goes here:
 #   - HM module imports
 #   - Global HM settings (pkgs, backups)
 #   - extraSpecialArgs (feature flags)
 #   - Per-user config loading (usrset options + host sheet + liijar hm entry)
+#   - NOT sysmlinks
 #
 # What goes in hstjar/<host>/user.nix:
-#   - Per-host toggle switches (usrset.*) — shared with the hjem backend
+#   - Per-host toggle switches (usrset.*) shared with the hjem backend
 #
 # What goes in juajar/liijar/:
 #   - The actual app modules. Every liijar/<app>/hm.nix is auto-imported by
 #     juajar/liijar/hm.nix (below). shared.nix holds the single-sourced
 #     package lists / generated files; hjem.nix is the hjem twin.
 #   - liijar/options.nix declares the usrset sheet (shared backend-agnostic).
+#   - package configs, sysmlinks for resources within resjar/
 # =-=-=[end homekey.nix] =-=-=
 
 {
@@ -31,7 +33,6 @@
   hostnm,
   ...
 }:
-
 {
   imports = [
     inputs.home-manager.nixosModules.home-manager

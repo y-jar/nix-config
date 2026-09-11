@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ═══════════════════════════════════════════════════════
-#  testjar — gum TUI runner for installer tests
+#  testjar gum TUI runner for installer tests
 #
 #  Human:   ./resjar/nixbin/testjar          (gum menu)
 #  AI/CLI:  ./resjar/nixbin/testjar --tier1
@@ -22,7 +22,7 @@ DEFAULT_COMBO="ext4-home"
 die() { echo "FAIL: $*" >&2; exit 1; }
 
 check_deps() {
-  command -v gum >/dev/null || die "'gum' not found — run: nix-shell -p gum"
+  command -v gum >/dev/null || die "'gum' not found run: nix-shell -p gum"
   [ -x "$TESTINSTALL" ] || die "testinstall.sh not found: $TESTINSTALL"
   [ -x "$TESTVM" ] || die "testvm.sh not found: $TESTVM"
 }
@@ -36,7 +36,7 @@ pick_combo() {
     choices+="$c"$'\n'
     idx=$((idx + 1))
   done
-  choices+=$'\n'"(cancel — back to menu)"
+  choices+=$'\n'"(cancel back to menu)"
   # Navigate to default combo (Down default_idx-1 times, Enter)
   # gum choose highlights first item by default; Down×N selects Nth (0-indexed)
   local sel
@@ -98,7 +98,7 @@ main_menu() {
       "Combo: Full install (pick combo)" \
       "Show last test log" \
       "Exit" \
-      --header "Test Jar — Installer Tests" \
+      --header "Test Jar Installer Tests" \
       --height 12) || true
 
     case "$choice" in
@@ -157,12 +157,12 @@ main() {
       -h|--help)
         echo "usage: testjar [--tier1] [--smoke] [--full] [--combo NAME] [--log]"
         echo ""
-        echo "  (no args)    — gum TUI menu"
-        echo "  --tier1      — run logic tests (fast)"
-        echo "  --smoke      — run smoke test (VM, ~60s)"
-        echo "  --full       — run full install test (VM, ~10min)"
-        echo "  --combo NAME — combo to use (default: $DEFAULT_COMBO)"
-        echo "  --log        — show last test log"
+        echo "  (no args)    gum TUI menu"
+        echo "  --tier1      run logic tests (fast)"
+        echo "  --smoke      run smoke test (VM, ~60s)"
+        echo "  --full       run full install test (VM, ~10min)"
+        echo "  --combo NAME combo to use (default: $DEFAULT_COMBO)"
+        echo "  --log        show last test log"
         echo ""
         echo "available combos: $COMBOS"
         exit 0

@@ -6,7 +6,7 @@
 
 # nixdraw
 
-Self-hosted Excalidraw — a virtual whiteboard for sketching and hand-drawn diagrams. Runs as a Docker container.
+Self-hosted Excalidraw a virtual whiteboard for sketching and hand-drawn diagrams. Runs as a Docker container.
 
 ## Accessing
 
@@ -32,7 +32,7 @@ http://              # type exactly
 :3000                # type exactly, this is the port for the server
 ```
 
-Try `http://localhost:3000` first in a regular browser on the server machine — that's the simplest path to get started.
+Try `http://localhost:3000` first in a regular browser on the server machine that's the simplest path to get started.
 
 ## Configuration
 

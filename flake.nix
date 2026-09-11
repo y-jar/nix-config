@@ -167,7 +167,7 @@
       inputs.nixpkgs.follows = "nixpkgs"; # locks version to the nixpkgs to reduce duplicate data
     }; # End of homemanager
 
-    # [mangowm] wayland compositor (dwl-based) — ships nixosModules.mango
+    # [mangowm] wayland compositor (dwl-based) ships nixosModules.mango
     mangowm = {
       url = "github:mangowm/mango";
       inputs.nixpkgs.follows = "nixpkgs";

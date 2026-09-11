@@ -10,7 +10,7 @@
 # - Most heavy groups default OFF; flip what you need back on.
 # - Replace every `PLEASECHANGEME_*` with real values.
 # - Copy this whole folder to hstjar/<name>/ (via the installer) then set values.
-# - All toggles are overridable — nothing here is force-locked.
+# - All toggles are overridable nothing here is force-locked.
 {
   inputs,
   config,
@@ -37,10 +37,10 @@
       # =============[base / core packages]
       # Minimal: keep just the essentials. imaging (codecs) is OFF to save space.
       base = {
-        coreTools = true; # neovim + nh + git — keep
-        netArchives = true; # wget + curl + zip + rsync — small, keep
-        fsTools = true; # psmisc + pciutils + usbutils — small, keep
-        imaging = false; # image/video codec + thumbnail libs — OFF (large)
+        coreTools = true; # neovim + nh + git keep
+        netArchives = true; # wget + curl + zip + rsync small, keep
+        fsTools = true; # psmisc + pciutils + usbutils small, keep
+        imaging = false; # image/video codec + thumbnail libs OFF (large)
       };
       # =============[base / core packages]^^^
 

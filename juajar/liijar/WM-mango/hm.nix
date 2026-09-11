@@ -35,7 +35,7 @@ let
 
   # nix-injected startups (desktop shell spawn + system autostart commands).
   generatedStartups = ''
-    # mango (mangowm) — nix-generated startups
+    # mango (mangowm) nix-generated startups
     # Contents injected by WM-mango/default.nix from system autostart + shell toggles.
     # Don't hand-edit: rebuild to regenerate.
   ''

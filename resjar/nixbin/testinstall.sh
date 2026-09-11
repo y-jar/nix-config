@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ═══════════════════════════════════════════════════════════════
-#  testinstall.sh — Tier 1 logic tests for install.sh
+#  testinstall.sh Tier 1 logic tests for install.sh
 #  NOTE: these tests are run by an AI/LLM during development.
 #  They are NOT part of the installer and never ship in the ISO.
 #  Run with:  ./resjar/nixbin/testinstall.sh
@@ -426,7 +426,7 @@ echo "== refresh action: regen hardware-config, skip nixos-install =="
     # Pre-clone so $CLONE_DIR exists; then plant a stale hardware-config
     git clone https://github.com/y-jar/nix-config.git "$CLONE_DIR"
     printf '# STALE\n{ ... }: { }\n' > "$CLONE_DIR/hstjar/vmhost/hardware-configuration.nix"
-    # Don't re-clone — use existing clone (AUTO_CLONE unset → auto_confirm returns false)
+    # Don't re-clone use existing clone (AUTO_CLONE unset → auto_confirm returns false)
     unset INSTALLJAR_AUTO_CLONE
     export INSTALLJAR_AUTO_HOST_ACTION=refresh
     export INSTALLJAR_AUTO_HOST=vmhost

@@ -3,7 +3,7 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Web apps (browser apps as desktop apps) — hjem side.
+# goal: Web apps (browser apps as desktop apps) hjem side.
 # -=-=-=-=-=-=-=-=-=-=-=
 # Reads the host's sysset.webapps (passed via hjem.specialArgs) and writes
 # per-app launcher scripts + .desktop entries into ~/.local/bin and

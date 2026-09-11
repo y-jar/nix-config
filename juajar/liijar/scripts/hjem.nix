@@ -3,7 +3,7 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Installs user helper scripts (bldjar, jwall, etc.) — hjem side.
+# goal: Installs user helper scripts (bldjar, jwall, etc.) hjem side.
 # -=-=-=-=-=-=-=-=-=-=-=
 # The script sources live in ./scriptsbin/ (the single copy, shared with the
 # home-manager backend in hm.nix). bldjar/fixzsh/ytdl are installed always;

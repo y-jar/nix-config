@@ -3,7 +3,7 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Host petrichor: user toggle sheet (usrset) — shared by home-manager and hjem.
+# goal: Host petrichor: user toggle sheet (usrset) shared by home-manager and hjem.
 # (kwaytea's Pewta)
 # -=-=-=-=-=-=-=-=-=-=-=
 {
@@ -119,7 +119,7 @@
     ai = {
       enable = aiEnable; # sets AI tools like opencode, llama.cpp
       opencode.enable = true; # opencode CLI + GUI (keep even if local llama is off)
-      lmstudio.enable = false; # LM Studio (~2.3GiB) — set false to save space
+      lmstudio.enable = false; # LM Studio (~2.3GiB) set false to save space
     };
     dictation.enable = false; # voxtype push-to-talk dictation + meeting/VTT transcript (F9)
     git.enable = true; # ~10mib - git + gh + lazygit

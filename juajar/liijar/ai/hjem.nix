@@ -3,7 +3,7 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: hjem: AI tools (opencode) — direct file writes.
+# goal: hjem: AI tools (opencode) direct file writes.
 # -=-=-=-=-=-=-=-=-=-=-=
 # Writes opencode config directly into hjem's user `files` option:
 #   ~/.config/opencode/opencode.json  (provider settings)
@@ -110,7 +110,7 @@ let
       | `resjar/docbin/` | Documentation (install guide, per-feature guides) |
       | `resjar/nixbin/` | Nix templates and reference code |
       | `.rotjar/reposjar/` | Reference NixOS configs from other people (for patterns/inspiration) |
-      | `flake.nix` | Main flake — hosts, inputs, system builders (mkJar, mkHjemJar, urnJar) |
+      | `flake.nix` | Main flake hosts, inputs, system builders (mkJar, mkHjemJar, urnJar) |
 
       ## Search Strategy
 
@@ -118,16 +118,17 @@ let
       2. Check `hstjar/0_TEMPLATE/system.nix` for the full list of available sysset options
       3. Look in `juajar/sysjar/` to see how an existing option is implemented before writing new ones
       4. Reference `.rotjar/reposjar/` for patterns from other NixOS configs when stuck
-      5. Read the target host's system.nix before suggesting changes — never assume what's already set
+      5. Read the target host's system.nix before suggesting changes never assume what's already set
 
       ## Module Patterns
 
       - `sysset` options go in `juajar/sysjar/<feature>/default.nix`
-      - `usrset` options are ALL declared in `juajar/liijar/options.nix` — never elsewhere
+      - `usrset` options are ALL declared in `juajar/liijar/options.nix` never elsewhere
       - New app = a dir in `juajar/liijar/<app>/` with `hm.nix` and/or `hjem.nix` (+ `shared.nix`)
+      - New app? copy `juajar/liijar/cowsay/` the commented reference example
       - Boolean toggle pattern: `lib.mkOption { type = lib.types.bool; default = true/false; }`
       - Conditional config: wrap in `lib.mkIf cfg.enable { ... }`
-      - `juajar/sysjar/default.nix` auto-imports everything — no manual registration needed
+      - `juajar/sysjar/default.nix` auto-imports everything no manual registration needed
       - Follow the project's naming: `sysjar` for system, `liijar` for user apps (both backends)
 
       ## Rules
@@ -160,12 +161,12 @@ let
 
       ## Vault Structure
 
-      - `7qs/` — Main worldbuilding vault (metaphysics, species, time, space, factions, cultures, astronomy)
-      - `conlangs/` — Constructed languages (currently: Ylle'an / l1)
-      - `projects/` — Stories, songs, poems, writing projects
-      - `Excalidraw/` — Diagrams and visual maps
-      - `ai-tools/` — AI tool documentation and routing
-      - `.loom-lang-cache.json` — Pre-built lexicon cache for quick lookups
+      - `7qs/` Main worldbuilding vault (metaphysics, species, time, space, factions, cultures, astronomy)
+      - `conlangs/` Constructed languages (currently: Ylle'an / l1)
+      - `projects/` Stories, songs, poems, writing projects
+      - `Excalidraw/` Diagrams and visual maps
+      - `ai-tools/` AI tool documentation and routing
+      - `.loom-lang-cache.json` Pre-built lexicon cache for quick lookups
 
       ## File Format
 
@@ -183,26 +184,26 @@ let
 
       When handling Ylle'an translation or vocabulary tasks, **always** follow this order:
 
-      1. **Load `ai-tools/conlang.md`** — it maps the full language structure and documents the translation tool.
-      2. **Use `loom-lang-loader.py`** for lookups and translations — do NOT manually search 170+ vocabulary files:
-         - `python3 ai-tools/loom-lang-loader.py translate "english phrase"` — word-by-word translation with proposals for missing words
-         - `python3 ai-tools/loom-lang-loader.py lookup "word"` — find Ylle'an matches for an English word
-         - `python3 ai-tools/loom-lang-loader.py dump` — full lexicon reference dump
-         - `python3 ai-tools/loom-lang-loader.py index` — rebuild `.loom-lang-cache.json` after vocabulary changes
+      1. **Load `ai-tools/conlang.md`** it maps the full language structure and documents the translation tool.
+      2. **Use `loom-lang-loader.py`** for lookups and translations do NOT manually search 170+ vocabulary files:
+         - `python3 ai-tools/loom-lang-loader.py translate "english phrase"` word-by-word translation with proposals for missing words
+         - `python3 ai-tools/loom-lang-loader.py lookup "word"` find Ylle'an matches for an English word
+         - `python3 ai-tools/loom-lang-loader.py dump` full lexicon reference dump
+         - `python3 ai-tools/loom-lang-loader.py index` rebuild `.loom-lang-cache.json` after vocabulary changes
       3. The script uses `.loom-lang-cache.json` (auto-built on first run) for speed. Only manually read vocabulary `.md` files if the tool doesn't have what you need.
       4. Apply grammar rules (SOV order, particles, tense markers) from the grammar docs after getting word matches from the tool.
 
       ## Rules
 
       - **ALWAYS ask before editing any file.** Present the change and wait for approval.
-      - Read existing files before making suggestions — never assume what's already there.
+      - Read existing files before making suggestions never assume what's already there.
       - Use the `ai-tools/` guides to orient yourself before searching broadly.
-      - Keep the owner's voice in documentation — don't make it sound robotic.
+      - Keep the owner's voice in documentation don't make it sound robotic.
       - When you find a problem, explain it clearly and suggest a fix rather than just pointing it out.
       - Respect Obsidian conventions: use `![[embeds]]`, YAML frontmatter, and Obsidian-style links.
       - For Obsidian links to vocabulary, use `[[root_name]]` format linking to the root file in `Vocabulary/roots/`.
       - For Ylle'an translation or vocabulary tasks, load `ai-tools/conlang.md` first
-      - Use `python3 ai-tools/loom-lang-loader.py` for translations and lookups — it has a cache and word proposal engine, don't manually search 170+ vocabulary files
+      - Use `python3 ai-tools/loom-lang-loader.py` for translations and lookups it has a cache and word proposal engine, don't manually search 170+ vocabulary files
       - Use `[[root_name]]` Obsidian links when referencing vocabulary roots in documentation
     '';
   }; # end of agents

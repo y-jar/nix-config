@@ -55,14 +55,14 @@ Use `@doc-writer` in the chat to invoke this agent for documentation tasks.
 
 ### conlang-writer
 A specialist for constructed language creation and maintenance. Helps with:
-- **Auditing** — scan vocabulary for inconsistencies, orphaned roots, broken derivations
-- **Word mapping** — trace root → affix → word chains, map relationships between words
-- **Documentation** — write grammar docs and word entries in your writing style
-- **Word generation** — suggest new words following existing phonological/morphological patterns
+- **Auditing** scan vocabulary for inconsistencies, orphaned roots, broken derivations
+- **Word mapping** trace root → affix → word chains, map relationships between words
+- **Documentation** write grammar docs and word entries in your writing style
+- **Word generation** suggest new words following existing phonological/morphological patterns
 
 Knows the project structure:
-- `./conlangs/l1-lang/vocab/` — words, roots, particles, adjectives, folds (affixes)
-- `./conlangs/l1-lang/docs/` — grammar and documentation
+- `./conlangs/l1-lang/vocab/` words, roots, particles, adjectives, folds (affixes)
+- `./conlangs/l1-lang/docs/` grammar and documentation
 - Files use markdown with Obsidian YAML frontmatter (properties)
 
 Use `@conlang-writer` in the chat to invoke this agent for conlang tasks.

@@ -3,11 +3,11 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Host calender: user toggle sheet (usrset) — shared by home-manager and hjem.
+# goal: Host calender: user toggle sheet (usrset) shared by home-manager and hjem.
 # -=-=-=-=-=-=-=-=-=-=-=
 # This is the USER configuration file for this host (one sheet, both backends).
 # - Each option below is a toggle: enable only what you need.
-# - Keep `shell.enable` true — it's the default shell for most systems.
+# - Keep `shell.enable` true it's the default shell for most systems.
 # - WM toggles mirror the system sheet (./system.nix) via the *Enable args.
 # - Pair options here with the matching system toggles in ./system.nix.
 {
@@ -37,7 +37,7 @@
       noctalia.enable = false; # noctalia desktop shell (shelljar replaces it)
     };
     mango = {
-      enable = mangoEnable; # mango (mangowm) — the compositor calender runs
+      enable = mangoEnable; # mango (mangowm) the compositor calender runs
       shelljar.enable = true; # my quickshell island shell (binds.conf is all shjctl)
     };
     launcher.enable = true; # sets launcher fuzzel
@@ -124,7 +124,7 @@
     ai = {
       enable = aiEnable; # sets AI tools like opencode, llama.cpp
       opencode.enable = true; # opencode CLI + GUI (keep even if local llama is off)
-      lmstudio.enable = false; # LM Studio (~2.3GiB) — set false to save space
+      lmstudio.enable = false; # LM Studio (~2.3GiB) set false to save space
     };
     dictation.enable = true; # push-to-talk dictation + meeting/VTT transcript (voxtype, F9)
     git.enable = true; # sets git

@@ -3,7 +3,7 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: User home directories — hjem side.
+# goal: User home directories hjem side.
 # =-=-=[directories] =-=-=
 # Creates custom jar-prefixed directories in the
 # home folder. Runs once via .profile on login (the dirSetup bus is
@@ -22,6 +22,6 @@ let
   '';
 in
 {
-  # always expose the dir setup — it's harmless and idempotent
+  # always expose the dir setup it's harmless and idempotent
   config.hjemDotfiles.dirSetup = dirSetup;
 }

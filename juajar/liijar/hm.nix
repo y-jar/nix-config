@@ -8,7 +8,7 @@
 # =-=-=[liijar/hm.nix] =-=-=
 # Imported by juajar/homekey.nix into the home-manager user scope.
 # Every juajar/liijar/<app>/ directory that has an hm.nix gets imported.
-# (App dirs can also carry sibling files + shared.nix — those are imported
+# (App dirs can also carry sibling files + shared.nix those are imported
 # by the app's own hm.nix/hjem.nix, never by this auto-importer.)
 # =-=-=[end liijar/hm.nix] =-=-=
 { lib, ... }:

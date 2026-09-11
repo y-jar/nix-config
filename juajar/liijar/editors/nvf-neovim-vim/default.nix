@@ -3,7 +3,7 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: NVF (neovim) config entry — options/imports.
+# goal: NVF (neovim) config entry options/imports.
 # -=-=-=-=-=-=-=-=-=-=-=
 {
   inputs,

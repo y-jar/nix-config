@@ -3,11 +3,11 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Host 0_TEMPLATE: user toggle sheet (usrset) — shared by home-manager and hjem.
+# goal: Host 0_TEMPLATE: user toggle sheet (usrset) shared by home-manager and hjem.
 # -=-=-=-=-=-=-=-=-=-=-=
 # This is the USER configuration file for this host (one sheet, both backends).
 # - Each option below is a toggle: enable only what you need (sizes are rough).
-# - Keep `shell.enable` true — it's the default shell for most systems.
+# - Keep `shell.enable` true it's the default shell for most systems.
 # - WM toggles mirror the system sheet (./system.nix) via the *Enable args.
 # - Pair options here with the matching system toggles in ./system.nix.
 # - For extra Hyprland/Niri per-host config see juajar/liijar/wmconfigs (host-inputs).
@@ -29,6 +29,7 @@
     # enables zsh shell with aliases [should be on by default]
     shell.enable = true;
     wine.enable = false; # ~500mib - windows compatibility layer (opt-in)
+    # cowsay.enable = true; # reference example module copy juajar/liijar/cowsay for new apps
 
     # =========[experience] [pick one or more if you know what you're doing] [sizes approximate]
     hyprland.enable = hyprlandEnable;
@@ -119,7 +120,7 @@
     ai = {
       enable = aiEnable; # sets AI tools like opencode, llama.cpp
       opencode.enable = true; # opencode CLI + GUI (keep even if local llama is off)
-      lmstudio.enable = true; # LM Studio (~2.3GiB) — set false to save space
+      lmstudio.enable = true; # LM Studio (~2.3GiB) set false to save space
     };
     dictation.enable = false; # voxtype push-to-talk dictation + meeting/VTT transcript (F9)
     git.enable = true; # ~10mib - git + gh + lazygit

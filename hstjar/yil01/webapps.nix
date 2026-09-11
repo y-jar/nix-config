@@ -3,7 +3,7 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Host yil01: browser apps treated as desktop apps (webapps) — hjem host.
+# goal: Host yil01: browser apps treated as desktop apps (webapps) hjem host.
 # -=-=-=-=-=-=-=-=-=-=-=
 # Hjem flavor of the webapp sheet. Same data shape as sysset.webapps so the
 # shared system module (autostart) + juajar/liijar/webapps build launchers/entries.

@@ -8,7 +8,7 @@
 # =-=-=[liijar/fuzzel/shared.nix] =-=-=
 # Pure data shared by both backends:
 #   - settings: the fuzzel.ini values (HM serializes them via programs.fuzzel,
-#     hjem via pkgs.formats.ini — same values, same file)
+#     hjem via pkgs.formats.ini same values, same file)
 #   - packages: the fuzzel binary + the jarScripts helpers (jsearch/jpower/
 #     jemoji from liijar/wmconfigs/bin), gated on the unified
 #     niri || hyprland || launcher gate used by both backends.
@@ -37,7 +37,7 @@ let
   ];
 in
 {
-  # fuzzel.ini values — full glass, colorless, no outline: a very subtle
+  # fuzzel.ini values full glass, colorless, no outline: a very subtle
   # neutral tint over the compositor blur (frosted), solid dark-gray
   # selection for readability.
   settings = {

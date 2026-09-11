@@ -5,7 +5,7 @@
 # -=-=-=-=-=-=-=-=-=-=-=
 # goal: OBS shared data: obs-studio package.
 # -=-=-=-=-=-=-=-=-=-=-=
-# (the six HM plugins stay HM-side — hjem hosts never had them)
+# (the six HM plugins stay HM-side hjem hosts never had them)
 {
   cfg,
   pkgs,

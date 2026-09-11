@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# jclip — clipboard history menu (cliphist + fuzzel)
+# jclip clipboard history menu (cliphist + fuzzel)
 # Usage:
 #   jclip            # pick an entry and put it on the clipboard
 #   jclip --wipe     # clear clipboard history

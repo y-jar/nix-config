@@ -3,7 +3,7 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: The usrset toggle sheet — single source of truth for user options.
+# goal: The usrset toggle sheet single source of truth for user options.
 # -=-=-=-=-=-=-=-=-=-=-=
 # =-=-=[liijar/options.nix] =-=-=
 # Declares every `usrset.*` option ONCE. Imported by BOTH user backends:
@@ -37,6 +37,11 @@
       description = "Enable zsh shell";
     };
     wine.enable = lib.mkEnableOption "wine (windows compatibility layer, ~500MiB)";
+    cowsay.enable = lib.mkOption {
+      type = lib.types.bool;
+      default = true; # always installed unless a host turns it off
+      description = "Enable cowsay. REFERENCE EXAMPLE module copy juajar/liijar/cowsay/ for new apps";
+    };
 
     # [experience]
     hyprland = {

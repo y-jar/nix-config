@@ -3,7 +3,7 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Host 0_MINIMAL: lean user toggle sheet (usrset) — shared by both backends.
+# goal: Host 0_MINIMAL: lean user toggle sheet (usrset) shared by both backends.
 # -=-=-=-=-=-=-=-=-=-=-=
 # Bare essentials: shell + terminal + a browser + opencode (non-local AI).
 # Heavy groups (editors, chat, media, art, office, dev, gaming) default OFF.
@@ -33,7 +33,7 @@
       noctalia.enable = false; # noctalia desktop shell
     };
     mango = {
-      enable = mangoEnable; # mango (mangowm) — default WM on this minimal host
+      enable = mangoEnable; # mango (mangowm) default WM on this minimal host
       shelljar.enable = false; # my quickshell island shell
     };
     launcher.enable = true; # ~10mib - fuzzel launcher

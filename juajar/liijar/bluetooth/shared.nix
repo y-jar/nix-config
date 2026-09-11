@@ -3,7 +3,7 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Blueman GUI (user-level bluetooth tool) — both backends.
+# goal: Blueman GUI (user-level bluetooth tool) both backends.
 # -=-=-=-=-=-=-=-=-=-=-=
 {
   cfg,

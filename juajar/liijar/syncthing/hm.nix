@@ -6,7 +6,7 @@
 # goal: Syncthing file sync (web UI :8384).
 # -=-=-=-=-=-=-=-=-=-=-=
 # =-=-=[liijar/syncthing/hm.nix] =-=-=
-# home-manager backend only — hjem hosts never had syncthing, so this app
+# home-manager backend only hjem hosts never had syncthing, so this app
 # ships no hjem.nix (the liijar/hjem.nix auto-import skips it).
 # =-=-=[end liijar/syncthing/hm.nix] =-=-=
 {

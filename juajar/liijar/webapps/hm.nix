@@ -3,7 +3,7 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Web apps (browser apps as desktop apps) — home-manager side.
+# goal: Web apps (browser apps as desktop apps) home-manager side.
 # -=-=-=-=-=-=-=-=-=-=-=
 # Data comes from the host's hstjar/<host>/webapps.nix (sets sysset.webapps,
 # declared by juajar/sysjar/webapps, passed here as the `webapps` specialArg).

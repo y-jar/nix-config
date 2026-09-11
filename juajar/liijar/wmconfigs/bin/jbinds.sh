@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# jbinds — mango keybind cheat sheet in a floating foot window.
+# jbinds mango keybind cheat sheet in a floating foot window.
 # Parses ~/.config/mango/binds.conf into a sectioned "key -> action" table.
 # Bind: SUPER+SHIFT+Slash ("?"). Close: press any key (or q) inside the window.
 set -eu

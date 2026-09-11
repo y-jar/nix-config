@@ -3,7 +3,7 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Host yil01: user toggle sheet (usrset) — shared by home-manager and hjem.
+# goal: Host yil01: user toggle sheet (usrset) shared by home-manager and hjem.
 # (live as yil01 = mkJar / yil02 = mkHjemJar, both read this sheet)
 # -=-=-=-=-=-=-=-=-=-=-=
 {
@@ -117,7 +117,7 @@
     ai = {
       enable = aiEnable; # sets AI tools like opencode, llama.cpp
       opencode.enable = true; # opencode CLI + GUI (keep even if local llama is off)
-      lmstudio.enable = true; # LM Studio (~2.3GiB) — set false to save space
+      lmstudio.enable = true; # LM Studio (~2.3GiB) set false to save space
     };
     dictation.enable = false;
     git.enable = true;

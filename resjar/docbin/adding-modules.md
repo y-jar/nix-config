@@ -86,3 +86,24 @@ after it is done, if you configure Home Manager this is what you need to do:
   };
 }
 ```
+
+
+## Adding an app to the jar (the modern way)
+
+since the big reorg, user-level apps live in ONE tree: [juajar/liijar/](../../juajar/liijar). every app gets a dir with up to three files, and both backends (home-manager + hjem) read the same app:
+
+```
+juajar/liijar/<app>/
+  shared.nix   # the app's data: packages + generated files (single source)
+  hm.nix       # home-manager adapter (home.packages, home.file, programs.*)
+  hjem.nix     # hjem adapter (packages, files."...".source)
+```
+
+**cowsay is the commented reference example** read [juajar/liijar/cowsay/](../../juajar/liijar/cowsay), every file explains itself + the gotchas. the short version:
+
+1. `juajar/liijar/options.nix` declare your toggle (`usrset.<app>.enable = ...`) there and ONLY there
+2. copy `cowsay/` to `liijar/<app>/`, put your packages in `shared.nix`
+3. flip the toggle in the host's `hstjar/<host>/user.nix`
+4. done both `liijar/hm.nix` and `liijar/hjem.nix` auto-import the app. no registration, no key edits
+
+gotchas the example comments cover: `//` does not compose `lib.mkIf` (use `lib.mkMerge`), programs.* wraps binaries (filter raw pkgs out on the hm side), hjem has no programs.*/user units (write unit files + the dirSetup bus).

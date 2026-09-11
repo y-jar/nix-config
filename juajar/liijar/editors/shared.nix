@@ -10,7 +10,7 @@
 # toggle + their own sub-toggle; obsidian/helix follow only their own
 # sub-toggle. home-manager hosts install all of these via programs.* in
 # hm.nix (hjem hosts never had the plain gnome-text-editor base list, so
-# that stays HM-side only). nvf is NOT here — hjem hosts get it via the
+# that stays HM-side only). nvf is NOT here hjem hosts get it via the
 # system-level bridge (sysset.nvf), not as a user package.
 # =-=-=[end liijar/editors/shared.nix] =-=-=
 {

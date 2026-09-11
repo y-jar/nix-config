@@ -15,17 +15,17 @@ User-level: enabled in `usrset.hyprland.enable`.
 
 ```
 WindowManager[hyprland]/
-├── base.lua              # entry point — requires all hl/*.lua files
-├── default.nix           # NixOS module — deploys config, selects host-inputs
+├── base.lua              # entry point requires all hl/*.lua files
+├── default.nix           # NixOS module deploys config, selects host-inputs
 ├── hl/
 │   ├── animations.lua    # animation curves
 │   ├── autostart.lua     # startup apps (noctalia, easyeffects, etc.)
 │   ├── colors.lua        # color definitions
-│   ├── genr.lua          # general settings — layout, gaps, blur, input, cursor
+│   ├── genr.lua          # general settings layout, gaps, blur, input, cursor
 │   ├── keybinds.lua      # all keybindings
 │   ├── rules.lua         # window, workspace, and layer rules
 │   ├── shell-rules.lua   # noctalia/wayle layer rules
-│   ├── vars.lua          # variables — app names, modifiers
+│   ├── vars.lua          # variables app names, modifiers
 │   └── scripts-bin/
 │       ├── hypr-workspace.sh   # per-monitor workspace dispatcher
 │       └── launch_first_available.sh
@@ -48,7 +48,7 @@ Each monitor gets its own range of 10 workspaces. Monitors are ordered by positi
 
 `SUPER+1` switches to workspace 1 on whichever monitor you're focused on. Focus stays on the current monitor.
 
-Implemented by `hl/scripts-bin/hypr-workspace.sh` — detects the current monitor via `hyprctl activeworkspace`, calculates the absolute workspace number, and dispatches.
+Implemented by `hl/scripts-bin/hypr-workspace.sh` detects the current monitor via `hyprctl activeworkspace`, calculates the absolute workspace number, and dispatches.
 
 Single-monitor hosts automatically get workspaces 1–10 (no config needed).
 

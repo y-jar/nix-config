@@ -17,7 +17,7 @@
 #   - The nvf bridge (usrset.editors.nvf -> sysset.nvf)
 #
 # What goes in hstjar/<host>/user.nix:
-#   - Per-host toggle switches (usrset.*) — shared with the home-manager backend
+#   - Per-host toggle switches (usrset.*) shared with the home-manager backend
 #
 # What goes in juajar/liijar/:
 #   - The actual app modules. Every liijar/<app>/hjem.nix is auto-imported by
@@ -29,6 +29,7 @@
 #     New app = drop a dir in liijar/<app>/ with an hm.nix and/or hjem.nix.
 #     No central wiring needed.
 #   - liijar/options.nix declares the usrset sheet (shared backend-agnostic).
+#   - package configs, sysmlinks for resources within resjar/
 # =-=-=[end hjemkey.nix] =-=-=
 
 {

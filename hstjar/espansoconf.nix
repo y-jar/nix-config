@@ -5,7 +5,7 @@
 # -=-=-=-=-=-=-=-=-=-=-=
 # goal: Shared espanso triggers/replacements consumed by host user.nix.
 # -=-=-=-=-=-=-=-=-=-=-=
-# espanso text expander — shared trigger/replacement config.
+# espanso text expander shared trigger/replacement config.
 # Consumed by host user.nix:
 #   espanso = (import ../espansoconf.nix { });                     # enabled (default)
 #   espanso = (import ../espansoconf.nix { enable = false; });     # headless / template hosts

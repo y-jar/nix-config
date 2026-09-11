@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ═══════════════════════════════════════════════════════
-#  NixOS in a Jar — Interactive Installer
+#  NixOS in a Jar Interactive Installer
 #  Uses gum for TUI prompts
 # ═══════════════════════════════════════════════════════
 set -euo pipefail
@@ -21,7 +21,7 @@ NC='\033[0m'
 
 # ──[privileged runner with TEST-MODE guard]
 # INSTALLJAR_TEST_MODE=1 turns privileged/destructive ops into no-ops
-# (defense in depth — should only ever be set by the test harness).
+# (defense in depth should only ever be set by the test harness).
 run_privileged() {
     if [ "${INSTALLJAR_TEST_MODE:-0}" = "1" ]; then
         gum log --level warn "TEST-MODE: skipping privileged op: sudo $*"
@@ -124,7 +124,7 @@ add_host_to_flake() {
 
     # Check if host already exists in flake.nix
     if grep -qP "^\s*${host}\s*=\s*mkJar" "$FLAKE_PATH"; then
-        gum log --level warn "Host '$host' already exists in flake.nix — skipping"
+        gum log --level warn "Host '$host' already exists in flake.nix skipping"
         return 0
     fi
 
@@ -159,7 +159,7 @@ open_editor() {
     elif command -v nano &>/dev/null; then
         nano "$file"
     else
-        gum log --level warn "No editor found — edit manually: $file"
+        gum log --level warn "No editor found edit manually: $file"
     fi
 }
 
@@ -216,8 +216,8 @@ fresh_install() {
     # Step 5: Edit configs
     gum style --border normal --align center --width 50 \
         "Now edit your configs!" \
-        "hstjar/$host/system.nix  — system toggles" \
-        "hstjar/$host/user.nix    — user toggles"
+        "hstjar/$host/system.nix  system toggles" \
+        "hstjar/$host/user.nix    user toggles"
 
     if gum confirm "Open system.nix in editor?"; then
         open_editor "$target_dir/system.nix"
@@ -234,7 +234,7 @@ fresh_install() {
     if gum confirm "Test configuration first? (nht)"; then
         gum log --level info "Testing $host..."
         nh os test --accept-flake-config ~/nix-config#"$host" || {
-            gum log --level error "Test failed — fix your config and try again"
+            gum log --level error "Test failed fix your config and try again"
             return 1
         }
         gum log --level info "Test passed!"
@@ -306,7 +306,7 @@ update_existing() {
     if gum confirm "Pull latest changes from repo?"; then
         gum log --level info "Pulling..."
         git -C "$NIX_CONFIG_DIR" pull --rebase origin main || {
-            gum log --level warn "Pull failed — continuing anyway"
+            gum log --level warn "Pull failed continuing anyway"
         }
     fi
 
@@ -367,7 +367,7 @@ manual_install() {
     gum format -t code 'git clone https://github.com/y-jar/nix-config.git ~/nix-config
 cd ~/nix-config'
     if ! gum confirm "Done?"; then
-        gum log --level info "Exiting — resume when ready"
+        gum log --level info "Exiting resume when ready"
         return 0
     fi
 
@@ -450,7 +450,7 @@ pick_part() {
     local required="$3"
     local chosen_parts="$4"
 
-    # Auto-mode: match by prompt keyword (order matters — Root before boot
+    # Auto-mode: match by prompt keyword (order matters Root before boot
     # because "Root partition (skip BIOS boot)" contains "boot")
     if [ "${INSTALLJAR_AUTO:-0}" = "1" ]; then
         case "$prompt" in
@@ -526,22 +526,22 @@ verify_boot_partition_check() {
                 echo "BIOS boot mode + GPT partition table detected, but no 'BIOS boot' partition found."
                 echo "GRUB on BIOS+GPT requires a 1M partition of type 'BIOS boot' (unformatted)."
                 echo "Without it, GRUB cannot install on GPT+btrfs (btrfs has no blocklist fallback)."
-                echo "Fix: sudo cfdisk $disk — add a 1M partition of type 'BIOS boot', then re-run."
+                echo "Fix: sudo cfdisk $disk add a 1M partition of type 'BIOS boot', then re-run."
             fi
             return 1
         fi
     elif [ "$mode" = "UEFI" ] && [ "$pttype" = "gpt" ]; then
         if [ -z "$boot_part" ]; then
             echo "UEFI boot mode + GPT detected, but no EFI System partition selected."
-            echo "Fix: sudo cfdisk $disk — add a 512M partition of type 'EFI System', then re-run."
+            echo "Fix: sudo cfdisk $disk add a 512M partition of type 'EFI System', then re-run."
             return 1
         fi
     fi
 
     if [ "$mode" = "BIOS" ] && [ "$fs_type" = "xfs" ] && [ -z "$boot_part" ]; then
         echo "BIOS boot mode + XFS filesystem: a separate /boot partition (ext4) is required."
-        echo "GRUB 2.12 cannot read modern XFS — it needs an ext4 /boot to find the kernel."
-        echo "Fix: sudo cfdisk $disk — add a 1G partition (Linux filesystem) for /boot, then re-run."
+        echo "GRUB 2.12 cannot read modern XFS it needs an ext4 /boot to find the kernel."
+        echo "Fix: sudo cfdisk $disk add a 1G partition (Linux filesystem) for /boot, then re-run."
         return 1
     fi
 
@@ -573,7 +573,7 @@ verify_boot_partition() {
     return 0
 }
 
-# ──[detect if we're running in a VM — used to pick portable vs generated hardware config]
+# ──[detect if we're running in a VM used to pick portable vs generated hardware config]
 # Checks systemd-detect-virt first; falls back to isInVM=true in the host's system.nix.
 is_vm_host() {
     local clone_dir="$1" host="$2"
@@ -710,12 +710,12 @@ copy_config_to_home() {
     local main_user="$1" clone_dir="$2"
     [ "${INSTALLJAR_TEST_MODE:-0}" = "1" ] && return 0
     if [ -z "$main_user" ]; then
-        gum log --level warn "No mainUser set — skipping ~/nix-config copy (config stays at $clone_dir)"
+        gum log --level warn "No mainUser set skipping ~/nix-config copy (config stays at $clone_dir)"
         return 0
     fi
     local home_dir="/mnt/home/$main_user"
     if [ ! -d "$home_dir" ]; then
-        gum log --level warn "Home dir $home_dir doesn't exist — skipping ~/nix-config copy"
+        gum log --level warn "Home dir $home_dir doesn't exist skipping ~/nix-config copy"
         return 0
     fi
 
@@ -730,10 +730,10 @@ copy_config_to_home() {
         # Force flush writes to disk so a hard VM kill doesn't lose the new files.
         run_privileged sync
     else
-        gum log --level warn "Source $clone_dir doesn't exist — skipping ~/nix-config copy"
+        gum log --level warn "Source $clone_dir doesn't exist skipping ~/nix-config copy"
     fi
 
-    # Chown the ENTIRE home directory — nixos-install runs as root, so
+    # Chown the ENTIRE home directory nixos-install runs as root, so
     # home-manager activation creates root-owned files (~/.zshrc, ~/.config/*,
     # XDG dirs, etc.). Without this, GDM authenticates the user but the
     # session crashes on permission errors, looping back to the login screen.
@@ -748,7 +748,7 @@ copy_config_to_home() {
         gum log --level warn "copy_config_to_home: chown $uid_gid $home_dir failed (files may be root-owned)"
         return 0
     fi
-    gum log --level info "Home directory owned by $main_user — session should start cleanly"
+    gum log --level info "Home directory owned by $main_user session should start cleanly"
     return 0
 }
 
@@ -796,7 +796,7 @@ copy_network_config() {
 
     if [ "$copied" = "1" ]; then
         run_privileged sync
-        gum log --level info "Network credentials copied — Wi-Fi should work on first boot"
+        gum log --level info "Network credentials copied Wi-Fi should work on first boot"
     else
         gum log --level info "No live network credentials found to copy"
     fi
@@ -825,7 +825,7 @@ gen_vm_hardware_config() {
     local boot_mode="${8:-UEFI}"
 
     local out=""
-    out+="# Portable hardware config — generated by installjar for VM hosts."$'\n'
+    out+="# Portable hardware config generated by installjar for VM hosts."$'\n'
     out+="# Safe to edit and commit; uses device paths so it works across VMs."$'\n\n'
     out+=$'{ config, lib, pkgs, modulesPath, ... }:\n\n'
     out+=$'{\n'
@@ -969,7 +969,7 @@ iso_install() {
     fi
     if [ "$fs_type" = "xfs" ] && [ "$boot_mode" = "BIOS" ]; then
         gum log --level warn "XFS + BIOS detected: creating separate 1G ext4 /boot partition."
-        gum log --level warn "GRUB 2.12 cannot read modern XFS — ext4 /boot holds the kernel + initrd."
+        gum log --level warn "GRUB 2.12 cannot read modern XFS ext4 /boot holds the kernel + initrd."
     fi
     gum log --level info "Filesystem: $fs_type"
 
@@ -1077,7 +1077,7 @@ $guide"
         home_part=$(pick_part "$target_disk" "Home partition (or skip)" "optional" "$chosen")
         [ -n "$home_part" ] && chosen+="$home_part"$'\n'
         if [ -z "$home_part" ]; then
-            gum log --level warn "No home partition picked — using $root_part for /home instead"
+            gum log --level warn "No home partition picked using $root_part for /home instead"
             separate_home=false
         fi
     fi
@@ -1224,7 +1224,7 @@ $guide"
 
             while true; do
                 local net_choice
-                net_choice=$(printf '%b' "${net_options%$'\n'}" | gum choose --header "No network — pick a tool to connect" --height 8)
+                net_choice=$(printf '%b' "${net_options%$'\n'}" | gum choose --header "No network pick a tool to connect" --height 8)
                 [ -z "$net_choice" ] && net_choice="Cancel install"
 
                 case "$net_choice" in
@@ -1352,7 +1352,7 @@ $guide"
                     "$clone_dir/flake.nix"
                 gum log --level info "Registered $new_host in flake.nix"
             else
-                gum log --level warn "Marker not found in flake.nix — manual addition needed"
+                gum log --level warn "Marker not found in flake.nix manual addition needed"
                 gum log --level info "Add this line under nixosConfigurations in flake.nix:"
                 gum log --level info "  $new_host = mkJar \"$new_host\";"
                 gum confirm "Open flake.nix in \${EDITOR:-nano} to add manually?" && \
@@ -1380,7 +1380,7 @@ $guide"
                 [ -n "$sv" ] && sed -i "s/VersionNumber/$sv/" "$sys_file"
                 gum log --level info "Replaced placeholders in hstjar/$new_host/system.nix"
             else
-                gum log --level warn "system.nix not found in new host dir — skipping placeholder replacement"
+                gum log --level warn "system.nix not found in new host dir skipping placeholder replacement"
             fi
             # Replace HomeManagerVersionNumber in user.nix (same version as system)
             if [ -f "$home_file" ]; then
@@ -1479,7 +1479,7 @@ File: hstjar/$host/hardware-configuration.nix"
                 return 1
             fi
             gum log --level info "Selected host: $host"
-            # main_user read from system.nix (existing path — current behavior)
+            # main_user read from system.nix (existing path current behavior)
             main_user=$(grep -oP 'mainUser\s*=\s*"\K[^"]+' "$clone_dir/hstjar/$host/system.nix" 2>/dev/null | head -1 || true)
             ;;
         *)
@@ -1496,7 +1496,7 @@ File: hstjar/$host/hardware-configuration.nix"
     # Generate hardware config (skip if refresh already did it inline)
     if [ "$hw_config_done" != "1" ]; then
         if is_vm_host "$clone_dir" "$host"; then
-            gum log --level info "VM host detected ($host) — writing portable hardware config"
+            gum log --level info "VM host detected ($host) writing portable hardware config"
             gen_vm_hardware_config "$fs_type" "$use_subvolumes" "$separate_home" \
                 "$boot_part" "$root_part" "$home_part" "$swap_part" "$boot_mode" \
                 | run_privileged tee "$clone_dir/hstjar/$host/hardware-configuration.nix" >/dev/null
@@ -1526,7 +1526,7 @@ File: hstjar/$host/hardware-configuration.nix"
         return 0
     fi
 
-    gum log --level info "Installing NixOS — build & copy logs below (this takes a while)..."
+    gum log --level info "Installing NixOS build & copy logs below (this takes a while)..."
     run_privileged nixos-install --no-root-passwd --flake "$clone_dir#$host" --show-trace
 
     local install_status=$?
@@ -1561,7 +1561,7 @@ File: hstjar/$host/hardware-configuration.nix"
         gum log --level info "Setting root password..."
         printf '%s:%s\n' root "$root_pass" | run_privileged nixos-enter --root /mnt -c chpasswd
     else
-        gum log --level warn "Root password left empty — root stays passwordless"
+        gum log --level warn "Root password left empty root stays passwordless"
     fi
 
     if [ -n "$main_user" ]; then
@@ -1605,7 +1605,7 @@ gum style --border normal --width 50 "Step 13: Next steps"
     # Offer a chroot shell for debugging/password resets before rebooting
     if [ "${INSTALLJAR_AUTO:-0}" != "1" ]; then
         if gum confirm "Drop into installed system shell before reboot?"; then
-            gum log --level info "Launching nixos-enter — type 'exit' to return"
+            gum log --level info "Launching nixos-enter type 'exit' to return"
             run_privileged nixos-enter --root /mnt || true
         fi
     fi
@@ -1627,7 +1627,7 @@ main() {
     check_deps
 
     if [ "${INSTALLJAR_AUTO:-0}" = "1" ]; then
-        gum log --level info "Auto-install mode — skipping menu"
+        gum log --level info "Auto-install mode skipping menu"
         iso_install
         local rc=$?
         gum log --level info "Goodbye! (auto mode, rc=$rc)"
@@ -1642,7 +1642,7 @@ main() {
             "Manual Install" \
             "View Documentation" \
             "Exit" \
-            --header "NixOS in a Jar — Installer" \
+            --header "NixOS in a Jar Installer" \
             --height 12)
 
         case "$choice" in

@@ -47,7 +47,7 @@ in
         }; # end of llama.gpu
       }; # end of llama options
       webui = {
-        enable = lib.mkEnableOption "Open WebUI — browser-based chat interface for llama.cpp";
+        enable = lib.mkEnableOption "Open WebUI browser-based chat interface for llama.cpp";
         port = lib.mkOption {
           type = lib.types.port;
           default = 8080;

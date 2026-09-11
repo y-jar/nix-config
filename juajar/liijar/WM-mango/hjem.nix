@@ -36,7 +36,7 @@ let
   shelljarEnabled = hjm.mango.shelljar.enable or false;
   noctaliaEnabled = hjm.mango.noctalia.enable or false;
   generatedStartups = ''
-    # mango (mangowm) — nix-generated startups
+    # mango (mangowm) nix-generated startups
     # Contents injected by liijar/WM-mango/hjem.nix.
     # Don't hand-edit: rebuild to regenerate.
   ''

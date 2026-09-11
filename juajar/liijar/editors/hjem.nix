@@ -6,7 +6,7 @@
 # goal: hjem editors: vscodium/zed/obsidian/helix packages per-toggle.
 # -=-=-=-=-=-=-=-=-=-=-=
 # (home-manager hosts install the same editors via programs.* in hm.nix;
-# hjem hosts get nvf via the system-level bridge — sysset.nvf — instead)
+# hjem hosts get nvf via the system-level bridge sysset.nvf instead)
 {
   config,
   lib,

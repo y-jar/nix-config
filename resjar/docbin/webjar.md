@@ -45,10 +45,10 @@ sysset.server.webjar = {
 
 | File | Purpose |
 |---|---|
-| `juajar/sysjar/server/webjar/index.html` | Page structure — service cards |
+| `juajar/sysjar/server/webjar/index.html` | Page structure service cards |
 | `juajar/sysjar/server/webjar/style.css` | Dark theme, responsive grid |
 | `juajar/sysjar/server/webjar/script.js` | Floating particles background (canvas) |
-| `juajar/sysjar/server/webjar/default.nix` | NixOS module — nginx + activation script |
+| `juajar/sysjar/server/webjar/default.nix` | NixOS module nginx + activation script |
 
 ## Adding a service
 

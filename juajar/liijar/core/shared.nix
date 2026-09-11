@@ -6,7 +6,7 @@
 # goal: Core always-on user packages (single source for both backends).
 # -=-=-=-=-=-=-=-=-=-=-=
 # Union of the old hjem core bucket (hjmbin/packages.nix) and the old
-# home-manager bucket (usrbin/user[packages]) — both backends now get
+# home-manager bucket (usrbin/user[packages]) both backends now get
 # the same baseline. Wine is opt-in (usrset.wine.enable, ~500MiB).
 {
   cfg,
@@ -42,7 +42,7 @@
       tldr # Simplified and community-driven man pages
       jp # json parser
       tree # Command to produce a depth indented listing of files
-      cowsay # MOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+      # (cowsay moved to liijar/cowsay the commented reference example module)
 
       # =======[nix jar]
       nix-output-monitor # prettier nix build output (nom)
@@ -58,7 +58,7 @@
       chafa # terminal image/file viewer with sixel/kitty support
       cliamp # CLI music player
     ]
-    # wine is opt-in (usrset.wine.enable) — pulls wine-gecko + wine-mono too
+    # wine is opt-in (usrset.wine.enable) pulls wine-gecko + wine-mono too
     ++ lib.optionals cfg.wine.enable [
       wine # Wine is a compatibility layer for running Windows programs on Unix-like systems
     ]

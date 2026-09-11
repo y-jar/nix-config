@@ -12,20 +12,12 @@ Adding a new config is pretty straightforward.
 4. After those two files, check the `boot.nix` file for the bootloader issues and make any necessary adjustments(you shouldnt need to but im not gonna say no).
 5. now that you have set up the host config, you now need to hop into the [flake.nix](../../flake.nix) and add the new config to the `nixosConfigurations` block:
     > NOTE: all instances of `HOSTNAME` should be replaced to what you want `[Or keep it, HOSTNAME is a good name too]`
+    > the `mkJar`/`mkHjemJar` helpers already wire everything for you (sysjar base + the user backend key + your host dir) so it's just one line. **dont** hand-write `nixpkgs.lib.nixosSystem` unless you know why, a host added that way gets no user config at all (no shell, no apps)
     ```nix
     nixosConfigurations = {
-        # this block below is what you add :)  
-        HOSTNAME = nixpkgs.lib.nixosSystem {
-            system = "x86_64-linux"; # or your target system type
-            specialArgs = { 
-                inherit inputs; # sends over the inputs from the flake.nix
-                hostnm = "HOSTNAME"; # sends over the hostname of the config the the system
-            };
-            modules = [ # more or less dont change this
-                ./juajar/sysjar # this is where the base system options are defined. [you shouldnt need to change this or enter it. unless you got apps or things to add on top.]
-                ./hstjar/HOSTNAME # change this [this makes sure the config you just made is ensured to work]
-            ]; # end of modules
-        }; # end of HOSTNAME config
+        # this line below is what you add :)  
+        HOSTNAME = mkJar "HOSTNAME"; # home-manager backend [the usual pick]
+        # HOSTNAME = mkHjemJar "HOSTNAME"; # hjem backend [alternative to home-manager, see calender]
     }; # end of nixosConfigurations block
     ```
 6. **While still in the installer shell..**: same as the [install guide](./install-guide.md), run: `ga` in `~/nix-config` and then either of these options:

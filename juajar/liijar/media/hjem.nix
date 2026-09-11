@@ -71,7 +71,7 @@ let
   '';
 in
 {
-  # NOTE: lib.mkMerge, not `//` — the attrset-update operator does not compose
+  # NOTE: lib.mkMerge, not `//` the attrset-update operator does not compose
   # module properties (mkIf); the old `// lib.mkIf` form silently dropped every
   # branch but the last (and any plain keys like packages).
   config = lib.mkMerge [

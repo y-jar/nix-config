@@ -28,4 +28,4 @@ http:// # type exactly
 :8096 # type exactly, this is the port for the server [also 8096 is open i think]
 ```
 
-Try `http://localhost:8096` first in a regular browser on the server machine — that's the simplest path to the setup wizard.
+Try `http://localhost:8096` first in a regular browser on the server machine that's the simplest path to the setup wizard.

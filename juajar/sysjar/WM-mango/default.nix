@@ -33,7 +33,7 @@ in
     # mango is not systemd-launched, so nothing activates the standard session
     # targets (niri gets this from niri.service BindsTo=graphical-session.target).
     # mango-session.target is started from mango's exec-once (startups.conf) and
-    # pulls graphical-session.target in as a dependency — systemd refuses manual
+    # pulls graphical-session.target in as a dependency systemd refuses manual
     # starts of graphical-session.target itself.
     systemd.user.units."mango-session.target".text = ''
       [Unit]

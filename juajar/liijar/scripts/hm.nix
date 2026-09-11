@@ -3,10 +3,10 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Installs user helper scripts (bldjar, jwall, etc.) — home-manager side.
+# goal: Installs user helper scripts (bldjar, jwall, etc.) home-manager side.
 # -=-=-=-=-=-=-=-=-=-=-=
 # The script sources live in ./scriptsbin/ (the single copy, shared with the
-# hjem backend in hjem.nix). This side installs the full set, ungated — same
+# hjem backend in hjem.nix). This side installs the full set, ungated same
 # as the legacy usrbin module.
 { pkgs, ... }:
 let

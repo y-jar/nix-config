@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# jlayout — toggle the focused tag's layout between scroller <-> vertical_scroller.
+# jlayout toggle the focused tag's layout between scroller <-> vertical_scroller.
 # Uses mango IPC (mmsg); must run inside the mango session (env inherited from `spawn`).
 # Bind: SUPER+CTRL+Slash  (SUPER+Slash sets scroller directly)
 set -eu
 
 if ! command -v mmsg >/dev/null 2>&1; then
-  echo "jlayout: mmsg not found — are you in a mango session?" >&2
+  echo "jlayout: mmsg not found are you in a mango session?" >&2
   exit 1
 fi
 

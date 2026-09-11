@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# testvm.sh — Tier 2: drive the real resjar/nixbin/install.sh inside a
+# testvm.sh Tier 2: drive the real resjar/nixbin/install.sh inside a
 # disposable, headless, hypervisor-isolated VM.
 #
 # Safety model:
@@ -109,7 +109,7 @@ load_combo() {
       VERIFY_HOME=1; VERIFY_SWAP=0; VERIFY_SUBVOL=0; VERIFY_HOME_CONFIG=1
       ;;
     gpt-auto-btrfs-subvol-bios-home)
-      # Blank disk — install.sh's auto_partition creates:
+      # Blank disk install.sh's auto_partition creates:
       #   GPT + 1M BIOS boot + 18G btrfs (subvol @/@home/@nix) + rest btrfs home
       # Tests the INSTALLJAR_AUTO_PARTITION=1 code path.
       DISK_LAYOUT=""
@@ -320,7 +320,7 @@ EOF
 EOF
       # STALE hardware-configuration.nix (install.sh's refresh path will overwrite)
       cat > "$d/hardware-configuration.nix" <<'EOF'
-# STALE — install.sh refresh should overwrite this
+# STALE install.sh refresh should overwrite this
 { ... }: { }
 EOF
       cp "$REPO/flake.nix" "$TEST_ROOT/flake.patched.nix"
@@ -389,9 +389,9 @@ EOF
 gen_provision_drv() {
   cat > "$TEST_ROOT/provision.drv" <<EOF
 # auto-generated: provision the live VM (ssh pubkey for nixos user)
-wait recovery:~\]\\\$ 
+wait recovery:~\]\\\$
 send export TERM=xterm-256color; stty rows 50 cols 160\r
-wait recovery:~\]\\\$ 
+wait recovery:~\]\\\$
 send mkdir -p ~/.ssh && echo '$PUBKEY' >> ~/.ssh/authorized_keys && chmod 700 ~/.ssh && chmod 600 ~/.ssh/authorized_keys; echo P1=\$?\r
 wait P1=[01]
 EOF
@@ -627,7 +627,7 @@ main() {
   push_tree
   phase_install
   if [ "$SMOKE" -eq 1 ]; then kill_vm; trap - EXIT; exit 0; fi
-  # Refresh combo: no nixos-install, no disk boot — just verify logs + exit
+  # Refresh combo: no nixos-install, no disk boot just verify logs + exit
   if [ "$COMBO" = "refresh" ]; then
     echo "TIER2 PASS ($COMBO)"
     kill_vm; trap - EXIT

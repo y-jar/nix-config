@@ -3,7 +3,7 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: User home directories (xdg) — home-manager side.
+# goal: User home directories (xdg) home-manager side.
 # -=-=-=-=-=-=-=-=-=-=-=
 { config, ... }:
 

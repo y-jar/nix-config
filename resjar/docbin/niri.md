@@ -15,12 +15,12 @@ User-level: enabled in `usrset.niri.enable`.
 
 ```
 WindowManager[niri]/
-├── config.kdl        # entry point — includes all other files
+├── config.kdl        # entry point includes all other files
 ├── base.kdl          # layout, gaps, animations, cursor, misc
 ├── bindings.kdl      # all keybindings
 ├── rules.kdl         # window and layer rules
 ├── startups.kdl      # startup apps, environment
-├── default.nix       # NixOS module — deploys config
+├── default.nix       # NixOS module deploys config
 └── host-inputs/
     ├── calender.kdl  # triple-monitor config
     ├── ziiemar.kdl   # laptop config
@@ -144,4 +144,4 @@ Niri uses columns instead of traditional tiling. Windows stack vertically within
 - **Tabbed** (`Mod+W`): toggle between stacked and tabbed display within a column
 - **Width** (`Mod+R`): cycle through preset widths (1/3, 1/2, 2/3)
 
-Workspaces are dynamic — they're created as needed and don't have fixed names like Hyprland.
+Workspaces are dynamic they're created as needed and don't have fixed names like Hyprland.

@@ -7,7 +7,7 @@
 # -=-=-=-=-=-=-=-=-=-=-=
 # The browser packages per-toggle live in ./shared.nix (hjem side); the
 # home-manager side installs them via the programs.* wrappers below, which
-# bake in policies — so no raw browser packages are added to home.packages.
+# bake in policies so no raw browser packages are added to home.packages.
 {
   config,
   lib,
