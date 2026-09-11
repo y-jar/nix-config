@@ -9,7 +9,7 @@ binds {
     Mod+Shift+D hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel";}
     // Mod+D hotkey-overlay-title="[D]isplay Noctalia Launcher" { spawn "qs" "ipc" "-c" "noctalia-shell" "call" "launcher" "toggle"; }
     // Mod+D hotkey-overlay-title="[D]isplay Noctalia Launcher" { spawn-sh "noctalia msg panel-toggle launcher"; }
-    Mod+D hotkey-overlay-title="[D]isplay Launcher (shelljar)" { spawn-sh "shjctl toggleLauncher"; }
+    Mod+D hotkey-overlay-title="[D]isplay Launcher (shelljar)" { spawn-sh "shjctl toggleLauncher $(niri msg -j focused-output | jq -r .name)"; }
     // [LOCK-SCREEN]
     Mod+Alt+L hotkey-overlay-title="[L]ock the Screen" { spawn "swaylock"; }
     // [BROWSER]
@@ -25,7 +25,7 @@ binds {
     Mod+G hotkey-overlay-title="Open [G]apless" { spawn "g4music"; } // spawns gapless
     // Mod+Shift+C hotkey-overlay-title="Open [C]alculator" { spawn "gnome-calculator"; } // spawns calculator
     
-Mod+P hotkey-overlay-title="Power [P]menu (shelljar)" { spawn-sh "shjctl toggleSession"; } // power menu (shelljar)
+Mod+P hotkey-overlay-title="Power [P]menu (shelljar)" { spawn-sh "shjctl toggleSession $(niri msg -j focused-output | jq -r .name)"; } // power menu (shelljar)
 Mod+Shift+P hotkey-overlay-title="Open [P]ower Menu (fuzzel)" { spawn "jpower"; } // power menu using fuzzel
     Mod+Z hotkey-overlay-title="Open [Z]oom" { spawn "woomer"; } // zoom
     Mod+C hotkey-overlay-title="Open [C]olor Picker" { spawn "hyprpicker" "-a"; } // color picker
@@ -243,8 +243,8 @@ Mod+Shift+P hotkey-overlay-title="Open [P]ower Menu (fuzzel)" { spawn "jpower"; 
     Mod+T { toggle-column-tabbed-display; }
 
     // [WALLPAPER] full-screen calm picker (shelljar). Mod+O slides backward.
-    Mod+W hotkey-overlay-title="Wallpaper [W] Picker (next)" { spawn-sh "shjctl wallpaperNext"; }
-    Mod+O hotkey-overlay-title="Wallpaper Picke[r] (prev)" { spawn-sh "shjctl wallpaperPrev"; }
+    Mod+W hotkey-overlay-title="Wallpaper [W] Picker (next)" { spawn-sh "shjctl wallpaperNext $(niri msg -j focused-output | jq -r .name)"; }
+    Mod+O hotkey-overlay-title="Wallpaper Picke[r] (prev)" { spawn-sh "shjctl wallpaperPrev $(niri msg -j focused-output | jq -r .name)"; }
 
 
 

@@ -37,18 +37,20 @@ let
   noctaliaEnabled = hjm.niri.noctalia.enable or false;
 
   # exact settings bind line in the static file that gets swapped per shell
-  sLine = ''Mod+S hotkey-overlay-title="Toggle Noctalia [S]ettings" { spawn "qs" "ipc" "-c" "noctalia-shell" "call" "settings" "toggle"; }'';
+  # (double-quoted + leading spaces: ''-strings strip indentation and would
+  # never match the indented static line, silently no-op'ing the swap)
+  sLine = "    Mod+S hotkey-overlay-title=\"Toggle Noctalia [S]ettings\" { spawn \"qs\" \"ipc\" \"-c\" \"noctalia-shell\" \"call\" \"settings\" \"toggle\"; }";
 
   # exact browser bind line swapped to the per-host preferred browser.
-  bLine = ''Mod+B hotkey-overlay-title="Open [B]rowser" { spawn "librewolf"; }'';
+  bLine = "    Mod+B hotkey-overlay-title=\"Open [B]rowser\" { spawn \"librewolf\"; }";
   browserCmd = hjm.browsers.default or "firefox";
-  browserBind = ''Mod+B hotkey-overlay-title="Open [B]rowser" { spawn "${browserCmd}"; }'';
+  browserBind = "    Mod+B hotkey-overlay-title=\"Open [B]rowser\" { spawn \"${browserCmd}\"; }";
 
   # exact Mod+D launcher line swapped per shell.
-  dLine = ''Mod+D hotkey-overlay-title="[D]isplay Launcher (shelljar)" { spawn-sh "shjctl toggleLauncher"; }'';
+  dLine = "    Mod+D hotkey-overlay-title=\"[D]isplay Launcher (shelljar)\" { spawn-sh \"shjctl toggleLauncher $(niri msg -j focused-output | jq -r .name)\"; }";
   dShellBind = dLine; # shelljar launcher
-  dNoctaliaBind = ''Mod+D hotkey-overlay-title="[D]isplay Noctalia Launcher" { spawn "qs" "ipc" "-c" "noctalia-shell" "call" "launcher" "toggle"; }'';
-  dFuzzelBind = ''Mod+D hotkey-overlay-title="[D]isplay Launcher (fuzzel)" { spawn "fuzzel"; }'';
+  dNoctaliaBind = "    Mod+D hotkey-overlay-title=\"[D]isplay Noctalia Launcher\" { spawn \"qs\" \"ipc\" \"-c\" \"noctalia-shell\" \"call\" \"launcher\" \"toggle\"; }";
+  dFuzzelBind = "    Mod+D hotkey-overlay-title=\"[D]isplay Launcher (fuzzel)\" { spawn \"fuzzel\"; }";
   launcherBind =
     if shelljarEnabled then
       dShellBind
@@ -59,7 +61,7 @@ let
 
   shellBindS =
     if shelljarEnabled then
-      ''Mod+S hotkey-overlay-title="Toggle [S]helljar Control Center" { spawn-sh "shjctl toggleControlCenter"; }''
+      "    Mod+S hotkey-overlay-title=\"Toggle [S]helljar Control Center\" { spawn-sh \"shjctl toggleControlCenter $(niri msg -j focused-output | jq -r .name)\"; }"
     else if noctaliaEnabled then
       sLine
     else

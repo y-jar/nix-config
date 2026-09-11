@@ -40,7 +40,7 @@ let
   browserBind = "    Mod+B hotkey-overlay-title=\"Open [B]rowser\" { spawn \"${browserCmd}\"; }";
 
   # exact Mod+D launcher line in the static file, swapped per shell.
-  dLine = "    Mod+D hotkey-overlay-title=\"[D]isplay Launcher (shelljar)\" { spawn-sh \"shjctl toggleLauncher\"; }";
+  dLine = "    Mod+D hotkey-overlay-title=\"[D]isplay Launcher (shelljar)\" { spawn-sh \"shjctl toggleLauncher $(niri msg -j focused-output | jq -r .name)\"; }";
   dShellBind = dLine; # shelljar launcher
   dNoctaliaBind = "    Mod+D hotkey-overlay-title=\"[D]isplay Noctalia Launcher\" { spawn \"qs\" \"ipc\" \"-c\" \"noctalia-shell\" \"call\" \"launcher\" \"toggle\"; }";
   dFuzzelBind = "    Mod+D hotkey-overlay-title=\"[D]isplay Launcher (fuzzel)\" { spawn \"fuzzel\"; }";
@@ -55,7 +55,7 @@ let
   # exact Mod+S settings bind, swapped per shell.
   shellBindS =
     if shelljarEnabled then
-      "    Mod+S hotkey-overlay-title=\"Toggle [S]helljar Control Center\" { spawn-sh \"shjctl toggleControlCenter\"; }"
+      "    Mod+S hotkey-overlay-title=\"Toggle [S]helljar Control Center\" { spawn-sh \"shjctl toggleControlCenter $(niri msg -j focused-output | jq -r .name)\"; }"
     else if noctaliaEnabled then
       sLine
     else
