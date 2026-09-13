@@ -44,6 +44,12 @@
         url = "https://mail.google.com";
         mode = "pwa";
       }
+      {
+        name = "googleMessages";
+        url = "https://messages.google.com/web/conversations";
+        mode = "pwa";
+        browser = "chromium";
+      }
     ]; # end of apps
   }; # end of sysset.webapps
 }

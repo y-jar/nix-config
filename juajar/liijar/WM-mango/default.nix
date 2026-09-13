@@ -9,7 +9,7 @@
 # Copies the category config.conf dotfiles + per-host host-inputs file.
 # Category configs live in liijar/wmconfigs/mango (shared with the
 # old home-manager side). nix-startups.conf is generated from the shell toggles
-# (shelljar) + system autostart.
+# (shelljar) + system autostart. Im gay
 # =-=-=[end mango] =-=-=
 
 {

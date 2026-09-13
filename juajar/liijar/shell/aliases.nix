@@ -26,7 +26,6 @@
   nv = "nvim";
   zd = "zeditor";
   code = "codium";
-  yy = "yazi";
   brw = "browsh"; # TUI based browser
   b = "browsh"; # browser
   oc = "opencode"; # Ai thing
