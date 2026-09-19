@@ -145,15 +145,15 @@ in
           exit 1
         fi
 
-        # --[api helpers]--
+        # --[api helpers]-- (max-time: a hung connection must never wedge this unit)
         api_get() {
-          curl -s -H "Authorization: Bearer $TOKEN" "$1" || true
+          curl -s --max-time 30 -H "Authorization: Bearer $TOKEN" "$1" || true
         }
         post_json() {
-          curl -s -X POST -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" -d "$2" "$1" || true
+          curl -s --max-time 30 -X POST -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" -d "$2" "$1" || true
         }
         patch_json() {
-          curl -s -X PATCH -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" -d "$2" "$1" || true
+          curl -s --max-time 30 -X PATCH -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" -d "$2" "$1" || true
         }
         # first_pk URL KEY VALUE -> pk of first list entry where entry[KEY] == VALUE
         first_pk() {
@@ -164,7 +164,7 @@ in
         FLOW_PK=""
         AUTH_REJECTS=0
         for i in $(seq 1 60); do
-          CODE=$(curl -s -o /dev/null -w '%{http_code}' -H "Authorization: Bearer $TOKEN" "$API_BASE/api/v3/core/applications/" 2>/dev/null || true)
+          CODE=$(curl -s --max-time 15 -o /dev/null -w '%{http_code}' -H "Authorization: Bearer $TOKEN" "$API_BASE/api/v3/core/applications/" 2>/dev/null || true)
           CODE=$(printf '%s' "$CODE" | tr -d '[:space:]')
           if [ -z "$CODE" ]; then CODE="000"; fi
           if [ "$CODE" = "401" ] || [ "$CODE" = "403" ]; then
@@ -287,8 +287,10 @@ in
           install -D -m 0640 -o root -g "$OUTLINE_GROUP" /dev/null "$SECRET_FILE"
         fi
         printf '%s' "$CLIENT_SECRET" > "$SECRET_FILE"
-        systemctl restart outline.service
         echo "outline-oidc-provision: outline <-> authentik wired (client: $CLIENT_ID)"
+        # --no-block: outline orders itself after this unit, so waiting on its
+        # restart from in here would deadlock the activation transaction
+        systemctl restart --no-block outline.service
       ''; # end of script
     }; # end of outline-oidc-provision
 
