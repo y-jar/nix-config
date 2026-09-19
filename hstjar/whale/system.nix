@@ -161,7 +161,10 @@
         outline = {
           enable = true; # sets outline wiki server (local postgres+redis)
           port = 3001; # 3000 is nixdraw's on this host
-          publicUrl = "https://whale:3001"; # browse URL; SSO redirects must match it
+          publicUrl = "https://whale.local:3001"; # browse URL; SSO redirects must match it
+          # NOTE: must be a multi-label host (whale.local, not whale) - outline
+          # sets its oauth csrf cookie with Domain=<host> and browsers reject
+          # single-label domain cookies; .local resolves via avahi on the LAN.
           # [login] hands-off: the outline-oidc-provision unit wires this into
           # authentik automatically (provider, app, secret, tls cert).
           extraConfig = {
