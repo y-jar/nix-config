@@ -16,6 +16,9 @@
 # clientSecretFile path (0640 root:outline), and restarts outline. it is
 # idempotent and self-healing; retry after a failed first run with:
 #   systemctl start outline-oidc-provision
+# tls: outline 1.9's oidc sets secure cookies (NODE_ENV=production), so login
+# needs https - set extraConfig.sslCertFile/sslKeyFile and the provisioner
+# mints a self-signed cert there (base64 one-liners, outline's ssl format).
 # ref: https://integrations.goauthentik.io/documentation/outline/
 {
   lib,
@@ -32,6 +35,11 @@ let
   oidcSecretFile =
     if (oidcAuth != null && oidcAuth ? clientSecretFile) then oidcAuth.clientSecretFile else null;
   oidcClientId = if (oidcAuth != null && oidcAuth ? clientId) then oidcAuth.clientId else null;
+
+  # [tls passthrough] outline 1.9's oidc needs https (secure cookies); the
+  # provisioner mints a self-signed cert at these paths when they are set
+  sslCertPath = if (cfg.extraConfig ? sslCertFile) then cfg.extraConfig.sslCertFile else null;
+  sslKeyPath = if (cfg.extraConfig ? sslKeyFile) then cfg.extraConfig.sslKeyFile else null;
 
   # [authentik neighbor] (same server block, option always declared)
   authentikCfg = config.sysset.server.authentik;
@@ -86,7 +94,7 @@ in
         databaseUrl = "local"; # spins up local postgres + outline db
         redisUrl = "local"; # local redis over a unix socket (no extra port)
         storage.storageType = "local"; # attachments on disk (no S3/MinIO)
-        forceHttps = false; # plain http on LAN; flip when behind TLS
+        forceHttps = lib.mkDefault false; # http LAN default; override via extraConfig when serving https
       }
       cfg.extraConfig
     ]; # end of services.outline
@@ -125,12 +133,36 @@ in
         ENV_FILE=${lib.escapeShellArg authentikCfg.environmentFile}
         API_BASE="http://localhost:${toString authentikCfg.port}"
         OUTLINE_GROUP=${lib.escapeShellArg config.services.outline.group}
+        SSL_CERT_FILE=${if sslCertPath != null then lib.escapeShellArg sslCertPath else "\"\""}
+        SSL_KEY_FILE=${if sslKeyPath != null then lib.escapeShellArg sslKeyPath else "\"\""}
         PROV_NAME="outline"
         APP_SLUG="outline"
         KEY_NAME="jar-outline-oidc-signing"
         EMAIL_MAP_NAME="jar: outline email (verified)"
         FLOW_SLUG="default-provider-authorization-implicit-consent"
         IVAL_FLOW_SLUG="default-provider-invalidation-flow"
+
+        # --[tls certs: outline 1.9 oidc refuses secure cookies over http]--
+        # self-signed, minted once, kept as base64 one-liners (outline's ssl
+        # env format); swap for real certs at the same paths when a domain +
+        # acme arrive. runs before the early-exit so a later https flip still
+        # generates them.
+        if [ -n "$SSL_CERT_FILE" ] && [ -n "$SSL_KEY_FILE" ]; then
+          if [ ! -s "$SSL_CERT_FILE" ] || [ ! -s "$SSL_KEY_FILE" ]; then
+            mkdir -p "$(dirname "$SSL_CERT_FILE")" "$(dirname "$SSL_KEY_FILE")"
+            TLS_HOST=$(printf '%s' "$CALLBACK" | sed -E 's#^https?://([^:/]+).*#\1#')
+            TMPD=$(mktemp -d)
+            openssl req -x509 -newkey rsa:2048 -nodes -days 3650 \
+              -subj "/CN=$TLS_HOST" \
+              -addext "subjectAltName=DNS:$TLS_HOST,DNS:$TLS_HOST.local" \
+              -keyout "$TMPD/key.pem" -out "$TMPD/cert.pem" 2>/dev/null
+            openssl base64 -A -in "$TMPD/cert.pem" -out "$SSL_CERT_FILE"
+            openssl base64 -A -in "$TMPD/key.pem" -out "$SSL_KEY_FILE"
+            rm -rf "$TMPD"
+          fi
+          chown root:"$OUTLINE_GROUP" "$SSL_CERT_FILE" "$SSL_KEY_FILE"
+          chmod 0640 "$SSL_CERT_FILE" "$SSL_KEY_FILE"
+        fi
 
         # --[already provisioned? instant exit]--
         if [ -s "$SECRET_FILE" ]; then

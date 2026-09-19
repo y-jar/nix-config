@@ -161,16 +161,24 @@
         outline = {
           enable = true; # sets outline wiki server (local postgres+redis)
           port = 3001; # 3000 is nixdraw's on this host
-          publicUrl = "http://whale:3001"; # browse URL; SSO redirects must match it
+          publicUrl = "https://whale:3001"; # browse URL; SSO redirects must match it
           # [login] hands-off: the outline-oidc-provision unit wires this into
-          # authentik automatically (provider, app, secret) on first boot.
-          extraConfig.oidcAuthentication = {
-            clientId = "outline"; # fixed id; the provisioner owns the secret
-            clientSecretFile = "/var/lib/outline-oidc-secret"; # filled by the provisioner
-            authUrl = "http://whale:9000/application/o/authorize/";
-            tokenUrl = "http://whale:9000/application/o/token/";
-            userinfoUrl = "http://whale:9000/application/o/userinfo/";
-            displayName = "authentik";
+          # authentik automatically (provider, app, secret, tls cert).
+          extraConfig = {
+            # outline 1.9 oidc needs https (secure cookies); the provisioner
+            # auto-generates a self-signed cert at these paths - swap for real
+            # ones here when the domain + acme project lands.
+            sslCertFile = "/var/lib/outline-ssl/cert.b64";
+            sslKeyFile = "/var/lib/outline-ssl/key.b64";
+            forceHttps = true; # we serve real tls now
+            oidcAuthentication = {
+              clientId = "outline"; # fixed id; the provisioner owns the secret
+              clientSecretFile = "/var/lib/outline-oidc-secret"; # filled by the provisioner
+              authUrl = "http://whale:9000/application/o/authorize/";
+              tokenUrl = "http://whale:9000/application/o/token/";
+              userinfoUrl = "http://whale:9000/application/o/userinfo/";
+              displayName = "authentik";
+            };
           };
         }; # end of outline
         authentik = {
