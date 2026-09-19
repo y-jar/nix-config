@@ -66,6 +66,9 @@
   stllm = "sudo systemctl start llama-cpp";
   # [t480 related commands]
   cbat = "acpi -b"; # check battery status combined
+  # [whale related comands]
+  grpauth = "sudo grep AUTHENTIK_BOOTSTRAP_PASSWORD /var/lib/authentik/env"; # grep authentik bootstrap password
+  erroroutline = "journalctl -u outline-oidc-provision"; # journalctl for outline oidc provisioning
 
   # =========[Extra]
   mcube = "mangohud vkcube --present_mode 1"; # needs mangohud+vulkan-tools

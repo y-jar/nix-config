@@ -143,6 +143,14 @@
           enable = false;
           port = 80;
         };
+        outline = {
+          enable = false; # sets outline wiki server (local postgres+redis)
+          port = 3000; # note: use 3001+ if nixdraw is on (it owns 3000)
+        }; # end of outline
+        authentik = {
+          enable = false; # sets authentik SSO IdP (login provider for outline)
+          port = 9000; # web UI/API port
+        }; # end of authentik
         vpn = {
           mullvad.enable = false;
         };

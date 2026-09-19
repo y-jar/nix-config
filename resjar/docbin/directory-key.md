@@ -57,7 +57,7 @@
 │   │   ├── portal/             # XDG portals (per-DE backend selection)
 │   │   ├── ppd/                # Power Profiles Daemon
 │   │   ├── security/           # Polkit rules, rtkit, udisks2
-│   │   ├── server/             # Server modules (Jellyfin, sleepyjar, nixdraw, webjar, vpn)
+│   │   ├── server/             # Server modules (Jellyfin, komga, sleepyjar, nixdraw, webjar, outline, authentik, vpn)
 │   │   ├── syncthing/          # System syncthing service
 │   │   ├── system[scripts]/    # System-level shell scripts (nhu, nru)
 │   │   ├── tlp/                # TLP laptop power management + battery thresholds

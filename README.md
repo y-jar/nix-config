@@ -112,6 +112,7 @@ Paste:
   - **Virtualization Support:** Host-level tools (`libvirtd`, `virt-manager`, `gnome-boxes`, `swtpm`) or automated VM Guest optimization integrations (`qemuGuest`, `spice-vdagentd`).
   - **Gaming Infrastructures:** Centralized driver setups for graphics processing.
   - **Media & Sync Daemons:** Integrated server backends (like `jellyfin` media servers with simple ownership management).
+  - **Wiki & SSO Daemons:** Self-hosted `outline` knowledge base with `authentik` as its login provider (single local postgres, disk file storage).
   - **Automation:** Power maintenance daemons (like `sleepyjar` for automated system intervals and reboot behaviors). `[basic, i am still learning]`
 
   ### Application Toggles (`user.nix`)
@@ -155,7 +156,7 @@ Paste:
   `OpenCode` · `Lazygit` · `dotnet` · `Python` · `Node` · `GCC` · `Go`
 
   #### Self-Hosting:
-  `Jellyfin` · `nixdraw` · `webjar` · `sleepyjar`
+  `Jellyfin` · `Komga` · `Outline` · `Authentik (SSO)` · `nixdraw` · `webjar` · `sleepyjar`
 
   #### Other:
   `KeePassXC` · `LocalSend` · `Discord` · `Bazaar` · `LibreOffice` · `Fastfetch` · `llama.cpp` · `Japanese input (fcitx5 + Mozc)`

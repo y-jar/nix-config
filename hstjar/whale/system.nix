@@ -158,6 +158,25 @@
           enable = true; # ~5mib - self-hosted link page (nginx)
           port = 80;
         };
+        outline = {
+          enable = true; # sets outline wiki server (local postgres+redis)
+          port = 3001; # 3000 is nixdraw's on this host
+          publicUrl = "http://whale:3001"; # browse URL; SSO redirects must match it
+          # [login] hands-off: the outline-oidc-provision unit wires this into
+          # authentik automatically (provider, app, secret) on first boot.
+          extraConfig.oidcAuthentication = {
+            clientId = "outline"; # fixed id; the provisioner owns the secret
+            clientSecretFile = "/var/lib/outline-oidc-secret"; # filled by the provisioner
+            authUrl = "http://whale:9000/application/o/authorize/";
+            tokenUrl = "http://whale:9000/application/o/token/";
+            userinfoUrl = "http://whale:9000/application/o/userinfo/";
+            displayName = "authentik";
+          };
+        }; # end of outline
+        authentik = {
+          enable = true; # sets authentik SSO IdP (login provider for outline)
+          port = 9000; # web UI/API port (akadmin password: sudo grep AUTHENTIK_BOOTSTRAP_PASSWORD /var/lib/authentik/env)
+        }; # end of authentik
       }; # end of server
       # =============[Server]^^^
     }; # end of sysset

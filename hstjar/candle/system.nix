@@ -147,6 +147,14 @@
           enable = true; # ~5mib - self-hosted link page (nginx)
           port = 80;
         };
+        outline = {
+          enable = false; # sets outline wiki server (local postgres+redis)
+          port = 3000; # note: use 3001+ if nixdraw is on (it owns 3000)
+        }; # end of outline
+        authentik = {
+          enable = false; # sets authentik SSO IdP (login provider for outline)
+          port = 9000; # web UI/API port
+        }; # end of authentik
       }; # end of server
       # =============[Server]^^^
     }; # end of sysset

@@ -58,17 +58,8 @@ in
         "flakes"
       ]; # End of experimental-features
 
-      # [binary caches / substituters]
-      substituters = [
-        "https://cache.nixos.org"
-        "https://bazinga.cachix.org" # whisper's cache [preprocessor]
-        "https://onelock.cachix.org"
-      ]; # end of substituters
-      trusted-public-keys = [
-        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-        "bazinga.cachix.org-1:WI9TV6l0gBVhcfY7OQM5zWqYmESIarKME0fjVN6yDYU="
-        "onelock.cachix.org-1:Wyy9XrWqFKcPxkZXQg5yZXtsbKTbkaga44UWRJfgqEg="
-      ]; # end of trusted-public-keys
+      # [binary caches]
+      # no third-party substituters: default cache.nixos.org only.
 
       # [perf & hygiene]
       auto-optimise-store = true; # dedupe identical store paths

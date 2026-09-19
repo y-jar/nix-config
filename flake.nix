@@ -173,5 +173,12 @@
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
     # [hjem] THE user backend (home-manager is gone) [https://github.com/feel-co/hjem]
     hjem.url = "github:feel-co/hjem";
+
+    # [authentik-nix] self-hosted SSO IdP (for outline + future apps)
+    # NOTE: no nixpkgs.follows on purpose: upstream pins its own nixpkgs because
+    # the python deps (poetry2nix) break against foreign nixpkgs versions.
+    authentik-nix = {
+      url = "github:nix-community/authentik-nix";
+    }; # end of authentik-nix
   }; # end of inputs
 }

@@ -6,7 +6,7 @@
 # goal: installs user helper scripts (bldjar, jwall, etc.).
 # -=-=-=-=-=-=-=-=-=-=-=
 # The script sources live in ./scriptsbin/ (the single copy).
-# bldjar/fixzsh/ytdl are installed always; the wallpaper pickers
+# bldjar/fixzsh/ytdl/gb/gu are installed always; the wallpaper pickers
 # (jwall/random-wall) plus chafa (their fzf preview) are gated on a
 # Wayland compositor, matching awww's gate.
 {
@@ -35,6 +35,14 @@ let
     {
       name = "ytdl";
       path = ./scriptsbin/ytdl.sh;
+    }
+    {
+      name = "gb";
+      path = ./scriptsbin/gb.sh;
+    }
+    {
+      name = "gu";
+      path = ./scriptsbin/gu.sh;
     }
   ];
 
