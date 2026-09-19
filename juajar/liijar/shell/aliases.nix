@@ -69,8 +69,11 @@
   # [whale related comands]
   grpauth = "sudo grep AUTHENTIK_BOOTSTRAP_PASSWORD /var/lib/authentik/env"; # grep authentik bootstrap password
   erroroutline = "journalctl -u outline-oidc-provision"; # journalctl for outline oidc provisioning
+  whealth = "systemctl is-active outline authentik authentik-worker && ss -tln | grep -E ':(3001|9000) ' && curl -sk https://whale.local:3001/ -o /dev/null -w 'outline: HTTP %{http_code}' && echo && curl -s http://localhost:9000/if/flow/default-authentication-flow/ -o /dev/null -w 'authentik: HTTP %{http_code}'"; # post-switch whale check: services, ports, web endpoints
   # [fleet ssh (see hstjar/*/net.nix + sysjar/networking)]
   fkey = "ssh-keyscan -t ed25519"; # scan a host's fleet key: fkey <hostname>.local
+  # [host checks]
+  wdry = "out=$(nix build --print-out-paths --no-link /home/jar/nix-config#nixosConfigurations.$(hostname).config.system.build.toplevel) && echo BUILD-OK $out && sudo $out/bin/switch-to-configuration dry-activate && echo DRY-OK"; # pre-flight this host: build + dry-run activation (changes nothing)
 
   # =========[Extra]
   mcube = "mangohud vkcube --present_mode 1"; # needs mangohud+vulkan-tools
