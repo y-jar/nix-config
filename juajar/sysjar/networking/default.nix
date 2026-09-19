@@ -15,17 +15,12 @@
 let
   vpncfg = config.sysset.server.vpn;
 
-  # [fleet identity registry] every hstjar/<host>/net.nix is pure data
-  # ({ ip, hostKey }) and this module imports ALL of them - host configs
-  # cannot see each other, but a shared data import can. each host then
-  # pins every fleet host's ip (/etc/hosts) and ssh host key
-  # (/etc/ssh/ssh_known_hosts), so `ssh whale` resolves + verifies without
-  # avahi, and ~/.ssh/known_hosts is never consulted for fleet hosts -
-  # stale entries there can't trigger host-key warnings anymore.
-  # adding a host: fill its hstjar/<host>/net.nix while it is online
-  # (scan the key with the `fkey` alias). hosts with no net.nix (or
-  # ip = null) are skipped. rebuilt host = new key: re-scan, update its
-  # net.nix, jc + rebuild the rest of the fleet.
+  # [fleet phone book] every hstjar/<host>/net.nix is pure data:
+  #   ip / hostKey = identity (single source of truth per host)
+  #   user         = optional ssh login user on that host (default "jar")
+  #   knows        = optional list of hosts THIS one pins
+  # entries with a real ip are pinnable; hostKey = null means dns-only.
+  # host configs cannot see each other, but a shared data import can.
   fleetRoot = ../../../hstjar;
   fleetRaw = lib.filterAttrs (
     name: type: type == "directory" && builtins.pathExists (fleetRoot + "/${name}/net.nix")
@@ -33,9 +28,24 @@ let
   fleet = lib.filterAttrs (name: data: data ? ip && data.ip != null) (
     lib.mapAttrs (name: _: import (fleetRoot + "/${name}/net.nix")) fleetRaw
   );
+
+  # [who i know] this host's own net.nix may declare `knows` - the fleet
+  # hosts it pins (dns + ssh). hosts without a list (the normal case) know
+  # everyone pinnable: you never know where a host will be, so the default
+  # stays flexible; off-lan hosts opt out with knows = [ ].
+  myData =
+    if builtins.pathExists (fleetRoot + "/${hostnm}/net.nix") then
+      import (fleetRoot + "/${hostnm}/net.nix")
+    else
+      { };
+  myKnows = if myData ? knows && myData.knows != null then myData.knows else builtins.attrNames fleet;
+
+  # [applied pins] a host always knows itself; plus everyone in its list.
+  known = lib.filterAttrs (name: _: name == hostnm || builtins.elem name myKnows) fleet;
+
   # hosts with a pinned key get the full treatment (dns pin + known_hosts
   # + ssh block); hosts with hostKey = null only get the dns pin.
-  pinned = lib.filterAttrs (name: data: data ? hostKey && data.hostKey != null) fleet;
+  pinned = lib.filterAttrs (name: data: data ? hostKey && data.hostKey != null) known;
 in
 {
   options = {
@@ -47,6 +57,18 @@ in
   }; # end of options
 
   config = {
+    # [guard: a `knows` entry with no pinnable net.nix is a typo or an
+    # off-lan host - fail the build naming it instead of silently pinning
+    # nothing for it]
+    assertions = [
+      {
+        assertion = lib.all (n: builtins.hasAttr n fleet) myKnows;
+        message = "networking: ${hostnm}'s net.nix knows a host with no pinnable net.nix (missing hstjar/<name>/net.nix or ip = null): ${
+          toString (lib.filter (n: !builtins.hasAttr n fleet) myKnows)
+        }";
+      }
+    ];
+
     # [Enable the OpenSSH daemon.]
     services.openssh.enable = true;
     networking = {
@@ -56,10 +78,10 @@ in
       hostName = "${hostnm}"; # sets HOSTNAME
       #[ for resolving local ip info]
       # ip -4 addr show | grep inet
-      # [fleet pins: one line per hstjar/*/net.nix - dns resolves without
-      # avahi; ips are stable dhcp-reserved lan addresses]
+      # [fleet pins: one line per known hstjar/*/net.nix - dns resolves
+      # without avahi; ips are stable dhcp-reserved lan addresses]
       extraHosts = lib.concatStringsSep "\n" (
-        lib.mapAttrsToList (name: data: "${data.ip} ${name} ${name}.local") fleet
+        lib.mapAttrsToList (name: data: "${data.ip} ${name} ${name}.local") known
       );
 
       # [for dns issues i keep running into]
@@ -110,7 +132,7 @@ in
     # [fleet ssh: pinned host keys + per-host blocks. UserKnownHostsFile
     # points fleet hosts at the global pinned file only - the user's
     # ~/.ssh/known_hosts is bypassed entirely (stale entries can't break
-    # logins or trigger warnings). user is jar fleet-wide.]
+    # logins or trigger warnings). User comes from the target's net.nix.]
     programs.ssh = {
       knownHosts = lib.mapAttrs (name: data: {
         hostNames = [
@@ -124,7 +146,7 @@ in
         lib.mapAttrsToList (name: data: ''
           Host ${name} ${name}.local ${data.ip}
             HostName ${name}.local
-            User jar
+            User ${data.user or "jar"}
             UserKnownHostsFile /etc/ssh/ssh_known_hosts
         '') pinned
       );
