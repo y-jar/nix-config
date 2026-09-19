@@ -161,13 +161,21 @@ in
 
         # --[wait for authentik: token accepted + default blueprints imported]--
         FLOW_PK=""
+        AUTH_REJECTS=0
         for i in $(seq 1 60); do
           CODE=$(curl -s -o /dev/null -w '%{http_code}' -H "Authorization: Bearer $TOKEN" "$API_BASE/api/v3/core/applications/" 2>/dev/null || true)
           CODE=$(printf '%s' "$CODE" | tr -d '[:space:]')
           if [ -z "$CODE" ]; then CODE="000"; fi
           if [ "$CODE" = "401" ] || [ "$CODE" = "403" ]; then
-            echo "outline-oidc-provision: bootstrap token rejected ($CODE); was authentik's first start done without it?" >&2
-            exit 1
+            # authentik can answer 401/403 briefly while it finishes booting,
+            # so only give up after several consecutive rejections
+            AUTH_REJECTS=$((AUTH_REJECTS + 1))
+            if [ "$AUTH_REJECTS" -ge 5 ]; then
+              echo "outline-oidc-provision: bootstrap token rejected ($CODE, $AUTH_REJECTS tries); was authentik's first start done without it?" >&2
+              exit 1
+            fi
+          else
+            AUTH_REJECTS=0
           fi
           if [ "$CODE" = "200" ]; then
             FLOW_PK=$(api_get "$API_BASE/api/v3/flows/instances/" | jq -r --arg s "$FLOW_SLUG" '.results[]? | select(.slug==$s) | .pk' | head -n1 || true)
@@ -191,7 +199,7 @@ in
             --arg n "$KEY_NAME" --arg c "$(cat "$TMPD/cert.pem")" --arg k "$(cat "$TMPD/key.pem")" \
             '{name:$n, certificate_data:$c, key_data:$k}')")
           rm -rf "$TMPD"
-          KEY_PK=$(printf '%s' "$RESP" | jq -r '.pk // empty')
+          KEY_PK=$(printf '%s' "$RESP" | jq -r '.pk // empty' 2>/dev/null || true)
           if [ -z "$KEY_PK" ]; then
             echo "outline-oidc-provision: keypair create failed: $RESP" >&2
             exit 1
@@ -199,13 +207,14 @@ in
         fi
 
         # --[custom email scope mapping (outline needs email_verified: true)]--
-        MAP_PK=$(first_pk "$API_BASE/api/v3/propertymappings/scope/" name "$EMAIL_MAP_NAME")
+        # NOTE: 2026.8 moved scope mappings to propertymappings/provider/scope
+        MAP_PK=$(first_pk "$API_BASE/api/v3/propertymappings/provider/scope/" name "$EMAIL_MAP_NAME")
         if [ -z "$MAP_PK" ]; then
-          RESP=$(post_json "$API_BASE/api/v3/propertymappings/scope/" "$(jq -n \
+          RESP=$(post_json "$API_BASE/api/v3/propertymappings/provider/scope/" "$(jq -n \
             --arg n "$EMAIL_MAP_NAME" \
             --arg e 'return {"email": request.user.email, "email_verified": True}' \
             '{name:$n, scope_name:"email", description:"email + email_verified=true (outline requirement)", expression:$e}')")
-          MAP_PK=$(printf '%s' "$RESP" | jq -r '.pk // empty')
+          MAP_PK=$(printf '%s' "$RESP" | jq -r '.pk // empty' 2>/dev/null || true)
           if [ -z "$MAP_PK" ]; then
             echo "outline-oidc-provision: scope mapping create failed: $RESP" >&2
             exit 1
@@ -213,8 +222,12 @@ in
         fi
 
         # --[scopes: default openid+profile mappings plus the custom email one]--
-        DEF_PKS=$(api_get "$API_BASE/api/v3/propertymappings/scope/" | jq -r \
-          '[.results[]? | select(.scope_name=="openid" or .scope_name=="profile") | .pk]')
+        DEF_PKS=$(api_get "$API_BASE/api/v3/propertymappings/provider/scope/" | jq -r \
+          '[.results[]? | select(.scope_name=="openid" or .scope_name=="profile") | .pk]' 2>/dev/null || true)
+        if [ -z "$DEF_PKS" ] || [ "$DEF_PKS" = "[]" ]; then
+          echo "outline-oidc-provision: no openid/profile scope mappings found (did the worker import default blueprints?)" >&2
+          exit 1
+        fi
         PROPS=$(jq -n --argjson d "$DEF_PKS" --arg m "$MAP_PK" '$d + [$m]')
 
         # --[the oauth2 provider itself]--
@@ -239,7 +252,7 @@ in
           patch_json "$API_BASE/api/v3/providers/oauth2/$PROV_PK/" "$PAYLOAD" >/dev/null
         else
           RESP=$(post_json "$API_BASE/api/v3/providers/oauth2/" "$PAYLOAD")
-          PROV_PK=$(printf '%s' "$RESP" | jq -r '.pk // empty')
+          PROV_PK=$(printf '%s' "$RESP" | jq -r '.pk // empty' 2>/dev/null || true)
           if [ -z "$PROV_PK" ]; then
             echo "outline-oidc-provision: provider create failed: $RESP" >&2
             exit 1
