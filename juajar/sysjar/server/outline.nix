@@ -292,7 +292,11 @@ in
           }')
         PROV_PK=$(first_pk "$API_BASE/api/v3/providers/oauth2/" name "$PROV_NAME")
         if [ -n "$PROV_PK" ]; then
-          patch_json "$API_BASE/api/v3/providers/oauth2/$PROV_PK/" "$PAYLOAD" >/dev/null
+          RESP=$(patch_json "$API_BASE/api/v3/providers/oauth2/$PROV_PK/" "$PAYLOAD")
+          if ! printf '%s' "$RESP" | jq -e '.pk' >/dev/null 2>&1; then
+            echo "outline-oidc-provision: provider patch failed: $RESP" >&2
+            exit 1
+          fi
         else
           RESP=$(post_json "$API_BASE/api/v3/providers/oauth2/" "$PAYLOAD")
           PROV_PK=$(printf '%s' "$RESP" | jq -r '.pk // empty' 2>/dev/null || true)
@@ -306,7 +310,11 @@ in
         APP_PK=$(first_pk "$API_BASE/api/v3/core/applications/" slug "$APP_SLUG")
         APP_PAYLOAD=$(jq -n --arg p "$PROV_PK" '{name:"Outline", slug:"outline", provider:$p}')
         if [ -n "$APP_PK" ]; then
-          patch_json "$API_BASE/api/v3/core/applications/$APP_PK/" "$APP_PAYLOAD" >/dev/null
+          RESP=$(patch_json "$API_BASE/api/v3/core/applications/$APP_PK/" "$APP_PAYLOAD")
+          if ! printf '%s' "$RESP" | jq -e '.pk' >/dev/null 2>&1; then
+            echo "outline-oidc-provision: application patch failed: $RESP" >&2
+            exit 1
+          fi
         else
           RESP=$(post_json "$API_BASE/api/v3/core/applications/" "$APP_PAYLOAD")
           if ! printf '%s' "$RESP" | jq -e '.pk' >/dev/null; then

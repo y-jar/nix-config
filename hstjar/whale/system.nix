@@ -177,9 +177,12 @@
             oidcAuthentication = {
               clientId = "outline"; # fixed id; the provisioner owns the secret
               clientSecretFile = "/var/lib/outline-oidc-secret"; # filled by the provisioner
-              authUrl = "http://whale:9000/application/o/authorize/";
-              tokenUrl = "http://whale:9000/application/o/token/";
-              userinfoUrl = "http://whale:9000/application/o/userinfo/";
+              # authUrl is browser-facing: whale.local resolves via avahi on
+              # every LAN machine (single-label "whale" does not). token and
+              # userinfo are server-to-server from this host: loopback, no DNS.
+              authUrl = "http://whale.local:9000/application/o/authorize/";
+              tokenUrl = "http://localhost:9000/application/o/token/";
+              userinfoUrl = "http://localhost:9000/application/o/userinfo/";
               displayName = "authentik";
             };
           };
@@ -187,6 +190,7 @@
         authentik = {
           enable = true; # sets authentik SSO IdP (login provider for outline)
           port = 9000; # web UI/API port (akadmin password: sudo grep AUTHENTIK_BOOTSTRAP_PASSWORD /var/lib/authentik/env)
+          adminEmail = "akadmin@whale.local"; # declared akadmin email (converged by authentik-akadmin-email)
         }; # end of authentik
       }; # end of server
       # =============[Server]^^^
