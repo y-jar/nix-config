@@ -66,7 +66,9 @@ in
       {
         enable = true;
         environmentFile = cfg.environmentFile;
-        settings.listen.http = "0.0.0.0:${toString cfg.port}";
+        # NOTE: 2026.8+ config loader wants listen.http as a *sequence*
+        # (env vars get comma-split leniently, but the yaml file is strict)
+        settings.listen.http = [ "0.0.0.0:${toString cfg.port}" ];
       }
       cfg.extraConfig
     ]; # end of services.authentik
