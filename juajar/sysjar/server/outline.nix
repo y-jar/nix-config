@@ -281,6 +281,7 @@ in
             authorization_flow: $flow,
             invalidation_flow: $iflow,
             client_type: "confidential",
+            grant_types: ["authorization_code", "refresh_token"],
             client_id: $cid,
             client_secret: $cs,
             redirect_uris: [{matching_mode: "strict", url: $cb, redirect_uri_type: "authorization"}],
