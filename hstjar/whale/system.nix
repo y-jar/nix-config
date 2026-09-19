@@ -51,8 +51,8 @@
       # =============[experience install]
       # [pick one or more if you know what you're doing]
       cinnamon.enable = false; # sets cinnamon
-      gnome.enable = true; # sets gnome [on by default]
-      gdm.enable = true; # headless server, no login screen
+      gnome.enable = false; # headless server: no DE (ssh + tty only)
+      gdm.enable = false; # headless server, no login screen
       hyprland.enable = false; # sets hyprland ~19MiB
       niri.enable = false; # sets niri
       mango.enable = false; # sets mango (mangowm)
@@ -68,7 +68,7 @@
         open = false; # open-source NVIDIA kernel module (Turing/RTX 2000+ only)
       };
       # [kernel] pick one: "default", "latest", "cachyos-latest", "cachyos-bore", "cachyos-lts"
-      kernel.variant = "latest";
+      kernel.variant = "default"; # stable kernel (latest broke this vm before)
       # [TTY console font] bitmap fonts (set null for kernel default):
       #   "ter-116n"    - Terminus 16px (default-size, crisp)
       #   "ter-124n"    - Terminus 24px (medium, good for HiDPI)
