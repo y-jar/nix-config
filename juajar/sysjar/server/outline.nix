@@ -130,6 +130,7 @@ in
         KEY_NAME="jar-outline-oidc-signing"
         EMAIL_MAP_NAME="jar: outline email (verified)"
         FLOW_SLUG="default-provider-authorization-implicit-consent"
+        IVAL_FLOW_SLUG="default-provider-invalidation-flow"
 
         # --[already provisioned? instant exit]--
         if [ -s "$SECRET_FILE" ]; then
@@ -189,6 +190,13 @@ in
           exit 1
         fi
 
+        # --[invalidation flow (required provider field since 2024.x)]--
+        IVAL_FLOW_PK=$(api_get "$API_BASE/api/v3/flows/instances/" | jq -r --arg s "$IVAL_FLOW_SLUG" '.results[]? | select(.slug==$s) | .pk' | head -n1 || true)
+        if [ -z "$IVAL_FLOW_PK" ]; then
+          echo "outline-oidc-provision: $IVAL_FLOW_SLUG not found (did the worker import default blueprints?)" >&2
+          exit 1
+        fi
+
         # --[signing keypair (RS256 id tokens; created if missing)]--
         KEY_PK=$(first_pk "$API_BASE/api/v3/crypto/certificatekeypairs/" name "$KEY_NAME")
         if [ -z "$KEY_PK" ]; then
@@ -233,11 +241,13 @@ in
         # --[the oauth2 provider itself]--
         CLIENT_SECRET=$(openssl rand -hex 32)
         PAYLOAD=$(jq -n \
-          --arg name "$PROV_NAME" --arg flow "$FLOW_PK" --arg cid "$CLIENT_ID" --arg cs "$CLIENT_SECRET" \
+          --arg name "$PROV_NAME" --arg flow "$FLOW_PK" --arg iflow "$IVAL_FLOW_PK" \
+          --arg cid "$CLIENT_ID" --arg cs "$CLIENT_SECRET" \
           --arg cb "$CALLBACK" --arg key "$KEY_PK" --argjson props "$PROPS" \
           '{
             name: $name,
             authorization_flow: $flow,
+            invalidation_flow: $iflow,
             client_type: "confidential",
             client_id: $cid,
             client_secret: $cs,
