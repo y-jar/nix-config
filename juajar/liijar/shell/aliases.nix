@@ -69,6 +69,8 @@
   # [whale related comands]
   grpauth = "sudo grep AUTHENTIK_BOOTSTRAP_PASSWORD /var/lib/authentik/env"; # grep authentik bootstrap password
   erroroutline = "journalctl -u outline-oidc-provision"; # journalctl for outline oidc provisioning
+  # [fleet ssh (see hstjar/*/net.nix + sysjar/networking)]
+  fkey = "ssh-keyscan -t ed25519"; # scan a host's fleet key: fkey <hostname>.local
 
   # =========[Extra]
   mcube = "mangohud vkcube --present_mode 1"; # needs mangohud+vulkan-tools
