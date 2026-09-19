@@ -21,7 +21,7 @@ let
   awwwPackages = [ pkgs.awww ]; # animated wallpaper daemon for Wayland
 
   awwwSessionVariables = {
-    AWWW_TRANSITION = "random"; # pick a transition effect at random each change
+    AWWW_TRANSITION = "grow"; # pick a transition effect at random each change
     AWWW_TRANSITION_DURATION = "1"; # seconds, per awww img man page
     AWWW_TRANSITION_STEP = "90"; # how fast the transition approaches the new image
   }; # end of awwwSessionVariables
