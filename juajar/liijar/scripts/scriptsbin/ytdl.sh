@@ -96,7 +96,7 @@ if [[ -z "$ITEM_COUNT" || "$ITEM_COUNT" == "NA" || "$ITEM_COUNT" -le 1 ]]; then
         *"Only video"*) QUALITY="video-only";;
     esac
 
-    dl_video "$URL" "$HOME/Downloads/%(title)s.%(ext)s" "$(quality_fmt)"
+    dl_video "$URL" "$HOME/downloads/%(title)s.%(ext)s" "$(quality_fmt)"
     echo -e "${G}Done!${N} Saved to ~/Downloads/"
     exit 0
 fi
