@@ -105,7 +105,7 @@
       threeD = false;
       astronomy = false;
     };
-    office.enable = false;
+    office.enable = true;
     obs.enable = false;
     kdenlive.enable = false;
     # =========[creative tools]^^^
