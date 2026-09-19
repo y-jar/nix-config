@@ -3,7 +3,7 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: zsh: zshrc + fzfrc generation.
+# goal: zsh: zshenv + zshrc + fzfrc generation.
 # -=-=-=-=-=-=-=-=-=-=-=
 # Aliases + shell functions are single-sourced in juajar/liijar/shell/.
 {
@@ -29,8 +29,12 @@ let
     inherit uf;
   };
 
-  # attrset of aliases -> `alias k=v` lines
-  aliasLines = lib.concatStringsSep "\n" (lib.mapAttrsToList (k: v: ''alias ${k}="${v}"'') aliases);
+  # attrset of aliases -> `alias k=v` lines. Bodies are single-quoted
+  # (with ' escaped as '\'') so $/$(...) stay literal until invocation;
+  # double quotes made wdry run `nix build` at every shell startup and
+  # froze shlvl's $SHLVL at definition time.
+  sq = lib.replaceStrings [ "'" ] [ "'\\''" ];
+  aliasLines = lib.concatStringsSep "\n" (lib.mapAttrsToList (k: v: "alias ${k}='${sq v}'") aliases);
 
   # yazi cd-on-quit wrapper (ported from the old programs.yazi zsh
   # integration): launch with `y`, quit with q -> shell cds into the dir
@@ -47,6 +51,16 @@ let
     }
   '';
 
+  # session vars (hjem loadEnv) for every zsh invocation: foot opens
+  # non-login shells so .zprofile never runs. The once-guard keeps
+  # nested shells from re-sourcing the env script.
+  zshenv = pkgs.writeText "zshenv" ''
+    if [[ -z "''${__HJEM_SESS_VARS_SOURCED-}" ]]; then
+      export __HJEM_SESS_VARS_SOURCED=1
+      . ${config.environment.loadEnv}
+    fi
+  '';
+
   zshrc = pkgs.writeText "zshrc" ''
     # completions
     autoload -Uz compinit
@@ -55,8 +69,12 @@ let
     # autosuggestions
     source ${zshAutosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
-    # syntax highlighting
-    source ${zshSyntax}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    # fzf (env vars single-sourced with ~/.fzfrc)
+    source ${fzfrc}
+    # fzf keybindings: alt-c dirs, ctrl-t files, ctrl-r history
+    source ${pkgs.fzf}/share/fzf/key-bindings.zsh
+    # fzf tab-completion (compinit ran above)
+    source ${pkgs.fzf}/share/fzf/completion.zsh
 
     # user-local binaries (webapp launchers, user scripts)
     export PATH="$HOME/.local/bin:$PATH"
@@ -75,6 +93,10 @@ let
     ${aliasLines}
 
     ${yaziWrapper}
+
+    # syntax highlighting (must stay last so it wraps every widget defined
+    # above, incl. the fzf alt-c/ctrl-t/ctrl-r widgets and zoxide's z)
+    source ${zshSyntax}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
   '';
 
   fzfrc = pkgs.writeText "fzfrc" ''
@@ -89,6 +111,7 @@ in
 {
   config = lib.mkIf hjm.shell.enable {
     files = {
+      ".zshenv".source = zshenv;
       ".zshrc".source = zshrc;
       ".fzfrc".source = fzfrc;
     };

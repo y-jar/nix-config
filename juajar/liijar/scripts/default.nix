@@ -22,6 +22,17 @@ let
   mkScript = name: path: pkgs.writeShellScriptBin name (builtins.readFile path);
   mkAll = list: map (s: mkScript s.name s.path) list;
 
+  # =-=-=[Awww Env]
+  # Compositor-spawned runs (foot -e jwall keybind, startup random-wall)
+  # source no shell profile, so the AWWW_* transition vars must travel
+  # inside the script. Single-sourced from liijar/awww's sessionVariables.
+  awwwEnv = lib.concatStringsSep "\n" (
+    lib.mapAttrsToList (k: v: "export ${k}=\"${toString v}\"") (
+      lib.filterAttrs (n: _: lib.hasPrefix "AWWW_" n) config.environment.sessionVariables
+    )
+  );
+  mkWallScript = name: path: pkgs.writeShellScriptBin name (awwwEnv + "\n" + builtins.readFile path);
+
   # =-=-=[Scripts]
   core = [
     {
@@ -60,5 +71,7 @@ in
 {
   packages =
     (mkAll core)
-    ++ lib.optionals (hjm.niri.enable || hjm.hyprland.enable) (mkAll wall ++ [ pkgs.chafa ]);
+    ++ lib.optionals (hjm.niri.enable || hjm.hyprland.enable) (
+      (map (s: mkWallScript s.name s.path) wall) ++ [ pkgs.chafa ]
+    );
 }
