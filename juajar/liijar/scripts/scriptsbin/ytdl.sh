@@ -97,7 +97,7 @@ if [[ -z "$ITEM_COUNT" || "$ITEM_COUNT" == "NA" || "$ITEM_COUNT" -le 1 ]]; then
     esac
 
     dl_video "$URL" "$HOME/downloads/%(title)s.%(ext)s" "$(quality_fmt)"
-    echo -e "${G}Done!${N} Saved to ~/Downloads/"
+    echo -e "${G}Done!${N} Saved to ~/downloads/"
     exit 0
 fi
 
@@ -126,13 +126,13 @@ fi
 
 # --[folder name]--
 DEFAULT_FOLDER=$(sanitize "$PLAYLIST_TITLE")
-echo -e "${C}Download folder:${N} ~/Downloads/$DEFAULT_FOLDER"
+echo -e "${C}Download folder:${N} ~/downloads/$DEFAULT_FOLDER"
 echo -ne "${Y}Press Enter to confirm, or type a custom name:${N} "
 read -r CUSTOM
 FOLDER_NAME=$( [[ -n "$CUSTOM" ]] && sanitize "$CUSTOM" || echo "$DEFAULT_FOLDER" )
 
 # --[download]--
-DL_DIR="$HOME/Downloads/$FOLDER_NAME"
+DL_DIR="$HOME/downloads/$FOLDER_NAME"
 mkdir -p "$DL_DIR"
 FMT=$(quality_fmt)
 
@@ -158,4 +158,4 @@ case "$TYPE_MSG" in
         ;;
 esac
 
-echo -e "${G}Done!${N} Saved to ~/Downloads/$FOLDER_NAME/"
+echo -e "${G}Done!${N} Saved to ~/downloads/$FOLDER_NAME/"
