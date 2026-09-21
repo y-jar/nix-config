@@ -74,6 +74,6 @@
     ├── docbin/                 # Documentation (this file lives here)
     ├── fontbin/                # Custom fonts (x5y8pxNegaTape)
     ├── imagebin/               # Images (logos, screenshots)
-    ├── nixbin/                 # Installer + test scripts (jarhelp, install.sh)
+    ├── nixbin/                 # Installer + test scripts (jarhelp, nixinstall)
     └── shotbin/                # Screenshots
 ```

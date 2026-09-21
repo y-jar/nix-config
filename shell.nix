@@ -20,6 +20,7 @@ pkgs.mkShell {
 
     # [installer]
     gum # TUI prompts for setup script
+    fzf # fuzzy finder (Iso Install disk picking)
   ]; # end of build inputs
 
   # hook: https://nix.dev/manual/nix/2.34/command-ref/nix-shell.html
@@ -28,7 +29,7 @@ pkgs.mkShell {
     echo -e "\e[1;33m====[ Entering Installer Shell for Nix in a Jar ]====\e[0m"
     echo -e "|"
     echo -e "| Interactive Installer:"
-    echo -e "|   '\e[1;32minstalljar\e[0m'        -> Launch the guided installer (gum TUI)"
+    echo -e "|   '\e[1;32mnixinstall\e[0m'       -> Launch the guided installer (gum TUI)"
     echo -e "|   '\e[1;32mtestjar\e[0m'          -> Run installer tests (gum TUI)"
     echo -e "|"
     echo -e "| Core Onboarding Steps:"
@@ -52,7 +53,7 @@ pkgs.mkShell {
 
     # [interactive installer]
     setup() {
-        installjar
+        bash "$HOME/nix-config/resjar/nixbin/nixinstall" "$@"
     }
     # [test runner]
     testjar() {
@@ -124,6 +125,7 @@ pkgs.mkShell {
     #[extras]
     alias cl="clear"
     alias ga="git add ."
+    alias mkiso="./resjar/nixbin/buildiso.sh"
     # =======[aliases]
   '';
 }

@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
 # ═══════════════════════════════════════════════════════
-#  NixOS in a Jar Interactive Installer
+#  nixinstall NixOS in a Jar Installer
 #  Uses gum for TUI prompts
+#
+#  Iso Install: core system from a live ISO (archinstall-style).
+#    partition → format → mount → create user → minimal NixOS
+#    → clone y-jar/nix-config into /home/<user>/nix-config.
+#    NO switch: the user pulls it after first boot (hardto + nhs).
+#  Other menu entries manage hosts on an already-installed system.
 # ═══════════════════════════════════════════════════════
 set -euo pipefail
 
@@ -11,6 +17,7 @@ FLAKE_PATH="$NIX_CONFIG_DIR/flake.nix"
 HOSTS_DIR="$NIX_CONFIG_DIR/hstjar"
 TEMPLATE_DIR="$HOSTS_DIR/0_TEMPLATE"
 DOCS_DIR="$NIX_CONFIG_DIR/resjar/docbin"
+DEFAULT_REPO_URL="https://github.com/y-jar/nix-config.git"
 
 # ──[colors for fallback output]
 RED='\033[0;31m'
@@ -20,10 +27,10 @@ BLUE='\033[0;34m'
 NC='\033[0m'
 
 # ──[privileged runner with TEST-MODE guard]
-# INSTALLJAR_TEST_MODE=1 turns privileged/destructive ops into no-ops
+# NIXINSTALL_TEST_MODE=1 turns privileged/destructive ops into no-ops
 # (defense in depth should only ever be set by the test harness).
 run_privileged() {
-    if [ "${INSTALLJAR_TEST_MODE:-0}" = "1" ]; then
+    if [ "${NIXINSTALL_TEST_MODE:-0}" = "1" ]; then
         gum log --level warn "TEST-MODE: skipping privileged op: sudo $*"
         return 0
     fi
@@ -32,16 +39,16 @@ run_privileged() {
 export -f run_privileged
 
 # ──[auto-mode helpers]
-# INSTALLJAR_AUTO=1 enables non-interactive installs driven by env vars.
+# NIXINSTALL_AUTO=1 enables non-interactive installs driven by env vars.
 # auto_val  NAME   → echoes ${NAME} and returns 0 if auto-mode; returns 1 otherwise
-# autoconfirm MSG VAR → returns 0/1 based on ${VAR} if auto-mode; else gum confirm
+# auto_confirm MSG VAR → returns 0/1 based on ${VAR} if auto-mode; else gum confirm
 auto_val() {
-    [ "${INSTALLJAR_AUTO:-0}" = "1" ] || return 1
+    [ "${NIXINSTALL_AUTO:-0}" = "1" ] || return 1
     echo "${!1:-}"
 }
 auto_confirm() {
     local msg="$1" var="$2"
-    if [ "${INSTALLJAR_AUTO:-0}" = "1" ]; then
+    if [ "${NIXINSTALL_AUTO:-0}" = "1" ]; then
         [ "${!var:-0}" = "1" ] && return 0 || return 1
     fi
     gum confirm "$msg"
@@ -54,7 +61,7 @@ auto_confirm() {
 auto_spin() {
     local title="$1"; shift
     shift  # skip the -- separator
-    if [ "${INSTALLJAR_AUTO:-0}" = "1" ]; then
+    if [ "${NIXINSTALL_AUTO:-0}" = "1" ]; then
         echo "[auto] $title"
         "$@"
     else
@@ -70,9 +77,8 @@ check_deps() {
         exit 1
     fi
     if ! command -v fzf &>/dev/null; then
-        echo -e "${RED}Error: 'fzf' is not installed.${NC}"
-        echo "Run: nix-shell -p fzf"
-        exit 1
+        # Soft: only Iso Install (live ISO) uses fzf; the ISO ships it.
+        echo -e "${YELLOW}Warning: 'fzf' not found (only needed for Iso Install).${NC}"
     fi
 }
 
@@ -164,7 +170,7 @@ open_editor() {
 }
 
 # ═══════════════════════════════════════
-#  Option 1: Fresh Install
+#  Option 1: Fresh Install (installed system)
 # ═══════════════════════════════════════
 fresh_install() {
     gum style --border double --align center --width 50 \
@@ -425,12 +431,12 @@ pick_part() {
 
     # Auto-mode: match by prompt keyword (order matters Root before boot
     # because "Root partition (skip BIOS boot)" contains "boot")
-    if [ "${INSTALLJAR_AUTO:-0}" = "1" ]; then
+    if [ "${NIXINSTALL_AUTO:-0}" = "1" ]; then
         case "$prompt" in
-            *Root*)           echo "${INSTALLJAR_AUTO_ROOT_PART:-}" ; return 0 ;;
-            *Swap*)           echo "${INSTALLJAR_AUTO_SWAP_PART:-}" ; return 0 ;;
-            *Home*)           echo "${INSTALLJAR_AUTO_HOME_PART:-}" ; return 0 ;;
-            *EFI*|*boot*)     echo "${INSTALLJAR_AUTO_BOOT_PART:-}" ; return 0 ;;
+            *Root*)           echo "${NIXINSTALL_AUTO_ROOT_PART:-}" ; return 0 ;;
+            *Swap*)           echo "${NIXINSTALL_AUTO_SWAP_PART:-}" ; return 0 ;;
+            *Home*)           echo "${NIXINSTALL_AUTO_HOME_PART:-}" ; return 0 ;;
+            *EFI*|*boot*)     echo "${NIXINSTALL_AUTO_BOOT_PART:-}" ; return 0 ;;
         esac
     fi
 
@@ -483,8 +489,8 @@ pick_part() {
 verify_boot_partition_check() {
     local disk="$1" mode="$2" boot_part="$3" fs_type="${4:-}"
 
-    [ "${INSTALLJAR_TEST_MODE:-0}" = "1" ] && return 0
-    [ "${INSTALLJAR_AUTO_PARTITION:-0}" = "1" ] && return 0
+    [ "${NIXINSTALL_TEST_MODE:-0}" = "1" ] && return 0
+    [ "${NIXINSTALL_AUTO_PARTITION:-0}" = "1" ] && return 0
 
     local pttype
     pttype=$(blkid -s PTTYPE -o value "$disk" 2>/dev/null || echo "")
@@ -546,106 +552,108 @@ verify_boot_partition() {
     return 0
 }
 
-# ──[detect if we're running in a VM used to pick portable vs generated hardware config]
-# Checks systemd-detect-virt first; falls back to isInVM=true in the host's system.nix.
-is_vm_host() {
-    local clone_dir="$1" host="$2"
-    if command -v systemd-detect-virt &>/dev/null; then
-        local virt
-        virt=$(systemd-detect-virt 2>/dev/null || echo "none")
-        if [ -n "$virt" ] && [ "$virt" != "none" ]; then
-            return 0
-        fi
-    fi
-    grep -qP 'isInVM\s*=\s*true' "$clone_dir/hstjar/$host/system.nix" 2>/dev/null
-}
+# ──[plan a partition layout for a disk (pure: prints a plan, touches nothing)]
+# Line format: "label|<dos|gpt>" followed by "part|<device>|<size>|<sfdisk-type>|<role>".
+# An empty size means "rest of the disk" that partition is always LAST.
+# Roles: boot (ESP or BIOS-boot), boot-ext4 (BIOS+XFS /boot), swap, root, home.
+# Default table: GPT for UEFI; GPT for btrfs (blocklist fallback is unsafe on
+# btrfs); MBR for everything else (BIOS+ext4/xfs).
+plan_partitions() {
+    local disk="$1" boot_mode="$2" fs_type="$3" separate_home="$4" use_swap="$5"
+    local swap_size="${6:-8G}" root_size="${7:-50G}"
 
-# ──[auto-partition the target disk based on chosen combo]
-# Triggered by INSTALLJAR_AUTO_PARTITION=1. Wipes $target_disk and writes
-# a layout matching the existing testvm combos (boot × pttype × fs × home × swap × subvol).
-# Exports partition paths back via INSTALLJAR_AUTO_*_PART env vars so subsequent
-# Step 5 (pick_part) returns them.
-auto_partition() {
-    local disk="$1" boot_mode="$2" fs_type="$3"
-    local separate_home="$4" use_swap="$5" use_subvolumes="$6" swap_size="${7:-2G}"
-    local label="${INSTALLJAR_AUTO_LABEL:-}"
-
-    # Default partition table: GPT for UEFI; GPT for btrfs/subvols (blocklist fallback
-    # is unsafe on btrfs); MBR for everything else (BIOS+ext4/xfs).
+    local label="${NIXINSTALL_AUTO_LABEL:-}"
     if [ -z "$label" ]; then
         if [ "$boot_mode" = "UEFI" ]; then
             label="gpt"
-        elif [ "$fs_type" = "btrfs" ] || [ "$use_subvolumes" = true ]; then
+        elif [ "$fs_type" = "btrfs" ]; then
             label="gpt"
         else
             label="dos"
         fi
     fi
 
-    # Partition suffix (nvme/mmcblk/loop use p1, p2, ...)
-    local disk_base part_suffix
+    local disk_base part_suffix n
     disk_base=$(basename "$disk")
     part_suffix=""
     case "$disk_base" in
         nvme*|mmcblk*|loop*) part_suffix="p" ;;
     esac
+    n=0
 
-    local script="label: $label"$'\n'
-    local part_num=1
-    local boot_part_dev="" root_part_dev="" home_part_dev="" swap_part_dev=""
+    printf 'label|%s\n' "$label"
 
-    # Boot/ESP partition first (1M BIOS boot or 512M EFI System)
+    # Boot partition first: 512M EFI (UEFI) or 1M BIOS boot (BIOS+GPT).
+    # The 1M BIOS boot partition is a raw GRUB embed area never formatted,
+    # never mounted (root holds /boot on BIOS+GPT).
     if [ "$boot_mode" = "UEFI" ]; then
-        script+=",512M,U"$'\n'
-        boot_part_dev="/dev/${disk_base}${part_suffix}${part_num}"
-        part_num=$((part_num + 1))
+        n=$((n + 1))
+        printf 'part|/dev/%s%s%d|512M|U|boot\n' "$disk_base" "$part_suffix" "$n"
     elif [ "$label" = "gpt" ]; then
-        script+=",1M,21686148-6449-6E6F-744E-656564454649"$'\n'  # BIOS boot (unformatted)
-        part_num=$((part_num + 1))
+        n=$((n + 1))
+        printf 'part|/dev/%s%s%d|1M|21686148-6449-6E6F-744E-656564454649|biosboot\n' "$disk_base" "$part_suffix" "$n"
     fi
 
-    # For BIOS+XFS: GRUB 2.12's xfs module can't read modern XFS to load
-    # kernel/initrd. Create a separate 1G ext4 /boot so GRUB reads from ext4.
-    local xfs_boot_part_dev=""
+    # BIOS+XFS: GRUB 2.12's xfs module can't read modern XFS to load
+    # kernel/initrd. Separate 1G ext4 /boot so GRUB reads from ext4.
     if [ "$boot_mode" = "BIOS" ] && [ "$fs_type" = "xfs" ]; then
-        script+=",1G,L"$'\n'
-        xfs_boot_part_dev="/dev/${disk_base}${part_suffix}${part_num}"
-        part_num=$((part_num + 1))
+        n=$((n + 1))
+        printf 'part|/dev/%s%s%d|1G|L|boot-ext4\n' "$disk_base" "$part_suffix" "$n"
     fi
 
-    # Root partition size: 16G when swap+home both set (leaves room for ~2G home on a 20G disk);
-    # 18G otherwise (matches existing testvm combos).
-    # For BIOS+XFS: 16G to leave space for 1G /boot (20G disk).
-    local root_size="18G"
-    if [ "$use_swap" = true ] && [ "$separate_home" = true ]; then
-        root_size="16G"
-    fi
-    if [ "$boot_mode" = "BIOS" ] && [ "$fs_type" = "xfs" ]; then
-        root_size="16G"
-    fi
-
-    # Root partition
-    script+=",$root_size,L"$'\n'
-    root_part_dev="/dev/${disk_base}${part_suffix}${part_num}"
-    part_num=$((part_num + 1))
-
-    # Optional swap (2G default)
+    # Swap before root so the rest-of-disk partition stays last
     if [ "$use_swap" = true ]; then
-        script+=",${swap_size},S"$'\n'
-        swap_part_dev="/dev/${disk_base}${part_suffix}${part_num}"
-        part_num=$((part_num + 1))
+        n=$((n + 1))
+        printf 'part|/dev/%s%s%d|%s|S|swap\n' "$disk_base" "$part_suffix" "$n" "$swap_size"
     fi
 
-    # Optional home (rest of disk)
     if [ "$separate_home" = true ]; then
-        script+=",,L"$'\n'
-        home_part_dev="/dev/${disk_base}${part_suffix}${part_num}"
-        part_num=$((part_num + 1))
+        n=$((n + 1))
+        printf 'part|/dev/%s%s%d|%s|L|root\n' "$disk_base" "$part_suffix" "$n" "$root_size"
+        n=$((n + 1))
+        printf 'part|/dev/%s%s%d||L|home\n' "$disk_base" "$part_suffix" "$n"
+    else
+        n=$((n + 1))
+        printf 'part|/dev/%s%s%d||L|root\n' "$disk_base" "$part_suffix" "$n"
     fi
+}
+
+# ──[auto-partition the target disk based on the plan_partitions layout]
+# Wipes $target_disk, writes the layout, then exports the partition paths
+# back via NIXINSTALL_AUTO_*_PART env vars so Iso Install can use them
+# directly (no manual partition picking needed).
+auto_partition() {
+    local disk="$1" boot_mode="$2" fs_type="$3" separate_home="$4" use_swap="$5"
+    local swap_size="${6:-8G}" root_size="${7:-50G}"
+
+    local plan
+    plan=$(plan_partitions "$disk" "$boot_mode" "$fs_type" "$separate_home" "$use_swap" "$swap_size" "$root_size")
+
+    local label="" script="" tag dev size type role
+    local boot_part_dev="" xfs_boot_part_dev="" biosboot_part_dev=""
+    local root_part_dev="" home_part_dev="" swap_part_dev=""
+    while IFS='|' read -r tag dev size type role; do
+        case "$tag" in
+            label)
+                label="$dev"
+                ;;
+            part)
+                script+=",$size,$type"$'\n'
+                case "$role" in
+                    boot)      boot_part_dev="$dev" ;;
+                    biosboot)  biosboot_part_dev="$dev" ;;
+                    boot-ext4) xfs_boot_part_dev="$dev" ;;
+                    swap)      swap_part_dev="$dev" ;;
+                    root)      root_part_dev="$dev" ;;
+                    home)      home_part_dev="$dev" ;;
+                esac
+                ;;
+        esac
+    done <<< "$plan"
 
     gum log --level info "auto_partition: wiping $disk and writing $label layout..."
     if ! run_privileged sfdisk --wipe always "$disk" <<<"$script" >/dev/null 2>&1; then
-        gum log --level error "auto_partition: sfdisk failed."
+        gum log --level error "auto_partition: sfdisk failed (root size too big for the disk?)"
         return 1
     fi
 
@@ -653,16 +661,19 @@ auto_partition() {
     run_privileged blockdev --rereadpt "$disk" 2>/dev/null || true
     sleep 2
 
-    # Export partition paths so Step 5 (pick_part) returns them in auto mode
-    [ -n "$boot_part_dev" ]  && export INSTALLJAR_AUTO_BOOT_PART="$boot_part_dev"
-    [ -n "$xfs_boot_part_dev" ] && export INSTALLJAR_AUTO_BOOT_PART="$xfs_boot_part_dev"
-    [ -n "$root_part_dev" ]  && export INSTALLJAR_AUTO_ROOT_PART="$root_part_dev"
-    [ -n "$home_part_dev" ]  && export INSTALLJAR_AUTO_HOME_PART="$home_part_dev"
-    [ -n "$swap_part_dev" ]  && export INSTALLJAR_AUTO_SWAP_PART="$swap_part_dev"
+    # Export partition paths so Iso Install Step 5 uses them directly
+    [ -n "$boot_part_dev" ]    && export NIXINSTALL_AUTO_BOOT_PART="$boot_part_dev"
+    [ -n "$xfs_boot_part_dev" ] && export NIXINSTALL_AUTO_BOOT_PART="$xfs_boot_part_dev"
+    [ -n "$root_part_dev" ]    && export NIXINSTALL_AUTO_ROOT_PART="$root_part_dev"
+    [ -n "$home_part_dev" ]    && export NIXINSTALL_AUTO_HOME_PART="$home_part_dev"
+    [ -n "$swap_part_dev" ]    && export NIXINSTALL_AUTO_SWAP_PART="$swap_part_dev"
 
     gum log --level info "auto_partition: $label layout on $disk"
     if [ -n "$boot_part_dev" ]; then
         gum log --level info "  boot: $boot_part_dev"
+    fi
+    if [ -n "$biosboot_part_dev" ]; then
+        gum log --level info "  bios-boot (GRUB embed area, no fs, not mounted): $biosboot_part_dev"
     fi
     if [ -n "$xfs_boot_part_dev" ]; then
         gum log --level info "  boot (ext4, for XFS GRUB): $xfs_boot_part_dev"
@@ -673,69 +684,18 @@ auto_partition() {
     return 0
 }
 
-# ──[copy $clone_dir → /mnt/home/$main_user/nix-config and chown]
-# Runs after nixos-install succeeds. Skips silently when main_user is unset or
-# home dir doesn't exist. Makes all `nhs`/`nht`/`nrs`/`nrt`/`nru` aliases work
-# on first boot (they hardcode ~/nix-config as the flake root).
-# Non-fatal: warns on failure rather than aborting iso_install (the system is
-# already installed; user can copy manually if needed).
-copy_config_to_home() {
-    local main_user="$1" clone_dir="$2"
-    [ "${INSTALLJAR_TEST_MODE:-0}" = "1" ] && return 0
-    if [ -z "$main_user" ]; then
-        gum log --level warn "No mainUser set skipping ~/nix-config copy (config stays at $clone_dir)"
-        return 0
-    fi
-    local home_dir="/mnt/home/$main_user"
-    if [ ! -d "$home_dir" ]; then
-        gum log --level warn "Home dir $home_dir doesn't exist skipping ~/nix-config copy"
-        return 0
-    fi
-
-    # Copy the nix-config repo into the user's home (if available)
-    if [ -d "$clone_dir" ]; then
-        local target="$home_dir/nix-config"
-        gum log --level info "Copying $clone_dir → /home/$main_user/nix-config..."
-        run_privileged mkdir -p "$target"
-        if ! run_privileged cp -a "$clone_dir/." "$target/"; then
-            gum log --level warn "copy_config_to_home: cp failed (config remains at $clone_dir; user can copy manually)"
-        fi
-        # Force flush writes to disk so a hard VM kill doesn't lose the new files.
-        run_privileged sync
-    else
-        gum log --level warn "Source $clone_dir doesn't exist skipping ~/nix-config copy"
-    fi
-
-    # Chown the ENTIRE home directory nixos-install runs as root, so
-    # hjem activation creates root-owned files (~/.zshrc, ~/.config/*,
-    # XDG dirs, etc.). Without this, GDM authenticates the user but the
-    # session crashes on permission errors, looping back to the login screen.
-    local uid_gid
-    uid_gid=$(run_privileged nixos-enter --root /mnt -c "echo \$(id -u $main_user):\$(id -g $main_user)" 2>/dev/null | tr -dc '0-9:') || true
-    if [ -z "$uid_gid" ]; then
-        gum log --level warn "copy_config_to_home: could not resolve uid:gid for $main_user (files may be root-owned)"
-        return 0
-    fi
-    gum log --level info "Fixing ownership of /home/$main_user (uid:gid $uid_gid)..."
-    if ! run_privileged chown -R "$uid_gid" "$home_dir"; then
-        gum log --level warn "copy_config_to_home: chown $uid_gid $home_dir failed (files may be root-owned)"
-        return 0
-    fi
-    gum log --level info "Home directory owned by $main_user session should start cleanly"
-    return 0
-}
-
 # ──[copy live ISO Wi-Fi credentials to the installed system]
 # Mirrors archinstall's copy_iso_network_config. Copies NetworkManager
-# connection files and/or iwd PSKs from the live ISO to /mnt so Wi-Fi
+# connection files and/or iwd PSKs from the live ISO to the target so Wi-Fi
 # works on first boot without re-running nmtui.
 copy_network_config() {
-    [ "${INSTALLJAR_TEST_MODE:-0}" = "1" ] && return 0
+    [ "${NIXINSTALL_TEST_MODE:-0}" = "1" ] && return 0
+    local mnt="${1:-/mnt}"
     local copied=0
 
     # NetworkManager connection files
     local nm_src="/etc/NetworkManager/system-connections"
-    local nm_dst="/mnt/etc/NetworkManager/system-connections"
+    local nm_dst="$mnt/etc/NetworkManager/system-connections"
     if [ -d "$nm_src" ] && ls "$nm_src"/*.nmconnection >/dev/null 2>&1; then
         gum log --level info "Copying NetworkManager Wi-Fi profiles to target..."
         run_privileged mkdir -p "$nm_dst"
@@ -747,7 +707,7 @@ copy_network_config() {
 
     # iwd PSK files
     local iwd_src="/var/lib/iwd"
-    local iwd_dst="/mnt/var/lib/iwd"
+    local iwd_dst="$mnt/var/lib/iwd"
     if [ -d "$iwd_src" ] && ls "$iwd_src"/*.psk >/dev/null 2>&1; then
         gum log --level info "Copying iwd Wi-Fi profiles to target..."
         run_privileged mkdir -p "$iwd_dst"
@@ -759,7 +719,7 @@ copy_network_config() {
 
     # systemd-networkd configs (wired/static IP)
     local netd_src="/etc/systemd/network"
-    local netd_dst="/mnt/etc/systemd/network"
+    local netd_dst="$mnt/etc/systemd/network"
     if [ -d "$netd_src" ] && ls "$netd_src"/*.network >/dev/null 2>&1; then
         gum log --level info "Copying systemd-networkd configs to target..."
         run_privileged mkdir -p "$netd_dst"
@@ -775,79 +735,172 @@ copy_network_config() {
     fi
 }
 
-# ──[emit a fileSystems entry for the portable VM config]
-gen_fs_entry() {
-    local mnt="$1" device="$2" fstype="$3" options="$4"
-
-    printf '  fileSystems."%s" =\n    { device = "%s";\n      fsType = "%s";\n' "$mnt" "$device" "$fstype"
-    if [ -n "$options" ]; then
-        printf '      options = [ "%s" ];\n' "$options"
+# ──[hash a password for users.users.<name>.initialHashedPassword]
+# Prefers openssl (on the ISO); falls back to mkpasswd (whois).
+hash_password() {
+    local pass="$1"
+    if command -v openssl &>/dev/null; then
+        printf '%s' "$pass" | openssl passwd -6 -stdin 2>/dev/null && return 0
     fi
-    printf '    };\n'
+    if command -v mkpasswd &>/dev/null; then
+        mkpasswd -m sha-512 "$pass" 2>/dev/null && return 0
+    fi
+    return 1
 }
 
-# ──[generate a portable hardware-config for VM hosts]
-gen_vm_hardware_config() {
-    local fs_type="$1"
-    local use_subvolumes="$2"
-    local separate_home="$3"
-    local boot_part="$4"
-    local root_part="$5"
-    local home_part="$6"
-    local swap_part="$7"
-    local boot_mode="${8:-UEFI}"
-
-    local out=""
-    out+="# Portable hardware config generated by installjar for VM hosts."$'\n'
-    out+="# Safe to edit and commit; uses device paths so it works across VMs."$'\n\n'
-    out+=$'{ config, lib, pkgs, modulesPath, ... }:\n\n'
-    out+=$'{\n'
-    out+=$'  imports =\n    [ (modulesPath + "/installer/scan/not-detected.nix")\n    ];\n\n'
-    out+=$'  boot.initrd.availableKernelModules = [ "virtio_pci" "virtio_blk" "virtio_net" "ahci" "ata_piix" ];\n'
-    out+=$'  boot.initrd.kernelModules = [ ];\n'
-    out+=$'  boot.kernelModules = [ ];\n'
-    out+=$'  boot.extraModulePackages = [ ];\n\n'
-
-    if [ "$fs_type" = "btrfs" ] && [ "$use_subvolumes" = true ]; then
-        out+="$(gen_fs_entry "/" "$root_part" "btrfs" "subvol=@,compress=zstd")"$'\n'
-        if [ "$separate_home" = true ]; then
-            out+="$(gen_fs_entry "/home" "$home_part" "btrfs" "compress=zstd")"$'\n'
+# ──[prompt helpers: validate + retry (max 3) archinstall-style up-front]
+prompt_hostname() {
+    local tries=0 name
+    while [ "$tries" -lt 3 ]; do
+        tries=$((tries + 1))
+        if [ "${NIXINSTALL_AUTO:-0}" = "1" ]; then
+            name="${NIXINSTALL_AUTO_HOSTNAME:-}"
         else
-            out+="$(gen_fs_entry "/home" "$root_part" "btrfs" "subvol=@home,compress=zstd")"$'\n'
+            name=$(gum input --prompt "Hostname: " --placeholder "e.g. mypc")
         fi
-        out+="$(gen_fs_entry "/nix" "$root_part" "btrfs" "subvol=@nix,compress=zstd")"$'\n'
-    else
-        out+="$(gen_fs_entry "/" "$root_part" "$fs_type" "")"$'\n'
-        if [ -n "$home_part" ]; then
-            out+="$(gen_fs_entry "/home" "$home_part" "$fs_type" "")"$'\n'
+        if [[ "$name" =~ ^[a-z][a-z0-9-]*$ ]]; then
+            echo "$name"
+            return 0
         fi
-    fi
+        gum log --level error "Invalid hostname '$name' (lowercase letters, digits, hyphens)"
+    done
+    return 1
+}
 
-    if [ -n "$boot_part" ]; then
-        if [ "$boot_mode" = "UEFI" ]; then
-            out+="$(gen_fs_entry "/boot" "$boot_part" "vfat" "")"$'\n'
+prompt_username() {
+    local tries=0 name
+    while [ "$tries" -lt 3 ]; do
+        tries=$((tries + 1))
+        if [ "${NIXINSTALL_AUTO:-0}" = "1" ]; then
+            name="${NIXINSTALL_AUTO_USERNAME:-}"
         else
-            out+="$(gen_fs_entry "/boot" "$boot_part" "ext4" "")"$'\n'
+            name=$(gum input --prompt "Username: " --placeholder "e.g. jar")
+        fi
+        if [[ "$name" =~ ^[a-z_][a-z0-9_-]*$ ]] && [ "${#name}" -le 32 ] && [ "$name" != "root" ]; then
+            echo "$name"
+            return 0
+        fi
+        gum log --level error "Invalid username '$name' (lowercase letters, digits, _ or -; max 32 chars; not root)"
+    done
+    return 1
+}
+
+prompt_password() {
+    local tries=0 p1 p2
+    while [ "$tries" -lt 3 ]; do
+        tries=$((tries + 1))
+        if [ "${NIXINSTALL_AUTO:-0}" = "1" ]; then
+            p1="${NIXINSTALL_AUTO_PASSWORD:-}"
+            if [ -n "$p1" ]; then
+                echo "$p1"
+                return 0
+            fi
+            gum log --level error "NIXINSTALL_AUTO_PASSWORD is empty"
+            return 1
+        fi
+        p1=$(gum input --password --prompt "Password for the user: ")
+        p2=$(gum input --password --prompt "Confirm password: ")
+        if [ -n "$p1" ] && [ "$p1" = "$p2" ]; then
+            echo "$p1"
+            return 0
+        fi
+        gum log --level warn "Passwords empty or mismatched try again"
+    done
+    return 1
+}
+
+prompt_timezone() {
+    if [ "${NIXINSTALL_AUTO:-0}" = "1" ]; then
+        echo "${NIXINSTALL_AUTO_TIMEZONE:-Etc/UTC}"
+        return 0
+    fi
+    local default_tz="Etc/UTC" detected tz
+    if command -v timedatectl &>/dev/null; then
+        detected=$(timedatectl show -p Timezone --value 2>/dev/null || true)
+        [ -n "$detected" ] && default_tz="$detected"
+    fi
+    tz=$(gum input --prompt "Timezone: " --value "$default_tz")
+    [ -z "$tz" ] && tz="$default_tz"
+    echo "$tz"
+}
+
+# ──[generate the minimal core configuration.nix for Iso Install]
+# Pure function: prints a complete NixOS configuration to stdout.
+# Core system only bootloader, network, the created user, flakes.
+# The jar config is NOT switched here; the user runs hardto + nhs after boot.
+gen_base_config() {
+    local hostname="$1" timezone="$2" username="$3" user_hash="$4"
+    local boot_mode="$5" target_disk="$6" wheel="$7" ssh_enable="$8" ssh_key="${9:-}"
+
+    local boot_block=""
+    if [ "$boot_mode" = "UEFI" ]; then
+        boot_block=$'  boot.loader.systemd-boot.enable = true;\n  boot.loader.efi.canTouchEfiVariables = true;'
+    else
+        boot_block="  boot.loader.grub.enable = true;
+  boot.loader.grub.device = \"${target_disk}\";"
+    fi
+
+    local groups=""
+    [ "$wheel" = "1" ] && groups=' "wheel"'
+
+    local ssh_block=""
+    if [ "$ssh_enable" = "1" ]; then
+        ssh_block=$'  services.openssh.enable = true;\n'
+        if [ -n "$ssh_key" ]; then
+            ssh_block+="  users.users.${username}.openssh.authorizedKeys.keys = [ \"${ssh_key}\" ];"$'\n'
         fi
     fi
 
-    if [ -n "$swap_part" ]; then
-        out+='  swapDevices = [ { device = "'"$swap_part"'"; } ];'$'\n'
-    else
-        out+='  swapDevices = [ ];'$'\n'
-    fi
+    local state_version
+    state_version=$(nixos-version 2>/dev/null | cut -d. -f1-2 || echo "")
+    [ -n "$state_version" ] || state_version="26.05"
 
-    out+=$'\n}\n'
-    printf '%s' "$out"
+    cat <<EOF
+# Generated by nixinstall (Iso Install) core system only, no jar switch yet.
+# After first boot:
+#   cd ~/nix-config && nix-shell
+#   hardto ${hostname}   # scaffold host + yoink this machine's hardware config
+#   nhs ${hostname}      # deploy (this is the switch)
+{ config, pkgs, ... }:
+
+{
+  imports = [ ./hardware-configuration.nix ];
+
+  networking.hostName = "${hostname}";
+  time.timeZone = "${timezone}";
+  networking.networkmanager.enable = true;
+
+${boot_block}
+
+  users.users.${username} = {
+    isNormalUser = true;
+    extraGroups = [${groups} ];
+    initialHashedPassword = "${user_hash}";
+  };
+  # root stays locked (--no-root-passwd); use sudo from ${username}
+
+${ssh_block}  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  environment.systemPackages = with pkgs; [
+    git
+    vim
+    nano
+    wget
+  ];
+
+  system.stateVersion = "${state_version}";
+}
+EOF
 }
 
 # ═══════════════════════════════════════
-#  Option 0: Install from ISO
+#  Option 0: Iso Install (live ISO only)
 # ═══════════════════════════════════════
 iso_install() {
     gum style --border double --align center --width 50 \
-        --foreground 212 "NixOS Installer" "Guided installation from ISO"
+        --foreground 212 "Iso Install" "Core NixOS from live ISO (erases disk)"
 
+    local mnt="${NIXINSTALL_MNT_ROOT:-/mnt}"
     local target_disk=""
     local fs_type=""
     local use_subvolumes=false
@@ -859,6 +912,7 @@ iso_install() {
     local root_part=""
     local home_part=""
     local swap_part=""
+    local partitioned_auto=0
 
     # ──────────────────────────────────────
     # Step 1: Disk selection
@@ -881,9 +935,9 @@ iso_install() {
     done <<< "$disks"
 
     local selected
-    if auto_val INSTALLJAR_AUTO_DISK >/dev/null 2>&1; then
-        selected="/dev/$(auto_val INSTALLJAR_AUTO_DISK) | (auto)"
-        target_disk="/dev/$(auto_val INSTALLJAR_AUTO_DISK)"
+    if auto_val NIXINSTALL_AUTO_DISK >/dev/null 2>&1; then
+        selected="/dev/$(auto_val NIXINSTALL_AUTO_DISK) | (auto)"
+        target_disk="/dev/$(auto_val NIXINSTALL_AUTO_DISK)"
         gum log --level info "Auto: selected disk: $target_disk"
     else
         selected=$(echo "$disk_list" | fzf --header="Select the disk to install onto" --height=10)
@@ -895,7 +949,7 @@ iso_install() {
     fi
     gum log --level info "Selected disk: $target_disk"
 
-    if ! auto_confirm "This will ERASE data on $target_disk. Continue?" INSTALLJAR_AUTO_ERASE; then
+    if ! auto_confirm "This will ERASE data on $target_disk. Continue?" NIXINSTALL_AUTO_ERASE; then
         gum log --level info "Cancelled"
         return 0
     fi
@@ -912,8 +966,8 @@ iso_install() {
     fi
 
     local boot_choice
-    if auto_val INSTALLJAR_AUTO_BOOT >/dev/null 2>&1; then
-        boot_mode=$(auto_val INSTALLJAR_AUTO_BOOT)
+    if auto_val NIXINSTALL_AUTO_BOOT >/dev/null 2>&1; then
+        boot_mode=$(auto_val NIXINSTALL_AUTO_BOOT)
         [ -z "$boot_mode" ] && boot_mode="BIOS"
         gum log --level info "Auto: boot mode: $boot_mode"
     else
@@ -930,8 +984,8 @@ iso_install() {
     # ──────────────────────────────────────
     gum style --border normal --width 50 "Step 3: Choose partition scheme"
 
-    if auto_val INSTALLJAR_AUTO_FS >/dev/null 2>&1; then
-        fs_type=$(auto_val INSTALLJAR_AUTO_FS)
+    if auto_val NIXINSTALL_AUTO_FS >/dev/null 2>&1; then
+        fs_type=$(auto_val NIXINSTALL_AUTO_FS)
         gum log --level info "Auto: filesystem: $fs_type"
     else
         fs_type=$(gum choose "ext4" "btrfs" "xfs" --header "Filesystem for root and home")
@@ -946,117 +1000,178 @@ iso_install() {
     fi
     gum log --level info "Filesystem: $fs_type"
 
-    if auto_confirm "Separate /home partition?" INSTALLJAR_AUTO_HOME; then
+    if auto_confirm "Separate /home partition?" NIXINSTALL_AUTO_HOME; then
         separate_home=true
     fi
 
-    if auto_confirm "Swap partition?" INSTALLJAR_AUTO_SWAP; then
+    if auto_confirm "Swap partition?" NIXINSTALL_AUTO_SWAP; then
         use_swap=true
-        swap_size=$(auto_val INSTALLJAR_AUTO_SWAP_SIZE 2>/dev/null || gum input --placeholder "e.g. 16G" --prompt "Swap size: " --value "8G")
+        swap_size=$(auto_val NIXINSTALL_AUTO_SWAP_SIZE 2>/dev/null || gum input --placeholder "e.g. 8G" --prompt "Swap size: " --value "8G")
+        [ -z "$swap_size" ] && swap_size="8G"
     fi
 
-    if [ "$fs_type" = "btrfs" ] && auto_confirm "Use btrfs subvolumes? (@ / @home / @nix)" INSTALLJAR_AUTO_SUBVOL; then
+    if [ "$fs_type" = "btrfs" ] && auto_confirm "Use btrfs subvolumes? (@ / @home / @nix)" NIXINSTALL_AUTO_SUBVOL; then
         use_subvolumes=true
     fi
 
     # ──────────────────────────────────────
-    # Step 4: Partition guide
+    # Step 4: Partition the disk
     # ──────────────────────────────────────
     gum style --border normal --width 50 "Step 4: Partition the disk"
 
-    local guide=""
-    if [ "$boot_mode" = "UEFI" ]; then
-        guide+="512M  -> type 'EFI System'       -> /boot  (REQUIRED)"$'\n'
-    else
-        local pttype_now
-        pttype_now=$(blkid -s PTTYPE -o value "$target_disk" 2>/dev/null || echo "")
-        if [ "$pttype_now" = "gpt" ]; then
-            guide+="1M    -> type 'BIOS boot'        -> (unformatted)  *** REQUIRED for GPT ***"$'\n'
+    if [ "${NIXINSTALL_AUTO:-0}" = "1" ]; then
+        if [ "${NIXINSTALL_AUTO_PARTITION:-0}" = "1" ]; then
+            auto_partition "$target_disk" "$boot_mode" "$fs_type" \
+                "$separate_home" "$use_swap" "$swap_size" "${NIXINSTALL_AUTO_ROOT_SIZE:-50G}" \
+                || return 1
+            partitioned_auto=1
+        elif ! auto_confirm "Run cfdisk now?" NIXINSTALL_AUTO_CFDISK; then
+            gum log --level info "You can run: sudo cfdisk $target_disk"
+            if ! auto_confirm "Ready to continue after partitioning?" NIXINSTALL_AUTO_READY; then
+                gum log --level info "Cancelled"
+                return 0
+            fi
         else
-            guide+="1M    -> type 'BIOS boot'        -> (unformatted, optional on MBR)"$'\n'
+            run_privileged cfdisk "$target_disk"
         fi
-        if [ "$fs_type" = "xfs" ]; then
-            guide+="1G    -> type 'Linux filesystem' -> /boot (ext4, REQUIRED for XFS+GRUB)"$'\n'
-        fi
-    fi
-    if [ "$use_swap" = true ]; then
-        guide+="${swap_size} -> type 'Linux swap'         -> swap"$'\n'
-    fi
-    if [ "$separate_home" = true ]; then
-        guide+="50-100G -> type 'Linux filesystem' -> /"$'\n'
-        guide+="rest   -> type 'Linux filesystem' -> /home"$'\n'
     else
-        guide+="rest   -> type 'Linux filesystem' -> /"$'\n'
-    fi
+        local part_method
+        part_method=$(gum choose --header "Partition $target_disk" --height 8 \
+            "Auto-partition (recommended)" \
+            "Manual (open cfdisk)")
+        if [ -z "$part_method" ]; then
+            gum log --level info "Cancelled"
+            return 0
+        fi
 
-    gum format -t code "Open cfdisk to partition:
+        case "$part_method" in
+            "Auto-partition"*)
+                local root_size="50G"
+                if [ "$separate_home" = true ]; then
+                    root_size=$(gum input --prompt "Root partition size: " --placeholder "e.g. 50G" --value "50G")
+                    [ -z "$root_size" ] && root_size="50G"
+                fi
+                gum log --level warn "Auto-partition wipes $target_disk and writes a new layout."
+                if ! gum confirm "Proceed with auto-partition?"; then
+                    gum log --level info "Cancelled"
+                    return 0
+                fi
+                auto_partition "$target_disk" "$boot_mode" "$fs_type" \
+                    "$separate_home" "$use_swap" "$swap_size" "$root_size" \
+                    || return 1
+                partitioned_auto=1
+                ;;
+            *)
+                # Manual partitioning guide
+                local guide=""
+                if [ "$boot_mode" = "UEFI" ]; then
+                    guide+="512M  -> type 'EFI System'       -> /boot  (REQUIRED)"$'\n'
+                else
+                    local pttype_now
+                    pttype_now=$(blkid -s PTTYPE -o value "$target_disk" 2>/dev/null || echo "")
+                    if [ "$pttype_now" = "gpt" ]; then
+                        guide+="1M    -> type 'BIOS boot'        -> (unformatted)  *** REQUIRED for GPT ***"$'\n'
+                    else
+                        guide+="1M    -> type 'BIOS boot'        -> (unformatted, optional on MBR)"$'\n'
+                    fi
+                    if [ "$fs_type" = "xfs" ]; then
+                        guide+="1G    -> type 'Linux filesystem' -> /boot (ext4, REQUIRED for XFS+GRUB)"$'\n'
+                    fi
+                fi
+                if [ "$use_swap" = true ]; then
+                    guide+="${swap_size} -> type 'Linux swap'         -> swap"$'\n'
+                fi
+                if [ "$separate_home" = true ]; then
+                    guide+="50-100G -> type 'Linux filesystem' -> /"$'\n'
+                    guide+="rest   -> type 'Linux filesystem' -> /home"$'\n'
+                else
+                    guide+="rest   -> type 'Linux filesystem' -> /"$'\n'
+                fi
+
+                gum format -t code "Open cfdisk to partition:
   sudo cfdisk $target_disk
 
 Recommended layout for $boot_mode:
 
 $guide"
 
-    if [ "${INSTALLJAR_AUTO_PARTITION:-0}" = "1" ]; then
-        auto_partition "$target_disk" "$boot_mode" "$fs_type" \
-            "$separate_home" "$use_swap" "$use_subvolumes" "$swap_size" \
-            || return 1
-    elif ! auto_confirm "Run cfdisk now?" INSTALLJAR_AUTO_CFDISK; then
-        gum log --level info "You can run: sudo cfdisk $target_disk"
-        if ! auto_confirm "Ready to continue after partitioning?" INSTALLJAR_AUTO_READY; then
-            gum log --level info "Cancelled"
-            return 0
-        fi
-    else
-        run_privileged cfdisk "$target_disk"
+                if ! gum confirm "Run cfdisk now?"; then
+                    gum log --level info "You can run: sudo cfdisk $target_disk"
+                    if ! gum confirm "Ready to continue after partitioning?"; then
+                        gum log --level info "Cancelled"
+                        return 0
+                    fi
+                else
+                    run_privileged cfdisk "$target_disk"
+                fi
+                ;;
+        esac
     fi
 
     # ──────────────────────────────────────
-    # Step 5: Identify partitions
+    # Step 5: Identify partitions (manual path only)
     # ──────────────────────────────────────
-    gum style --border normal --width 50 "Step 5: Identify partitions"
-
-    echo ""
-    echo "Here are the partitions on $target_disk:"
-    lsblk "$target_disk" -o NAME,SIZE,FSTYPE,MOUNTPOINT
-    echo ""
-
-    local chosen=""
-
-    if [ "$boot_mode" = "UEFI" ]; then
-        boot_part=$(pick_part "$target_disk" "EFI boot partition" "required" "$chosen")
-        [ -n "$boot_part" ] && chosen+="$boot_part"$'\n'
-        root_part=$(pick_part "$target_disk" "Root partition" "required" "$chosen")
-        [ -n "$root_part" ] && chosen+="$root_part"$'\n'
-    else
-        root_part=$(pick_part "$target_disk" "Root partition (skip BIOS boot)" "required" "$chosen")
-        [ -n "$root_part" ] && chosen+="$root_part"$'\n'
-        if [ "$fs_type" = "xfs" ]; then
-            boot_part=$(pick_part "$target_disk" "boot partition (ext4, for XFS GRUB)" "required" "$chosen")
-            [ -n "$boot_part" ] && chosen+="$boot_part"$'\n'
-        fi
-    fi
-
-    if [ -z "$root_part" ]; then
-        gum log --level error "Root partition is required"
-        return 1
-    fi
-
-    if [ "$use_swap" = true ]; then
-        swap_part=$(pick_part "$target_disk" "Swap partition (or skip)" "optional" "$chosen")
-        [ -n "$swap_part" ] && chosen+="$swap_part"$'\n'
-    fi
-
-    if [ "$separate_home" = true ]; then
-        home_part=$(pick_part "$target_disk" "Home partition (or skip)" "optional" "$chosen")
-        [ -n "$home_part" ] && chosen+="$home_part"$'\n'
-        if [ -z "$home_part" ]; then
-            gum log --level warn "No home partition picked using $root_part for /home instead"
+    if [ "$partitioned_auto" = "1" ]; then
+        gum style --border normal --width 50 "Step 5: Partitions (from auto layout)"
+        boot_part="${NIXINSTALL_AUTO_BOOT_PART:-}"
+        root_part="${NIXINSTALL_AUTO_ROOT_PART:-}"
+        home_part="${NIXINSTALL_AUTO_HOME_PART:-}"
+        swap_part="${NIXINSTALL_AUTO_SWAP_PART:-}"
+        if [ "$separate_home" = true ] && [ -z "$home_part" ]; then
+            gum log --level warn "No home partition in auto layout using root for /home instead"
             separate_home=false
         fi
+        gum log --level info "Layout: boot=${boot_part:-none} root=$root_part home=${home_part:-none} swap=${swap_part:-none}"
+    else
+        gum style --border normal --width 50 "Step 5: Identify partitions"
+
+        echo ""
+        echo "Here are the partitions on $target_disk:"
+        lsblk "$target_disk" -o NAME,SIZE,FSTYPE,MOUNTPOINT
+        echo ""
+
+        local chosen=""
+
+        if [ "$boot_mode" = "UEFI" ]; then
+            boot_part=$(pick_part "$target_disk" "EFI boot partition" "required" "$chosen")
+            [ -n "$boot_part" ] && chosen+="$boot_part"$'\n'
+            root_part=$(pick_part "$target_disk" "Root partition" "required" "$chosen")
+            [ -n "$root_part" ] && chosen+="$root_part"$'\n'
+        else
+            root_part=$(pick_part "$target_disk" "Root partition (skip BIOS boot)" "required" "$chosen")
+            [ -n "$root_part" ] && chosen+="$root_part"$'\n'
+            if [ "$fs_type" = "xfs" ]; then
+                boot_part=$(pick_part "$target_disk" "boot partition (ext4, for XFS GRUB)" "required" "$chosen")
+                [ -n "$boot_part" ] && chosen+="$boot_part"$'\n'
+            fi
+        fi
+
+        if [ -z "$root_part" ]; then
+            gum log --level error "Root partition is required"
+            return 1
+        fi
+
+        if [ "$use_swap" = true ]; then
+            swap_part=$(pick_part "$target_disk" "Swap partition (or skip)" "optional" "$chosen")
+            [ -n "$swap_part" ] && chosen+="$swap_part"$'\n'
+            if [ -z "$swap_part" ]; then
+                gum log --level warn "No swap partition picked skipping swap"
+            fi
+        fi
+
+        if [ "$separate_home" = true ]; then
+            home_part=$(pick_part "$target_disk" "Home partition (or skip)" "optional" "$chosen")
+            [ -n "$home_part" ] && chosen+="$home_part"$'\n'
+            if [ -z "$home_part" ]; then
+                gum log --level warn "No home partition picked using $root_part for /home instead"
+                separate_home=false
+            fi
+        fi
     fi
 
+    local part
     for part in "$boot_part" "$root_part" "$home_part" "$swap_part"; do
-        if [ -n "$part" ] && [ "${INSTALLJAR_SKIP_DEV_CHECK:-0}" != "1" ] && [ ! -b "$part" ]; then
+        if [ -n "$part" ] && [ "${NIXINSTALL_SKIP_DEV_CHECK:-0}" != "1" ] && [ ! -b "$part" ]; then
             gum log --level error "Partition does not exist: $part"
             return 1
         fi
@@ -1091,7 +1206,7 @@ $guide"
         gum log "  $swap_part  -> swap"
     fi
 
-    if ! auto_confirm "Format these partitions?" INSTALLJAR_AUTO_FORMAT; then
+    if ! auto_confirm "Format these partitions?" NIXINSTALL_AUTO_FORMAT; then
         gum log --level info "Cancelled"
         return 0
     fi
@@ -1133,40 +1248,40 @@ $guide"
     # ──────────────────────────────────────
     gum style --border normal --width 50 "Step 7: Mount partitions"
 
-    if mountpoint -q /mnt 2>/dev/null; then
-        if auto_confirm "/mnt is already mounted. Unmount and continue?" INSTALLJAR_AUTO_UNMOUNT; then
-            run_privileged umount -R /mnt 2>/dev/null || true
+    if mountpoint -q "$mnt" 2>/dev/null; then
+        if auto_confirm "$mnt is already mounted. Unmount and continue?" NIXINSTALL_AUTO_UNMOUNT; then
+            run_privileged umount -R "$mnt" 2>/dev/null || true
         else
-            gum log --level error "Please unmount /mnt first"
+            gum log --level error "Please unmount $mnt first"
             return 1
         fi
     fi
 
     if [ "$fs_type" = "btrfs" ] && [ "$use_subvolumes" = true ]; then
-        run_privileged mount --mkdir "$root_part" /mnt
-        run_privileged btrfs subvolume create /mnt/@
+        run_privileged mount --mkdir "$root_part" "$mnt"
+        run_privileged btrfs subvolume create "$mnt/@"
         if [ "$separate_home" != true ]; then
-            run_privileged btrfs subvolume create /mnt/@home
+            run_privileged btrfs subvolume create "$mnt/@home"
         fi
-        run_privileged btrfs subvolume create /mnt/@nix
-        run_privileged umount /mnt
+        run_privileged btrfs subvolume create "$mnt/@nix"
+        run_privileged umount "$mnt"
 
-        run_privileged mount -o subvol=@ "$root_part" /mnt
+        run_privileged mount -o subvol=@ "$root_part" "$mnt"
         if [ "$separate_home" = true ]; then
-            run_privileged mount --mkdir "$home_part" /mnt/home
+            run_privileged mount --mkdir "$home_part" "$mnt/home"
         else
-            run_privileged mount --mkdir -o subvol=@home "$root_part" /mnt/home
+            run_privileged mount --mkdir -o subvol=@home "$root_part" "$mnt/home"
         fi
-        run_privileged mount --mkdir -o subvol=@nix "$root_part" /mnt/nix
+        run_privileged mount --mkdir -o subvol=@nix "$root_part" "$mnt/nix"
     else
-        run_privileged mount "$root_part" /mnt
+        run_privileged mount "$root_part" "$mnt"
         if [ -n "$home_part" ]; then
-            run_privileged mount --mkdir "$home_part" /mnt/home
+            run_privileged mount --mkdir "$home_part" "$mnt/home"
         fi
     fi
 
     if [ -n "$boot_part" ]; then
-        run_privileged mount --mkdir "$boot_part" /mnt/boot
+        run_privileged mount --mkdir "$boot_part" "$mnt/boot"
     fi
 
     if [ -n "$swap_part" ]; then
@@ -1183,8 +1298,8 @@ $guide"
 
     if ! ping -c 1 1.1.1.1 &>/dev/null; then
         gum log --level warn "No network connectivity"
-        if [ "${INSTALLJAR_AUTO:-0}" = "1" ]; then
-            if ! auto_confirm "Still offline. Continue anyway? (nixos-install needs network)" INSTALLJAR_AUTO_NETWORK_CONTINUE; then
+        if [ "${NIXINSTALL_AUTO:-0}" = "1" ]; then
+            if ! auto_confirm "Still offline. Continue anyway? (nixos-install needs network)" NIXINSTALL_AUTO_NETWORK_CONTINUE; then
                 return 1
             fi
         else
@@ -1224,365 +1339,159 @@ $guide"
     fi
 
     # ──────────────────────────────────────
-    # Step 9: Clone repo
+    # Step 9: System identity (user up front, archinstall-style)
     # ──────────────────────────────────────
-    gum style --border normal --width 50 "Step 9: Clone nix-config"
+    gum style --border normal --width 50 "Step 9: System identity"
+
+    local hostname timezone main_user password user_hash
+    hostname=$(prompt_hostname) || return 1
+    timezone=$(prompt_timezone)
+    main_user=$(prompt_username) || return 1
+    password=$(prompt_password) || return 1
+    user_hash=$(hash_password "$password") || {
+        gum log --level error "No password hashing tool found (openssl or mkpasswd)"
+        return 1
+    }
+
+    local wheel=1 ssh_enable=0 ssh_key=""
+    if [ "${NIXINSTALL_AUTO:-0}" = "1" ]; then
+        wheel="${NIXINSTALL_AUTO_WHEEL:-1}"
+        ssh_enable="${NIXINSTALL_AUTO_SSH:-0}"
+        ssh_key="${NIXINSTALL_AUTO_SSH_KEY:-}"
+    else
+        if gum confirm "Grant $main_user sudo (wheel) access?"; then
+            wheel=1
+        else
+            wheel=0
+        fi
+        if gum confirm "Enable SSH on first boot?"; then
+            ssh_enable=1
+            ssh_key=$(gum input --prompt "SSH public key to authorize (Enter to skip): " --placeholder "ssh-ed25519 AAAA...")
+        fi
+    fi
+    gum log --level info "System: host=$hostname tz=$timezone user=$main_user wheel=$wheel ssh=$ssh_enable"
+
+    # ──────────────────────────────────────
+    # Step 10: Install core NixOS (no flake, no switch)
+    # ──────────────────────────────────────
+    gum style --border normal --width 50 "Step 10: Install core NixOS"
+
+    gum log --level info "Generating a minimal core configuration (bootloader + network + user)..."
+    run_privileged mkdir -p "$mnt/etc/nixos"
+    auto_spin "Generating hardware configuration..." -- \
+        run_privileged nixos-generate-config --root "$mnt"
+
+    gen_base_config "$hostname" "$timezone" "$main_user" "$user_hash" \
+        "$boot_mode" "$target_disk" "$wheel" "$ssh_enable" "$ssh_key" \
+        | run_privileged tee "$mnt/etc/nixos/configuration.nix" >/dev/null
+    gum log --level info "Core configuration written to $mnt/etc/nixos/configuration.nix"
+
+    if ! auto_confirm "Proceed with installation?" NIXINSTALL_AUTO_PROCEED; then
+        gum log --level info "Cancelled (mounts and $mnt/etc/nixos kept)"
+        return 0
+    fi
+
+    # NIX_CONFIG is set via `env` AFTER sudo's env_reset (sudo strips incoming
+    # env vars, and the ISO's /etc is read-only so nix.conf can't be patched):
+    # nixos-install's nix-build shim needs flakes enabled in the live env.
+    gum log --level info "Command: sudo env NIX_CONFIG=... nixos-install --root $mnt --no-root-passwd"
+    gum log --level info "Installing NixOS build & copy logs below (this takes a while)..."
+    if ! run_privileged env NIX_CONFIG="experimental-features = nix-command flakes" \
+        nixos-install --root "$mnt" --no-root-passwd --show-trace; then
+        gum log --level error "Installation failed (see output above)"
+        gum log --level error "Partitions and $mnt/etc/nixos are kept fix the issue and re-run Iso Install"
+        gum log --level error "(pick Manual partitioning to reuse the existing partitions)"
+        return 1
+    fi
+
+    gum log --level info "Core NixOS installed successfully!"
+
+    # ──────────────────────────────────────
+    # Step 11: Clone nix-config into the user's home (NO switch)
+    # ──────────────────────────────────────
+    gum style --border normal --width 50 "Step 11: Clone nix-config into /home/$main_user"
 
     local repo_url
-    if auto_val INSTALLJAR_AUTO_REPO >/dev/null 2>&1; then
-        repo_url=$(auto_val INSTALLJAR_AUTO_REPO)
+    if auto_val NIXINSTALL_AUTO_REPO >/dev/null 2>&1; then
+        repo_url=$(auto_val NIXINSTALL_AUTO_REPO)
         gum log --level info "Auto: repo URL: ${repo_url:-(none)}"
     else
-        repo_url=$(gum input --prompt "Repo URL: " --value "https://github.com/y-jar/nix-config.git")
+        repo_url=$(gum input --prompt "Repo URL: " --value "$DEFAULT_REPO_URL")
     fi
 
-    local clone_dir="${CLONE_DIR:-/mnt/etc/nixos}"
-    if [ -d "$clone_dir" ]; then
-        if [ "$(ls -A "$clone_dir" 2>/dev/null)" ]; then
-            gum log --level warn "$clone_dir is not empty"
-            if ! auto_confirm "Clone into it anyway?" INSTALLJAR_AUTO_CLONE; then
-                gum log "Skipping clone. Make sure the flake is in place."
+    local home_dir="$mnt/home/$main_user"
+    if [ -z "$repo_url" ]; then
+        gum log --level warn "No repo URL skipping clone (clone manually after first boot)"
+    else
+        local target="$home_dir/nix-config"
+        run_privileged mkdir -p "$home_dir"
+        if [ -e "$target" ]; then
+            gum log --level warn "$target already exists skipping clone"
+        elif auto_spin "Cloning nix-config..." -- run_privileged git clone "$repo_url" "$target"; then
+            gum log --level info "Cloned to /home/$main_user/nix-config"
+        else
+            gum log --level warn "Clone failed (non-fatal) clone manually after first boot:"
+            gum log --level warn "  git clone $repo_url ~/nix-config"
+        fi
+    fi
+
+    # Hand the whole home dir to the real user (clone + install ran as root)
+    if [ -d "$home_dir" ]; then
+        local uid_gid
+        uid_gid=$(run_privileged nixos-enter --root "$mnt" -c "echo \$(id -u $main_user):\$(id -g $main_user)" 2>/dev/null | tr -dc '0-9:') || true
+        if [ -n "$uid_gid" ]; then
+            gum log --level info "Fixing ownership of /home/$main_user ($uid_gid)..."
+            if ! run_privileged chown -R "$uid_gid" "$home_dir" 2>/dev/null; then
+                gum log --level warn "chown failed files may be root-owned fix after reboot if needed"
             fi
         else
-            auto_spin "Cloning..." -- \
-                sudo git clone "$repo_url" "$clone_dir"
+            gum log --level warn "Could not resolve uid:gid for $main_user fix ownership after reboot if needed"
         fi
-    else
-        auto_spin "Cloning..." -- \
-            run_privileged git clone "$repo_url" "$clone_dir"
-    fi
-
-    if [ ! -f "$clone_dir/flake.nix" ]; then
-        gum log --level error "flake.nix not found in $clone_dir"
-        gum log "Try cloning manually: sudo git clone $repo_url $clone_dir"
-        return 1
-    fi
-
-    # Ensure the nixos user can access the repo (clone may have been done as root)
-    run_privileged chown -R "$(id -u):$(id -g)" "$clone_dir" 2>/dev/null || true
-
-    # ──────────────────────────────────────
-    # Step 10: Select host + action
-    # ──────────────────────────────────────
-    gum style --border normal --width 50 "Step 10: Select host"
-
-    local hosts
-    hosts=$(find "$clone_dir/hstjar" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | \
-        xargs -n1 basename | grep -v '^0_TEMPLATE$' | sort || true)
-
-    local host=""
-    local main_user=""
-    local action=""
-    local refresh_only=0
-    local hw_config_done=0
-
-    # Auto-mode: pick action via env var (default: existing)
-    if auto_val INSTALLJAR_AUTO_HOST_ACTION >/dev/null 2>&1; then
-        action=$(auto_val INSTALLJAR_AUTO_HOST_ACTION)
-        gum log --level info "Auto: host action: $action"
-    elif [ "${INSTALLJAR_AUTO:-0}" = "1" ]; then
-        action="existing"
-    else
-        action=$(gum choose \
-            "Pick existing host" \
-            "Scaffold a new host" \
-            "Refresh hardware-config for existing host" \
-            --header "Host action" --height 7)
-    fi
-
-    case "$action" in
-        "Scaffold a new host"|"new")
-            # ──────────────────────────────────────
-            # Sub-action: scaffold new host from 0_TEMPLATE
-            # ──────────────────────────────────────
-            local new_host=""
-            if auto_val INSTALLJAR_AUTO_NEW_HOST >/dev/null 2>&1; then
-                new_host=$(auto_val INSTALLJAR_AUTO_NEW_HOST)
-            else
-                new_host=$(gum input --prompt "New host name: " --placeholder "e.g. mylaptop")
-            fi
-            if [ -z "$new_host" ]; then
-                gum log --level error "No host name provided"
-                return 1
-            fi
-            if ! [[ "$new_host" =~ ^[a-z][a-z0-9-]*$ ]]; then
-                gum log --level error "Invalid host name '$new_host' (lowercase letters, digits, hyphens only)"
-                return 1
-            fi
-            [ "$new_host" != "0_TEMPLATE" ] || { gum log --level error "Reserved name 0_TEMPLATE"; return 1; }
-            if [ -d "$clone_dir/hstjar/$new_host" ]; then
-                gum log --level error "Host $new_host already exists in hstjar/"
-                return 1
-            fi
-
-            gum log --level info "Scaffolding $new_host from 0_TEMPLATE..."
-            cp -r "$clone_dir/hstjar/0_TEMPLATE" "$clone_dir/hstjar/$new_host"
-
-            # Register in flake.nix (uses marker; fallback to manual edit prompt)
-            local marker="# ===[INSTALLER: append new hosts on the line below]==="
-            if grep -qF "$marker" "$clone_dir/flake.nix"; then
-                sed -i "/$(printf '%s' "$marker" | sed 's/[[\.*^$(){}?+|/]/\\&/g')/i\\        $new_host = mkJar \"$new_host\"; # added by installer" \
-                    "$clone_dir/flake.nix"
-                gum log --level info "Registered $new_host in flake.nix"
-            else
-                gum log --level warn "Marker not found in flake.nix manual addition needed"
-                gum log --level info "Add this line under nixosConfigurations in flake.nix:"
-                gum log --level info "  $new_host = mkJar \"$new_host\";"
-                gum confirm "Open flake.nix in \${EDITOR:-nano} to add manually?" && \
-                    run_privileged "${EDITOR:-nano}" "$clone_dir/flake.nix"
-            fi
-
-            # Prompt for primary username (used for placeholder replacement)
-            if auto_val INSTALLJAR_AUTO_MAIN_USER >/dev/null 2>&1; then
-                main_user=$(auto_val INSTALLJAR_AUTO_MAIN_USER)
-            else
-                main_user=$(gum input --prompt "Primary username: " --placeholder "e.g. jar")
-            fi
-            if [ -z "$main_user" ]; then
-                gum log --level error "Username required for new host"
-                return 1
-            fi
-
-            # Replace placeholders in new host's system.nix
-            local sys_file="$clone_dir/hstjar/$new_host/system.nix"
-            local sv
-            sv=$(nixos-version 2>/dev/null | cut -d. -f1-2 || echo "26.05")
-            if [ -f "$sys_file" ]; then
-                sed -i "s/PLEASECHANGEME_USERNAME/$main_user/g" "$sys_file"
-                [ -n "$sv" ] && sed -i "s/VersionNumber/$sv/" "$sys_file"
-                gum log --level info "Replaced placeholders in hstjar/$new_host/system.nix"
-            else
-                gum log --level warn "system.nix not found in new host dir skipping placeholder replacement"
-            fi
-            # Git-add new files so flake eval sees them
-            ( cd "$clone_dir" && git add flake.nix "hstjar/$new_host" 2>/dev/null ) || true
-            gum log --level info "Scaffolded $new_host"
-
-            host="$new_host"
-            ;;
-        "Refresh hardware-config for existing host"|"refresh")
-            # ──────────────────────────────────────
-            # Sub-action: refresh hardware-config only on existing host
-            # ──────────────────────────────────────
-            if [ -z "$hosts" ]; then
-                gum log --level error "No hosts found in hstjar/ to refresh"
-                return 1
-            fi
-            if auto_val INSTALLJAR_AUTO_HOST >/dev/null 2>&1; then
-                host=$(auto_val INSTALLJAR_AUTO_HOST)
-                gum log --level info "Auto: selected host: $host"
-            else
-                host=$(echo "$hosts" | fzf --header="Pick host to refresh")
-            fi
-            if [ -z "$host" ]; then
-                gum log --level error "No host selected"
-                return 1
-            fi
-            if [ ! -d "$clone_dir/hstjar/$host" ]; then
-                gum log --level error "Host $host does not exist in hstjar/"
-                return 1
-            fi
-            gum log --level info "Selected host: $host (refresh-only)"
-
-            # gen hardware config (same logic as existing path below)
-            if is_vm_host "$clone_dir" "$host"; then
-                gen_vm_hardware_config "$fs_type" "$use_subvolumes" "$separate_home" \
-                    "$boot_part" "$root_part" "$home_part" "$swap_part" "$boot_mode" \
-                    | run_privileged tee "$clone_dir/hstjar/$host/hardware-configuration.nix" >/dev/null
-            else
-                auto_spin "Generating hardware configuration..." -- \
-                    run_privileged nixos-generate-config --root /mnt
-                local hw_cfg="/mnt/etc/nixos/hardware-configuration.nix"
-                if [ ! -f "$hw_cfg" ]; then
-                    gum log --level error "nixos-generate-config did not produce $hw_cfg"
-                    gum log --level error "This usually means /mnt is not mounted or permissions are wrong."
-                    return 1
-                fi
-                run_privileged cp "$hw_cfg" "$clone_dir/hstjar/$host/"
-            fi
-            ( cd "$clone_dir" && git add "hstjar/$host/hardware-configuration.nix" 2>/dev/null ) || true
-
-            # Extract main_user for the post-summary
-            main_user=$(grep -oP 'mainUser\s*=\s*"\K[^"]+' "$clone_dir/hstjar/$host/system.nix" 2>/dev/null | head -1 || true)
-
-            gum log --level info "Hardware config refreshed for $host"
-            gum style --border normal --width 50 "Refresh complete"
-            gum format -t code "Hardware config regenerated for: $host
-File: hstjar/$host/hardware-configuration.nix"
-
-            # Ask whether to continue to nixos-install or stop here
-            if [ "${INSTALLJAR_AUTO:-0}" = "1" ]; then
-                if [ "${INSTALLJAR_AUTO_REFRESH_INSTALL:-0}" = "1" ]; then
-                    gum log --level info "Auto: continuing to nixos-install after refresh"
-                    hw_config_done=1
-                else
-                    refresh_only=1
-                fi
-            else
-                if gum confirm "Continue to install NixOS with updated config?"; then
-                    hw_config_done=1
-                else
-                    refresh_only=1
-                fi
-            fi
-            ;;
-        "Pick existing host"|"existing"|""|" ")
-            # ──────────────────────────────────────
-            # Sub-action: pick existing host (original path)
-            # ──────────────────────────────────────
-            if [ -z "$hosts" ]; then
-                gum log --level error "No hosts found in hstjar/"
-                return 1
-            fi
-            if auto_val INSTALLJAR_AUTO_HOST >/dev/null 2>&1; then
-                host=$(auto_val INSTALLJAR_AUTO_HOST)
-                gum log --level info "Auto: selected host: $host"
-            else
-                host=$(echo "$hosts" | fzf --header="Select a host configuration")
-            fi
-            if [ -z "$host" ]; then
-                gum log --level error "No host selected"
-                return 1
-            fi
-            gum log --level info "Selected host: $host"
-            # main_user read from system.nix (existing path current behavior)
-            main_user=$(grep -oP 'mainUser\s*=\s*"\K[^"]+' "$clone_dir/hstjar/$host/system.nix" 2>/dev/null | head -1 || true)
-            ;;
-        *)
-            gum log --level error "Unknown action: $action"
-            return 1
-            ;;
-    esac
-
-    # Refresh-only path: abort before nixos-install
-    if [ "$refresh_only" = "1" ]; then
-        return 0
-    fi
-
-    # Generate hardware config (skip if refresh already did it inline)
-    if [ "$hw_config_done" != "1" ]; then
-        if is_vm_host "$clone_dir" "$host"; then
-            gum log --level info "VM host detected ($host) writing portable hardware config"
-            gen_vm_hardware_config "$fs_type" "$use_subvolumes" "$separate_home" \
-                "$boot_part" "$root_part" "$home_part" "$swap_part" "$boot_mode" \
-                | run_privileged tee "$clone_dir/hstjar/$host/hardware-configuration.nix" >/dev/null
-        else
-            auto_spin "Generating hardware configuration..." -- \
-                run_privileged nixos-generate-config --root /mnt
-            local hw_cfg="/mnt/etc/nixos/hardware-configuration.nix"
-            if [ ! -f "$hw_cfg" ]; then
-                gum log --level error "nixos-generate-config did not produce $hw_cfg"
-                gum log --level error "This usually means /mnt is not mounted or permissions are wrong."
-                return 1
-            fi
-            run_privileged cp "$hw_cfg" "$clone_dir/hstjar/$host/"
-        fi
-        gum log --level info "Hardware config written for $host"
+        run_privileged sync
     fi
 
     # ──────────────────────────────────────
-    # Step 11: nixos-install
+    # Step 12: Copy network credentials
     # ──────────────────────────────────────
-    gum style --border normal --width 50 "Step 11: Install NixOS"
-
-    gum log --level info "Command: sudo nixos-install --no-root-passwd --flake $clone_dir#$host"
-
-    if ! auto_confirm "Proceed with installation?" INSTALLJAR_AUTO_PROCEED; then
-        gum log --level info "Cancelled"
-        return 0
-    fi
-
-    gum log --level info "Installing NixOS build & copy logs below (this takes a while)..."
-    run_privileged nixos-install --no-root-passwd --flake "$clone_dir#$host" --show-trace
-
-    local install_status=$?
-    if [ $install_status -ne 0 ]; then
-        gum log --level error "Installation failed (exit code $install_status)"
-        return 1
-    fi
-
-    gum log --level info "NixOS installed successfully!"
+    gum style --border normal --width 50 "Step 12: Copy network credentials"
+    copy_network_config "$mnt"
 
     # ──────────────────────────────────────
-    # Step 11.5: Copy config to user home + network creds
-    # ──────────────────────────────────────
-    copy_config_to_home "$main_user" "$clone_dir"
-    copy_network_config
-
-    # ──────────────────────────────────────
-    # Step 12: Set passwords
-    # ──────────────────────────────────────
-    gum style --border normal --width 50 "Step 12: Set passwords"
-
-    local root_pass=""
-    local user_pass=""
-
-    if auto_val INSTALLJAR_AUTO_ROOT_PASS >/dev/null 2>&1; then
-        root_pass=$(auto_val INSTALLJAR_AUTO_ROOT_PASS)
-        gum log --level info "Auto: root password set from env"
-    else
-        root_pass=$(gum input --password --prompt "Root password: " --placeholder "min 8 chars")
-    fi
-    if [ -n "$root_pass" ]; then
-        gum log --level info "Setting root password..."
-        printf '%s:%s\n' root "$root_pass" | run_privileged nixos-enter --root /mnt -c chpasswd
-    else
-        gum log --level warn "Root password left empty root stays passwordless"
-    fi
-
-    if [ -n "$main_user" ]; then
-        if [ "${INSTALLJAR_AUTO:-0}" = "1" ]; then
-            user_pass="$root_pass"
-            gum log --level info "Auto: user password = root password"
-        else
-            user_pass=$(gum input --password --prompt "Password for $main_user (Press Enter to use root's password): ")
-            if [ -z "$user_pass" ]; then
-                user_pass="$root_pass"
-            fi
-        fi
-        if [ -n "$user_pass" ]; then
-            gum log --level info "Setting password for $main_user..."
-            printf '%s:%s\n' "$main_user" "$user_pass" | run_privileged nixos-enter --root /mnt -c chpasswd
-        fi
-    fi
-    gum log --level info "Passwords set"
-
-    # ──────────────────────────────────────
-    # Step 13: Next steps
+    # Step 13: Finish (the switch is yours to pull)
     # ──────────────────────────────────────
     gum style --border double --align center --width 50 \
-        --foreground 2 "Installation Complete!" \
-        "Host: $host" \
+        --foreground 2 "Core Install Complete!" \
+        "Host: $hostname" \
+        "User: $main_user" \
         "Disk: $target_disk"
 
-gum style --border normal --width 50 "Step 13: Next steps"
-    gum format -t code '1. Remove the install media
-2. Reboot into the new system
-3. Login with your user
-4. Edit your config:
+    gum style --border normal --width 50 "Step 13: Next steps (no switch pulled yet)"
+    gum format -t code "1. Remove the install media and reboot
+2. Login as $main_user
+3. Scaffold your host and switch:
      cd ~/nix-config
-     # edit hstjar/<host>/* files
-     nht        # test config
-     nhs        # deploy system
-     jarhelp    # help menu
-5. Locked out? Boot the ISO and reset:
-     nixos-enter --root /mnt -c "passwd"'
+     nix-shell            # provides hardto / nhs / nht
+     hardto $hostname     # scaffold host + yoink hardware config
+     # edit hstjar/$hostname/system.nix + user.nix
+     nhs $hostname        # deploy (this is the switch)
+4. Locked out? Boot the ISO again:
+     nixos-enter --root /mnt -c \"passwd $main_user\""
 
-    # Offer a chroot shell for debugging/password resets before rebooting
-    if [ "${INSTALLJAR_AUTO:-0}" != "1" ]; then
+    # Offer a chroot shell for debugging before rebooting
+    if [ "${NIXINSTALL_AUTO:-0}" != "1" ]; then
         if gum confirm "Drop into installed system shell before reboot?"; then
             gum log --level info "Launching nixos-enter type 'exit' to return"
-            run_privileged nixos-enter --root /mnt || true
+            run_privileged nixos-enter --root "$mnt" || true
         fi
     fi
 
-    if auto_confirm "Unmount and reboot now?" INSTALLJAR_AUTO_REBOOT; then
+    if auto_confirm "Unmount and reboot now?" NIXINSTALL_AUTO_REBOOT; then
         auto_spin "Unmounting..." -- \
-            run_privileged umount -R /mnt
+            run_privileged umount -R "$mnt"
         run_privileged reboot
     else
         gum log "Reboot manually:"
-        gum format -t code "sudo umount -R /mnt && sudo reboot"
+        gum format -t code "sudo umount -R $mnt && sudo reboot"
     fi
 }
 
@@ -1592,7 +1501,7 @@ gum style --border normal --width 50 "Step 13: Next steps"
 main() {
     check_deps
 
-    if [ "${INSTALLJAR_AUTO:-0}" = "1" ]; then
+    if [ "${NIXINSTALL_AUTO:-0}" = "1" ]; then
         gum log --level info "Auto-install mode skipping menu"
         iso_install
         local rc=$?
@@ -1602,23 +1511,23 @@ main() {
 
     while true; do
         choice=$(gum choose \
-            "Install from ISO" \
-            "Fresh Install" \
-            "Update Existing Host" \
-            "Manual Install" \
+            "Iso Install live ISO only (erases disk)" \
+            "Fresh Install add a new host (installed system)" \
+            "Update Existing Host (installed system)" \
+            "Manual Install step-by-step guide" \
             "View Documentation" \
             "Exit" \
-            --header "NixOS in a Jar Installer" \
+            --header "NixOS in a Jar nixinstall" \
             --height 12)
 
         case "$choice" in
-            "Install from ISO")      iso_install || true ;;
-            "Fresh Install")         check_dir && fresh_install || true ;;
-            "Update Existing Host")  check_dir && update_existing || true ;;
-            "Manual Install")        manual_install || true ;;
-            "View Documentation")    check_dir && view_docs || true ;;
-            "Exit")                  gum log --level info "Goodbye!"; exit 0 ;;
-            *)                       gum log --level warn "Unknown option" ;;
+            "Iso Install"*)             iso_install || true ;;
+            "Fresh Install"*)           check_dir && fresh_install || true ;;
+            "Update Existing Host"*)    check_dir && update_existing || true ;;
+            "Manual Install"*)          manual_install || true ;;
+            "View Documentation"*)      check_dir && view_docs || true ;;
+            "Exit")                     gum log --level info "Goodbye!"; exit 0 ;;
+            *)                          gum log --level warn "Unknown option" ;;
         esac
 
         echo ""

@@ -80,12 +80,28 @@ Wi-Fi (iwd):
 
 Test:  ping 1.1.1.1
 
-====== FLAKE INSTALL ======
+====== CORE INSTALL (what nixinstall does for you) ======
 
-  cd /mnt
-  git clone https://github.com/y-jar/nix-config
-  cd nix-config
-  nixos-install --flake .#HOSTNAME
+  nixos-generate-config --root /mnt
+  nano /mnt/etc/nixos/configuration.nix
+    # minimal config: import ./hardware-configuration.nix, bootloader,
+    # networkmanager, your user (wheel + password), flakes enabled
+  nixos-install --root /mnt --no-root-passwd
+  git clone https://github.com/y-jar/nix-config /mnt/home/USER/nix-config
+  chown -R USER: /mnt/home/USER
+
+====== REBOOT ======
+
+  umount -R /mnt
+  reboot
+
+====== POST-INSTALL (the switch) ======
+
+After reboot, on the new system:
+  cd ~/nix-config
+  nix-shell
+  hardto YOURHOST     # scaffold host + yoink hardware config
+  nhs YOURHOST        # deploy (this is the switch)
 
   HOSTNAME options:
     calender  - main pc
@@ -96,18 +112,8 @@ Test:  ping 1.1.1.1
     yilyonix  - test bench
     ziiemar   - laptop
 
-====== REBOOT ======
-
-  umount -R /mnt
-  reboot
-
-====== POST-INSTALL ======
-
-After reboot, on the new system:
-  passwd              # set your password
-  nh os switch --accept-flake-config ~/nix-config#HOSTNAME   # rebuild if needed
-
 ===== INTERACTIVE INSTALLER =====
-For a guided experience, run:
-  installjar
+For a guided experience (does all of the above), run:
+  nixinstall
+Then pick: Iso Install  (live ISO only, erases disk)
 GUIDE

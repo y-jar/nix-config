@@ -85,7 +85,7 @@
                 gum
                 fzf
                 (pkgs.writeShellScriptBin "jarhelp" (builtins.readFile ./resjar/nixbin/jarhelp))
-                (pkgs.writeShellScriptBin "installjar" (builtins.readFile ./resjar/nixbin/install.sh))
+                (pkgs.writeShellScriptBin "nixinstall" (builtins.readFile ./resjar/nixbin/nixinstall))
               ];
               networking.hostName = "recovery";
               services.openssh.enable = true;
@@ -112,7 +112,7 @@
                 gum
                 fzf
                 (pkgs.writeShellScriptBin "jarhelp" (builtins.readFile ./resjar/nixbin/jarhelp))
-                (pkgs.writeShellScriptBin "installjar" (builtins.readFile ./resjar/nixbin/install.sh))
+                (pkgs.writeShellScriptBin "nixinstall" (builtins.readFile ./resjar/nixbin/nixinstall))
               ];
               networking.hostName = "recovery";
               services.openssh.enable = true;
