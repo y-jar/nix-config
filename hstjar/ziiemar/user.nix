@@ -70,6 +70,8 @@
       obsidian.enable = true; # sets obsidian
       nvf.enable = true; # sets nvf config for neovim [~2G]
       helix.enable = true; # sets helix
+      cherrytree.enable = false; # sets cherrytree
+      pycharm.enable = false; # sets pycharm
     }; # end of editors
     chatApps = {
       enable = true;

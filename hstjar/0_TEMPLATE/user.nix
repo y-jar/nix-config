@@ -72,6 +72,8 @@
       obsidian.enable = false; # ~200mib
       nvf.enable = true; # ~200mib - neovim config
       helix.enable = false; # ~20mib
+      cherrytree.enable = false; # ~150mib - hierarchical note-taking editor
+      pycharm.enable = false; # ~2.5gib - JetBrains PyCharm Professional (unfree)
     }; # end of editors
     chatApps = {
       enable = true;

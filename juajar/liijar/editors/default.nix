@@ -3,9 +3,9 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: editors: vscodium/zed/obsidian/helix packages + helix config.
+# goal: editors: vscodium/zed/cherrytree/pycharm/obsidian/helix packages + helix config.
 # -=-=-=-=-=-=-=-=-=-=-=
-# vscodium/zed follow the master toggle + their own sub-toggle; obsidian/helix
+# vscodium/zed/cherrytree/pycharm follow the master toggle + their own sub-toggle; obsidian/helix
 # follow only their own sub-toggle (mirrors the old bucket gates). nvf does
 # NOT live here it comes system-level via the sysset.nvf bridge (hjemkey)
 # running juajar/sysjar/nvf.
@@ -28,6 +28,8 @@ in
       packages =
         lib.optionals (cfg.enable && cfg.vscodium.enable) [ pkgs.vscodium ]
         ++ lib.optionals (cfg.enable && cfg.zed.enable) [ pkgs.zed-editor ]
+        ++ lib.optionals (cfg.enable && cfg.cherrytree.enable) [ pkgs.cherrytree ]
+        ++ lib.optionals (cfg.enable && cfg.pycharm.enable) [ pkgs.jetbrains.pycharm ]
         ++ lib.optionals cfg.obsidian.enable [ pkgs.obsidian ]
         ++ lib.optionals cfg.helix.enable [ pkgs.helix ]
         # editor extras (from the old home-manager module)

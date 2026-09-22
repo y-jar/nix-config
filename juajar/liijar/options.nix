@@ -151,6 +151,8 @@
       obsidian.enable = lib.mkEnableOption "obsidian";
       nvf.enable = lib.mkEnableOption "nvf (neovim config)";
       helix.enable = lib.mkEnableOption "helix";
+      cherrytree.enable = lib.mkEnableOption "cherrytree hierarchical note-taking editor";
+      pycharm.enable = lib.mkEnableOption "jetbrains pycharm professional IDE (unfree)";
     };
     chatApps = {
       enable = lib.mkEnableOption "chat apps (discord + halloy)";

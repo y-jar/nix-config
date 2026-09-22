@@ -66,6 +66,8 @@
       obsidian.enable = false;
       nvf.enable = true; # keep neovim config (small-ish)
       helix.enable = false;
+      cherrytree.enable = false;
+      pycharm.enable = false;
     };
     chatApps = {
       enable = false; # OFF: no discord/halloy (saves ~380mib)

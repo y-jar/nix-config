@@ -71,6 +71,8 @@
       obsidian.enable = false;
       nvf.enable = true;
       helix.enable = false;
+      cherrytree.enable = false;
+      pycharm.enable = false;
     };
     chatApps = {
       enable = true;
