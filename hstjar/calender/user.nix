@@ -76,8 +76,8 @@
       obsidian.enable = true; # sets obsidian
       nvf.enable = true; # sets nvf config for neovim
       helix.enable = false; # sets helix
-      cherrytree.enable = false; # sets cherrytree
-      pycharm.enable = false; # sets pycharm
+      cherrytree.enable = true; # sets cherrytree
+      pycharm.enable = true; # sets pycharm
     }; # end of editors
     chatApps = {
       enable = true;
@@ -95,8 +95,8 @@
       enable = true; # media master toggle
       mpv = true; # mpv video player + yt-dlp
       downloaders = true; # ffmpeg + yt-dlp
-      musicApps = true; # quodlibet, gapless, blanket
-      audioEditor = true; # audacity
+      musicApps = false; # quodlibet, gapless, blanket
+      audioEditor = false; # audacity
       viewers = true; # yacreader, constrict, anki
       defaultApps = true; # default mime apps + loupe/showtime/file-roller
     };

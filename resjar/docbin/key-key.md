@@ -33,3 +33,4 @@
 - [Pipewire & Audio Documentation](./pipewire&audio-help.md) PipeWire routing and audio setup
 - [Coloring](./coloring.md) Color palette hex values
 - [Gaming](./gaming.md) Gaming troubleshooting (Minecraft, Steam, Wayland)
+- [Mcpelauncher (Bedrock)](./mcpelauncher.md) Bumping/repairing the Minecraft Bedrock launcher overlay

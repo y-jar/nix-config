@@ -36,8 +36,8 @@ case "$mode" in
 esac
 
 # open in swappy for editing if it exists
-if command -v swappy >/dev/null 2>&1; then
-  swappy -f "$OUT"
-fi
+# if command -v swappy >/dev/null 2>&1; then
+#   swappy -f "$OUT"
+# fi
 
 notify-send "Screenshot" "Saved to $OUT" -i camera-photo 2>/dev/null || true

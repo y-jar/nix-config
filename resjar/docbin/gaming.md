@@ -15,6 +15,10 @@ Here is what i use when i encounter issues with minecraft on my system and it st
 
 - **zink**: Zink is a driver that implements OpenGL on top of Vulkan, allowing applications to run OpenGL programs using Vulkan's capabilities
 
+### **Minecraft Bedrock (mcpelauncher)**
+Game updates can outpace the launcher and cause a `Signal 11` crash on start.
+See the [mcpelauncher runbook](./mcpelauncher.md).
+
 ### **Steam Games**
 Here are some fixes for Steam games:
 
