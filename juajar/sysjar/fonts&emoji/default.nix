@@ -45,29 +45,25 @@ in
 
   config = lib.mkIf cfg.enable {
     fonts = {
-      packages =
-        (with pkgs; [
-          nerd-fonts.intone-mono # terminal font (always)
-          # [basic]
-          comfortaa
-          cascadia-code
-        ])
-        ++ (lib.optionals (!cfg.minimal) (
-          with pkgs;
-          [
-            # [extras]
-            excalifont
-            monocraft
-            miracode
-            # [jp]
-            ipaexfont
-            rounded-mgenplus # ~700MiB - the heavy one
-            koruri
-            x5y8pxNegaTape # JP pixel font [vendored]
-            # [emojis]
-            noto-fonts-emoji-blob-bin # Blobmoji
-          ]
-        )); # end of packages
+      packages = [
+        pkgs.nerd-fonts.intone-mono # terminal font (always)
+        # [basic]
+        pkgs.comfortaa
+        pkgs.cascadia-code
+      ]
+      ++ (lib.optionals (!cfg.minimal) [
+        # [extras]
+        pkgs.excalifont
+        pkgs.monocraft
+        pkgs.miracode
+        # [jp]
+        pkgs.ipaexfont
+        pkgs.rounded-mgenplus # ~700MiB - the heavy one
+        pkgs.koruri
+        x5y8pxNegaTape # JP pixel font [vendored]
+        # [emojis]
+        pkgs.noto-fonts-emoji-blob-bin # Blobmoji
+      ]); # end of packages
 
       # emoji
       fontconfig = {

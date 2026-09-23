@@ -80,7 +80,7 @@
       discord.enable = true; # ~300mib
       halloy.enable = true; # ~69mib nice
     };
-    espanso = (import ../espansoconf.nix { enable = false; }); # ~30mib - espanso text expander
+    espanso = import ../espansoconf.nix { enable = false; }; # ~30mib - espanso text expander
     flatpak.enable = false; # ~10mib - flatpak + bazaar
     # [file explorers]
     nautilus.enable = true; # ~50mib

@@ -3,15 +3,15 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Host whale: bootloader settings (systemd-boot).
+# goal: Host whale: bootloader settings (grub).
 # -=-=-=-=-=-=-=-=-=-=-=
 { ... }: {
   # boot
+  sysset.boot.grubDevice = "/dev/sda";
   boot = {
     loader = {
       grub = {
         enable = true;
-        device = "/dev/sda"; # Changed from /dev/vda to /dev/sda
         useOSProber = true;
         fsIdentifier = "provided";
       }; # end of grub

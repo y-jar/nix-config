@@ -5,12 +5,7 @@
 # -=-=-=-=-=-=-=-=-=-=-=
 # goal: Host candle: system-level toggle sheet (sysset).
 # -=-=-=-=-=-=-=-=-=-=-=
-{
-  inputs,
-  config,
-  lib,
-  ...
-}:
+{ ... }:
 
 {
   config = {

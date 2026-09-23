@@ -1,0 +1,6 @@
+# statix lints deliberately not applied to this repo.
+# empty_pattern (W10): NixOS modules use `{ ... }:` as the conventional
+# signature; rewriting to `_` hurts readability for no functional gain.
+disabled = [
+  "empty_pattern"
+]

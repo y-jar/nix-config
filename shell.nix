@@ -4,23 +4,23 @@
 }:
 # create a shell enviroment
 pkgs.mkShell {
-  buildInputs = with pkgs; [
+  buildInputs = [
     # [base]
-    neovim # Vim text editor fork focused on extensibility and agility
-    vim # text editor
-    nh # nix helper
-    git # version control
-    pkg-config # Tool that allows packages to find out information about other packages (wrapper script)
+    pkgs.neovim # Vim text editor fork focused on extensibility and agility
+    pkgs.vim # text editor
+    pkgs.nh # nix helper
+    pkgs.git # version control
+    pkgs.pkg-config # Tool that allows packages to find out information about other packages (wrapper script)
 
     # [nix stuff]
-    nixd # Feature-rich Nix language server interoperating with C++ nix
-    nixfmt # Nix formatter
-    alejandra # formatter ~1.7mib
-    nil # Nix language server
+    pkgs.nixd # Feature-rich Nix language server interoperating with C++ nix
+    pkgs.nixfmt # Nix formatter
+    pkgs.alejandra # formatter ~1.7mib
+    pkgs.nil # Nix language server
 
     # [installer]
-    gum # TUI prompts for setup script
-    fzf # fuzzy finder (Iso Install disk picking)
+    pkgs.gum # TUI prompts for setup script
+    pkgs.fzf # fuzzy finder (Iso Install disk picking)
   ]; # end of build inputs
 
   # hook: https://nix.dev/manual/nix/2.34/command-ref/nix-shell.html

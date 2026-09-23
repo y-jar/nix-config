@@ -11,7 +11,6 @@
   ...
 }:
 let
-  cfg = config.sysset.nvf;
   keymaps = import ./keybinds.nix;
 in
 {

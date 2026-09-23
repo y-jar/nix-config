@@ -16,12 +16,12 @@ let
 in
 {
   config = lib.mkIf cfg.enable {
-    packages = with pkgs; [
-      libreoffice # LibreOffice office suite
+    packages = [
+      pkgs.libreoffice # LibreOffice office suite
       # [Technical Writing]
-      pandoc # Conversion between documentation formats
-      projectlibre # Project-Management Software similar to MS-Project
-      jupyter # Web-based notebook environment for interactive computing; mainly used for school and notetaking
+      pkgs.pandoc # Conversion between documentation formats
+      pkgs.projectlibre # Project-Management Software similar to MS-Project
+      pkgs.jupyter # Web-based notebook environment for interactive computing; mainly used for school and notetaking
     ]; # end of packages
   }; # end of config
 }

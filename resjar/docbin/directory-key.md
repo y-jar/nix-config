@@ -59,7 +59,7 @@
 │   │   ├── security/           # Polkit rules, rtkit, udisks2
 │   │   ├── server/             # Server modules (Jellyfin, komga, sleepyjar, nixdraw, webjar, outline, authentik, vpn)
 │   │   ├── syncthing/          # System syncthing service
-│   │   ├── system[scripts]/    # System-level shell scripts (nhu, nru)
+│   │   ├── system[scripts]/    # System-level shell scripts (nru, updatejar)
 │   │   ├── tlp/                # TLP laptop power management + battery thresholds
 │   │   ├── users/              # User account creation + groups
 │   │   ├── v412/               # v4l2loopback kernel module (OBS virtual cam)

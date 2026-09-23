@@ -48,7 +48,7 @@ in
           | `resjar/docbin/` | Documentation (install guide, per-feature guides) |
           | `resjar/nixbin/` | Nix templates and reference code |
           | `.rotjar/reposjar/` | Reference NixOS configs from other people (for patterns/inspiration) |
-          | `flake.nix` | Main flake hosts, inputs, system builders (mkJar, mkHjemJar, urnJar) |
+          | `flake.nix` | Main flake hosts, inputs, system builder (mkJar) |
 
           ## Search Strategy
 

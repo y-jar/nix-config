@@ -15,14 +15,9 @@
 #    you need!
 #
 # And remember, your configuration is yours to customize.
-# After you're done, head over to ./home.nix to configure your user!
+# After you're done, head over to ./user.nix to configure your user!
 #*/-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-{
-  inputs,
-  config,
-  lib,
-  ...
-}:
+{ ... }:
 {
   config = {
     system.stateVersion = "26.05"; # [CHANGE THIS]
@@ -92,7 +87,6 @@
       tlp.cpuEppOnBattery = "balance_power"; # (default|performance|balance_performance|balance_power|power)
       tlp.platformProfileOnBattery = "balanced"; # (cool|quiet|balanced|performance)
       tlp.pcieAspmOnBattery = "default"; # (default|performance|powersave|powersupersave)
-      # powerprofiles.enable = true;
       audio = {
         enable = true; # sets audio and adds some apps
         addon.enable = false; # adds my audio setup

@@ -9,7 +9,6 @@
 # sysset.unfree.enable and sysset.UseNixPkgsYoinks.enable.
 # -=-=-=-=-=-=-=-=-=-=-=
 {
-  config,
   lib,
   osConfig,
   pkgs,

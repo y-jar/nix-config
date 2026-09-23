@@ -28,12 +28,12 @@ in
       enable = true;
       xwayland.enable = true;
     }; # end of programs.hyprland
-    environment.systemPackages = with pkgs; [
+    environment.systemPackages = [
       # [Hyprland Companion Apps :P ]
-      hyprshot # Utility to easily take screenshots in Hyprland using your mouse
-      hyprlauncher # A multipurpose and versatile launcher / picker for Hyprland
-      hyprlock # Hyprland’s GPU-accelerated screen locking utility
-      hyprsunset # Application to enable a blue-light filter on Hyprland
+      pkgs.hyprshot # Utility to easily take screenshots in Hyprland using your mouse
+      pkgs.hyprlauncher # A multipurpose and versatile launcher / picker for Hyprland
+      pkgs.hyprlock # Hyprland’s GPU-accelerated screen locking utility
+      pkgs.hyprsunset # Application to enable a blue-light filter on Hyprland
     ]; # end of enviroment.systemPackages
   }; # end of config
 }

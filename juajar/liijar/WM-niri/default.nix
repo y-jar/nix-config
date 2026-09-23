@@ -98,28 +98,26 @@ in
 {
 
   config = lib.mkIf hjm.niri.enable {
-    packages =
-      with pkgs;
-      [
-        # niri packages (folded from hjmbin/packages.nix bucket)
-        wayshot
-        wl-clipboard
-        wlr-randr
-        playerctl
-        brightnessctl
-        libnotify
-        dunst
-        grim
-        slurp
-        wf-recorder
-      ]
-      # install the desktop shell exactly when it would be spawned
-      ++ lib.optionals shelljarEnabled [
-        inputs.shelljar.packages.${pkgs.stdenv.hostPlatform.system}.default # spawned by generatedStartups when shelljar is the shell
-      ]
-      ++ lib.optionals (noctaliaEnabled && !shelljarEnabled) [
-        pkgs.noctalia-shell # spawned by generatedStartups when noctalia is the shell
-      ];
+    packages = [
+      # niri packages (folded from hjmbin/packages.nix bucket)
+      pkgs.wayshot
+      pkgs.wl-clipboard
+      pkgs.wlr-randr
+      pkgs.playerctl
+      pkgs.brightnessctl
+      pkgs.libnotify
+      pkgs.dunst
+      pkgs.grim
+      pkgs.slurp
+      pkgs.wf-recorder
+    ]
+    # install the desktop shell exactly when it would be spawned
+    ++ lib.optionals shelljarEnabled [
+      inputs.shelljar.packages.${pkgs.stdenv.hostPlatform.system}.default # spawned by generatedStartups when shelljar is the shell
+    ]
+    ++ lib.optionals (noctaliaEnabled && !shelljarEnabled) [
+      pkgs.noctalia-shell # spawned by generatedStartups when noctalia is the shell
+    ];
     files = {
       ".config/niri/config.kdl".source = kdlDir + "/config.kdl";
       ".config/niri/base.kdl".source = kdlDir + "/base.kdl";

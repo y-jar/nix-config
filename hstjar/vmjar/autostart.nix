@@ -11,11 +11,7 @@
 # List programs to run on startup, e.g. `commands = [ "voxtype" "pavucontrol" ];`
 # Empty = start nothing. Heavy GUI tools stay opt-in to keep idle RAM low.
 # -=-=-=-=-=-=-=-=-=-=-=
-{
-  config,
-  lib,
-  ...
-}:
+{ ... }:
 {
   config.sysset.autostart.commands = [
     # put programs to autostart here

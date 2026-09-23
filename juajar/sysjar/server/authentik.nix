@@ -73,7 +73,7 @@ in
     services.authentik = lib.mkMerge [
       {
         enable = true;
-        environmentFile = cfg.environmentFile;
+        inherit (cfg) environmentFile;
         # NOTE: 2026.8+ config loader wants listen.http as a *sequence*
         # (env vars get comma-split leniently, but the yaml file is strict)
         settings.listen.http = [ "0.0.0.0:${toString cfg.port}" ];

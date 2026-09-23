@@ -3,7 +3,7 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Define main/guest/admin users + home-manager mapping.
+# goal: Define main/guest/admin users + hjem mapping.
 # -=-=-=-=-=-=-=-=-=-=-=
 { config, lib, ... }:
 
@@ -14,7 +14,7 @@ in
   options = {
     sysset = {
       mainUser = lib.mkOption {
-        description = "Primary desktop user (gets home-manager + full config)";
+        description = "Primary desktop user (gets hjem + full config)";
         type = lib.types.str;
       };
       users = lib.mkOption {

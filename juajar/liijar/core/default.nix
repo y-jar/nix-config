@@ -22,54 +22,48 @@ in
 {
   config = lib.mkMerge [
     {
-      packages =
-        with pkgs;
-        [
-          # =======[core shell]
-          zsh
+      packages = [
+        # =======[core shell]
+        pkgs.zsh
 
-          # =======[cli tools]
-          ripgrep # fast recursive grep (better than grep -r)
-          fd # Simple, fast and user-friendly alternative to find
-          bat # Cat(1) clone with syntax highlighting and Git integration
-          fzf # fuzzy finder
-          zoxide # smarter cd
-          jq # Lightweight and flexible command-line JSON processor [needed for my jsearch script]
-          noogle-search # search Nix functions from the CLI
+        # =======[cli tools]
+        pkgs.ripgrep # fast recursive grep (better than grep -r)
+        pkgs.fd # Simple, fast and user-friendly alternative to find
+        pkgs.bat # Cat(1) clone with syntax highlighting and Git integration
+        pkgs.fzf # fuzzy finder
+        pkgs.zoxide # smarter cd
+        pkgs.jq # Lightweight and flexible command-line JSON processor [needed for my jsearch script]
 
-          # =======[ness jar]
-          lynx # text-based web browser
-          popsicle # iso burner
-          caligula # image burner in the cl
-          gnome-disk-utility # Udisks graphical front-end
+        # =======[ness jar]
+        pkgs.lynx # text-based web browser
+        pkgs.popsicle # iso burner
+        pkgs.caligula # image burner in the cl
+        pkgs.gnome-disk-utility # Udisks graphical front-end
 
-          # =======[dev jar]
-          tldr # Simplified and community-driven man pages
-          jp # json parser
-          tree # Command to produce a depth indented listing of files
-          # (cowsay lives in liijar/cowsay the commented reference example module)
+        # =======[dev jar]
+        pkgs.tldr # Simplified and community-driven man pages
+        pkgs.jp # json parser
+        pkgs.tree # Command to produce a depth indented listing of files
+        # (cowsay lives in liijar/cowsay the commented reference example module)
 
-          # =======[nix jar]
-          nix-output-monitor # prettier nix build output (nom)
-          nix-tree # visualize nix dependency tree
-          nurl # fetch a URL and output a nix hash
-          nix-init # generate a nix package from a repo URL
+        # =======[nix jar]
+        pkgs.nix-output-monitor # prettier nix build output (nom)
 
-          # =======[cli jar]
-          gum # interactive CLI prompts, confirmations, choosers
-          lla # modern ls with icons, plugins, gitignore
-          sd # sed alternative, intuitive find-and-replace
-          trash-cli # safe rm to trash instead of permanent delete
-          chafa # terminal image/file viewer with sixel/kitty support
-          cliamp # CLI music player
-        ]
-        # wine is opt-in (usrset.wine.enable) pulls wine-gecko + wine-mono too
-        ++ lib.optionals cfg.wine.enable [
-          wine # Wine is a compatibility layer for running Windows programs on Unix-like systems
-        ]
-        ++ lib.optionals (osConfig.sysset.UseNixPkgsYoinks.enable or false) [
-          inputs.rsakura.packages.x86_64-linux.default # a cool thing whisper did, awesone of them to add it as a pkgs in nix! ref: https://github.com/preprocessor/rsakura
-        ];
+        # =======[cli jar]
+        pkgs.gum # interactive CLI prompts, confirmations, choosers
+        pkgs.lla # modern ls with icons, plugins, gitignore
+        pkgs.sd # sed alternative, intuitive find-and-replace
+        pkgs.trash-cli # safe rm to trash instead of permanent delete
+        pkgs.chafa # terminal image/file viewer with sixel/kitty support
+        pkgs.cliamp # CLI music player
+      ]
+      # wine is opt-in (usrset.wine.enable) pulls wine-gecko + wine-mono too
+      ++ lib.optionals cfg.wine.enable [
+        pkgs.wine # Wine is a compatibility layer for running Windows programs on Unix-like systems
+      ]
+      ++ lib.optionals (osConfig.sysset.UseNixPkgsYoinks.enable or false) [
+        inputs.rsakura.packages.x86_64-linux.default # a cool thing whisper did, awesone of them to add it as a pkgs in nix! ref: https://github.com/preprocessor/rsakura
+      ];
     }
     {
       # [btop] transparent background (converted from the old home-manager

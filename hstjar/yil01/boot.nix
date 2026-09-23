@@ -3,7 +3,7 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Host 0_TEMPLATE: bootloader settings (systemd-boot).
+# goal: Host yil01: bootloader settings (systemd-boot).
 # -=-=-=-=-=-=-=-=-=-=-=
 { ... }: {
   # boot

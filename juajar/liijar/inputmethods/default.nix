@@ -20,18 +20,16 @@ let
   cfg = config.usrset.inputmethods;
 
   # fcitx5 addons, gated per input method
-  addons =
-    with pkgs;
-    [
-      fcitx5-gtk # GTK IM module for fcitx5
-      fcitx5-nord # Nord theme for fcitx5
-    ]
-    ++ (lib.optionals cfg.japanese.enable [
-      fcitx5-mozc # Mozc input method for fcitx5
-    ])
-    ++ (lib.optionals cfg.korean.enable [
-      fcitx5-hangul # Hangul input method for fcitx5
-    ]);
+  addons = [
+    pkgs.fcitx5-gtk # GTK IM module for fcitx5
+    pkgs.fcitx5-nord # Nord theme for fcitx5
+  ]
+  ++ (lib.optionals cfg.japanese.enable [
+    pkgs.fcitx5-mozc # Mozc input method for fcitx5
+  ])
+  ++ (lib.optionals cfg.korean.enable [
+    pkgs.fcitx5-hangul # Hangul input method for fcitx5
+  ]);
 
   # fcitx5 with the addon set baked in
   fcitx5Package = pkgs.qt6Packages.fcitx5-with-addons.override { inherit addons; };

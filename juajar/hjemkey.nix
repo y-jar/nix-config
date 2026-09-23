@@ -34,7 +34,6 @@
 {
   config,
   lib,
-  pkgs,
   inputs,
   hostnm,
   ...

@@ -5,12 +5,7 @@
 # -=-=-=-=-=-=-=-=-=-=-=
 # goal: Host calender: system-level toggle sheet (sysset).
 # -=-=-=-=-=-=-=-=-=-=-=
-{
-  inputs,
-  config,
-  lib,
-  ...
-}:
+{ ... }:
 
 {
   config = {

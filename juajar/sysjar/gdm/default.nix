@@ -18,8 +18,8 @@ in
   options = {
     sysset.gdm.enable = lib.mkOption {
       type = lib.types.bool;
-      default = true;
-      description = "Enable GDM display manager, Off if wanting headless";
+      default = false;
+      description = "Enable GDM display manager (opt-in; leave off for headless/WM-from-TTY hosts)";
     };
   }; # end options
 

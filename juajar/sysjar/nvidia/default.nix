@@ -25,7 +25,7 @@ in
     hardware.nvidia = {
       modesetting.enable = true;
       powerManagement.enable = true;
-      open = cfg.open;
+      inherit (cfg) open;
       nvidiaSettings = true;
     }; # end of hardware.nvidia
     boot.blacklistedKernelModules = [ "nouveau" ];

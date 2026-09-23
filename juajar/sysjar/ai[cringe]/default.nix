@@ -63,8 +63,8 @@ in
       services.llama-cpp = {
         enable = true;
         package = llamaPackage;
-        host = cfg.host; # The host address which the llama-server HTTP interface listens to.
-        port = cfg.port;
+        inherit (cfg) host; # The host address which the llama-server HTTP interface listens to.
+        inherit (cfg) port;
         openFirewall = lib.mkIf (cfg.host == "0.0.0.0") true;
         # [models] auto-downloaded from HuggingFace on first request into /var/cache/llama-cpp
         modelsPreset = {
@@ -86,9 +86,9 @@ in
           "render"
           "video"
         ];
-        # calender has an iGPU (gfx1036, no precompiled kernel in this ROCm build)
-        # that llama.cpp otherwise splits the model across, causing GPU hangs and
-        # ~4 t/s. Restrict ROCm to the dGPU (RX 9070 XT) only.
+        # Some hosts have an iGPU without a precompiled ROCm kernel; llama.cpp
+        # would otherwise split the model across devices, causing GPU hangs and
+        # poor throughput. Restrict ROCm to the first (d)GPU.
         Environment = lib.mkIf (cfg.llama.gpu == "rocm") [ "ROCR_VISIBLE_DEVICES=0" ];
         # the nixpkgs llama-cpp module hardcodes ProcSubset=pid, which hides
         # /proc/meminfo and breaks llama-server's `--fit on` memory detection.

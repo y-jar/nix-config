@@ -11,12 +11,7 @@
 # - Replace every `PLEASECHANGEME_*` with real values.
 # - Copy this whole folder to hstjar/<name>/ (via the installer) then set values.
 # - All toggles are overridable nothing here is force-locked.
-{
-  inputs,
-  config,
-  lib,
-  ...
-}:
+{ ... }:
 
 {
   config = {
@@ -113,6 +108,7 @@
           intel.enable = false;
           nvidia.enable = false;
         };
+        codecs.enable = false; # OFF: no GStreamer/VA-API tooling
         steam.enable = false;
       };
       virtcam.enable = false;

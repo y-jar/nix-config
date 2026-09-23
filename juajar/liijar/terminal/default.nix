@@ -33,10 +33,10 @@ let
     font-monospace-warn=no
   '';
 
-  terminalPackages = with pkgs; [
-    foot
-    kitty # incase foot doesnt work for root
-    alacritty # terminal emulator
+  terminalPackages = [
+    pkgs.foot
+    pkgs.kitty # incase foot doesnt work for root
+    pkgs.alacritty # terminal emulator
   ]; # end of terminalPackages
 
   terminalFiles = {

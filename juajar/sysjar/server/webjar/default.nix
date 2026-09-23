@@ -10,6 +10,7 @@
 let
   cfg = config.sysset.server.webjar;
   webroot = ./.;
+  webrootDir = "/var/lib/webjar";
 in
 {
   options.sysset.server.webjar = {
@@ -36,11 +37,11 @@ in
         listen = [
           {
             addr = "0.0.0.0";
-            port = cfg.port;
+            inherit (cfg) port;
           }
         ]; # End of listen config
 
-        root = "/var/lib/webjar"; # The path of the web root directory.
+        root = webrootDir; # The path of the web root directory.
 
         # Declarative location config
         locations."/" = {
@@ -50,8 +51,8 @@ in
     }; # End of nginx config
 
     system.activationScripts.webjar = ''
-      mkdir -p /var/lib/webjar
-      cp ${webroot}/index.html ${webroot}/support.html ${webroot}/style.css ${webroot}/script.js ${webroot}/JarOnPar.png /var/lib/webjar/
+      mkdir -p ${webrootDir}
+      cp ${webroot}/index.html ${webroot}/support.html ${webroot}/style.css ${webroot}/script.js ${webroot}/JarOnPar.png ${webrootDir}/
     ''; # End of activation script
   }; # End of config
 }

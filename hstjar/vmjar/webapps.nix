@@ -21,7 +21,7 @@
 #   category = "Network"      XDG category for grouping
 #   extraArgs = [ "--start-maximized" ]
 # -=-=-=-=-=-=-=-=-=-=-=
-{ lib, ... }:
+{ ... }:
 
 {
   sysset.webapps = {

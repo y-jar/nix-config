@@ -16,8 +16,8 @@
 }:
 let
   cfg = config.usrset.theming;
-  flavor = cfg.flavor;
-  accent = cfg.accent;
+  inherit (cfg) flavor;
+  inherit (cfg) accent;
 
   gtkThemeName = "catppuccin-${flavor}-${accent}-standard";
   iconThemeName = "Papirus-Dark";
@@ -59,12 +59,12 @@ in
         variant = flavor;
       })
       (pkgs.catppuccin-papirus-folders.override {
-        accent = accent;
-        flavor = flavor;
+        inherit accent;
+        inherit flavor;
       })
       pkgs.papirus-folders
       (pkgs.catppuccin-kvantum.override {
-        accent = accent;
+        inherit accent;
         variant = flavor;
       })
       pkgs.kdePackages.qtstyleplugin-kvantum
@@ -80,7 +80,7 @@ in
       ".config/Kvantum/kvantum.kvconfig".source = kvantumConfig;
       ".config/Kvantum/${qtThemeName}".source = "${
         pkgs.catppuccin-kvantum.override {
-          accent = accent;
+          inherit accent;
           variant = flavor;
         }
       }/share/Kvantum/${qtThemeName}";

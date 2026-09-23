@@ -5,13 +5,7 @@
 # -=-=-=-=-=-=-=-=-=-=-=
 # goal: Host ziiemar: system-level toggle sheet (sysset).
 # -=-=-=-=-=-=-=-=-=-=-=
-{
-  inputs,
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ pkgs, ... }:
 
 {
   config = {
@@ -19,8 +13,7 @@
     #            [system state version from first install]
 
     # [host hardware quirk] Drop the OLED panel to 48Hz on battery, 120Hz on AC,
-    # to save power. (Moved here from the old home.nix so user.nix stays a pure
-    # toggle sheet that both backends can read.)
+    # to save power. Kept system-level so user.nix stays a pure toggle sheet.
     systemd.user.services.niri-refresh-on-battery = {
       description = "Switch niri eDP-1 refresh rate based on power source";
       after = [ "graphical-session.target" ];
@@ -116,7 +109,6 @@
       tlp.cpuEppOnBattery = "power"; # max battery savings (balance_power = default)
       tlp.platformProfileOnBattery = "low-power"; # (cool|quiet|balanced|performance)
       tlp.pcieAspmOnBattery = "powersave"; # deeper PCIe idle states
-      # powerprofiles.enable = true;
       audio = {
         enable = true; # sets audio and adds some apps
         addon.enable = false; # adds my audio setup

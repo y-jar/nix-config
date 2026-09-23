@@ -5,12 +5,7 @@
 # -=-=-=-=-=-=-=-=-=-=-=
 # goal: Host 0_MINIMAL: imports system + hardware + boot for this machine.
 # -=-=-=-=-=-=-=-=-=-=-=
-{
-  inputs,
-  hostnm,
-  config,
-  ...
-}:
+{ ... }:
 
 {
   imports = [

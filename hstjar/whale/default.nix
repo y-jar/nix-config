@@ -5,12 +5,7 @@
 # -=-=-=-=-=-=-=-=-=-=-=
 # goal: Host whale: imports system + hardware + boot for this machine.
 # -=-=-=-=-=-=-=-=-=-=-=
-{
-  inputs,
-  hostnm,
-  config,
-  ...
-}:
+{ ... }:
 
 {
   imports = [

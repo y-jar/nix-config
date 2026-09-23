@@ -16,9 +16,9 @@
 let
   cfg = config.usrset.flatpak;
 
-  flatpakPackages = with pkgs; [
-    flatpak
-    bazaar # appstore
+  flatpakPackages = [
+    pkgs.flatpak
+    pkgs.bazaar # appstore
   ]; # end of flatpakPackages
 
   # lets flatpak work

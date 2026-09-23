@@ -8,14 +8,13 @@
 # -=-=-=-=-=-=-=-=-=-=-=
 {
   lib,
-  pkgs,
   ...
 }:
 {
   config = {
     nixpkgs.overlays = [
       (
-        final: prev:
+        _final: prev:
         let
           curlWithWebsockets = prev.curl.override { websocketSupport = true; };
           patchCurl = map (pkg: if lib.getName pkg == "curl" then curlWithWebsockets else pkg);
@@ -39,7 +38,7 @@
             buildInputs = patchCurl old.buildInputs;
           }); # end of mcpelauncher-client
 
-          mcpelauncher-ui-qt = prev.mcpelauncher-ui-qt.overrideAttrs (old: {
+          mcpelauncher-ui-qt = prev.mcpelauncher-ui-qt.overrideAttrs (_old: {
             version = "1.8.4-qt6";
             src = prev.fetchFromGitHub {
               owner = "minecraft-linux";

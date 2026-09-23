@@ -3,15 +3,15 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Host vmjar: bootloader settings (systemd-boot).
+# goal: Host vmjar: bootloader settings (grub).
 # -=-=-=-=-=-=-=-=-=-=-=
 { ... }: {
   # boot
+  sysset.boot.grubDevice = "/dev/vda";
   boot = {
     loader = {
       grub = {
         enable = true;
-        device = "/dev/vda";
         useOSProber = true;
         fsIdentifier = "provided";
       }; # end of grub

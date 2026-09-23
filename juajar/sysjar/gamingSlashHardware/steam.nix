@@ -31,23 +31,23 @@ in
       dedicatedServer.openFirewall = true;
       localNetworkGameTransfers.openFirewall = true;
       # extra packages
-      extraPackages = with pkgs; [
-        libxcursor # X Cursor extension
-        libxi # X Input extension
-        libxinerama # Xinerama extension
-        libxscrnsaver # X Screen Saver extension
-        libpng # PNG image format library
-        libpulseaudio # PulseAudio is a free and open-source sound server
-        libvorbis # Vorbis audio compression reference implementation
-        stdenv.cc.cc.lib # The default build environment for Unix packages in Nixpkgs and gcc
-        libkrb5 # MIT Kerberos 5
-        keyutils # Tools used to control the Linux kernel key management system
-        protonup-qt # installer for proton versions
+      extraPackages = [
+        pkgs.libxcursor # X Cursor extension
+        pkgs.libxi # X Input extension
+        pkgs.libxinerama # Xinerama extension
+        pkgs.libxscrnsaver # X Screen Saver extension
+        pkgs.libpng # PNG image format library
+        pkgs.libpulseaudio # PulseAudio is a free and open-source sound server
+        pkgs.libvorbis # Vorbis audio compression reference implementation
+        pkgs.stdenv.cc.cc.lib # The default build environment for Unix packages in Nixpkgs and gcc
+        pkgs.libkrb5 # MIT Kerberos 5
+        pkgs.keyutils # Tools used to control the Linux kernel key management system
+        pkgs.protonup-qt # installer for proton versions
       ]; # end of extraPackages
     }; # end of programs.steam
 
-    environment.systemPackages = with pkgs; [
-      mangohud # for huds
+    environment.systemPackages = [
+      pkgs.mangohud # for huds
     ]; # end of environment.systemPackages
 
     # sets the steam group to include all users

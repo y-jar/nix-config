@@ -6,8 +6,6 @@
 # goal: Nix settings (experimental features, substituters, garbage collection).
 # -=-=-=-=-=-=-=-=-=-=-=
 {
-  pkgs,
-  inputs,
   lib,
   config,
   ...
@@ -45,9 +43,6 @@ in
     programs.nix-ld.enable = true;
 
     # nix stuff
-    # environment.systemPackages = with pkgs; [
-
-    # ]; # End of environment.systemPackages
 
     # options for nix
     nix.settings = {

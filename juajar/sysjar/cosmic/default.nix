@@ -30,8 +30,12 @@ in
   };
 
   config = {
-    services.desktopManager.cosmic.enable = cfg.enable;
-    services.displayManager.cosmic-greeter.enable = cfg.greeter;
-    services.displayManager.gdm.enable = lib.mkIf cfg.greeter (lib.mkForce false);
+    services = {
+      desktopManager.cosmic.enable = cfg.enable;
+      displayManager = {
+        cosmic-greeter.enable = cfg.greeter;
+        gdm.enable = lib.mkIf cfg.greeter (lib.mkForce false);
+      };
+    };
   };
 }

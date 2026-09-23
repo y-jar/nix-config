@@ -58,27 +58,25 @@ in
 {
 
   config = lib.mkIf hjm.mango.enable {
-    packages =
-      with pkgs;
-      [
-        jshot # wayland screenshot tool (region/screen/window) via grim+slurp+swappy
-        jclip # clipboard history menu (cliphist + fuzzel)
-        jlayout # toggle current tag between scroller and vertical_scroller (SUPER+CTRL+Slash)
-        jbinds # keybind cheat sheet overlay in foot (SUPER+SHIFT+Slash)
-        grim # wayland screenshot capture
-        slurp # wayland region select for grim
-        swappy # wayland screenshot annotation
-        hyprpicker # color picker (SUPER+C)
-        cliphist # clipboard history storage (jclip)
-        xwayland-satellite # Xwayland outside the compositor
-      ]
-      ++ lib.optionals shelljarEnabled [
-        # desktop shell (binds.conf + generated startups use shjctl)
-        inputs.shelljar.packages.${pkgs.stdenv.hostPlatform.system}.default
-      ]
-      ++ lib.optionals (noctaliaEnabled && !shelljarEnabled) [
-        pkgs.noctalia-shell # noctalia desktop shell (quickshell based)
-      ];
+    packages = [
+      jshot # wayland screenshot tool (region/screen/window) via grim+slurp+swappy
+      jclip # clipboard history menu (cliphist + fuzzel)
+      jlayout # toggle current tag between scroller and vertical_scroller (SUPER+CTRL+Slash)
+      jbinds # keybind cheat sheet overlay in foot (SUPER+SHIFT+Slash)
+      pkgs.grim # wayland screenshot capture
+      pkgs.slurp # wayland region select for grim
+      pkgs.swappy # wayland screenshot annotation
+      pkgs.hyprpicker # color picker (SUPER+C)
+      pkgs.cliphist # clipboard history storage (jclip)
+      pkgs.xwayland-satellite # Xwayland outside the compositor
+    ]
+    ++ lib.optionals shelljarEnabled [
+      # desktop shell (binds.conf + generated startups use shjctl)
+      inputs.shelljar.packages.${pkgs.stdenv.hostPlatform.system}.default
+    ]
+    ++ lib.optionals (noctaliaEnabled && !shelljarEnabled) [
+      pkgs.noctalia-shell # noctalia desktop shell (quickshell based)
+    ];
     files = {
       ".config/mango/config.conf".source = wmc + "/config.conf"; # linker
       ".config/mango/env.conf".source = wmc + "/env.conf";

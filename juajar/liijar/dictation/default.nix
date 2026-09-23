@@ -20,12 +20,12 @@ let
   cfg = config.usrset.dictation;
 
   # voxtype + its runtime helpers + the `vtt` meeting-mode transcriber wrapper
-  dictationPackages = with pkgs; [
-    voxtype # local voice-to-text daemon (Whisper engine)
-    wtype # Wayland typing (needed for output.mode = "type")
-    wl-clipboard # clipboard fallback output
-    libnotify # transcription notifications
-    playerctl # auto-pause MPRIS media while recording
+  dictationPackages = [
+    pkgs.voxtype # local voice-to-text daemon (Whisper engine)
+    pkgs.wtype # Wayland typing (needed for output.mode = "type")
+    pkgs.wl-clipboard # clipboard fallback output
+    pkgs.libnotify # transcription notifications
+    pkgs.playerctl # auto-pause MPRIS media while recording
     (pkgs.writeShellScriptBin "vtt" ''
       # vtt - voxtype meeting-mode transcriber (continuous -> VTT/SRT/Markdown export)
       # usage: vtt <start|stop|export|help>

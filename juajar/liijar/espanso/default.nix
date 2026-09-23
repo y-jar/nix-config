@@ -56,7 +56,7 @@ let
   }
   // lib.optionalAttrs (cfg.vars != [ ]) {
     ".config/espanso/match/globals.yml" = yaml.generate "espanso-globals.yml" {
-      vars = cfg.vars;
+      inherit (cfg) vars;
     };
   }; # end of espansoFiles
 in

@@ -9,13 +9,8 @@
 # - It's a checklist to fill out: enable what you need, leave the rest off.
 # - Replace every `PLEASECHANGEME_*` with real values.
 # - Set `system.stateVersion` to the NixOS version of first install.
-# - Pair options here with matching user toggles in ./home.nix.
-{
-  inputs,
-  config,
-  lib,
-  ...
-}:
+# - Pair options here with matching user toggles in ./user.nix.
+{ ... }:
 
 {
   config = {
@@ -118,11 +113,12 @@
       flatpak.enable = false; # ~10mib - flatpak support [still needs to be enabled in user.nix]
       gaming = {
         drivers = {
-          enable = true; # ~1.5gib - Vulkan + Mesa + codecs
+          enable = true; # ~1.5gib - Vulkan + Mesa
           amd.enable = false; # AMD specific drivers
           intel.enable = false; # Intel specific drivers
           nvidia.enable = false; # NVIDIA drivers (Vulkan + 32-bit)
         }; # end of drivers
+        codecs.enable = true; # ~codecs - GStreamer + VA-API/Vulkan debug tools
         steam.enable = false; # ~2gib - Steam client + 32-bit libs
       }; # end of gaming
       virtcam.enable = false; # ~5mib - virtual camera for OBS

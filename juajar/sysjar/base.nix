@@ -37,6 +37,11 @@ in
         default = false;
         description = "Set boot loader timeout to 1 second. Default: false (systemd-boot default of 5 seconds).";
       };
+      grubDevice = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = "GRUB install device (e.g. /dev/sda or /dev/disk/by-id/...). Required on hosts using boot.loader.grub; leave null on systemd-boot hosts.";
+      };
     };
 
     # Always-on base package groups. Each defaults to true so existing hosts are
@@ -56,41 +61,89 @@ in
     # Use zsh
     # NOTE: at a point i ran into a weird zsh error, run this if commands dont work
     #export PATH=/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin:$HOME/.local/bin:$PATH
-    programs.zsh.enable = true;
-    environment.shells = with pkgs; [ zsh ];
+    programs = {
+      zsh.enable = true;
+      dconf.enable = true; # key/value preference storage (GCONF successor)
+      evince.enable = true; # PDF thumbnailing
+      # tell NixOS to include these in the generated pixbuf loaders cache
+      gdk-pixbuf.modulePackages = lib.mkIf base.imaging [
+        pkgs.librsvg
+        pkgs.webp-pixbuf-loader
+      ];
+    };
+    environment = {
+      shells = [ pkgs.zsh ];
+      # WM/DE-dependent session variables. Skipped on headless/server/VM hosts.
+      sessionVariables = lib.optionalAttrs hasDesktop {
+        NIXOS_OZONE_WL = "1"; # nudges Electron/Chrome apps to use Wayland
+        QT_QPA_PLATFORMTHEME = "qtct";
+        QT_QPA_PLATFORMTHEME_QT6 = "qtct";
+      };
+      # ==================================System Packages========================================
+      # List packages installed in system profile.
+      # use https://search.nixos.org/ to find more packages (and options).
+      systemPackages = lib.mkMerge [
+        # [base]
+        (lib.mkIf base.coreTools [
+          pkgs.neovim # extensible terminal editor
+          pkgs.vim # classic terminal editor
+          pkgs.nh # nix helper (builds/deploys this config)
+          pkgs.git # version control
+          pkgs.eza
+        ])
+
+        # [Archives & net serv]
+        (lib.mkIf base.netArchives [
+          pkgs.wget # file retrieval over HTTP/HTTPS/FTP
+          pkgs.curl # URL-transfer CLI
+          pkgs.zip # zip archiver
+          pkgs.unzip # zip extractor
+          pkgs.rar # rar archiver
+          pkgs.rsync # incremental file transfer
+        ])
+
+        # [tools & file system]
+        (lib.mkIf base.fsTools [
+          pkgs.psmisc # killall + fuser
+          pkgs.pciutils # lspci
+          pkgs.usbutils # lsusb
+          pkgs.killall # kill by name
+          pkgs.ntfs3g # read/write NTFS
+        ])
+
+        # [image format support]
+        (lib.mkIf base.imaging [
+          pkgs.webp-pixbuf-loader # webp support for GTK apps
+          pkgs.libheif # heif/avif support
+          pkgs.libjxl # jpeg-xl support
+          pkgs.poppler-utils # PDF utilities
+          pkgs.poppler # PDF rendering lib
+          pkgs.ffmpegthumbnailer # video + image thumbnails
+          pkgs.gdk-pixbuf # image loading/manipulation lib
+          pkgs.librsvg # svg support + pixbuf loader rebuild
+          pkgs.libjpeg # jpeg support
+          pkgs.libpng # png support
+          pkgs.libtiff # tiff support
+        ])
+      ]; # end of environment.systemPackages
+    };
     users.defaultUserShell = pkgs.zsh; # default shell for new users
 
-    # ==================================Tweaks========================================
-    # inside here will be things that might need to find a home
-    programs.dconf.enable = true; # key/value preference storage (GCONF successor)
-    services.gnome.gnome-keyring.enable = true; # desktop password/keyring storage
-    programs.evince.enable = true; # PDF thumbnailing
-    services.tumbler.enable = true; # image/video thumbnail service
+    services = {
+      # ==================================Tweaks========================================
+      gnome.gnome-keyring.enable = true; # desktop password/keyring storage
+      tumbler.enable = true; # image/video thumbnail service
 
-    # [perf / cleanliness]
-    services.dbus.implementation = "broker"; # faster, lighter D-Bus than the reference implementation
-    services.speechd.enable = lib.mkForce false; # text-to-speech daemon (off)
-
-    # WM/DE-dependent session variables. Skipped on headless/server/VM hosts.
-    environment.sessionVariables = lib.optionalAttrs hasDesktop {
-      NIXOS_OZONE_WL = "1"; # nudges Electron/Chrome apps to use Wayland
-      QT_QPA_PLATFORMTHEME = "qtct";
-      QT_QPA_PLATFORMTHEME_QT6 = "qtct";
+      # [perf / cleanliness]
+      dbus.implementation = "broker"; # faster, lighter D-Bus than the reference implementation
+      speechd.enable = lib.mkForce false; # text-to-speech daemon (off)
     };
-
-    # tell NixOS to include these in the generated pixbuf loaders cache
-    programs.gdk-pixbuf.modulePackages = lib.mkIf base.imaging (
-      with pkgs;
-      [
-        librsvg
-        webp-pixbuf-loader
-      ]
-    );
 
     # ==================================Boot========================================
     boot = {
       initrd.systemd.enable = true; # systemd in the initrd
       loader.timeout = lib.mkIf cfg.fastMenu 1; # 1s when fastMenu, else systemd-boot default (5s)
+      loader.grub.device = lib.mkIf (cfg.grubDevice != null) cfg.grubDevice; # GRUB install target (per-host option)
       consoleLogLevel = lib.mkIf cfg.quiet 3; # quieter kernel log
       kernelParams = lib.mkIf cfg.quiet [
         "quiet"
@@ -98,65 +151,5 @@ in
         "systemd.show_status=auto"
       ]; # end of kernelParams
     }; # end of boot
-
-    # ==================================System Packages========================================
-    # List packages installed in system profile.
-    # use https://search.nixos.org/ to find more packages (and options).
-    environment.systemPackages = lib.mkMerge [
-      # [base]
-      (lib.mkIf base.coreTools (
-        with pkgs;
-        [
-          neovim # extensible terminal editor
-          vim # classic terminal editor
-          nh # nix helper (builds/deploys this config)
-          git # version control
-          eza
-        ]
-      ))
-
-      # [Archives & net serv]
-      (lib.mkIf base.netArchives (
-        with pkgs;
-        [
-          wget # file retrieval over HTTP/HTTPS/FTP
-          curl # URL-transfer CLI
-          zip # zip archiver
-          unzip # zip extractor
-          rar # rar archiver
-          rsync # incremental file transfer
-        ]
-      ))
-
-      # [tools & file system]
-      (lib.mkIf base.fsTools (
-        with pkgs;
-        [
-          psmisc # killall + fuser
-          pciutils # lspci
-          usbutils # lsusb
-          killall # kill by name
-          ntfs3g # read/write NTFS
-        ]
-      ))
-
-      # [image format support]
-      (lib.mkIf base.imaging (
-        with pkgs;
-        [
-          webp-pixbuf-loader # webp support for GTK apps
-          libheif # heif/avif support
-          libjxl # jpeg-xl support
-          poppler-utils # PDF utilities
-          poppler # PDF rendering lib
-          ffmpegthumbnailer # video + image thumbnails
-          gdk-pixbuf # image loading/manipulation lib
-          librsvg # svg support + pixbuf loader rebuild
-          libjpeg # jpeg support
-          libpng # png support
-          libtiff # tiff support
-        ]
-      ))
-    ]; # end of environment.systemPackages
   }; # end of config
 }

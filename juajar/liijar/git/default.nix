@@ -18,10 +18,10 @@
 let
   cfg = config.usrset.git;
 
-  gitPackages = with pkgs; [
-    gh # for github login
-    lazygit # for kool github viewing
-    delta # diff pager + side-by-side diffs (the generated .gitconfig uses it)
+  gitPackages = [
+    pkgs.gh # for github login
+    pkgs.lazygit # for kool github viewing
+    pkgs.delta # diff pager + side-by-side diffs (the generated .gitconfig uses it)
   ]; # end of gitPackages
 
   gitconfig = pkgs.writeText "gitconfig" ''

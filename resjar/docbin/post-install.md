@@ -26,4 +26,4 @@ Depending on what, this can be done in two ways: `flatpak app updates`, or `syst
   - > You would run this after a period of time, or making a change to the config.
   - Run `cd ~/nix-config` then run `git add .` so the command below can work `:)`
   - Run `nru` to update flake inputs and rebuild
-  - Run `nhu` to rebuild using the nix helper
+  - Run `nhs` to rebuild and deploy using the nix helper

@@ -74,7 +74,7 @@
       discord.enable = false;
       halloy.enable = false;
     };
-    espanso = (import ../espansoconf.nix { enable = false; });
+    espanso = import ../espansoconf.nix { enable = false; };
     flatpak.enable = false;
     nautilus.enable = true; # ~50mib file manager
     yazi.enable = true; # ~10mib terminal file manager

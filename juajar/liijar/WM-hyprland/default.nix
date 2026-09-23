@@ -65,19 +65,17 @@ in
       # [desktop shell config]
       ".config/shelljar/config.kdl".source = ../shell/shelljar-config.kdl;
     }; # end of files
-    packages =
-      with pkgs;
-      [
-        waypaper # GUI wallpaper setter for Wayland-based window managers
-        hyprpicker # The mouse-following color picker
-        woomer # Zoomer application for Wayland inspired by tsoding's boomer
-      ]
-      # desktop shell binaries
-      ++ lib.optionals shelljarEnabled [
-        inputs.shelljar.packages.${pkgs.stdenv.hostPlatform.system}.default # my quickshell island shell
-      ]
-      ++ lib.optionals noctaliaEnabled [
-        noctalia-shell # noctalia desktop shell (quickshell based)
-      ];
+    packages = [
+      pkgs.waypaper # GUI wallpaper setter for Wayland-based window managers
+      pkgs.hyprpicker # The mouse-following color picker
+      pkgs.woomer # Zoomer application for Wayland inspired by tsoding's boomer
+    ]
+    # desktop shell binaries
+    ++ lib.optionals shelljarEnabled [
+      inputs.shelljar.packages.${pkgs.stdenv.hostPlatform.system}.default # my quickshell island shell
+    ]
+    ++ lib.optionals noctaliaEnabled [
+      pkgs.noctalia-shell # noctalia desktop shell (quickshell based)
+    ];
   }; # end of config
 }

@@ -103,13 +103,15 @@
   };
 
   keys.normal = {
-    space.space = ":reload-all";
+    space = {
+      space = ":reload-all";
+      w = ":w";
+      q = ":q";
+    };
     esc = [
       "collapse_selection"
       "keep_primary_selection"
     ];
-    space.w = ":w";
-    space.q = ":q";
 
     # useful vim keybindings
     "$" = "goto_line_end";

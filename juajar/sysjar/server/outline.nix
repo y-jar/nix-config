@@ -89,8 +89,8 @@ in
     services.outline = lib.mkMerge [
       {
         enable = true;
-        port = cfg.port;
-        publicUrl = cfg.publicUrl;
+        inherit (cfg) port;
+        inherit (cfg) publicUrl;
         databaseUrl = "local"; # spins up local postgres + outline db
         redisUrl = "local"; # local redis over a unix socket (no extra port)
         storage.storageType = "local"; # attachments on disk (no S3/MinIO)
@@ -100,246 +100,248 @@ in
     ]; # end of services.outline
 
     # [oidc secret file placeholder] (the provisioner writes the real secret in)
-    systemd.tmpfiles.rules =
-      lib.optionals (oidcSecretFile != null && !lib.hasPrefix "/nix/store/" oidcSecretFile)
-        [
-          "f ${oidcSecretFile} 0640 root ${config.services.outline.group} -"
-        ]; # end of tmpfiles
+    systemd = {
+      tmpfiles.rules =
+        lib.optionals (oidcSecretFile != null && !lib.hasPrefix "/nix/store/" oidcSecretFile)
+          [
+            "f ${oidcSecretFile} 0640 root ${config.services.outline.group} -"
+          ]; # end of tmpfiles
 
-    # [wire oidc into authentik: idempotent, self-healing provisioner]
-    systemd.services.outline-oidc-provision = lib.mkIf provision {
-      description = "outline: wire OIDC into authentik (idempotent)";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "authentik.service" ];
-      wants = [ "authentik.service" ];
-      path = [
-        pkgs.curl
-        pkgs.jq
-        pkgs.openssl
-        pkgs.coreutils
-        pkgs.systemd
-      ];
-      serviceConfig = {
-        Type = "oneshot";
-        PrivateTmp = true;
-      }; # end of serviceConfig
-      script = ''
-        set -euo pipefail
+      # [wire oidc into authentik: idempotent, self-healing provisioner]
+      services.outline-oidc-provision = lib.mkIf provision {
+        description = "outline: wire OIDC into authentik (idempotent)";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "authentik.service" ];
+        wants = [ "authentik.service" ];
+        path = [
+          pkgs.curl
+          pkgs.jq
+          pkgs.openssl
+          pkgs.coreutils
+          pkgs.systemd
+        ];
+        serviceConfig = {
+          Type = "oneshot";
+          PrivateTmp = true;
+        }; # end of serviceConfig
+        script = ''
+          set -euo pipefail
 
-        # --[inputs (from nix)]--
-        CLIENT_ID=${lib.escapeShellArg oidcClientId}
-        SECRET_FILE=${lib.escapeShellArg oidcSecretFile}
-        CALLBACK=${lib.escapeShellArg callback}
-        ENV_FILE=${lib.escapeShellArg authentikCfg.environmentFile}
-        API_BASE="http://localhost:${toString authentikCfg.port}"
-        OUTLINE_GROUP=${lib.escapeShellArg config.services.outline.group}
-        SSL_CERT_FILE=${if sslCertPath != null then lib.escapeShellArg sslCertPath else "\"\""}
-        SSL_KEY_FILE=${if sslKeyPath != null then lib.escapeShellArg sslKeyPath else "\"\""}
-        PROV_NAME="outline"
-        APP_SLUG="outline"
-        KEY_NAME="jar-outline-oidc-signing"
-        EMAIL_MAP_NAME="jar: outline email (verified)"
-        FLOW_SLUG="default-provider-authorization-implicit-consent"
-        IVAL_FLOW_SLUG="default-provider-invalidation-flow"
+          # --[inputs (from nix)]--
+          CLIENT_ID=${lib.escapeShellArg oidcClientId}
+          SECRET_FILE=${lib.escapeShellArg oidcSecretFile}
+          CALLBACK=${lib.escapeShellArg callback}
+          ENV_FILE=${lib.escapeShellArg authentikCfg.environmentFile}
+          API_BASE="http://localhost:${toString authentikCfg.port}"
+          OUTLINE_GROUP=${lib.escapeShellArg config.services.outline.group}
+          SSL_CERT_FILE=${if sslCertPath != null then lib.escapeShellArg sslCertPath else "\"\""}
+          SSL_KEY_FILE=${if sslKeyPath != null then lib.escapeShellArg sslKeyPath else "\"\""}
+          PROV_NAME="outline"
+          APP_SLUG="outline"
+          KEY_NAME="jar-outline-oidc-signing"
+          EMAIL_MAP_NAME="jar: outline email (verified)"
+          FLOW_SLUG="default-provider-authorization-implicit-consent"
+          IVAL_FLOW_SLUG="default-provider-invalidation-flow"
 
-        # --[tls certs: outline 1.9 oidc refuses secure cookies over http]--
-        # self-signed, minted once, kept as base64 one-liners (outline's ssl
-        # env format); swap for real certs at the same paths when a domain +
-        # acme arrive. runs before the early-exit so a later https flip still
-        # generates them.
-        if [ -n "$SSL_CERT_FILE" ] && [ -n "$SSL_KEY_FILE" ]; then
-          if [ ! -s "$SSL_CERT_FILE" ] || [ ! -s "$SSL_KEY_FILE" ]; then
-            mkdir -p "$(dirname "$SSL_CERT_FILE")" "$(dirname "$SSL_KEY_FILE")"
-            TLS_HOST=$(printf '%s' "$CALLBACK" | sed -E 's#^https?://([^:/]+).*#\1#')
+          # --[tls certs: outline 1.9 oidc refuses secure cookies over http]--
+          # self-signed, minted once, kept as base64 one-liners (outline's ssl
+          # env format); swap for real certs at the same paths when a domain +
+          # acme arrive. runs before the early-exit so a later https flip still
+          # generates them.
+          if [ -n "$SSL_CERT_FILE" ] && [ -n "$SSL_KEY_FILE" ]; then
+            if [ ! -s "$SSL_CERT_FILE" ] || [ ! -s "$SSL_KEY_FILE" ]; then
+              mkdir -p "$(dirname "$SSL_CERT_FILE")" "$(dirname "$SSL_KEY_FILE")"
+              TLS_HOST=$(printf '%s' "$CALLBACK" | sed -E 's#^https?://([^:/]+).*#\1#')
+              TMPD=$(mktemp -d)
+              openssl req -x509 -newkey rsa:2048 -nodes -days 3650 \
+                -subj "/CN=$TLS_HOST" \
+                -addext "subjectAltName=DNS:$TLS_HOST,DNS:$TLS_HOST.local" \
+                -keyout "$TMPD/key.pem" -out "$TMPD/cert.pem" 2>/dev/null
+              openssl base64 -A -in "$TMPD/cert.pem" -out "$SSL_CERT_FILE"
+              openssl base64 -A -in "$TMPD/key.pem" -out "$SSL_KEY_FILE"
+              rm -rf "$TMPD"
+            fi
+            chown root:"$OUTLINE_GROUP" "$SSL_CERT_FILE" "$SSL_KEY_FILE"
+            chmod 0640 "$SSL_CERT_FILE" "$SSL_KEY_FILE"
+          fi
+
+          # --[already provisioned? instant exit]--
+          if [ -s "$SECRET_FILE" ]; then
+            echo "outline-oidc-provision: already provisioned, nothing to do"
+            exit 0
+          fi
+
+          # --[bootstrap token from authentik's root-only env file]--
+          TOKEN=$(sed -n 's/^AUTHENTIK_BOOTSTRAP_TOKEN=//p' "$ENV_FILE" || true)
+          if [ -z "$TOKEN" ]; then
+            echo "outline-oidc-provision: no AUTHENTIK_BOOTSTRAP_TOKEN in $ENV_FILE" >&2
+            exit 1
+          fi
+
+          # --[api helpers]-- (max-time: a hung connection must never wedge this unit)
+          api_get() {
+            curl -s --max-time 30 -H "Authorization: Bearer $TOKEN" "$1" || true
+          }
+          post_json() {
+            curl -s --max-time 30 -X POST -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" -d "$2" "$1" || true
+          }
+          patch_json() {
+            curl -s --max-time 30 -X PATCH -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" -d "$2" "$1" || true
+          }
+          # first_pk URL KEY VALUE -> pk of first list entry where entry[KEY] == VALUE
+          first_pk() {
+            api_get "$1" | jq -r --arg k "$2" --arg v "$3" '.results[]? | select(.[$k]==$v) | .pk' | head -n1 || true
+          }
+
+          # --[wait for authentik: token accepted + default blueprints imported]--
+          FLOW_PK=""
+          AUTH_REJECTS=0
+          for i in $(seq 1 60); do
+            CODE=$(curl -s --max-time 15 -o /dev/null -w '%{http_code}' -H "Authorization: Bearer $TOKEN" "$API_BASE/api/v3/core/applications/" 2>/dev/null || true)
+            CODE=$(printf '%s' "$CODE" | tr -d '[:space:]')
+            if [ -z "$CODE" ]; then CODE="000"; fi
+            if [ "$CODE" = "401" ] || [ "$CODE" = "403" ]; then
+              # authentik can answer 401/403 briefly while it finishes booting,
+              # so only give up after several consecutive rejections
+              AUTH_REJECTS=$((AUTH_REJECTS + 1))
+              if [ "$AUTH_REJECTS" -ge 5 ]; then
+                echo "outline-oidc-provision: bootstrap token rejected ($CODE, $AUTH_REJECTS tries); was authentik's first start done without it?" >&2
+                exit 1
+              fi
+            else
+              AUTH_REJECTS=0
+            fi
+            if [ "$CODE" = "200" ]; then
+              FLOW_PK=$(api_get "$API_BASE/api/v3/flows/instances/" | jq -r --arg s "$FLOW_SLUG" '.results[]? | select(.slug==$s) | .pk' | head -n1 || true)
+              if [ -n "$FLOW_PK" ]; then break; fi
+            fi
+            echo "outline-oidc-provision: waiting for authentik ($i/60)..."
+            sleep 10
+          done
+          if [ -z "$FLOW_PK" ]; then
+            echo "outline-oidc-provision: authentik never became ready" >&2
+            exit 1
+          fi
+
+          # --[invalidation flow (required provider field since 2024.x)]--
+          IVAL_FLOW_PK=$(api_get "$API_BASE/api/v3/flows/instances/" | jq -r --arg s "$IVAL_FLOW_SLUG" '.results[]? | select(.slug==$s) | .pk' | head -n1 || true)
+          if [ -z "$IVAL_FLOW_PK" ]; then
+            echo "outline-oidc-provision: $IVAL_FLOW_SLUG not found (did the worker import default blueprints?)" >&2
+            exit 1
+          fi
+
+          # --[signing keypair (RS256 id tokens; created if missing)]--
+          KEY_PK=$(first_pk "$API_BASE/api/v3/crypto/certificatekeypairs/" name "$KEY_NAME")
+          if [ -z "$KEY_PK" ]; then
             TMPD=$(mktemp -d)
             openssl req -x509 -newkey rsa:2048 -nodes -days 3650 \
-              -subj "/CN=$TLS_HOST" \
-              -addext "subjectAltName=DNS:$TLS_HOST,DNS:$TLS_HOST.local" \
-              -keyout "$TMPD/key.pem" -out "$TMPD/cert.pem" 2>/dev/null
-            openssl base64 -A -in "$TMPD/cert.pem" -out "$SSL_CERT_FILE"
-            openssl base64 -A -in "$TMPD/key.pem" -out "$SSL_KEY_FILE"
+              -subj "/CN=jar outline oidc signing" -keyout "$TMPD/key.pem" -out "$TMPD/cert.pem" 2>/dev/null
+            RESP=$(post_json "$API_BASE/api/v3/crypto/certificatekeypairs/" "$(jq -n \
+              --arg n "$KEY_NAME" --arg c "$(cat "$TMPD/cert.pem")" --arg k "$(cat "$TMPD/key.pem")" \
+              '{name:$n, certificate_data:$c, key_data:$k}')")
             rm -rf "$TMPD"
+            KEY_PK=$(printf '%s' "$RESP" | jq -r '.pk // empty' 2>/dev/null || true)
+            if [ -z "$KEY_PK" ]; then
+              echo "outline-oidc-provision: keypair create failed: $RESP" >&2
+              exit 1
+            fi
           fi
-          chown root:"$OUTLINE_GROUP" "$SSL_CERT_FILE" "$SSL_KEY_FILE"
-          chmod 0640 "$SSL_CERT_FILE" "$SSL_KEY_FILE"
-        fi
 
-        # --[already provisioned? instant exit]--
-        if [ -s "$SECRET_FILE" ]; then
-          echo "outline-oidc-provision: already provisioned, nothing to do"
-          exit 0
-        fi
+          # --[custom email scope mapping (outline needs email_verified: true)]--
+          # NOTE: 2026.8 moved scope mappings to propertymappings/provider/scope
+          MAP_PK=$(first_pk "$API_BASE/api/v3/propertymappings/provider/scope/" name "$EMAIL_MAP_NAME")
+          if [ -z "$MAP_PK" ]; then
+            RESP=$(post_json "$API_BASE/api/v3/propertymappings/provider/scope/" "$(jq -n \
+              --arg n "$EMAIL_MAP_NAME" \
+              --arg e 'return {"email": request.user.email, "email_verified": True}' \
+              '{name:$n, scope_name:"email", description:"email + email_verified=true (outline requirement)", expression:$e}')")
+            MAP_PK=$(printf '%s' "$RESP" | jq -r '.pk // empty' 2>/dev/null || true)
+            if [ -z "$MAP_PK" ]; then
+              echo "outline-oidc-provision: scope mapping create failed: $RESP" >&2
+              exit 1
+            fi
+          fi
 
-        # --[bootstrap token from authentik's root-only env file]--
-        TOKEN=$(sed -n 's/^AUTHENTIK_BOOTSTRAP_TOKEN=//p' "$ENV_FILE" || true)
-        if [ -z "$TOKEN" ]; then
-          echo "outline-oidc-provision: no AUTHENTIK_BOOTSTRAP_TOKEN in $ENV_FILE" >&2
-          exit 1
-        fi
+          # --[scopes: default openid+profile mappings plus the custom email one]--
+          DEF_PKS=$(api_get "$API_BASE/api/v3/propertymappings/provider/scope/" | jq -r \
+            '[.results[]? | select(.scope_name=="openid" or .scope_name=="profile") | .pk]' 2>/dev/null || true)
+          if [ -z "$DEF_PKS" ] || [ "$DEF_PKS" = "[]" ]; then
+            echo "outline-oidc-provision: no openid/profile scope mappings found (did the worker import default blueprints?)" >&2
+            exit 1
+          fi
+          PROPS=$(jq -n --argjson d "$DEF_PKS" --arg m "$MAP_PK" '$d + [$m]')
 
-        # --[api helpers]-- (max-time: a hung connection must never wedge this unit)
-        api_get() {
-          curl -s --max-time 30 -H "Authorization: Bearer $TOKEN" "$1" || true
-        }
-        post_json() {
-          curl -s --max-time 30 -X POST -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" -d "$2" "$1" || true
-        }
-        patch_json() {
-          curl -s --max-time 30 -X PATCH -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" -d "$2" "$1" || true
-        }
-        # first_pk URL KEY VALUE -> pk of first list entry where entry[KEY] == VALUE
-        first_pk() {
-          api_get "$1" | jq -r --arg k "$2" --arg v "$3" '.results[]? | select(.[$k]==$v) | .pk' | head -n1 || true
-        }
-
-        # --[wait for authentik: token accepted + default blueprints imported]--
-        FLOW_PK=""
-        AUTH_REJECTS=0
-        for i in $(seq 1 60); do
-          CODE=$(curl -s --max-time 15 -o /dev/null -w '%{http_code}' -H "Authorization: Bearer $TOKEN" "$API_BASE/api/v3/core/applications/" 2>/dev/null || true)
-          CODE=$(printf '%s' "$CODE" | tr -d '[:space:]')
-          if [ -z "$CODE" ]; then CODE="000"; fi
-          if [ "$CODE" = "401" ] || [ "$CODE" = "403" ]; then
-            # authentik can answer 401/403 briefly while it finishes booting,
-            # so only give up after several consecutive rejections
-            AUTH_REJECTS=$((AUTH_REJECTS + 1))
-            if [ "$AUTH_REJECTS" -ge 5 ]; then
-              echo "outline-oidc-provision: bootstrap token rejected ($CODE, $AUTH_REJECTS tries); was authentik's first start done without it?" >&2
+          # --[the oauth2 provider itself]--
+          CLIENT_SECRET=$(openssl rand -hex 32)
+          PAYLOAD=$(jq -n \
+            --arg name "$PROV_NAME" --arg flow "$FLOW_PK" --arg iflow "$IVAL_FLOW_PK" \
+            --arg cid "$CLIENT_ID" --arg cs "$CLIENT_SECRET" \
+            --arg cb "$CALLBACK" --arg key "$KEY_PK" --argjson props "$PROPS" \
+            '{
+              name: $name,
+              authorization_flow: $flow,
+              invalidation_flow: $iflow,
+              client_type: "confidential",
+              grant_types: ["authorization_code", "refresh_token"],
+              client_id: $cid,
+              client_secret: $cs,
+              redirect_uris: [{matching_mode: "strict", url: $cb, redirect_uri_type: "authorization"}],
+              sub_mode: "user_username",
+              include_claims_in_id_token: true,
+              signing_key: (if $key == "" then null else $key end),
+              property_mappings: $props
+            }')
+          PROV_PK=$(first_pk "$API_BASE/api/v3/providers/oauth2/" name "$PROV_NAME")
+          if [ -n "$PROV_PK" ]; then
+            RESP=$(patch_json "$API_BASE/api/v3/providers/oauth2/$PROV_PK/" "$PAYLOAD")
+            if ! printf '%s' "$RESP" | jq -e '.pk' >/dev/null 2>&1; then
+              echo "outline-oidc-provision: provider patch failed: $RESP" >&2
               exit 1
             fi
           else
-            AUTH_REJECTS=0
+            RESP=$(post_json "$API_BASE/api/v3/providers/oauth2/" "$PAYLOAD")
+            PROV_PK=$(printf '%s' "$RESP" | jq -r '.pk // empty' 2>/dev/null || true)
+            if [ -z "$PROV_PK" ]; then
+              echo "outline-oidc-provision: provider create failed: $RESP" >&2
+              exit 1
+            fi
           fi
-          if [ "$CODE" = "200" ]; then
-            FLOW_PK=$(api_get "$API_BASE/api/v3/flows/instances/" | jq -r --arg s "$FLOW_SLUG" '.results[]? | select(.slug==$s) | .pk' | head -n1 || true)
-            if [ -n "$FLOW_PK" ]; then break; fi
+
+          # --[the application entry that exposes the provider]--
+          APP_PK=$(first_pk "$API_BASE/api/v3/core/applications/" slug "$APP_SLUG")
+          APP_PAYLOAD=$(jq -n --arg p "$PROV_PK" '{name:"Outline", slug:"outline", provider:$p}')
+          if [ -n "$APP_PK" ]; then
+            RESP=$(patch_json "$API_BASE/api/v3/core/applications/$APP_PK/" "$APP_PAYLOAD")
+            if ! printf '%s' "$RESP" | jq -e '.pk' >/dev/null 2>&1; then
+              echo "outline-oidc-provision: application patch failed: $RESP" >&2
+              exit 1
+            fi
+          else
+            RESP=$(post_json "$API_BASE/api/v3/core/applications/" "$APP_PAYLOAD")
+            if ! printf '%s' "$RESP" | jq -e '.pk' >/dev/null; then
+              echo "outline-oidc-provision: application create failed: $RESP" >&2
+              exit 1
+            fi
           fi
-          echo "outline-oidc-provision: waiting for authentik ($i/60)..."
-          sleep 10
-        done
-        if [ -z "$FLOW_PK" ]; then
-          echo "outline-oidc-provision: authentik never became ready" >&2
-          exit 1
-        fi
 
-        # --[invalidation flow (required provider field since 2024.x)]--
-        IVAL_FLOW_PK=$(api_get "$API_BASE/api/v3/flows/instances/" | jq -r --arg s "$IVAL_FLOW_SLUG" '.results[]? | select(.slug==$s) | .pk' | head -n1 || true)
-        if [ -z "$IVAL_FLOW_PK" ]; then
-          echo "outline-oidc-provision: $IVAL_FLOW_SLUG not found (did the worker import default blueprints?)" >&2
-          exit 1
-        fi
-
-        # --[signing keypair (RS256 id tokens; created if missing)]--
-        KEY_PK=$(first_pk "$API_BASE/api/v3/crypto/certificatekeypairs/" name "$KEY_NAME")
-        if [ -z "$KEY_PK" ]; then
-          TMPD=$(mktemp -d)
-          openssl req -x509 -newkey rsa:2048 -nodes -days 3650 \
-            -subj "/CN=jar outline oidc signing" -keyout "$TMPD/key.pem" -out "$TMPD/cert.pem" 2>/dev/null
-          RESP=$(post_json "$API_BASE/api/v3/crypto/certificatekeypairs/" "$(jq -n \
-            --arg n "$KEY_NAME" --arg c "$(cat "$TMPD/cert.pem")" --arg k "$(cat "$TMPD/key.pem")" \
-            '{name:$n, certificate_data:$c, key_data:$k}')")
-          rm -rf "$TMPD"
-          KEY_PK=$(printf '%s' "$RESP" | jq -r '.pk // empty' 2>/dev/null || true)
-          if [ -z "$KEY_PK" ]; then
-            echo "outline-oidc-provision: keypair create failed: $RESP" >&2
-            exit 1
+          # --[hand the secret to outline, then restart it to pick the secret up]--
+          if [ ! -f "$SECRET_FILE" ]; then
+            install -D -m 0640 -o root -g "$OUTLINE_GROUP" /dev/null "$SECRET_FILE"
           fi
-        fi
+          printf '%s' "$CLIENT_SECRET" > "$SECRET_FILE"
+          echo "outline-oidc-provision: outline <-> authentik wired (client: $CLIENT_ID)"
+          # --no-block: outline orders itself after this unit, so waiting on its
+          # restart from in here would deadlock the activation transaction
+          systemctl restart --no-block outline.service
+        ''; # end of script
+      }; # end of outline-oidc-provision
 
-        # --[custom email scope mapping (outline needs email_verified: true)]--
-        # NOTE: 2026.8 moved scope mappings to propertymappings/provider/scope
-        MAP_PK=$(first_pk "$API_BASE/api/v3/propertymappings/provider/scope/" name "$EMAIL_MAP_NAME")
-        if [ -z "$MAP_PK" ]; then
-          RESP=$(post_json "$API_BASE/api/v3/propertymappings/provider/scope/" "$(jq -n \
-            --arg n "$EMAIL_MAP_NAME" \
-            --arg e 'return {"email": request.user.email, "email_verified": True}' \
-            '{name:$n, scope_name:"email", description:"email + email_verified=true (outline requirement)", expression:$e}')")
-          MAP_PK=$(printf '%s' "$RESP" | jq -r '.pk // empty' 2>/dev/null || true)
-          if [ -z "$MAP_PK" ]; then
-            echo "outline-oidc-provision: scope mapping create failed: $RESP" >&2
-            exit 1
-          fi
-        fi
-
-        # --[scopes: default openid+profile mappings plus the custom email one]--
-        DEF_PKS=$(api_get "$API_BASE/api/v3/propertymappings/provider/scope/" | jq -r \
-          '[.results[]? | select(.scope_name=="openid" or .scope_name=="profile") | .pk]' 2>/dev/null || true)
-        if [ -z "$DEF_PKS" ] || [ "$DEF_PKS" = "[]" ]; then
-          echo "outline-oidc-provision: no openid/profile scope mappings found (did the worker import default blueprints?)" >&2
-          exit 1
-        fi
-        PROPS=$(jq -n --argjson d "$DEF_PKS" --arg m "$MAP_PK" '$d + [$m]')
-
-        # --[the oauth2 provider itself]--
-        CLIENT_SECRET=$(openssl rand -hex 32)
-        PAYLOAD=$(jq -n \
-          --arg name "$PROV_NAME" --arg flow "$FLOW_PK" --arg iflow "$IVAL_FLOW_PK" \
-          --arg cid "$CLIENT_ID" --arg cs "$CLIENT_SECRET" \
-          --arg cb "$CALLBACK" --arg key "$KEY_PK" --argjson props "$PROPS" \
-          '{
-            name: $name,
-            authorization_flow: $flow,
-            invalidation_flow: $iflow,
-            client_type: "confidential",
-            grant_types: ["authorization_code", "refresh_token"],
-            client_id: $cid,
-            client_secret: $cs,
-            redirect_uris: [{matching_mode: "strict", url: $cb, redirect_uri_type: "authorization"}],
-            sub_mode: "user_username",
-            include_claims_in_id_token: true,
-            signing_key: (if $key == "" then null else $key end),
-            property_mappings: $props
-          }')
-        PROV_PK=$(first_pk "$API_BASE/api/v3/providers/oauth2/" name "$PROV_NAME")
-        if [ -n "$PROV_PK" ]; then
-          RESP=$(patch_json "$API_BASE/api/v3/providers/oauth2/$PROV_PK/" "$PAYLOAD")
-          if ! printf '%s' "$RESP" | jq -e '.pk' >/dev/null 2>&1; then
-            echo "outline-oidc-provision: provider patch failed: $RESP" >&2
-            exit 1
-          fi
-        else
-          RESP=$(post_json "$API_BASE/api/v3/providers/oauth2/" "$PAYLOAD")
-          PROV_PK=$(printf '%s' "$RESP" | jq -r '.pk // empty' 2>/dev/null || true)
-          if [ -z "$PROV_PK" ]; then
-            echo "outline-oidc-provision: provider create failed: $RESP" >&2
-            exit 1
-          fi
-        fi
-
-        # --[the application entry that exposes the provider]--
-        APP_PK=$(first_pk "$API_BASE/api/v3/core/applications/" slug "$APP_SLUG")
-        APP_PAYLOAD=$(jq -n --arg p "$PROV_PK" '{name:"Outline", slug:"outline", provider:$p}')
-        if [ -n "$APP_PK" ]; then
-          RESP=$(patch_json "$API_BASE/api/v3/core/applications/$APP_PK/" "$APP_PAYLOAD")
-          if ! printf '%s' "$RESP" | jq -e '.pk' >/dev/null 2>&1; then
-            echo "outline-oidc-provision: application patch failed: $RESP" >&2
-            exit 1
-          fi
-        else
-          RESP=$(post_json "$API_BASE/api/v3/core/applications/" "$APP_PAYLOAD")
-          if ! printf '%s' "$RESP" | jq -e '.pk' >/dev/null; then
-            echo "outline-oidc-provision: application create failed: $RESP" >&2
-            exit 1
-          fi
-        fi
-
-        # --[hand the secret to outline, then restart it to pick the secret up]--
-        if [ ! -f "$SECRET_FILE" ]; then
-          install -D -m 0640 -o root -g "$OUTLINE_GROUP" /dev/null "$SECRET_FILE"
-        fi
-        printf '%s' "$CLIENT_SECRET" > "$SECRET_FILE"
-        echo "outline-oidc-provision: outline <-> authentik wired (client: $CLIENT_ID)"
-        # --no-block: outline orders itself after this unit, so waiting on its
-        # restart from in here would deadlock the activation transaction
-        systemctl restart --no-block outline.service
-      ''; # end of script
-    }; # end of outline-oidc-provision
-
-    # [outline waits for provisioning before its first start]
-    systemd.services.outline = lib.mkIf provision {
-      after = [ "outline-oidc-provision.service" ];
-      wants = [ "outline-oidc-provision.service" ];
-    }; # end of outline ordering
+      # [outline waits for provisioning before its first start]
+      services.outline = lib.mkIf provision {
+        after = [ "outline-oidc-provision.service" ];
+        wants = [ "outline-oidc-provision.service" ];
+      }; # end of outline ordering
+    }; # end of systemd
 
     # [firewall]
     networking.firewall.allowedTCPPorts = [ cfg.port ];

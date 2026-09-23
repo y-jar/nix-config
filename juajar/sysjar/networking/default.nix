@@ -11,7 +11,7 @@
   lib,
   ...
 }:
-# NOTE: this will be changes to a more modular layout, for now, this is a simple default config
+# NOTE: planned to move to a more modular layout; for now this is a simple default config
 let
   vpncfg = config.sysset.server.vpn;
 
@@ -25,7 +25,7 @@ let
   fleetRaw = lib.filterAttrs (
     name: type: type == "directory" && builtins.pathExists (fleetRoot + "/${name}/net.nix")
   ) (builtins.readDir fleetRoot);
-  fleet = lib.filterAttrs (name: data: data ? ip && data.ip != null) (
+  fleet = lib.filterAttrs (_: data: data ? ip && data.ip != null) (
     lib.mapAttrs (name: _: import (fleetRoot + "/${name}/net.nix")) fleetRaw
   );
 
@@ -45,7 +45,7 @@ let
 
   # hosts with a pinned key get the full treatment (dns pin + known_hosts
   # + ssh block); hosts with hostKey = null only get the dns pin.
-  pinned = lib.filterAttrs (name: data: data ? hostKey && data.hostKey != null) known;
+  pinned = lib.filterAttrs (_: data: data ? hostKey && data.hostKey != null) known;
 in
 {
   options = {
@@ -70,10 +70,25 @@ in
     ];
 
     # [Enable the OpenSSH daemon.]
-    services.openssh.enable = true;
+    services = {
+      openssh.enable = true;
+      # [for the dynamic seaching that other distros use.]
+      avahi = {
+        enable = true;
+        nssmdns4 = true;
+        openFirewall = true;
+        publish = {
+          enable = true;
+          addresses = true;
+          domain = true;
+        }; # end of publish
+      }; # end of avahi
+      # [vpn]
+      mullvad-vpn.enable = vpncfg.mullvad.enable; # mullvad vpn
+    }; # end of services
     networking = {
-      # NOTE: If hostname is changed, be sure to match it on flake.nix and in the shell alias in
-      # 	~/nix-config/modules/home/shell/zsh.nix
+      # NOTE: If hostname is changed, be sure to match it on flake.nix and in the shell aliases in
+      #   juajar/liijar/shell/aliases.nix
       networkmanager.enable = true;
       hostName = "${hostnm}"; # sets HOSTNAME
       #[ for resolving local ip info]
@@ -160,22 +175,5 @@ in
         "net.core.default_qdisc" = "cake";
       };
     };
-
-    # [for the dynamic seaching that other distros use.]
-    services.avahi = {
-      enable = true;
-      nssmdns4 = true;
-      openFirewall = true;
-      publish = {
-        enable = true;
-        addresses = true;
-        domain = true;
-      }; # end of publish
-    }; # end of avahi
-
-    # [vpn]
-    services = {
-      mullvad-vpn.enable = vpncfg.mullvad.enable; # mullvad vpn
-    }; # end of services
   }; # end of config
 }

@@ -9,7 +9,6 @@
   config,
   inputs,
   lib,
-  pkgs,
   ...
 }:
 {

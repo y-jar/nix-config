@@ -3,7 +3,7 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Installs system management helper scripts (nhu/nru/updatejar).
+# goal: Installs system management helper scripts (nru/updatejar).
 # -=-=-=-=-=-=-=-=-=-=-=
 # modules-jar/sys-bin/load-scripts.nix
 { pkgs, ... }:
@@ -14,10 +14,6 @@ let
   # =-=-=[Scripts]
   # TEMPLATE: { name = "TEMPLATE"; path = ./scriptsbin/TEMPLATE.sh; }
   scriptList = [
-    {
-      name = "nhu";
-      path = ./scriptsbin/nhu.sh;
-    }
     {
       name = "nru";
       path = ./scriptsbin/nru.sh;

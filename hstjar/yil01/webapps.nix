@@ -8,7 +8,7 @@
 # Hjem flavor of the webapp sheet. Same data shape as sysset.webapps so the
 # shared system module (autostart) + juajar/liijar/webapps build launchers/entries.
 # -=-=-=-=-=-=-=-=-=-=-=
-{ lib, ... }:
+{ ... }:
 
 {
   sysset.webapps = {

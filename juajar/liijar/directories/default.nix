@@ -11,8 +11,6 @@
 # =-=-=[end directories] =-=-=
 
 {
-  config,
-  lib,
   ...
 }:
 let

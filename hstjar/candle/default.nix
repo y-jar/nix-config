@@ -5,12 +5,7 @@
 # -=-=-=-=-=-=-=-=-=-=-=
 # goal: Host candle: imports system + hardware + boot for this machine.
 # -=-=-=-=-=-=-=-=-=-=-=
-{
-  inputs,
-  hostnm,
-  config,
-  ...
-}:
+{ ... }:
 
 {
   imports = [

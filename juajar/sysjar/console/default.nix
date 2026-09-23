@@ -23,8 +23,8 @@ in
 
   config = lib.mkIf (cfg.font != null) {
     console = {
-      font = cfg.font;
-      packages = with pkgs; [ terminus_font ];
+      inherit (cfg) font;
+      packages = [ pkgs.terminus_font ];
     }; # end of console config
   }; # end of config
 }

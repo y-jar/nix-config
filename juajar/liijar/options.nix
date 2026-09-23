@@ -172,7 +172,7 @@
         description = "Espanso match vars (e.g. date/time), used as {{name}} in replacements";
       };
       settings = lib.mkOption {
-        type = (pkgs.formats.yaml { }).type;
+        inherit (pkgs.formats.yaml { }) type;
         default = { };
         description = "Extra espanso config/default.yml settings";
       };

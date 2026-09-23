@@ -38,11 +38,11 @@ in
       support32Bit = true;
     }; # end of services.pulseaudio
 
-    environment.systemPackages = with pkgs; [
-      pulseaudioFull # full pulseaudio libs for compatibility
-      easyeffects # audio mixer
-      qpwgraph # Qt graph manager for PipeWire, similar to QjackCtls
-      pavucontrol # PulseAudio Volume Control
+    environment.systemPackages = [
+      pkgs.pulseaudioFull # full pulseaudio libs for compatibility
+      pkgs.easyeffects # audio mixer
+      pkgs.qpwgraph # Qt graph manager for PipeWire, similar to QjackCtls
+      pkgs.pavucontrol # PulseAudio Volume Control
     ]; # end of environment.systemPackages
   }; # end of config
 }

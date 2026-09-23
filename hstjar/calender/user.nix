@@ -84,7 +84,7 @@
       discord.enable = true;
       halloy.enable = false;
     };
-    espanso = (import ../espansoconf.nix { }); # espanso text expander
+    espanso = import ../espansoconf.nix { }; # espanso text expander
     flatpak.enable = false; # sets flatpak and adds bazaar
     # [file explorers]
     nautilus.enable = true; # sets nautilus

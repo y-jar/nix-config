@@ -3,14 +3,9 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Host 0_TEMPLATE: imports system + hardware + boot for this machine.
+# goal: Host yil01: imports system + hardware + boot for this machine.
 # -=-=-=-=-=-=-=-=-=-=-=
-{
-  inputs,
-  hostnm,
-  config,
-  ...
-}:
+{ ... }:
 
 {
   imports = [

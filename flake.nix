@@ -32,20 +32,6 @@
             ./hstjar/${hostName} # Host-specific directory entry [what happens here can depend on each system]
           ]; # end of modules
         }; # end of mkJar
-      # =-=-=[Systems that will be non x86_64-linux] [WIP]
-      urnJar =
-        { hostName, arch }:
-        nixpkgs.lib.nixosSystem {
-          system = arch; # Dynamically sets the architecture
-          specialArgs = {
-            inherit inputs self;
-            hostnm = hostName;
-          }; # end of special args
-          modules = [
-            ./juajar/sysjar # Entry for The System
-            ./hstjar/${hostName} # Entry for The host
-          ]; # end of modules
-        }; # end of urnJar
     in
     {
       # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=!!HOSTS!!=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -64,11 +50,7 @@
         vmjar = mkJar "vmjar"; # Virtual config
         yil01 = mkJar "yil01"; # Thinkpad Laptop thats super cute
         petrichor = mkJar "petrichor"; # kwaytea's Pewta
-        yil02 = mkJar "yil01"; # yil01 evaluated under the same sheet (live test twin)
         calender = mkJar "calender"; # main pc
-
-        # ========[for non x86 systems..] [WIP]
-        # TEMPLATE  = urnJar { hostName = "TEMPLATE"; arch = "aarch64-linux"; };
 
         # ========[ISO / recovery]
         iso = nixpkgs.lib.nixosSystem {
@@ -76,14 +58,14 @@
           modules = [
             "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
             ({ pkgs, lib, ... }: {
-              environment.systemPackages = with pkgs; [
-                git
-                vim
-                nh
-                fastfetch
-                neovim
-                gum
-                fzf
+              environment.systemPackages = [
+                pkgs.git
+                pkgs.vim
+                pkgs.nh
+                pkgs.fastfetch
+                pkgs.neovim
+                pkgs.gum
+                pkgs.fzf
                 (pkgs.writeShellScriptBin "jarhelp" (builtins.readFile ./resjar/nixbin/jarhelp))
                 (pkgs.writeShellScriptBin "nixinstall" (builtins.readFile ./resjar/nixbin/nixinstall))
               ];
@@ -103,14 +85,14 @@
           modules = [
             "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-graphical-gnome.nix"
             ({ pkgs, lib, ... }: {
-              environment.systemPackages = with pkgs; [
-                git
-                vim
-                nh
-                fastfetch
-                neovim
-                gum
-                fzf
+              environment.systemPackages = [
+                pkgs.git
+                pkgs.vim
+                pkgs.nh
+                pkgs.fastfetch
+                pkgs.neovim
+                pkgs.gum
+                pkgs.fzf
                 (pkgs.writeShellScriptBin "jarhelp" (builtins.readFile ./resjar/nixbin/jarhelp))
                 (pkgs.writeShellScriptBin "nixinstall" (builtins.readFile ./resjar/nixbin/nixinstall))
               ];
@@ -126,9 +108,13 @@
       }; # end of nixosConfigurations
 
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt; # nix fmt
-      packages.x86_64-linux.iso = self.nixosConfigurations.iso.config.system.build.isoImage; # nix build .#iso
-      packages.x86_64-linux.iso-gnome = self.nixosConfigurations.iso-gnome.config.system.build.isoImage; # nix build .#iso-gnome
-      packages.x86_64-linux.rsakura = inputs.rsakura.packages.x86_64-linux.default; # nix shell ~/nix-config#rsakura
+      packages = {
+        x86_64-linux = {
+          iso = self.nixosConfigurations.iso.config.system.build.isoImage; # nix build .#iso
+          iso-gnome = self.nixosConfigurations.iso-gnome.config.system.build.isoImage; # nix build .#iso-gnome
+          rsakura = inputs.rsakura.packages.x86_64-linux.default; # nix shell ~/nix-config#rsakura
+        };
+      };
     }; # end of flake outputs
   # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=[INPUTS]=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   inputs = {

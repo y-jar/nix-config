@@ -24,8 +24,8 @@ in
     programs.opencode = {
       enable = true;
       package = pkgs.opencode;
-      extraPackages = with pkgs; [
-        uv # rust based python package installer
+      extraPackages = [
+        pkgs.uv # rust based python package installer
       ]; # end of extraPackages
 
       # global instructions written to ~/.config/opencode/AGENTS.md

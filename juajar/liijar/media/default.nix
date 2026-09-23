@@ -36,10 +36,10 @@ let
       "-w"
     ];
 
-    meta = with lib; {
+    meta = {
       description = "A CLI for downloading webtoon.com comics as PDF or CBZ";
       homepage = "https://github.com/robinovitch61/webtoon-dl";
-      license = licenses.mit;
+      license = lib.licenses.mit;
       mainProgram = "webtoon-dl";
     };
   };
@@ -49,46 +49,31 @@ let
     lib.optionals (cfg.enable && cfg.mpv) [
       pkgs.mpv
     ]
-    ++ lib.optionals (cfg.enable && cfg.musicApps) (
-      with pkgs;
-      [
-        blanket # background noises
-        quodlibet # media player
-        gapless # lightweight GTK4 music player
-        spotify # music streaming (unfree) ~300miB
-      ]
-    )
-    ++ lib.optionals (cfg.enable && cfg.audioEditor) (
-      with pkgs;
-      [
-        audacity # audio editor
-      ]
-    )
-    ++ lib.optionals (cfg.enable && cfg.viewers) (
-      with pkgs;
-      [
-        yacreader # ebook/manga reader
-        constrict # file shrinker
-        anki # spaced-repetition flashcards
-      ]
-    )
-    ++ lib.optionals (cfg.enable && cfg.downloaders) (
-      with pkgs;
-      [
-        ffmpeg
-        yt-dlp # audio/video downloader
-        qbittorrent # torrent client
-        webtoonDl # webtoon.com comics as PDF/CBZ
-      ]
-    )
-    ++ lib.optionals (cfg.enable && cfg.defaultApps) (
-      with pkgs;
-      [
-        loupe # image viewer (GTK4/Rust, Wayland-native)
-        showtime # video player (GNOME)
-        file-roller # archive manager (GNOME)
-      ]
-    ); # end of mediaPackages
+    ++ lib.optionals (cfg.enable && cfg.musicApps) [
+      pkgs.blanket # background noises
+      pkgs.quodlibet # media player
+      pkgs.gapless # lightweight GTK4 music player
+      pkgs.spotify # music streaming (unfree) ~300miB
+    ]
+    ++ lib.optionals (cfg.enable && cfg.audioEditor) [
+      pkgs.audacity # audio editor
+    ]
+    ++ lib.optionals (cfg.enable && cfg.viewers) [
+      pkgs.yacreader # ebook/manga reader
+      pkgs.constrict # file shrinker
+      pkgs.anki # spaced-repetition flashcards
+    ]
+    ++ lib.optionals (cfg.enable && cfg.downloaders) [
+      pkgs.ffmpeg
+      pkgs.yt-dlp # audio/video downloader
+      pkgs.qbittorrent # torrent client
+      webtoonDl # webtoon.com comics as PDF/CBZ
+    ]
+    ++ lib.optionals (cfg.enable && cfg.defaultApps) [
+      pkgs.loupe # image viewer (GTK4/Rust, Wayland-native)
+      pkgs.showtime # video player (GNOME)
+      pkgs.file-roller # archive manager (GNOME)
+    ]; # end of mediaPackages
 
   mpvConf = pkgs.writeText "mpv.conf" ''
     profile=high-quality

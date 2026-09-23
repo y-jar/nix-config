@@ -33,15 +33,12 @@ in
         ++ lib.optionals cfg.obsidian.enable [ pkgs.obsidian ]
         ++ lib.optionals cfg.helix.enable [ pkgs.helix ]
         # editor extras (from the old home-manager module)
-        ++ lib.optionals cfg.enable (
-          with pkgs;
-          [
-            gnome-text-editor
-            lorem # Generate placeholder text
-            qownnotes # markdown app editor
-            buffer # Minimal editing space for all those things that don't need keeping
-          ]
-        );
+        ++ lib.optionals cfg.enable [
+          pkgs.gnome-text-editor
+          pkgs.lorem # Generate placeholder text
+          pkgs.qownnotes # markdown app editor
+          pkgs.buffer # Minimal editing space for all those things that don't need keeping
+        ];
     }
     (lib.mkIf cfg.helix.enable {
       files.".config/helix/config.toml".source = helixConfigToml;

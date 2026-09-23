@@ -10,7 +10,7 @@
 # browser = "chromium" | "firefox" | "librewolf" (null = default; app/pwa default chromium)
 # autostart = true -> launch at WM session start. icon null -> JarOnPar default.
 # -=-=-=-=-=-=-=-=-=-=-=
-{ lib, ... }:
+{ ... }:
 
 {
   sysset.webapps = {

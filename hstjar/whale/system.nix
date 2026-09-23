@@ -15,14 +15,9 @@
 #    you need!
 #
 # And remember, your configuration is yours to customize.
-# After you're done, head over to ./home.nix to configure your user!
+# After you're done, head over to ./user.nix to configure your user!
 #*/-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-{
-  inputs,
-  config,
-  lib,
-  ...
-}:
+{ ... }:
 {
   config = {
     system.stateVersion = "26.05"; # [CHANGE THIS]
@@ -118,11 +113,12 @@
       flatpak.enable = false; # sets flatpak in the system [still needs to be enabled in user.nix]
       gaming = {
         drivers = {
-          enable = true; # sets gaming drivers
+          enable = false; # headless server: no GPU, skip the driver stack
           amd.enable = false; # sets amd drivers
           intel.enable = false; # sets intel drivers
           nvidia.enable = false; # sets nvidia drivers (Vulkan + 32-bit)
         }; # end of drivers
+        codecs.enable = false; # GPU-less host: skip GStreamer/VA-API tooling
         steam.enable = false; # sets steam and associated libraries for gaming, but not more important drivers
       }; # end of gaming
       virtcam.enable = false; # sets virtual camera for things like OBS

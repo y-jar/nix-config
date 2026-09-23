@@ -9,13 +9,8 @@
 # - It's a checklist to fill out: enable what you need, leave the rest off.
 # - Replace every `PLEASECHANGEME_*` with real values.
 # - Set `system.stateVersion` to the NixOS version of first install.
-# - Pair options here with matching user toggles in ./home.nix.
-{
-  inputs,
-  config,
-  lib,
-  ...
-}:
+# - Pair options here with matching user toggles in ./user.nix.
+{ ... }:
 
 {
   config = {
