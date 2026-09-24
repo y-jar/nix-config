@@ -9,9 +9,8 @@
 # hstjar/<host>/webapps.nix (sets sysset.webapps.apps). This module only
 # declares the option shape and, for apps with `autostart = true`, appends their
 # launcher to sysset.autostart.commands so the WM spawns them at session start.
-# The actual desktop entries + launchers are built user-level:
-#   all hosts            -> juajar/liijar/webapps/default.nix
-#   hjem hosts          -> juajar/liijar/webapps/hjem.nix
+# The actual desktop entries + launchers are built user-level in
+#   juajar/liijar/webapps/default.nix
 # -=-=-=-=-=-=-=-=-=-=-=
 {
   config,
@@ -24,6 +23,11 @@ let
 
   # Turn a display name into a safe launcher/desktop id (shared helper).
   toSlug = import ../../lib/slug.nix { inherit lib; };
+
+  # Names that normalize to the same slug would clobber launcher/desktop/profile
+  # ids (listToAttrs in liijar/webapps). Guarded against below.
+  slugs = map (a: toSlug a.name) cfg.apps;
+  dupSlugs = lib.unique (lib.filter (s: lib.count (x: x == s) slugs > 1) slugs);
 in
 {
   options.sysset.webapps = {
@@ -110,5 +114,13 @@ in
     sysset.autostart.commands = lib.concatLists (
       map (a: lib.optional a.autostart "webapp-${toSlug a.name}") cfg.apps
     ); # end of autostart.commands
+
+    # Fail the build on slug collisions instead of silently dropping an app.
+    assertions = [
+      {
+        assertion = dupSlugs == [ ];
+        message = "sysset.webapps: duplicate app slug(s): ${lib.concatStringsSep ", " dupSlugs}. Rename the apps so launcher/desktop/profile ids stay unique.";
+      }
+    ];
   }; # end of config
 }
