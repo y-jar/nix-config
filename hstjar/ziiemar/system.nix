@@ -9,7 +9,7 @@
 
 {
   config = {
-    system.stateVersion = "25.11"; # [CHANGE THIS]
+    system.stateVersion = "25.11"; # [first-install marker: do NOT bump]
     #            [system state version from first install]
 
     # [host hardware quirk] Drop the OLED panel to 48Hz on battery, 120Hz on AC,

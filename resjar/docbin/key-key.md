@@ -28,6 +28,7 @@
 
 **Self-Hosting:**
 - [Self-Hosting Hub](./netkey.md) Server and self-hosted services (Jellyfin, nixdraw, sleepyjar)
+- [Secrets & Rotation](./secrets.md) Server secrets (authentik/outline), where they live, backup + rotation
 
 **Other:**
 - [Pipewire & Audio Documentation](./pipewire&audio-help.md) PipeWire routing and audio setup

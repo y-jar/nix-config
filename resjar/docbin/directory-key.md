@@ -16,12 +16,13 @@
 │   ├── petrichor/              # kwaytea's Pewta
 │   ├── vmjar/                  # Virtual machine config
 │   ├── whale/                  # Server system
-│   ├── yil01/                  # Thinkpad laptop [also live as yil02 on hjem]
+│   ├── yil01/                  # Thinkpad laptop
 │   ├── yilyonix/               # Test bench (laptop/tablet)
 │   └── ziiemar/                # Personal laptop (HP)
 │
 ├── juajar/                     # Shared NixOS modules
 │   ├── hjemkey.nix             # Hjem entry point (THE user backend)
+│   ├── lib/                    # Shared helpers (slug.nix for webapps)
 │   └── liijar/                 # User-level apps (hjem scope)
 │       ├── default.nix         # Auto-importer (same as sysjar) every app dir
 │       ├── options.nix         # The usrset.* option declarations (single source)
@@ -32,7 +33,7 @@
 │   ├── sysjar/                 # System-level modules (NixOS options under sysset.*)
 │   │   ├── base.nix            # Always-active: core system, CLI tools, Wayland basics
 │   │   ├── kernelPicker.nix    # Kernel variant picker (default/cachyos-latest/...)
-│   │   ├── ai[cringe]/         # llama.cpp + Open WebUI (rocm/cuda/cpu)
+│   │   ├── ai/                 # llama.cpp + Open WebUI (rocm/cuda/cpu)
 │   │   ├── audio/              # PipeWire stack + audio tools (+ jar-audio addon)
 │   │   ├── automount/          # Auto-mount removable media (udisks2)
 │   │   ├── autostart/          # WM session autostart commands (sysset.autostart)
@@ -42,8 +43,8 @@
 │   │   ├── cosmic/             # COSMIC desktop environment + greeter
 │   │   ├── espanso/            # Espanso daemon + Wayland security wrapper
 │   │   ├── flatpak/            # Flatpak service
-│   │   ├── fonts&emoji/        # System fonts + emoji (Nerd, Japanese, tape font)
-│   │   ├── gamingSlashHardware/# Steam, gaming drivers, Vulkan, GStreamer
+│   │   ├── fonts-emoji/        # System fonts + emoji (Nerd, Japanese, tape font)
+│   │   ├── gaming-hardware/    # Steam, gaming drivers, Vulkan, GStreamer
 │   │   ├── gdm/                # GDM display manager
 │   │   ├── gnome/              # GNOME desktop + companion apps
 │   │   ├── localsend/          # LocalSend file sharing
@@ -59,7 +60,7 @@
 │   │   ├── security/           # Polkit rules, rtkit, udisks2
 │   │   ├── server/             # Server modules (Jellyfin, komga, sleepyjar, nixdraw, webjar, outline, authentik, vpn)
 │   │   ├── syncthing/          # System syncthing service
-│   │   ├── system[scripts]/    # System-level shell scripts (nru, updatejar)
+│   │   ├── system-scripts/     # System-level shell scripts (nru, updatejar)
 │   │   ├── tlp/                # TLP laptop power management + battery thresholds
 │   │   ├── users/              # User account creation + groups
 │   │   ├── v412/               # v4l2loopback kernel module (OBS virtual cam)

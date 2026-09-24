@@ -158,6 +158,8 @@ Paste:
   #### Self-Hosting:
   `Jellyfin` · `Komga` · `Outline` · `Authentik (SSO)` · `nixdraw` · `webjar` · `sleepyjar`
 
+  Server secrets (authentik/outline) are host-generated see [Secrets & Rotation](resjar/docbin/secrets.md).
+
   #### Other:
   `KeePassXC` · `LocalSend` · `Discord` · `Bazaar` · `LibreOffice` · `Fastfetch` · `llama.cpp` · `Japanese input (fcitx5 + Mozc)`
 </details>

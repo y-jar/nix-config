@@ -12,7 +12,7 @@
 # Packages (opencode CLI/GUI, uv, lmstudio) live in the package bucket
 # below under the same ai.* fine toggles (so a host can keep opencode
 # while skipping LM Studio's ~2.3GiB). The local llama.cpp server is
-# system-side (sysset.ai, juajar/sysjar/ai[cringe]).
+# system-side (sysset.ai, juajar/sysjar/ai).
 {
   config,
   lib,

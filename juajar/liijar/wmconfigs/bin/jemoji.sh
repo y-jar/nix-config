@@ -6,7 +6,7 @@
 # Emoji are dynamically detected from the system's installed emoji font (Blobmoji)
 # using fc-scan + python3. Kaomoji are hardcoded.
 # Selected character is copied to clipboard via wl-copy.
-# ref: juajar/sysjar/fonts&emoji/ for fontconfig setup
+# ref: juajar/sysjar/fonts-emoji/ for fontconfig setup
 
 # =-=-=-=-=-=-=-=[ EMOJIS ]-=-=-=-=-=-=-=-=
 # Search: EMOJI

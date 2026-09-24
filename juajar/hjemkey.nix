@@ -87,13 +87,7 @@
     hjem.specialArgs = {
       inherit hostnm;
       inherit inputs;
-      hasDesktop =
-        (config.sysset.niri.enable or false)
-        || (config.sysset.hyprland.enable or false)
-        || (config.sysset.mango.enable or false)
-        || (config.sysset.gnome.enable or false)
-        || (config.sysset.cinnamon.enable or false)
-        || (config.sysset.cosmic.enable or false);
+      hasDesktop = config.sysset.hasDesktop or false;
       gnomeEnable = config.sysset.gnome.enable or false;
       hyprlandEnable = config.sysset.hyprland.enable or false;
       niriEnable = config.sysset.niri.enable or false;

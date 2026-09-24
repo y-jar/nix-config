@@ -17,44 +17,56 @@ let
 
   # Derived flag: does this host run any window manager / desktop environment?
   # Headless/server/VM hosts (no WM/DE) skip WM-dependent session variables.
+  # Exposed as sysset.hasDesktop so hjem (hjemkey) reuses the same value.
   hasDesktop =
     (config.sysset.niri.enable or false)
     || (config.sysset.hyprland.enable or false)
+    || (config.sysset.mango.enable or false)
     || (config.sysset.gnome.enable or false)
     || (config.sysset.cinnamon.enable or false)
     || (config.sysset.cosmic.enable or false);
 in
 {
   options = {
-    sysset.boot = {
-      quiet = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Silence kernel/udev/systemd startup logs (quiet, udev.log_level=3, systemd.show_status=auto, consoleLogLevel=3). Default: false so users see the boot sequence.";
+    sysset = {
+      boot = {
+        quiet = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Silence kernel/udev/systemd startup logs (quiet, udev.log_level=3, systemd.show_status=auto, consoleLogLevel=3). Default: false so users see the boot sequence.";
+        };
+        fastMenu = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Set boot loader timeout to 1 second. Default: false (systemd-boot default of 5 seconds).";
+        };
+        grubDevice = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          default = null;
+          description = "GRUB install device (e.g. /dev/sda or /dev/disk/by-id/...). Required on hosts using boot.loader.grub; leave null on systemd-boot hosts.";
+        };
       };
-      fastMenu = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Set boot loader timeout to 1 second. Default: false (systemd-boot default of 5 seconds).";
-      };
-      grubDevice = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
-        default = null;
-        description = "GRUB install device (e.g. /dev/sda or /dev/disk/by-id/...). Required on hosts using boot.loader.grub; leave null on systemd-boot hosts.";
-      };
-    };
 
-    # Always-on base package groups. Each defaults to true so existing hosts are
-    # unaffected; minimal hosts can opt out to keep the system/download small.
-    sysset.base = {
-      coreTools = lib.mkEnableOption "editor + nh + git core CLI tools";
-      netArchives = lib.mkEnableOption "wget/curl/zip/rar/rsync archive+net tools";
-      fsTools = lib.mkEnableOption "psmisc/pciutils/usbutils/killall/ntfs3g fs tools";
-      imaging = lib.mkEnableOption "image/video codec + thumbnail support stack";
+      hasDesktop = lib.mkOption {
+        type = lib.types.bool;
+        internal = true;
+        default = false;
+        description = "Internal: true when any WM/DE (niri/hyprland/mango/gnome/cinnamon/cosmic) is enabled; bridges base session vars to hjem.";
+      };
+
+      # Always-on base package groups. Each defaults to true so existing hosts are
+      # unaffected; minimal hosts can opt out to keep the system/download small.
+      base = {
+        coreTools = lib.mkEnableOption "editor + nh + git core CLI tools";
+        netArchives = lib.mkEnableOption "wget/curl/zip/rar/rsync archive+net tools";
+        fsTools = lib.mkEnableOption "psmisc/pciutils/usbutils/killall/ntfs3g fs tools";
+        imaging = lib.mkEnableOption "image/video codec + thumbnail support stack";
+      };
     };
   }; # end of options
 
   config = {
+    sysset.hasDesktop = hasDesktop;
 
     time.timeZone = "America/New_York";
 

@@ -22,35 +22,8 @@
 let
   cfg = config.sysset.webapps;
 
-  # Turn a display name into a safe launcher/desktop id: lowercased, spaces -> '-'.
-  toSlug =
-    name:
-    lib.toLower (
-      builtins.replaceStrings
-        [
-          " "
-          "."
-          "/"
-          "_"
-          "("
-          ")"
-          "'"
-          "&"
-          ":"
-        ]
-        [
-          "-"
-          "-"
-          "-"
-          "-"
-          "-"
-          "-"
-          "-"
-          "-"
-          "-"
-        ]
-        name
-    );
+  # Turn a display name into a safe launcher/desktop id (shared helper).
+  toSlug = import ../../lib/slug.nix { inherit lib; };
 in
 {
   options.sysset.webapps = {

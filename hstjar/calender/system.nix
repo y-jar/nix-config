@@ -9,7 +9,7 @@
 
 {
   config = {
-    system.stateVersion = "26.05"; # [CHANGE THIS]
+    system.stateVersion = "26.05"; # [first-install marker: do NOT bump]
     #            [system state version from first install]
 
     # Fill this out!

@@ -15,7 +15,7 @@
 
 {
   config = {
-    system.stateVersion = "VersionNumber"; # [CHANGE THIS] [from first install]
+    system.stateVersion = "VersionNumber"; # [first-install marker: do NOT bump]
 
     # Fill this out!
     sysset = {
