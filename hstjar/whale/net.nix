@@ -18,7 +18,9 @@
 #   fkey whale.local    (or: ssh-keyscan -t ed25519 whale.local)
 # then jc + rebuild the other hosts.
 # -=-=-=-=-=-=-=-=-=-=-=
+# NOTE: this host also answers on 192.168.1.23 (second LAN address); the fleet
+# uses the .10 address below because .23 does not always connect.
 {
-  ip = "192.168.1.199"; # stable lan address (dhcp-reserved)
-  hostKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPJkpGbq4UoPfvxY+0MGBDtUTdUSgVrdwKqHM7zueK9m"; # scanned 2026-09-19
+  ip = "192.168.1.10"; # stable lan address (dhcp-reserved)
+  hostKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL0qZlOl6bq8VaRE1TLeWf2O7IpIQiuSkptTJDHocJpD"; # scanned 2026-09-24
 }

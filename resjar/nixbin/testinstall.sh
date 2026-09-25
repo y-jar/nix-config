@@ -191,6 +191,19 @@ printf '#!/usr/bin/env bash\necho "mkswap $*" >> "$STUB_DIR/mkfs.log"\nexit 0\n'
 chmod +x "$STUB_BIN/mkswap"
 printf '#!/usr/bin/env bash\necho "btrfs $*" >> "$STUB_DIR/btrfs.log"\nexit 0\n' > "$STUB_BIN/btrfs"
 chmod +x "$STUB_BIN/btrfs"
+
+# blkid stub: reads "$STUB_DIR/blkid_types" ("<dev> <type>" lines) so runs can
+# simulate a vfat ESP (to exercise the fmask/dmask mount path). Empty => no output.
+cat > "$STUB_BIN/blkid" <<'BLKID'
+#!/usr/bin/env bash
+dev=""
+for a in "$@"; do case "$a" in /dev/*) dev="$a";; esac; done
+if [ -n "$dev" ] && [ -s "$STUB_DIR/blkid_types" ]; then
+    awk -v d="$dev" '$1==d{print $2; exit}' "$STUB_DIR/blkid_types"
+fi
+exit 0
+BLKID
+chmod +x "$STUB_BIN/blkid"
 for c in sync blockdev ping; do
     printf '#!/usr/bin/env bash\nexit 0\n' > "$STUB_BIN/$c"
     chmod +x "$STUB_BIN/$c"
@@ -412,6 +425,7 @@ seed_manual() { # boot fs choose_extra confirm_extra input_prefix_url...
 
 # ---- run A: UEFI + ext4 + separate home (manual partitioning)
 (
+    printf '/dev/vda1 vfat\n' > "$STUB_DIR/blkid_types"   # ESP is vfat -> masks expected
     seed_manual "UEFI" "ext4" \
         $'/dev/vda1 | 512M\n/dev/vda2 | 39.5G\n/dev/vda3 | 2G\n' \
         ""
@@ -444,10 +458,11 @@ assert_contains "mkfs.ext4 -F /dev/vda2" "$STUB_DIR/mkfs.log" "run A: root forma
 assert_contains "mkfs.ext4 -F /dev/vda3" "$STUB_DIR/mkfs.log" "run A: home formatted ext4"
 assert_contains "mount /dev/vda2 $MNT" "$STUB_DIR/mount.log" "run A: root mounted at <mnt>"
 assert_contains "mount --mkdir /dev/vda3 $MNT/home" "$STUB_DIR/mount.log" "run A: home mounted"
-assert_contains "mount --mkdir /dev/vda1 $MNT/boot" "$STUB_DIR/mount.log" "run A: boot mounted"
+assert_contains "mount --mkdir -o fmask=0077,dmask=0077 /dev/vda1 $MNT/boot" "$STUB_DIR/mount.log" "run A: ESP mounted with fmask/dmask"
 
 # ---- run B: BIOS + xfs + separate home (manual) -> grub + ext4 /boot
 (
+    : > "$STUB_DIR/blkid_types"   # ext4 /boot is not vfat -> plain mount (no masks)
     printf 'vda    40G\nvda1   1G\nvda2   16G\nvda3   2G\n' > "$STUB_DIR/lsblk_parts"
     printf 'NAME   SIZE FSTYPE MOUNTPOINT\nvda    40G\nvda1   1G\nvda2   16G\nvda3   2G\n' > "$STUB_DIR/lsblk_display"
     seed_manual "BIOS" "xfs" \

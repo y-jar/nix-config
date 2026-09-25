@@ -295,7 +295,7 @@ update_existing() {
     fi
 
     # Step 3: Pull latest changes
-    if gum confirm "Pull latest changes from repo?"; then
+    if gum confirm --default --affirmative "Yes" --negative "No" "Pull latest changes from repo?"; then
         gum log --level info "Pulling..."
         git -C "$NIX_CONFIG_DIR" pull --rebase origin main || {
             gum log --level warn "Pull failed continuing anyway"
@@ -1281,7 +1281,14 @@ $guide"
     fi
 
     if [ -n "$boot_part" ]; then
-        run_privileged mount --mkdir "$boot_part" "$mnt/boot"
+        # vfat (ESP) mounts world-readable by default, and nixos-generate-config
+        # only preserves fmask/dmask it actually sees on the mount. Mount with
+        # masks so the ESP (and systemd-boot's random seed) stays non-world-readable.
+        if [ "$(blkid -s TYPE -o value "$boot_part" 2>/dev/null)" = "vfat" ]; then
+            run_privileged mount --mkdir -o fmask=0077,dmask=0077 "$boot_part" "$mnt/boot"
+        else
+            run_privileged mount --mkdir "$boot_part" "$mnt/boot"
+        fi
     fi
 
     if [ -n "$swap_part" ]; then
@@ -1356,7 +1363,7 @@ $guide"
     local wheel=1 ssh_enable=0 ssh_key=""
     if [ "${NIXINSTALL_AUTO:-0}" = "1" ]; then
         wheel="${NIXINSTALL_AUTO_WHEEL:-1}"
-        ssh_enable="${NIXINSTALL_AUTO_SSH:-0}"
+        ssh_enable="${NIXINSTALL_AUTO_SSH:-1}"
         ssh_key="${NIXINSTALL_AUTO_SSH_KEY:-}"
     else
         if gum confirm "Grant $main_user sudo (wheel) access?"; then
@@ -1364,7 +1371,7 @@ $guide"
         else
             wheel=0
         fi
-        if gum confirm "Enable SSH on first boot?"; then
+        if gum confirm --default --affirmative "Yes" --negative "No" "Enable SSH on first boot?"; then
             ssh_enable=1
             ssh_key=$(gum input --prompt "SSH public key to authorize (Enter to skip): " --placeholder "ssh-ed25519 AAAA...")
         fi
@@ -1380,6 +1387,14 @@ $guide"
     run_privileged mkdir -p "$mnt/etc/nixos"
     auto_spin "Generating hardware configuration..." -- \
         run_privileged nixos-generate-config --root "$mnt"
+
+    # Guard: if the ESP is vfat it must carry fmask/dmask, otherwise systemd-boot's
+    # random seed is world-readable (nixos-generate-config only preserves masks that
+    # were on the mount).
+    if [ -n "$boot_part" ] && [ "$(blkid -s TYPE -o value "$boot_part" 2>/dev/null)" = "vfat" ] \
+        && ! grep -q 'fmask=0077' "$mnt/etc/nixos/hardware-configuration.nix" 2>/dev/null; then
+        gum log --level warn "ESP /boot has no fmask=0077 in the generated config; systemd-boot's random seed may be world-readable."
+    fi
 
     gen_base_config "$hostname" "$timezone" "$main_user" "$user_hash" \
         "$boot_mode" "$target_disk" "$wheel" "$ssh_enable" "$ssh_key" \
