@@ -51,6 +51,7 @@
         yil01 = mkJar "yil01"; # Thinkpad Laptop thats super cute
         petrichor = mkJar "petrichor"; # kwaytea's Pewta
         calender = mkJar "calender"; # main pc
+        fearra = mkJar "fearra"; # personal theater pc
 
         # ========[ISO / recovery]
         iso = nixpkgs.lib.nixosSystem {

@@ -3,7 +3,7 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Host calender: browser apps treated as desktop apps (webapps).
+# goal: Host 0_TEMPLATE: browser apps treated as desktop apps (webapps).
 # -=-=-=-=-=-=-=-=-=-=-=
 # Each entry becomes a fuzzel/rofi-searchable app. Fill in real apps below.
 #
@@ -25,34 +25,17 @@
 
 {
   sysset.webapps = {
-    enable = true; # ship disabled by default; set true when you add apps below
+    enable = false; # ship disabled by default; set true when you add apps below
     apps = [
       {
-        name = "YouTube Music";
-        url = "https://music.youtube.com";
+        name = "whale";
+        url = "http://whale:8096";
         mode = "pwa";
         browser = "chromium";
       }
       {
         name = "YouTube";
         url = "https://www.youtube.com";
-        mode = "pwa";
-        browser = "chromium";
-      }
-      {
-        name = "Gmail";
-        url = "https://mail.google.com";
-        mode = "pwa";
-      }
-      {
-        name = "googleMessages";
-        url = "https://messages.google.com/web/conversations";
-        mode = "pwa";
-        browser = "chromium";
-      }
-      {
-        name = "whale";
-        url = "http://whale:8096";
         mode = "pwa";
         browser = "chromium";
       }
