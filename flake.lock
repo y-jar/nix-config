@@ -655,11 +655,11 @@
     "wall-jar": {
       "flake": false,
       "locked": {
-        "lastModified": 1789393134,
-        "narHash": "sha256-UMVD3SHi7It2DqXFBoB0U/Xw2/1S6dMfaOPbbWBL7DQ=",
+        "lastModified": 1790378073,
+        "narHash": "sha256-JFF4n1uzDwUYhjMFOYBGG1r5cyYBoQ2ax2wb/aKAv9c=",
         "owner": "y-jar",
         "repo": "wall-jar",
-        "rev": "007ef107626ea94e46f997e22793f9384e9a0926",
+        "rev": "5725c838f7c02e336a13f03452265c4e927152f3",
         "type": "github"
       },
       "original": {
