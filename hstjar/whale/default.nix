@@ -14,5 +14,6 @@
     ./boot.nix # boot settings
     ./autostart.nix # per-host autostart apps (Window Managers only)
     ./webapps.nix # per-host browser apps as desktop apps (webapps)
+    ./mnt.nix # per-host mount points
   ];
 }
