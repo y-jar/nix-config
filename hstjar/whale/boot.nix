@@ -3,18 +3,14 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Host whale: bootloader settings (grub).
+# goal: Host whale: bootloader settings (systemd-boot).
 # -=-=-=-=-=-=-=-=-=-=-=
 { ... }: {
   # boot
-  sysset.boot.grubDevice = "/dev/sda";
   boot = {
     loader = {
-      grub = {
-        enable = true;
-        useOSProber = true;
-        fsIdentifier = "provided";
-      }; # end of grub
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
     }; # end of loader
     supportedFilesystems = [
       "fuse"

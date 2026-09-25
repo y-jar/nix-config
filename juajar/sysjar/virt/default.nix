@@ -3,54 +3,29 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Virtualization: QEMU/libvirtd tools + VM guest tuning.
+# goal: Virtualization role (host = libvirtd, guest = VM tuning) + options.
 # -=-=-=-=-=-=-=-=-=-=-=
 {
-  config,
   lib,
-  pkgs,
   ...
 }:
-let
-  cfg = config.sysset.virt;
-in
 {
   imports = [
-    ./VM.nix # for systems that exit inside a vm
+    ./host.nix # libvirtd/QEMU (role = "host")
+    ./guest.nix # qemu-guest-agent + virtio (role = "guest")
   ];
 
-  options = {
-    sysset = {
-      virt = {
-        enable = lib.mkOption {
-          type = lib.types.bool;
-          default = false;
-          description = "Enable virtualization (~1GiB, QEMU + libvirtd)";
-        }; # end of enable
-        isInVM = lib.mkOption {
-          type = lib.types.bool;
-          default = false;
-        }; # end of isInVM
-      }; # end of virt
-    }; # end of sysset
+  options.sysset.virt = {
+    role = lib.mkOption {
+      type = lib.types.enum [
+        "none"
+        "host"
+        "guest"
+      ];
+      default = "none";
+      description = "Virtualization role: host (libvirtd/QEMU), guest (tuned as a VM), or none.";
+    }; # end of role
+
+    gui = lib.mkEnableOption "virtualization GUI tools (virt-manager + gnome-boxes); host role only";
   }; # end of options
-
-  config = lib.mkIf cfg.enable {
-    virtualisation.libvirtd = {
-      enable = true;
-      qemu = {
-        swtpm.enable = true; # Allows libvirtd to use swtpm to create an emulated TPM.
-        vhostUserPackages = [ pkgs.virtiofsd ];
-        # ovmf.packages = [ pkgs.OVMFFull.fd ]; # Something about `Sample UEFI firmware for QEMU and KVM`
-      }; # end of qemu
-    }; # end of virtualisation.libvirtd
-    virtualisation.spiceUSBRedirection.enable = true; # Allows USB redirection via SPICE.
-
-    environment.systemPackages = [
-      pkgs.gnome-boxes # Virtual machine manager
-      pkgs.virt-manager # Virtual machine manager
-      pkgs.dnsmasq # DNS server
-      pkgs.phodav # Optional: For file sharing with guest VMs
-    ]; # end of environment.systemPackages
-  }; # end of config
 }

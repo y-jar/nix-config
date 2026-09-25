@@ -123,9 +123,8 @@
       }; # end of gaming
       virtcam.enable = false; # sets virtual camera for things like OBS
       virt = {
-        enable = false; # sets virtualization and installs virtualization tools
-        isInVM = true; # enable if this system is in a vm [virtual mechine]
-      };
+        role = "guest"; # this system runs inside a VM
+      }; # end of virt
       portal.enable = true; # XDG portal file pickers
       polkit.enable = true; # polkit authentication agent (gnome polkit)
       # =============[software]^^^

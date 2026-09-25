@@ -123,8 +123,8 @@
       }; # end of gaming
       virtcam.enable = false; # ~5mib - virtual camera for OBS
       virt = {
-        enable = false; # ~1gib - QEMU + libvirtd + tools
-        isInVM = false; # enable if this system is in a vm
+        role = "none"; # "none" | "host" (libvirtd/QEMU) | "guest" (tuned as a VM)
+        gui = false; # host only: virt-manager + gnome-boxes
       }; # end of virt
       portal.enable = false; # XDG portal file pickers
       polkit.enable = false; # polkit authentication agent (gnome polkit)
@@ -171,5 +171,13 @@
       }; # end of server
       # =============[Server]^^^
     }; # end of sysset
+
+    # [jellyfin hardware acceleration] optional; needs a GPU + matching drivers
+    # find the render node: ls -l /dev/dri/by-path/
+    # services.jellyfin.hardwareAcceleration = {
+    #   enable = true;
+    #   type = "vaapi";              # nvenc (NVIDIA) | vaapi (AMD/Intel) | amf (AMD)
+    #   device = "/dev/dri/renderD128";
+    # };
   }; # end of config
 }

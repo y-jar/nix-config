@@ -123,11 +123,18 @@
       }; # end of gaming
       virtcam.enable = false; # sets virtual camera for things like OBS
       virt = {
-        enable = false; # sets virtualization and installs virtualization tools
-        isInVM = true; # enable if this system is in a vm [virtual mechine]
-      };
+        role = "host"; # libvirtd/QEMU (managed via cockpit-machines)
+        gui = false; # headless: no virt-manager/gnome-boxes
+      }; # end of virt
       portal.enable = true; # XDG portal file pickers
       polkit.enable = true; # polkit authentication agent (gnome polkit)
+      cockpit = {
+        enable = true; # Cockpit web management UI (port 9090)
+        openFirewall = true; # open 9090 on the LAN
+        allowUnencrypted = true; # plain http on the trusted LAN (no TLS terminator yet)
+        machines = true; # cockpit-machines (KVM/libvirt management)
+        podman = true; # cockpit-podman (container management)
+      }; # end of cockpit
       # =============[software]^^^
 
       # =============[Server]
@@ -191,5 +198,13 @@
       }; # end of server
       # =============[Server]^^^
     }; # end of sysset
+
+    # [jellyfin hardware acceleration] optional; needs a GPU + matching drivers
+    # find the render node: ls -l /dev/dri/by-path/
+    # services.jellyfin.hardwareAcceleration = {
+    #   enable = true;
+    #   type = "vaapi";              # nvenc (NVIDIA) | vaapi (AMD/Intel) | amf (AMD)
+    #   device = "/dev/dri/renderD128";
+    # };
   }; # end of config
 }

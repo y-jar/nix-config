@@ -39,6 +39,7 @@
 │   │   ├── autostart/          # WM session autostart commands (sysset.autostart)
 │   │   ├── bluetooth/          # Bluetooth hardware
 │   │   ├── cinnamon/           # Cinnamon desktop environment
+│   │   ├── cockpit/            # Cockpit web management UI (+ machines/podman plugins)
 │   │   ├── console/            # TTY console font
 │   │   ├── cosmic/             # COSMIC desktop environment + greeter
 │   │   ├── espanso/            # Espanso daemon + Wayland security wrapper
@@ -64,7 +65,7 @@
 │   │   ├── tlp/                # TLP laptop power management + battery thresholds
 │   │   ├── users/              # User account creation + groups
 │   │   ├── v412/               # v4l2loopback kernel module (OBS virtual cam)
-│   │   ├── virt/               # libvirtd, QEMU, virt-manager
+│   │   ├── virt/               # virt role: none | host (libvirtd/QEMU) | guest (qemu-guest)
 │   │   ├── webapps/            # Web-apps-as-desktop-apps definitions (sysset.webapps)
 │   │   ├── WM-hyprland/        # Hyprland compositor enable + companion apps
 │   │   ├── WM-mango/           # Mango compositor enable

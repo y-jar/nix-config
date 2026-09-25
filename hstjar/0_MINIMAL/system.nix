@@ -113,8 +113,7 @@
       };
       virtcam.enable = false;
       virt = {
-        enable = false;
-        isInVM = false;
+        role = "none";
       };
       portal.enable = false;
       polkit.enable = false;

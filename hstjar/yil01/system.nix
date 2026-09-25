@@ -122,8 +122,8 @@
       }; # end of gaming
       virtcam.enable = false; # ~5mib - virtual camera for OBS
       virt = {
-        enable = true; # ~1gib - QEMU + libvirtd + tools
-        isInVM = false; # enable if this system is in a vm
+        role = "host"; # libvirtd/QEMU on this host
+        gui = true; # virt-manager + gnome-boxes
       }; # end of virt
       portal.enable = true; # XDG portal file pickers
       polkit.enable = true; # polkit authentication agent (gnome polkit)
