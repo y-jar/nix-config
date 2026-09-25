@@ -62,7 +62,7 @@
       font = "IntoneMono Nerd Font"; # options: "IntoneMono Nerd Font" "Monocraft" "Miracode"
       fontSize = 14; # font size (default: 14)
     };
-    syncthing.enable = true; # file sync (web UI at localhost:8384)
+    syncthing.enable = false; # file sync (web UI at localhost:8384)
     editors = {
       enable = true; # sets all editors
       vscodium.enable = true; # sets vscodium
