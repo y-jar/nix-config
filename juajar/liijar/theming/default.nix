@@ -38,6 +38,14 @@ let
     theme=${qtThemeName}
   '';
 
+  # point Qt6 (qt6ct platform theme, QT_QPA_PLATFORMTHEME_QT6=qtct) at our
+  # icon theme so QIcon::fromTheme stops falling back to bare hicolor.
+  qt6ctConfig = pkgs.writeText "qt6ct.conf" ''
+    [Appearance]
+    icon_theme=${iconThemeName}
+    style=kvantum
+  '';
+
   cursor = pkgs.runCommand "jcsr" { } ''
     mkdir -p $out/share/icons/jcsr
     cp -r ${./cursors/jcsr}/* $out/share/icons/jcsr/
@@ -71,12 +79,15 @@ in
       pkgs.libsForQt5.qtstyleplugin-kvantum
       pkgs.kdePackages.qt6ct
       pkgs.libsForQt5.qt5ct
+      pkgs.hicolor-icon-theme
+      pkgs.adwaita-icon-theme
       cursor
     ];
 
     files = {
       ".config/gtk-3.0/settings.ini".source = settingsIni;
       ".config/gtk-4.0/settings.ini".source = settingsIni;
+      ".config/qt6ct/qt6ct.conf".source = qt6ctConfig;
       ".config/Kvantum/kvantum.kvconfig".source = kvantumConfig;
       ".config/Kvantum/${qtThemeName}".source = "${
         pkgs.catppuccin-kvantum.override {
