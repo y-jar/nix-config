@@ -2,6 +2,7 @@
 # jshot wayland screenshot tool (grim + slurp + swappy)
 # Usage: jshot [region|screen|window]
 # Saves to ~/picjar/shotbin with a date/timestamp filename (matches niri's path).
+# Also copies the shot to the clipboard (via wl-copy).
 set -eu
 
 SHOT_DIR="$HOME/picjar/shotbin"
@@ -40,4 +41,7 @@ esac
 #   swappy -f "$OUT"
 # fi
 
-notify-send "Screenshot" "Saved to $OUT" -i camera-photo 2>/dev/null || true
+# copy to clipboard as PNG
+wl-copy --type image/png < "$OUT"
+
+notify-send "Screenshot" "Saved to $OUT (copied to clipboard)" -i camera-photo 2>/dev/null || true
