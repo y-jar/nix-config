@@ -28,12 +28,12 @@
     enable = false; # ship disabled by default; set true when you add apps below
     apps = [
       # EXAMPLE:
-      # {
-      #   name = "YouTube Music";
-      #   url = "https://music.youtube.com";
-      #   mode = "pwa";
-      #   browser = "chromium";
-      # }
+      {
+        name = "whale";
+        url = "http://whale:8096";
+        mode = "pwa";
+        browser = "chromium";
+      }
       # {
       #   name = "Gmail";
       #   url = "https://mail.google.com";

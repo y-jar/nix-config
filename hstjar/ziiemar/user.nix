@@ -52,10 +52,10 @@
     # =========[appstream]
     browsers = {
       enable = true; # sets firefox and librewolf [work and personal]
-      firefox = false; # firefox [work]
-      librewolf = true; # librewolf [personal]
+      firefox = true; # firefox [work]
+      librewolf = false; # librewolf [personal]
       chromium = true; # enables chromium [personal]
-      default = "librewolf"; # preferred browser: WM Super+B + default mime browser
+      default = "firefox"; # preferred browser: WM Super+B + default mime browser
     };
     terminal = {
       enable = true;
@@ -74,7 +74,7 @@
       pycharm.enable = false; # sets pycharm
     }; # end of editors
     chatApps = {
-      enable = true;
+      enable = false;
       discord.enable = true;
       halloy.enable = false;
     };
@@ -89,8 +89,8 @@
       enable = true; # media master toggle
       mpv = true; # mpv video player + yt-dlp
       downloaders = true; # ffmpeg + yt-dlp
-      musicApps = true; # quodlibet, gapless, blanket
-      audioEditor = true; # audacity
+      musicApps = false; # quodlibet, gapless, blanket
+      audioEditor = false; # audacity
       viewers = true; # yacreader, constrict, anki
       defaultApps = true; # default mime apps + loupe/showtime/file-roller
     };
@@ -119,7 +119,7 @@
     ai = {
       enable = aiEnable; # sets AI tools like opencode, llama.cpp
       opencode.enable = true; # opencode CLI + GUI (keep even if local llama is off)
-      lmstudio.enable = true; # LM Studio (~2.3GiB) set false to save space
+      lmstudio.enable = false; # LM Studio (~2.3GiB) set false to save space
     };
     dictation.enable = false; # voxtype push-to-talk dictation + meeting/VTT transcript (F9)
     git.enable = true; # sets git

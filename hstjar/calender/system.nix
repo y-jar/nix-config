@@ -38,7 +38,7 @@
       gnome.enable = false; # sets gnome [on by default]
       gdm.enable = true; # sets GDM login manager
       hyprland.enable = false; # sets hyprland
-      niri.enable = true; # sets niri
+      niri.enable = false; # sets niri
       mango.enable = true; # sets mango (mangowm)
       cosmic = {
         enable = false; # sets cosmic desktop environment

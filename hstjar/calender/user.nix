@@ -32,7 +32,7 @@
     hyprland.enable = hyprlandEnable;
     niri = {
       enable = niriEnable;
-      shelljar.enable = true; # my quickshell island shell
+      shelljar.enable = false; # my quickshell island shell
       noctalia.enable = false; # noctalia desktop shell (shelljar replaces it)
     };
     mango = {
@@ -74,7 +74,7 @@
       vscodium.enable = true; # sets vscodium
       zed.enable = true; # sets zed
       obsidian.enable = true; # sets obsidian
-      nvf.enable = true; # sets nvf config for neovim
+      nvf.enable = false; # sets nvf config for neovim
       helix.enable = false; # sets helix
       cherrytree.enable = true; # sets cherrytree
       pycharm.enable = true; # sets pycharm
@@ -109,7 +109,7 @@
 
     # =========[creative tools]
     art = {
-      enable = true; # art master toggle
+      enable = false; # art master toggle
       imageTools = true; # krita, gimp, inkscape, ...
       threeD = false; # blender, blockbench
       astronomy = true; # stellarium, celestia
@@ -127,7 +127,7 @@
       opencode.enable = true; # opencode CLI + GUI (keep even if local llama is off)
       lmstudio.enable = false; # LM Studio (~2.3GiB) set false to save space
     };
-    dictation.enable = true; # push-to-talk dictation + meeting/VTT transcript (voxtype, F9)
+    dictation.enable = false; # push-to-talk dictation + meeting/VTT transcript (voxtype, F9)
     git.enable = true; # sets git
     bluetooth.enable = false; # sets blueman in home packages
     dev = {
