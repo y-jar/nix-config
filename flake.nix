@@ -134,13 +134,8 @@
       flake = false;
     }; # end of wall-jar
     icon-jar = {
-      url = "github:y-jar/icon-jar"; # [icons i collected]
-      flake = false;
+      url = "github:y-jar/icon-jar"; # [icons + profile pictures i collected]
     }; # end of icon-jar
-    pfp-jar = {
-      url = "github:y-jar/pfp-jar"; # [profile pictures i collected]
-      flake = false;
-    }; # end of pfp-jar
     shelljar = {
       # [my quickshell island shell]
       url = "github:y-jar/shelljar";

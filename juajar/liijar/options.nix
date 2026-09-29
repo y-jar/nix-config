@@ -263,10 +263,10 @@
     # [resources]
     resYoink = {
       enable = lib.mkEnableOption "resource symlinks (wallpapers, icons, pfps)";
-      wallpapers = lib.mkEnableOption "wallpapers symlink";
-      icons = lib.mkEnableOption "icons symlink";
-      profilePictures = lib.mkEnableOption "profile pictures symlink";
-      minecraftSkins = lib.mkEnableOption "minecraft skins symlink";
+      wallpapers = lib.mkEnableOption "wallpapers symlink (resjar/wall-jar)";
+      icons = lib.mkEnableOption "icons symlink (resjar/iconbin) via icon-jar hjem module";
+      profilePictures = lib.mkEnableOption "profile pictures symlink (resjar/pfpbin) via icon-jar hjem module";
+      minecraftSkins = lib.mkEnableOption "minecraft skins symlink (resjar/mcskins-jar)";
     };
   }; # end of usrset
 }
