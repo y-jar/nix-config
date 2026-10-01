@@ -16,6 +16,8 @@
 }:
 let
   cfg = config.usrset;
+  p = config.usrset.theming.colors; # gruvbox palette
+  strip = c: builtins.substring 1 6 c; # "#rrggbb" -> "rrggbb"
 
   # unified gate: any wayland compositor or the launcher toggle
   enabled = cfg.niri.enable || cfg.hyprland.enable || cfg.launcher.enable;
@@ -49,12 +51,12 @@ let
       radius = 0; # border radius in pixels
     }; # end of border
     colors = {
-      background = "0d0d0d38"; # the background color (subtle frosted tint)
-      text = "d8dee9ff"; # the text color (neutral light gray)
-      match = "a6adb8ff"; # the match color (neutral gray)
-      selection = "2e3440ff"; # the selection color (dark slate gray)
-      selection-text = "d8dee9ff"; # the selection text color
-      border = "00000000"; # the border color (unused: width is 0)
+      background = "${strip p.bg1}d8"; # the background color (subtle frosted warm tint)
+      text = "${strip p.fg0}ff"; # the text color (warm off-white)
+      match = "${strip p.accent}ff"; # the match color (orange)
+      selection = "${strip p.bg3}ff"; # the selection color (warm charcoal)
+      selection-text = "${strip p.fg0}ff"; # the selection text color
+      border = "${strip p.accent}ff"; # the border color (unused: width is 0)
     }; # end of colors
   }; # end of fuzzelSettings
 

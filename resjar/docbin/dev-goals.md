@@ -30,11 +30,13 @@
   - Colors or something... 
   - make it slay
   - make custom icons for backdrop
+- **Theming** `[ DONE-ish ]`
+  - Pseudo-gruvbox (warm/dark, orange) wired across gtk3/gtk4/gtk2 + qt + terminals + WMs.
+  - Cleaned up home-manager migration leftovers: dconf stale keys locked to gruvbox, stale gtkrc-2.0 + gtk-3.0/4.0 colors.css replaced/blanked, so popsicle + GNOME Boxes theme properly.
 - **Sway Goals** `[ NOT IN PROGRESS ]`
   - mm keybinds
   - fuzzel, and other good apps.
   - Theming
-  - 
 - **Audio**
   - BIG KOOL `[ DONE ]`
 - **add-ons**

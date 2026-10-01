@@ -146,8 +146,9 @@
     # =========[management]^^^
     theming = {
       enable = true; # sets theme for gtk/qt
-      flavor = "mocha"; # catppuccin flavor (latte|frappe|macchiato|mocha)
-      accent = "blue"; # catppuccin accent color
+      variant = "dark"; # gruvbox variant (dark|light)
+      accent = "orange"; # gruvbox accent (orange is the warm star)
+      blackness = true; # darker backgrounds
       cursorSize = 36; # cursor size in pixels (default: 36)
     };
   }; # end of usrset

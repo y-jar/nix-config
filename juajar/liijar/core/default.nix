@@ -66,14 +66,22 @@ in
       ];
     }
     {
-      # [btop] transparent background (converted from the old home-manager
-      # programs.btop). NOTE: hjem symlinks this read-only, so btop can't
-      # self-save settings runtime changes vanish on restart (same tradeoff
-      # as mpv/yazi configs on hjem hosts).
+      # [btop] transparent background + gruvbox theme (converted from the old
+      # home-manager programs.btop). NOTE: hjem symlinks this read-only, so
+      # btop can't self-save settings runtime changes vanish on restart (same
+      # tradeoff as mpv/yazi configs on hjem hosts).
       packages = [ pkgs.btop ];
-      files.".config/btop/btop.conf".text = ''
-        theme_background=False
-      '';
+      files = {
+        ".config/btop/btop.conf".text = ''
+          theme_background=False
+          color_theme="jargruv"
+        '';
+        # [bat] gruvbox syntax theme (built into bat)
+        ".config/bat/config".text = ''
+          --theme="gruvbox-dark"
+        '';
+      };
+      environment.sessionVariables.BAT_THEME = "gruvbox-dark";
     }
   ]; # end of config
 }

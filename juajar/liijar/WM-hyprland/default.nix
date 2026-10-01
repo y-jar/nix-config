@@ -17,6 +17,30 @@
 }:
 let
   cfg = config.usrset.hyprland; # hyprland settings
+  p = config.usrset.theming.colors; # gruvbox palette
+  mkRgba = c: a: "rgba(${builtins.substring 1 6 c}${a})";
+
+  # gruvbox window borders / background (generated from the palette)
+  colorsLua = pkgs.writeText "colors.lua" ''
+    -- generated from usrset.theming palette (do not hand-edit)
+    hl.config({
+        general = {
+            col = {
+                active_border   = "${mkRgba p.accent "77"}",
+                inactive_border = "${mkRgba p.bg4 "33"}",
+            },
+        },
+        misc = {
+            background_color = "${mkRgba p.bg0 "ff"}",
+        },
+    })
+
+    hl.window_rule({
+        match        = { pin = 1 },
+        border_color = "${mkRgba p.accent "AA"} ${mkRgba p.accent "77"}",
+    })
+  '';
+
   hostSpecificFile = ./host-inputs + "/${hostnm}.lua"; # host-specific input
   targetLUASource =
     if builtins.pathExists hostSpecificFile then hostSpecificFile else ./host-inputs/0-unknown.lua;
@@ -60,6 +84,7 @@ in
       ".config/hypr/hl/autostart.lua".text = apply (builtins.readFile ./hl/autostart.lua);
       ".config/hypr/hl/keybinds.lua".text = apply (builtins.readFile ./hl/keybinds.lua);
       ".config/hypr/hl/vars.lua".text = apply (builtins.readFile ./hl/vars.lua);
+      ".config/hypr/hl/colors.lua".text = colorsLua; # palette-generated
       ".config/hypr/hl".source = ./hl; # main config (rest of hl)
       ".config/hypr/host-inputs/input.lua".source = targetLUASource; # host-specific inputs
       # [desktop shell config]

@@ -23,8 +23,41 @@
 }:
 let
   hjm = config.usrset;
+  p = config.usrset.theming.colors; # gruvbox palette
+  mkArgb = c: a: "0x${builtins.substring 1 6 c}${a}"; # Mango wants RRGGBBAA
   wmc = ../wmconfigs/mango; # shared mango wm configs (liijar)
   bin = ../wmconfigs/bin; # shared wm tool scripts
+
+  # looks.conf with the appearance hexes swapped for the palette. Mango only
+  # manages windows: borders are 0px, so these stay muted on purpose.
+  looksConf = pkgs.writeText "mango-looks.conf" (
+    lib.replaceStrings
+      [
+        "0x201b14ff"
+        "0x444444ff"
+        "0x8FBA7C55"
+        "0xEB441EFF"
+        "0xc9b890ff"
+        "0x89aa61ff"
+        "0xad401fff"
+        "0x516c93ff"
+        "0xb153a7ff"
+        "0x14a57cff"
+      ]
+      [
+        (mkArgb p.bg0 "ff")
+        (mkArgb p.bg4 "ff")
+        (mkArgb p.accent "55")
+        (mkArgb p.accent "ff")
+        (mkArgb p.fg1 "ff")
+        (mkArgb p.green "ff")
+        (mkArgb p.red "ff")
+        (mkArgb p.blue "ff")
+        (mkArgb p.purple "ff")
+        (mkArgb p.aqua "ff")
+      ]
+      (builtins.readFile (wmc + "/looks.conf"))
+  );
 
   hostSpecificFile = wmc + "/host-inputs/${hostnm}.conf";
   targetConfSource =
@@ -80,7 +113,7 @@ in
     files = {
       ".config/mango/config.conf".source = wmc + "/config.conf"; # linker
       ".config/mango/env.conf".source = wmc + "/env.conf";
-      ".config/mango/looks.conf".source = wmc + "/looks.conf";
+      ".config/mango/looks.conf".source = looksConf;
       ".config/mango/animation.conf".source = wmc + "/animation.conf";
       ".config/mango/layouts.conf".source = wmc + "/layouts.conf";
       ".config/mango/input.conf".source = wmc + "/input.conf";

@@ -20,5 +20,18 @@ in
   config = lib.mkIf cfg.enable {
     services.flatpak.enable = true;
     xdg.portal.enable = true;
+
+    # let sandboxed apps see the host GTK theme/config so gruvbox carries over
+    # (this nixpkgs has no services.flatpak.overrides option, write the global
+    # override file directly)
+    system.activationScripts.flatpakTheme = ''
+      mkdir -p /var/lib/flatpak/overrides
+      cat > /var/lib/flatpak/overrides/global <<'EOF'
+      [Context]
+      filesystems=xdg-config/gtk-3.0:ro;xdg-config/gtk-4.0:ro;xdg-data/themes:ro;xdg-data/icons:ro;
+      [Environment]
+      GTK_THEME=Gruvbox-Orange-Dark
+      EOF
+    '';
   };
 }

@@ -132,8 +132,9 @@
     # =========[management]^^^
     theming = {
       enable = true;
-      flavor = "mocha";
-      accent = "blue";
+      variant = "dark";
+      accent = "orange";
+      blackness = true;
       cursorSize = 36;
     };
   }; # end of usrset

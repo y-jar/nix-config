@@ -99,7 +99,7 @@ Paste:
   - **Cinnamon:** Full classic desktop environment infrastructure for standardized app layout support.
 
   #### Aesthetic Highlights:
-  - Custom user themes and specific environment styling configurations managed loosely under `usrset`.
+  - Pseudo-Gruvbox theme (warm + dark, orange accent) driven by one palette under `usrset.theming`, wired into GTK/Qt, terminals, launcher, TUIs, and the compositors.
   - Transparent layouts hints.
 </details>
 

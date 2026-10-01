@@ -75,26 +75,49 @@
       description = "Enable fuzzel launcher";
     };
     theming = {
-      enable = lib.mkEnableOption "theming (gtk + qt + cursor)";
-      flavor = lib.mkOption {
+      enable = lib.mkEnableOption "theming (gruvbox gtk + qt + cursor)";
+      variant = lib.mkOption {
         type = lib.types.enum [
-          "latte"
-          "frappe"
-          "macchiato"
-          "mocha"
+          "dark"
+          "light"
         ];
-        default = "mocha";
-        description = "Catppuccin flavor";
+        default = "dark";
+        description = "Gruvbox variant (dark|light)";
       };
       accent = lib.mkOption {
-        type = lib.types.str;
-        default = "blue";
-        description = "Catppuccin accent color";
+        type = lib.types.enum [
+          "orange"
+          "red"
+          "yellow"
+          "green"
+          "teal"
+          "purple"
+          "pink"
+          "grey"
+          "default"
+        ];
+        default = "orange";
+        description = "Gruvbox accent color (drives GTK theme + palette accent)";
+      };
+      blackness = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = "Darker backgrounds (gruvbox-gtk `black` tweak)";
       };
       cursorSize = lib.mkOption {
         type = lib.types.int;
         default = 36;
         description = "Cursor size in pixels";
+      };
+      colors = lib.mkOption {
+        type = lib.types.attrsOf lib.types.str;
+        default = { };
+        description = "Computed gruvbox palette (set by the theming module; read-only in practice)";
+      };
+      gtkThemeName = lib.mkOption {
+        type = lib.types.str;
+        default = "Gruvbox-Orange-Dark";
+        description = "Exact GTK theme dir name (set by the theming module; read-only in practice)";
       };
     };
 

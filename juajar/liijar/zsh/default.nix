@@ -16,6 +16,7 @@
 }:
 let
   hjm = config.usrset;
+  p = hjm.theming.colors; # gruvbox palette
 
   zshSyntax = pkgs.zsh-syntax-highlighting;
   zshAutosuggestions = pkgs.zsh-autosuggestions;
@@ -82,9 +83,9 @@ let
     # zoxide (smart cd)
     eval "$(zoxide init zsh)"
 
-    # prompt
-    PROMPT='%F{#5F7CB8}%n|%f'
-    RPROMPT='%F{#5F7CB8}%~ %F{#5F7CB8}%m%f %F{cyan}%*%f'
+    # prompt (gruvbox)
+    PROMPT='%F{${p.accent}}%n|%f'
+    RPROMPT='%F{${p.accent}}%~ %F{${p.accent}}%m%f %F{${p.fg2}}%*%f'
 
     # functions (single-sourced in liijar/shell)
     ${functions}
@@ -93,6 +94,18 @@ let
     ${aliasLines}
 
     ${yaziWrapper}
+
+    # gruvbox syntax + autosuggestion colors (set before sourcing)
+    typeset -A ZSH_HIGHLIGHT_STYLES
+    ZSH_HIGHLIGHT_STYLES[command]="fg=${p.green}"
+    ZSH_HIGHLIGHT_STYLES[builtin]="fg=${p.green}"
+    ZSH_HIGHLIGHT_STYLES[alias]="fg=${p.accent}"
+    ZSH_HIGHLIGHT_STYLES[function]="fg=${p.yellow}"
+    ZSH_HIGHLIGHT_STYLES[path]="fg=${p.fg2}"
+    ZSH_HIGHLIGHT_STYLES[unknown-token]="fg=${p.red}"
+    ZSH_HIGHLIGHT_STYLES[default]="fg=${p.fg0}"
+    ZSH_HIGHLIGHT_STYLES[comment]="fg=${p.grey}"
+    ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=${p.grey}"
 
     # syntax highlighting (must stay last so it wraps every widget defined
     # above, incl. the fzf alt-c/ctrl-t/ctrl-r widgets and zoxide's z)
@@ -103,7 +116,7 @@ let
     export FZF_DEFAULT_COMMAND="fd --type f --hidden --follow --exclude .git"
     export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
     export FZF_ALT_C_COMMAND="fd --type d --hidden --follow --exclude .git"
-    export FZF_DEFAULT_OPTS="--color=bg:#2b2622,bg+:#45403d,fg:#e6dfd3,fg+:#ebdbb2 --color=hl:#d79921,hl+:#d79921,info:#d79921,border:#d79921 --color=prompt:#d79921,pointer:#e6dfd3,marker:#e6dfd3,spinner:#d79921 --preview-window=right:50% --bind ctrl-/:toggle-preview"
+    export FZF_DEFAULT_OPTS="--color=bg:${p.bg1},bg+:${p.bg3},fg:${p.fg0},fg+:${p.fg0} --color=hl:${p.accent},hl+:${p.accent},info:${p.accent},border:${p.accent} --color=prompt:${p.accent},pointer:${p.fg0},marker:${p.fg0},spinner:${p.accent} --preview-window=right:50% --bind ctrl-/:toggle-preview"
     export FZF_CTRL_T_OPTS="--preview 'echo {} | bat --color=always -l= -'"
     export FZF_ALT_C_OPTS="--preview 'eza --tree --color=always {} | head -20'"
   '';

@@ -37,8 +37,9 @@
     launcher.enable = true; # sets launcher fuzzel
     theming = {
       enable = true;
-      flavor = "mocha";
-      accent = "blue";
+      variant = "dark";
+      accent = "orange";
+      blackness = true;
       cursorSize = 36;
     };
     resYoink = {

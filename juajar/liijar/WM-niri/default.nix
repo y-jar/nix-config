@@ -23,6 +23,7 @@
 }:
 let
   hjm = config.usrset;
+  p = config.usrset.theming.colors; # gruvbox palette
 
   wmc = ../wmconfigs/niri; # shared niri wm configs (liijar)
   kdlDir = wmc;
@@ -70,6 +71,26 @@ let
   generatedBindings =
     lib.replaceStrings [ sLine bLine dLine ] [ shellBindS browserBind launcherBind ]
       (builtins.readFile (kdlDir + "/bindings.kdl"));
+
+  # base.kdl with the hardcoded catppuccin-era colors swapped for the palette
+  baseKdl = pkgs.writeText "niri-base.kdl" (
+    lib.replaceStrings
+      [
+        "#5F7CB8"
+        "#ffc87f"
+        "#9b0000"
+        "#505050"
+        "#1e1e2e"
+      ]
+      [
+        p.accent
+        p.accentBright
+        p.red
+        p.bg4
+        p.bg1
+      ]
+      (builtins.readFile (kdlDir + "/base.kdl"))
+  );
 
   generatedStartups =
     builtins.readFile (kdlDir + "/startups.kdl")
@@ -120,7 +141,7 @@ in
     ];
     files = {
       ".config/niri/config.kdl".source = kdlDir + "/config.kdl";
-      ".config/niri/base.kdl".source = kdlDir + "/base.kdl";
+      ".config/niri/base.kdl".source = baseKdl;
       ".config/niri/bindings.kdl".source = pkgs.writeText "niri-bindings.kdl" generatedBindings;
       ".config/niri/rules.kdl".source = kdlDir + "/rules.kdl";
       ".config/niri/startups.kdl".source = pkgs.writeText "niri-startups.kdl" generatedStartups;

@@ -13,6 +13,7 @@
 }:
 let
   cfg = config.usrset.media;
+  p = config.usrset.theming.colors; # gruvbox palette
 
   # webtoon-dl (from the old webtoon-dl module): downloads webtoon.com
   # comics as PDF or CBZ
@@ -79,6 +80,14 @@ let
     profile=high-quality
     ytdl-format=bestvideo+bestaudio
     cache-default=4000000
+    # gruvbox osd + subtitles
+    osd-color=${p.fg0}
+    osd-border-color=${p.bg0}
+    osd-back-color=${p.bg1}
+    sub-color=${p.fg0}
+    sub-border-color=${p.bg0}
+    sub-back-color=${p.bg1}
+    border-background-color=${p.bg0}
   '';
 
   mimeApps = pkgs.writeText "mimeapps.list" ''

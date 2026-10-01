@@ -42,8 +42,9 @@
     launcher.enable = true; # sets launcher fuzzel
     theming = {
       enable = true;
-      flavor = "mocha"; # catppuccin flavor (latte|frappe|macchiato|mocha)
-      accent = "blue"; # catppuccin accent color
+      variant = "dark"; # gruvbox variant (dark|light)
+      accent = "orange"; # gruvbox accent (orange is the warm star)
+      blackness = true; # darker backgrounds
       cursorSize = 48; # cursor size in pixels (default: 36)
     };
     resYoink = {
