@@ -112,16 +112,15 @@ let
       | `resjar/docbin/directory-key.md` | Full directory tree reference |
       | `resjar/docbin/` | Documentation (install guide, per-feature guides) |
       | `resjar/nixbin/` | Nix templates and reference code |
-      | `.rotjar/reposjar/` | Reference NixOS configs from other people (for patterns/inspiration) |
       | `flake.nix` | Main flake hosts, inputs, system builder (mkJar) |
 
       ## Search Strategy
 
       1. Check `resjar/docbin/directory-key.md` first if lost
       2. Check `hstjar/0_TEMPLATE/system.nix` for the full list of available sysset options
-      3. Look in `juajar/sysjar/` to see how an existing option is implemented before writing new ones
-      4. Reference `.rotjar/reposjar/` for patterns from other NixOS configs when stuck
-      5. Read the target host's system.nix before suggesting changes never assume what's already set
+      3. Look in `juajar/sysjar/` + `resjar/nixbin/` to see how an existing option is implemented before writing new ones
+      4. Compare against an established pattern before writing new ones (follow the sysset/usrset convention)
+      5. Read the target host's system.nix + user.nix before suggesting changes never assume what's already set
 
       ## Module Patterns
 
@@ -140,7 +139,17 @@ let
       - Never hardcode values that should be options
       - Respect the sysset/usrset option pattern
       - Prefer lib.mkIf for conditional configuration
-      - Read the host's system.nix before making changes
+      - Read the host's system.nix + user.nix before making changes
+      - Check both sides before editing: sysset options in system.nix, usrset options in user.nix
+
+      ## Verification
+
+      Before finishing a task, validate your work:
+
+      - Run `statix check .` (repo uses statix, configured via `statix.toml`) to lint Nix style
+      - Run `nix flake check` to confirm the whole config still evaluates
+      - Run `nixos-rebuild dry-build --flake .#<host>` (or `nh os nixos-rebuild --host <host>`) before declaring anything done
+      - Compare against an existing module so the change follows established patterns
     '';
 
     loomworker = ''

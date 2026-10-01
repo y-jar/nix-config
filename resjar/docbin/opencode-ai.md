@@ -34,45 +34,33 @@ In opencode, type `/models` to see available models and select one. The local mo
 
 ## Custom Agents
 
-These agents are defined declaratively in the Nix config (`juajar/liijar/ai/opencode.nix`):
+These agents are defined declaratively in the Nix config (`juajar/liijar/ai/default.nix`):
 
 ### nix-helper
 A specialist for NixOS configuration help. Understands:
 - Nix language syntax and evaluation
 - NixOS module system (options, config, imports)
 - Flake structure and patterns
-- Home Manager integration
+- Home Manager / hjem integration
+- This repo's sysset/usrset option pattern and directory routing
 
 Use `@nix-helper` in the chat to invoke this agent for Nix-related tasks.
 
-### doc-writer
-A documentation specialist that maintains consistent style across all project docs. Understands:
-- The project's linking conventions
-- Markdown formatting standards
-- The docbin directory structure
+### loomworker
+A general assistant for the Loom worldbuilding vault (Obsidian knowledge base). Handles:
+- World, lore, metaphysics, species, and history
+- Conlang (Ylle'an) vocabulary, grammar, and word-building via `loom-lang-loader.py`
+- Creative writing projects (stories, songs, poems)
+- Editing and maintaining worldbuilding documentation
 
-Use `@doc-writer` in the chat to invoke this agent for documentation tasks.
-
-### conlang-writer
-A specialist for constructed language creation and maintenance. Helps with:
-- **Auditing** scan vocabulary for inconsistencies, orphaned roots, broken derivations
-- **Word mapping** trace root → affix → word chains, map relationships between words
-- **Documentation** write grammar docs and word entries in your writing style
-- **Word generation** suggest new words following existing phonological/morphological patterns
-
-Knows the project structure:
-- `./conlangs/l1-lang/vocab/` words, roots, particles, adjectives, folds (affixes)
-- `./conlangs/l1-lang/docs/` grammar and documentation
-- Files use markdown with Obsidian YAML frontmatter (properties)
-
-Use `@conlang-writer` in the chat to invoke this agent for conlang tasks.
+Use `@loomworker` in the chat to invoke this agent for worldbuilding/conlang/creative work.
 
 ## Configuration Location
 
 The opencode configuration is managed declaratively through Nix:
-- **Nix module:** `juajar/liijar/ai/opencode.nix`
+- **Nix module:** `juajar/liijar/ai/default.nix`
 - **Generated config:** `~/.config/opencode/opencode.json`
-- **Generated agents:** `~/.config/opencode/agent/*.md`
+- **Generated agents:** `~/.config/opencode/agents/*.md`
 - **Global instructions:** `~/.config/opencode/AGENTS.md`
 
 To make changes, edit the Nix module and rebuild your system with `nhs <hostname>`.
