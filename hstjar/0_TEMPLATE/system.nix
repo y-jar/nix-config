@@ -5,11 +5,22 @@
 # -=-=-=-=-=-=-=-=-=-=-=
 # goal: Host 0_TEMPLATE: system-level toggle sheet (sysset).
 # -=-=-=-=-=-=-=-=-=-=-=
-# This is the SYSTEM configuration file for this host.
-# - It's a checklist to fill out: enable what you need, leave the rest off.
-# - Replace every `PLEASECHANGEME_*` with real values.
-# - Set `system.stateVersion` to the NixOS version of first install.
-# - Pair options here with matching user toggles in ./user.nix.
+# This is the SYSTEM configuration file for this host (the `sysset` sheet).
+#
+# HOW TO USE THIS TEMPLATE
+#   - It's a checklist: enable what you need, leave the rest off (every option
+#     is opt-in; most default to false).
+#   - Replace every `PLEASECHANGEME_*` with real values.
+#   - `system.stateVersion` is a first-install marker: set it once and never bump.
+#   - Pair options here with the matching user toggles in ./user.nix.
+#   - Copy this whole directory to hstjar/<name>/ and add `mkJar "<name>"` in flake.nix.
+#
+# WHERE THE OPTIONS LIVE
+#   - Every `sysset.*` option is declared by a module under juajar/sysjar/<name>/.
+#     Read that module (or its `description`) for the full option surface, e.g.
+#     juajar/sysjar/server/mysql.nix for `sysset.server.mysql`.
+#   - Hardware/disk config is per-machine in ./hardware-configuration.nix and is
+#     generated with `hardto <host>`; do not hand-edit it.
 { ... }:
 
 {
@@ -165,6 +176,52 @@
           enable = false; # sets authentik SSO IdP (login provider for outline)
           port = 9000; # web UI/API port
         }; # end of authentik
+        # --------------------[MySQL / MariaDB  (module: juajar/sysjar/server/mysql.nix)]
+        # A local relational database. Safe default: localhost-only
+        # (bindAddress 127.0.0.1 + openFirewall false), so it can be enabled on
+        # any host without exposing it to the LAN.
+        #
+        #   flavor        "mariadb" (default) or "mysql" (Oracle MySQL 8.x)
+        #   port          3306 by default
+        #   bindAddress   "127.0.0.1" = localhost only. Use "0.0.0.0" ONLY with
+        #                 openFirewall = true and a passworded TCP user.
+        #   openFirewall  false (open the port for non-localhost access)
+        #   dataDir       /var/lib/mysql
+        #   databases     list of database names to CREATE if missing
+        #   users         local users using unix-SOCKET auth (NO password). They
+        #                 only work for a process running as that unix user on
+        #                 THIS host. For TCP/password logins create the user
+        #                 yourself once (docs) or via `initialScript`.
+        #   settings      extra my.cnf options, merged under settings.mysqld
+        #   initialScript SQL file run once on first start (e.g. a passworded user)
+        #   workbench     install the mysql-workbench GUI client (desktop hosts)
+        #   backup        nightly mysqldump of backup.databases -> backup.location
+        #                 on the backup.calendar schedule
+        # Docs / usage: see the host notes and `resjar/docbin/` server docs.
+        mysql = {
+          enable = false; # flip to true to run a local DB on this host
+          flavor = "mariadb"; # "mariadb" (default) | "mysql" (Oracle MySQL 8.x)
+          # port = 3306;
+          # bindAddress = "127.0.0.1"; # keep localhost unless you must expose it
+          # openFirewall = false;
+          # dataDir = "/var/lib/mysql";
+          # databases = [ "mydb" ];
+          # users = [
+          #   {
+          #     name = "PLEASECHANGEME_USERNAME"; # unix-socket auth, no password
+          #     ensurePermissions = { "mydb.*" = "ALL PRIVILEGES"; };
+          #   }
+          # ];
+          # settings = { }; # extra my.cnf, e.g. { max_connections = 200; }
+          # initialScript = null; # path to a .sql run once on first start
+          # workbench = false; # GUI client (desktop hosts only)
+          # backup = {
+          #   enable = false;
+          #   databases = [ "mydb" ]; # empty = nothing dumped
+          #   location = "/var/backup/mysql";
+          #   calendar = "01:15:00"; # systemd OnCalendar
+          # };
+        }; # end of mysql
         vpn = {
           mullvad.enable = false;
         };

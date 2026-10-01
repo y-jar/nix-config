@@ -102,6 +102,7 @@ in
           pkgs.nh # nix helper (builds/deploys this config)
           pkgs.git # version control
           pkgs.eza
+          pkgs.vis # terminal file viewer
         ])
 
         # [Archives & net serv]

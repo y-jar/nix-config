@@ -157,6 +157,24 @@
           enable = false; # sets authentik SSO IdP (login provider for outline)
           port = 9000; # web UI/API port
         }; # end of authentik
+        mysql = {
+          enable = true;
+          flavor = "mysql"; # Oracle MySQL 8.x (pkgs.mysql84); switch to "mariadb" anytime
+          databases = [ "bank" ]; # CIT 244 banking project
+          users = [
+            {
+              name = "jar"; # unix-socket auth (no password) for the local Python app
+              ensurePermissions = {
+                "bank.*" = "ALL PRIVILEGES";
+              };
+            }
+          ];
+          workbench = true; # mysql-workbench GUI (docs/screenshots)
+          backup = {
+            enable = true;
+            databases = [ "bank" ];
+          }; # end of backup
+        }; # end of mysql
         vpn = {
           mullvad.enable = true; # mullvad vpn ~43Mib
         };

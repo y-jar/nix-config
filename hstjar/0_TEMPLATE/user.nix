@@ -5,12 +5,18 @@
 # -=-=-=-=-=-=-=-=-=-=-=
 # goal: Host 0_TEMPLATE: user toggle sheet (usrset).
 # -=-=-=-=-=-=-=-=-=-=-=
-# This is the USER configuration file for this host (one sheet).
-# - Each option below is a toggle: enable only what you need (sizes are rough).
-# - Keep `shell.enable` true it's the default shell for most systems.
-# - WM toggles mirror the system sheet (./system.nix) via the *Enable args.
-# - Pair options here with the matching system toggles in ./system.nix.
-# - For extra Hyprland/Niri per-host config see juajar/liijar/wmconfigs (host-inputs).
+# This is the USER configuration file for this host (the `usrset` sheet).
+#
+# HOW TO USE THIS SHEET
+#   - Every option below is declared once in juajar/liijar/options.nix; this file
+#     only sets values. Most are opt-in (default false).
+#   - Each option is a toggle: enable only what you need (sizes are rough comments).
+#   - Keep `shell.enable` true: it's the default shell for most systems.
+#   - WM toggles mirror the system sheet (./system.nix) via the *Enable args.
+#   - Pair options here with the matching system toggles in ./system.nix.
+#   - Per-app behaviour lives in juajar/liijar/<app>/default.nix; shared shell
+#     aliases/functions live in juajar/liijar/shell/.
+#   - For extra Hyprland/Niri per-host config see juajar/liijar/wmconfigs (host-inputs).
 {
   hyprlandEnable,
   niriEnable,
