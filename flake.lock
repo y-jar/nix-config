@@ -243,11 +243,11 @@
     },
     "icon-jar": {
       "locked": {
-        "lastModified": 1790718939,
-        "narHash": "sha256-BnrDJeFQ2Ryo7d9NJRn6oxyosBEPzAA34XhTgYoSmUQ=",
+        "lastModified": 1790959938,
+        "narHash": "sha256-Tpp0GDXASOVxyLCnvTt6L9mY+L9a3El+KiJb8rcYSC8=",
         "owner": "y-jar",
         "repo": "icon-jar",
-        "rev": "66959c0d8c793cc8530b785a0e3c7fbf2a2fef58",
+        "rev": "ae19bab697a2f7a1071d45e8c4530d5304d7ac00",
         "type": "github"
       },
       "original": {
@@ -673,11 +673,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1790959416,
-        "narHash": "sha256-IT2fysccGM8Cg5je01O0nG0pfXoq6bGxkj4h6loX63o=",
+        "lastModified": 1790963557,
+        "narHash": "sha256-u3S5/6/fznEuCBH0Dav+21lNmeNjx71m1YxhsmURUeM=",
         "owner": "y-jar",
         "repo": "tuneshon",
-        "rev": "49abae2f7c84b18fd3fb6d2509935beb6903f672",
+        "rev": "d243989f54fd22fb21f8c7c4bfeb624d634fba34",
         "type": "github"
       },
       "original": {
