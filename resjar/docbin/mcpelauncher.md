@@ -33,7 +33,7 @@ durable fix.
 | `mcpelauncher-updates` mod | Version-specific patches that adapt the game lib to the launcher. | `~/.local/share/mcpelauncher/mods/mcpelauncher-updates/<ver>/x86_64/` |
 | version DB | Game versions still downloadable from Google Play (backing the Version dropdown). | `minecraft-linux/mcpelauncher-versiondb` |
 
-The crash is almost always **client too old for the installed game version** —
+The crash is almost always **client too old for the installed game version**:
 not a bad world, profile, or install. **Do not delete your install/worlds.**
 
 ## 1. Recognise the symptom
@@ -73,8 +73,8 @@ game series:
 - Launcher: <https://github.com/minecraft-linux/mcpelauncher-manifest/releases>
 - Updates mod: <https://github.com/minecraft-linux/mcpelauncher-updates/releases>
 
-> Tip: the GUI's own config shows the latest Play version —
-> `~/.config/Minecraft Linux Launcher/Minecraft Linux Launcher UI.conf` →
+> Tip: the GUI's own config shows the latest Play version:
+> `~/.config/Minecraft Linux Launcher/Minecraft Linux Launcher UI.conf` ->
 > `[googleversionchannel] latest_version=`.
 
 ## 3. Durable fix bump the overlay

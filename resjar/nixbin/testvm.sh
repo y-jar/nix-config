@@ -4,13 +4,13 @@
 #
 # Safety model:
 #   * Everything lives under /tmp/opencode/tier2/ ; refuse to run as root.
-#   * The guest disk is a regular sparse FILE (disk.img) under that dir —
+#   * The guest disk is a regular sparse FILE (disk.img) under that dir,
 #     not a block device.  The host NVMe is never passed to the guest.
 #   * User-mode SLIRP networking only (no tap/bridge); the only forwarded
 #     port is 127.0.0.1:22722 -> guest:22.  No host /dev/* is exposed.
 #   * If anything goes wrong the whole $TEST_ROOT can be deleted.
 #
-# NOTE: requires an ISO built AFTER the nixinstall rename (buildiso.sh) —
+# NOTE: requires an ISO built AFTER the nixinstall rename (buildiso.sh),
 # the installer is driven via the `nixinstall` command baked into the ISO.
 #
 # The install is driven via SSH using nixinstall's NIXINSTALL_AUTO env-var
@@ -308,7 +308,7 @@ phase3_boot_verify() {
         'hostname; lsblk -o NAME,SIZE,FSTYPE,MOUNTPOINT /dev/vda; df -h / /boot /home /nix 2>/dev/null; swapon --show 2>/dev/null; systemctl is-system-running 2>/dev/null; test -f ~/nix-config/flake.nix && echo HCFG_OK' 2>/dev/null); then
       echo "$out"
       printf '%s\n' "$out" | grep -q "$GUEST_HOSTNAME" || die "hostname mismatch (expected $GUEST_HOSTNAME)"
-      # Check root is mounted on some /dev/vd* partition (don't assume vda1 —
+      # Check root is mounted on some /dev/vd* partition (don't assume vda1:
       # GPT combos put BIOS boot or ESP on vda1 and root on vda2).
       printf '%s\n' "$out" | grep -qE '^/dev/vd[a-z0-9]+ +[0-9]+.* +[0-9]+% +/$' || die "root / not mounted"
       if [ "$VERIFY_HOME" = 1 ]; then

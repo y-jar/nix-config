@@ -47,7 +47,7 @@ let
         ]
       )
       ''
-        webapp '${a.name}' (mode '${a.mode}') uses ${browser}, which has no --app/frameless mode —
+        webapp '${a.name}' (mode '${a.mode}') uses ${browser}, which has no --app/frameless mode:
         it will open as a regular browser window with the tab UI. Set browser = "chromium" (and
         enable a chromium-based browser) for a true standalone app window.
       ''

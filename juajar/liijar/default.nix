@@ -6,7 +6,7 @@
 # goal: Auto-imports all sibling liijar modules (don't edit logic).
 # -=-=-=-=-=-=-=-=-=-=-=
 # Same auto-importer as sysjar: pulls in every root .nix file (options.nix,
-# profile-bus.nix) plus every app dir. App dirs must carry a default.nix —
+# profile-bus.nix) plus every app dir. App dirs must carry a default.nix;
 # the data dirs (shell/, wmconfigs/) don't, so they're skipped naturally.
 {
   lib,
