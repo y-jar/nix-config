@@ -125,6 +125,7 @@
     };
     dictation.enable = false; # voxtype push-to-talk dictation + meeting/VTT transcript (F9)
     git.enable = true; # sets git
+    tuneshon.enable = false; # NixOS update tool (gui + cli)
     bluetooth.enable = false; # sets blueman in home packages
     dev = {
       enable = false; # dev master toggle

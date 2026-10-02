@@ -125,6 +125,7 @@
     };
     dictation.enable = false; # voxtype push-to-talk dictation + meeting/VTT transcript (F9)
     git.enable = true; # ~10mib - git + gh + lazygit
+    tuneshon.enable = false; # NixOS update tool (gui + cli)
     bluetooth.enable = false; # ~5mib - blueman
     dev = {
       enable = false; # dev master toggle

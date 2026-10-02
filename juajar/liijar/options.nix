@@ -271,6 +271,29 @@
       default = true;
       description = "Enable git tools (git + gh + lazygit)";
     };
+    tuneshon = {
+      enable = lib.mkEnableOption "tuneshon (NixOS update tool, gui + cli)";
+      configDir = lib.mkOption {
+        type = lib.types.str;
+        default = "/etc/nixos";
+        description = "NixOS config directory tuneshon operates on";
+      };
+      bootLoader = lib.mkOption {
+        type = lib.types.str;
+        default = "systemd-boot";
+        description = "Boot loader name (systemd-boot, grub, ...)";
+      };
+      logFile = lib.mkOption {
+        type = lib.types.str;
+        default = "$HOME/.config/tuneshon/tuneshon.log";
+        description = "Path to the tuneshon log file";
+      };
+      overwrite = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Force-write ~/.config/tuneshon/config.json on login (clobbers GUI edits)";
+      };
+    };
     bluetooth.enable = lib.mkEnableOption "bluetooth (blueman)";
     fastfetch.enable = lib.mkOption {
       type = lib.types.bool;

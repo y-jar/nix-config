@@ -151,6 +151,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     }; # end of nvf
     rsakura.url = "github:preprocessor/rsakura"; # whisper's cool rust rewite fork
+    # [tuneshon] my lightweight NixOS update tool (nix flake + gui/cli)
+    tuneshon = {
+      url = "github:y-jar/tuneshon";
+      inputs.nixpkgs.follows = "nixpkgs";
+    }; # end of tuneshon
     # [cachyos kernel]
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
     # [hjem] THE user backend (home-manager is gone) [https://github.com/feel-co/hjem]

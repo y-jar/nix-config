@@ -23,9 +23,7 @@
   mangoEnable,
   aiEnable,
   ...
-}:
-
-{
+}: {
   usrset = {
     name = "PLEASECHANGEME_NAME"; # [CHANGE THIS] for git
     email = "PLEASECHANGEME_EMAIL"; # [CHANGE THIS] for git
@@ -86,7 +84,7 @@
       discord.enable = true; # ~300mib
       halloy.enable = true; # ~69mib nice
     };
-    espanso = import ../espansoconf.nix { enable = false; }; # ~30mib - espanso text expander
+    espanso = import ../espansoconf.nix {enable = false;}; # ~30mib - espanso text expander
     flatpak.enable = false; # ~10mib - flatpak + bazaar
     # [file explorers]
     nautilus.enable = true; # ~50mib
@@ -131,6 +129,13 @@
     };
     dictation.enable = false; # voxtype push-to-talk dictation + meeting/VTT transcript (F9)
     git.enable = true; # ~10mib - git + gh + lazygit
+    tuneshon = {
+      enable = false; # NixOS update tool (gui + cli) - set true to install it
+      configDir = "/etc/nixos"; # point at THIS host's nix config repo (e.g. "/home/<user>/nix-config")
+      bootLoader = "systemd-boot"; # CHANGE to match boot.nix (systemd-boot | grub | ...)
+      logFile = "/home/PLEASECHANGEME_USERNAME/.config/tuneshon/tuneshon.log"; # default location
+      overwrite = false; # true = force-reseed config.json each login (clobbers GUI edits)
+    };
     bluetooth.enable = false; # ~5mib - blueman
     dev = {
       enable = false; # dev master toggle

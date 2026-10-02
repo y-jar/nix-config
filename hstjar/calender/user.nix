@@ -16,9 +16,7 @@
   mangoEnable,
   aiEnable,
   ...
-}:
-
-{
+}: {
   usrset = {
     name = "y-jar"; # [CHANGE THIS] for git
     email = "park.7qs@gmail.com"; # [CHANGE THIS] for git
@@ -85,7 +83,7 @@
       discord.enable = true;
       halloy.enable = false;
     };
-    espanso = import ../espansoconf.nix { }; # espanso text expander
+    espanso = import ../espansoconf.nix {}; # espanso text expander
     flatpak.enable = false; # sets flatpak and adds bazaar
     # [file explorers]
     nautilus.enable = true; # sets nautilus
@@ -130,6 +128,13 @@
     };
     dictation.enable = false; # push-to-talk dictation + meeting/VTT transcript (voxtype, F9)
     git.enable = true; # sets git
+    tuneshon = {
+      enable = true; # NixOS update tool (gui + cli)
+      configDir = "/home/jar/nix-config"; # this repo
+      bootLoader = "systemd-boot"; # see boot.nix
+      logFile = "/home/jar/.config/tuneshon/tuneshon.log"; # default
+      overwrite = true; # don't clobber GUI edits
+    };
     bluetooth.enable = false; # sets blueman in home packages
     dev = {
       enable = true; # dev master toggle

@@ -123,6 +123,7 @@
     };
     dictation.enable = false;
     git.enable = true;
+    tuneshon.enable = false; # NixOS update tool (gui + cli)
     bluetooth.enable = true;
     fastfetch.enable = true;
     dev = {
