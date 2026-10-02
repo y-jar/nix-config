@@ -673,11 +673,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1790954424,
-        "narHash": "sha256-ceJtvZ9+FaRUF3K9BPhPhJrSWpxm9jFGP1LW0OU5Ivo=",
+        "lastModified": 1790959416,
+        "narHash": "sha256-IT2fysccGM8Cg5je01O0nG0pfXoq6bGxkj4h6loX63o=",
         "owner": "y-jar",
         "repo": "tuneshon",
-        "rev": "14998d769732051773d07c98678a68d7c9bcaeb7",
+        "rev": "49abae2f7c84b18fd3fb6d2509935beb6903f672",
         "type": "github"
       },
       "original": {
