@@ -54,6 +54,16 @@ in
         description = "Internal: true when any WM/DE (niri/hyprland/mango/gnome/cinnamon/cosmic) is enabled; bridges base session vars to hjem.";
       };
 
+      # True when this host installs an Electron-based editor (vscodium/obsidian),
+      # which pulls a currently-EOL insecure electron from the latest nixpkgs.
+      # Gates the permit in sysjar/nix so only electron-using hosts allow it.
+      usesElectronEditor = lib.mkOption {
+        type = lib.types.bool;
+        internal = true;
+        default = false;
+        description = "Internal: permit the currently-EOL electron that vscodium/obsidian pull.";
+      };
+
       # Always-on base package groups. Each defaults to true so existing hosts are
       # unaffected; minimal hosts can opt out to keep the system/download small.
       base = {

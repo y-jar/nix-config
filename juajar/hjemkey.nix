@@ -102,6 +102,11 @@
     # to their system-level gates so the host's user.nix stays the source of
     # truth. nvf: sysjar/nvf. syncthing: sysjar/syncthing (runs as mainUser).
     sysset.nvf.enable = config.hjem.users.${config.sysset.mainUser}.usrset.editors.nvf.enable or false;
+    # electron-based editors (vscodium/obsidian) pull an EOL insecure electron;
+    # surface it so sysjar/nix can permit it only on the hosts that use one.
+    sysset.usesElectronEditor =
+      config.hjem.users.${config.sysset.mainUser}.usrset.editors.vscodium.enable or false
+      || config.hjem.users.${config.sysset.mainUser}.usrset.editors.obsidian.enable or false;
     sysset.syncthing.enable =
       config.hjem.users.${config.sysset.mainUser}.usrset.syncthing.enable or false;
     # theming facts so the system side (dconf/flatpak) names the exact theme.

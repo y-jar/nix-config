@@ -38,6 +38,14 @@ in
     # Allow unfree packages (per-host toggle)
     nixpkgs.config.allowUnfree = cfg.enable;
 
+    # Permit the currently-EOL electron that electron editors (vscodium/obsidian)
+    # pull from the latest nixpkgs, only on hosts that actually install one.
+    # Version-scoped: a future nixpkgs that resolves them to a non-EOL electron
+    # ignores this entry entirely (no pinning, updates unaffected).
+    nixpkgs.config.permittedInsecurePackages = lib.mkIf config.sysset.usesElectronEditor [
+      "electron-41.10.7"
+    ];
+
     # Enables nix-ld to run unpatched binaries (like in my neovim config)
     # acts as a compatability thing, if this has an issue, or i dont like it, SHUT OFF HEHEHE
     programs.nix-ld.enable = true;
