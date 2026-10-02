@@ -74,12 +74,15 @@ in
       files = {
         ".config/btop/btop.conf".text = ''
           theme_background=False
-          color_theme="jargruv"
+          ${lib.optionalString config.usrset.theming.enable ''color_theme="jargruv"''}
         '';
         # [bat] gruvbox syntax theme (built into bat)
         ".config/bat/config".text = ''
           --theme="gruvbox-dark"
         '';
+        # [vis] lightweight vi-style fallback (package lives in sysjar base.nix
+        # coreTools); colors follow the terminal's gruvbox ANSI palette.
+        ".config/vis/visrc.lua".source = ./visrc.lua;
       };
       environment.sessionVariables.BAT_THEME = "gruvbox-dark";
     }

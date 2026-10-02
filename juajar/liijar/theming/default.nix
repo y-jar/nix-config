@@ -56,8 +56,9 @@ let
   };
   iconThemeName = "Gruvbox-Plus-${if dark then "Dark" else "Light"}";
 
-  # kvantum has no orange; brown is the warm stand-in.
-  kvantumVariant = "Gruvbox-${if dark then "Dark" else "Light"}-Brown";
+  # kvantum has no orange; brown is the warm stand-in. nixpkgs names the dark
+  # variant Gruvbox-Dark-* (hyphens) but the light variants with underscores.
+  kvantumVariant = if dark then "Gruvbox-Dark-Brown" else "Gruvbox_Light_Brown";
 
   cursorName = "jcsr";
 
@@ -183,11 +184,11 @@ let
 in
 {
   config = lib.mkMerge [
-    # palette + theme name + btop theme are always published, themed or not
+    # palette + theme names are always published, themed or not
     {
       usrset.theming.colors = colors;
       usrset.theming.gtkThemeName = gtkThemeName;
-      files.".config/btop/themes/jargruv.theme".source = btopTheme;
+      usrset.theming.iconThemeName = iconThemeName;
     }
 
     (lib.mkIf cfg.enable {
@@ -229,6 +230,8 @@ in
           QT_QPA_PLATFORMTHEME_QT6=qtct
           QT_STYLE_OVERRIDE=kvantum
         '';
+        # btop theme (only themed when theming is on)
+        ".config/btop/themes/jargruv.theme".source = btopTheme;
       };
       environment.sessionVariables.GTK_THEME = gtkThemeName;
     })

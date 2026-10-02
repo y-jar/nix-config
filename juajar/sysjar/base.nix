@@ -76,25 +76,6 @@ in
     programs = {
       zsh.enable = true;
       dconf.enable = true; # key/value preference storage (GCONF successor)
-      # Force the gruvbox theme for GSettings consumers (libhandy -> GNOME
-      # Boxes, portals, GNOME apps). The stale home-manager `user-db` wins over
-      # a plain system default, so lock the keys to enforce our values.
-      dconf.profiles.user.databases = [
-        {
-          settings."org/gnome/desktop/interface" = {
-            gtk-theme = "Gruvbox-Orange-Dark";
-            icon-theme = "Gruvbox-Plus-Dark";
-            cursor-theme = "jcsr";
-            color-scheme = "prefer-dark";
-          };
-          locks = [
-            "/org/gnome/desktop/interface/gtk-theme"
-            "/org/gnome/desktop/interface/icon-theme"
-            "/org/gnome/desktop/interface/cursor-theme"
-            "/org/gnome/desktop/interface/color-scheme"
-          ];
-        }
-      ];
       evince.enable = true; # PDF thumbnailing
       # tell NixOS to include these in the generated pixbuf loaders cache
       gdk-pixbuf.modulePackages = lib.mkIf base.imaging [
@@ -117,7 +98,6 @@ in
         # [base]
         (lib.mkIf base.coreTools [
           pkgs.neovim # extensible terminal editor
-          pkgs.vim # classic terminal editor
           pkgs.nh # nix helper (builds/deploys this config)
           pkgs.git # version control
           pkgs.eza

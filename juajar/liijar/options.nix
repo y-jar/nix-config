@@ -119,6 +119,11 @@
         default = "Gruvbox-Orange-Dark";
         description = "Exact GTK theme dir name (set by the theming module; read-only in practice)";
       };
+      iconThemeName = lib.mkOption {
+        type = lib.types.str;
+        default = "Gruvbox-Plus-Dark";
+        description = "Exact icon theme dir name (set by the theming module; read-only in practice)";
+      };
     };
 
     # [appstream]

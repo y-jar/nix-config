@@ -104,5 +104,15 @@
     sysset.nvf.enable = config.hjem.users.${config.sysset.mainUser}.usrset.editors.nvf.enable or false;
     sysset.syncthing.enable =
       config.hjem.users.${config.sysset.mainUser}.usrset.syncthing.enable or false;
+    # theming facts so the system side (dconf/flatpak) names the exact theme.
+    sysset.theming = {
+      enable = config.hjem.users.${config.sysset.mainUser}.usrset.theming.enable or false;
+      accent = config.hjem.users.${config.sysset.mainUser}.usrset.theming.accent or "orange";
+      variant = config.hjem.users.${config.sysset.mainUser}.usrset.theming.variant or "dark";
+      gtkThemeName =
+        config.hjem.users.${config.sysset.mainUser}.usrset.theming.gtkThemeName or "Gruvbox-Orange-Dark";
+      iconThemeName =
+        config.hjem.users.${config.sysset.mainUser}.usrset.theming.iconThemeName or "Gruvbox-Plus-Dark";
+    };
   };
 }
