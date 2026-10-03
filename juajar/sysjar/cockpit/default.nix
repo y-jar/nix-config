@@ -14,6 +14,7 @@
   config,
   lib,
   pkgs,
+  hostnm,
   ...
 }:
 let
@@ -23,6 +24,15 @@ let
     lib.optional cfg.machines pkgs.cockpit-machines
     ++ lib.optional cfg.podman pkgs.cockpit-podman
     ++ cfg.extraPlugins;
+
+  # this host's own net.nix (pure data; the same file the networking module
+  # reads). ip feeds the LAN origin so cockpit is reachable by address too.
+  netData =
+    let
+      p = ../../../hstjar/${hostnm}/net.nix;
+    in
+    if builtins.pathExists p then import p else { };
+  hostIp = netData.ip or null;
 in
 {
   options.sysset.cockpit = {
@@ -49,6 +59,12 @@ in
     machines = lib.mkEnableOption "cockpit-machines (manage KVM/QEMU VMs via libvirt)";
     podman = lib.mkEnableOption "cockpit-podman (manage containers)";
 
+    extraOrigins = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      description = "Extra cockpit origins on top of localhost + host/.local/ip (e.g. alternate names).";
+    }; # end of extraOrigins
+
     extraPlugins = lib.mkOption {
       type = lib.types.listOf lib.types.package;
       default = [ ];
@@ -61,6 +77,20 @@ in
       enable = true;
       inherit (cfg) port openFirewall;
       plugins = pluginPackages;
+      # [origins] cockpit rejects websocket upgrades whose Origin header is
+      # not whitelisted. nixpkgs only whitelists https://localhost, so add
+      # the LAN faces here: hostname, .local, and (from net.nix) the host ip.
+      allowed-origins = [
+        "http://${hostnm}:${toString cfg.port}"
+        "https://${hostnm}:${toString cfg.port}"
+        "http://${hostnm}.local:${toString cfg.port}"
+        "https://${hostnm}.local:${toString cfg.port}"
+      ]
+      ++ lib.optionals (hostIp != null) [
+        "http://${hostIp}:${toString cfg.port}"
+        "https://${hostIp}:${toString cfg.port}"
+      ]
+      ++ cfg.extraOrigins;
       settings.WebService.AllowUnencrypted = cfg.allowUnencrypted;
     }; # end of services.cockpit
   }; # end of config

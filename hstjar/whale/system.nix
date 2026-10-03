@@ -134,6 +134,7 @@
         allowUnencrypted = true; # plain http on the trusted LAN (no TLS terminator yet)
         machines = true; # cockpit-machines (KVM/libvirt management)
         podman = true; # cockpit-podman (container management)
+        extraOrigins = [ ]; # auto origins cover whale, whale.local, 192.168.1.10
       }; # end of cockpit
       # =============[software]^^^
 
