@@ -106,6 +106,7 @@
 
       # =============[software]
       # unfree.enable = false; # OPT-OUT: forbid unfree packages (spotify, chromium, vscodium, steam, ...). Defaults to true.
+      # systemStoreClean.enable = true; # auto weekly Nix GC (--delete-older-than 14d)
       UseNixPkgsYoinks.enable = false;
       ai = {
         enable = false; # ~2gib - llama.cpp + models (auto-downloaded via models-preset)

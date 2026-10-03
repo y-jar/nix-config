@@ -15,6 +15,7 @@
   nht = "nh os test --accept-flake-config ~/nix-config#${hostnm}"; # base test
   nhs = "nh os switch --accept-flake-config ~/nix-config#${hostnm}"; # base switch
   nhc = "nh clean all --keep 7"; # base cleanup
+  nsc = "sudo nix-collect-garbage -d"; # dense clean: drop all old generations (vs nhc --keep 7)
   nsr = "sudo nix-store --verify --check-contents --repair";
   nrs = "nixos-rebuild switch --sudo --flake ~/nix-config#${hostnm}"; # hard building
   nrt = "nixos-rebuild test --sudo --flake ~/nix-config#${hostnm}"; # testing

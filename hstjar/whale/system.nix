@@ -95,6 +95,7 @@
 
       # =============[software]
       unfree.enable = true; # allow unfree packages (spotify, chromium, vscodium, steam, ...)
+      systemStoreClean.enable = true; # auto weekly Nix GC (--delete-older-than 14d)
       UseNixPkgsYoinks.enable = false;
       ai = {
         enable = false; # sets AI tools (llama.cpp, opencode, etc.)
@@ -146,7 +147,7 @@
           juser = "jar"; # sets jellyfin user for perms for file access
         }; # end of jellyfin
         sleepyjar = {
-          enable = false; # sets sleepy service
+          enable = true; # sets sleepy service
           interval = "weekly"; # sets interval for sleepy service
           # some* options for sleepy service:
           # daily: reboots every midnight
