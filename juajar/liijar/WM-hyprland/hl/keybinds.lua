@@ -32,6 +32,8 @@ hl.bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd("foot --window-size-pixels=16
 -- Shelljar wallpaper: full-screen calm picker (Mod+W next, Mod+O prev)
 hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("shjctl wallpaperNext"))
 hl.bind(mainMod .. " + O", hl.dsp.exec_cmd("shjctl wallpaperPrev"))
+-- Shelljar: copy the newest notification's text to the clipboard
+hl.bind("SUPER + CTRL + SHIFT + C", hl.dsp.exec_cmd("shjctl copyLastNotification"), { description = "Copy last notification" })
 
 -- voxtype dictation (primary: hold F9 anywhere; SUPER+CTRL+V toggles)
 hl.bind(mainMod .. " + CTRL + V", hl.dsp.exec_cmd("voxtype record toggle"), { description = "Dictation: toggle voxtype" })

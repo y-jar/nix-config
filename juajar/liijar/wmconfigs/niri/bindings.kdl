@@ -26,6 +26,7 @@ binds {
     // Mod+Shift+C hotkey-overlay-title="Open [C]alculator" { spawn "gnome-calculator"; } // spawns calculator
     
 Mod+P hotkey-overlay-title="Power [P]menu (shelljar)" { spawn-sh "shjctl toggleSession $(niri msg -j focused-output | jq -r .name)"; } // power menu (shelljar)
+Mod+Ctrl+Shift+C hotkey-overlay-title="Copy last notifi[C]ation (shelljar)" { spawn-sh "shjctl copyLastNotification"; } // shelljar copy last notification
 Mod+Shift+P hotkey-overlay-title="Open [P]ower Menu (fuzzel)" { spawn "jpower"; } // power menu using fuzzel
     Mod+Z hotkey-overlay-title="Open [Z]oom" { spawn "woomer"; } // zoom
     Mod+C hotkey-overlay-title="Open [C]olor Picker" { spawn "hyprpicker" "-a"; } // color picker

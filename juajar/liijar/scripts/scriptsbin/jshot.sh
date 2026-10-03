@@ -14,7 +14,12 @@ mode="${1:-region}"
 
 case "$mode" in
   region)
-    grim -g "$(slurp -b '#1e1e2e80' -c '#5F7CB8')" "$OUT"
+    # transparent outline (no blue border), dimmed backdrop; settle before grim
+    # so slurp's overlay can't be captured into the shot.
+    geo="$(slurp -b '#1e1e2e80' -c '#00000000')" || exit 0
+    [ -n "$geo" ] || exit 0
+    sleep 0.08
+    grim -g "$geo" "$OUT"
     ;;
   screen)
     grim "$OUT"
