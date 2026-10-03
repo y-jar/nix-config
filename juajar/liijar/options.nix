@@ -36,6 +36,11 @@
       default = true; # always installed unless a host turns it off
       description = "Enable cowsay. REFERENCE EXAMPLE module copy juajar/liijar/cowsay/ for new apps";
     };
+    tools.enable = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Enable shared helper scripts (jshot/jrec/jimg/jnote/... in liijar/scripts).";
+    };
 
     # [experience]
     hyprland = {

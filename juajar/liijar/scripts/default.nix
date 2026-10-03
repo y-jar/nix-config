@@ -3,12 +3,15 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: installs user helper scripts (bldjar, jwall, etc.).
+# goal: installs ALL shared helper scripts (single source of truth).
 # -=-=-=-=-=-=-=-=-=-=-=
-# The script sources live in ./scriptsbin/ (the single copy).
-# bldjar/fixzsh/ytdl/gb/gu are installed always; the wallpaper pickers
-# (jwall/random-wall) plus chafa (their fzf preview) are gated on a
-# Wayland compositor, matching awww's gate.
+# The script sources live in ./scriptsbin/ (the single copy; the old
+# liijar/wmconfigs/bin copies were merged in here). Buckets:
+#   core    - always installed (nix/repo helpers)
+#   wmTools - gated on any compositor/launcher (need fuzzel/grim/wl-clipboard...)
+#   wall    - jwall/random-wall, awww env injected, same compositor gate
+#   mango   - jlayout/jbinds (mmsg + mango binds.conf)
+# Runtime deps for the compositor bucket travel together in compositorDeps.
 {
   config,
   lib,
@@ -17,6 +20,11 @@
 }:
 let
   hjm = config.usrset;
+
+  # =-=-=[Gate]
+  # compositor/launcher union: these scripts need a wayland session + fuzzel.
+  compositor = hjm.niri.enable || hjm.hyprland.enable || hjm.mango.enable || hjm.launcher.enable;
+  toolsOn = hjm.tools.enable;
 
   # =-=-=[Script Loader]
   mkScript = name: path: pkgs.writeShellScriptBin name (builtins.readFile path);
@@ -33,7 +41,19 @@ let
   );
   mkWallScript = name: path: pkgs.writeShellScriptBin name (awwwEnv + "\n" + builtins.readFile path);
 
-  # =-=-=[Scripts]
+  # =-=-=[jfocus] python + opencv (needs a real interpreter with cv2)
+  jfocus = pkgs.writeShellScriptBin "jfocus" ''
+    exec ${pkgs.python3.withPackages (ps: [ ps.opencv4 ])}/bin/python3 ${./scriptsbin/jfocus.py} "$@"
+  '';
+
+  # =-=-=[jimg] bake the watermark default in from resjar/scriptdepbin
+  watermark = ../../../resjar/scriptdepbin/watermark.png;
+  jimg = pkgs.writeShellScriptBin "jimg" ''
+    export JIMG_WATERMARK="''${JIMG_WATERMARK:-${watermark}}"
+    ${builtins.readFile ./scriptsbin/jimg.sh}
+  '';
+
+  # =-=-=[Buckets]
   core = [
     {
       name = "bldjar";
@@ -57,6 +77,60 @@ let
     }
   ];
 
+  wmTools = [
+    # [desktop / file]
+    {
+      name = "jshot";
+      path = ./scriptsbin/jshot.sh;
+    }
+    {
+      name = "jclip";
+      path = ./scriptsbin/jclip.sh;
+    }
+    {
+      name = "jemoji";
+      path = ./scriptsbin/jemoji.sh;
+    }
+    {
+      name = "jpower";
+      path = ./scriptsbin/jpower.sh;
+    }
+    {
+      name = "jsearch";
+      path = ./scriptsbin/jsearch.sh;
+    }
+    # [media / capture]
+    {
+      name = "jrec";
+      path = ./scriptsbin/jrec.sh;
+    }
+    {
+      name = "jmpris";
+      path = ./scriptsbin/jmpris.sh;
+    }
+    # [utilities]
+    {
+      name = "jnote";
+      path = ./scriptsbin/jnote.sh;
+    }
+    {
+      name = "jdefine";
+      path = ./scriptsbin/jdefine.sh;
+    }
+    {
+      name = "jtimer";
+      path = ./scriptsbin/jtimer.sh;
+    }
+    {
+      name = "jnight";
+      path = ./scriptsbin/jnight.sh;
+    }
+    {
+      name = "jmv";
+      path = ./scriptsbin/jmv.sh;
+    }
+  ];
+
   wall = [
     {
       name = "random-wall";
@@ -67,11 +141,49 @@ let
       path = ./scriptsbin/jwall.sh;
     }
   ];
+
+  mango = [
+    {
+      name = "jlayout";
+      path = ./scriptsbin/jlayout.sh;
+    }
+    {
+      name = "jbinds";
+      path = ./scriptsbin/jbinds.sh;
+    }
+  ];
+
+  # =-=-=[Runtime deps] shared by the wmTools bucket
+  compositorDeps = [
+    pkgs.fuzzel
+    pkgs.libnotify
+    pkgs.jq
+    pkgs.curl
+    pkgs.wl-clipboard
+    pkgs.grim
+    pkgs.slurp
+    pkgs.swappy
+    pkgs.wf-recorder
+    pkgs.cliphist
+    pkgs.hyprpicker
+    pkgs.imagemagick
+    pkgs.gammastep
+    pkgs.playerctl
+    pkgs.brightnessctl
+  ];
 in
 {
   packages =
     (mkAll core)
-    ++ lib.optionals (hjm.niri.enable || hjm.hyprland.enable) (
-      (map (s: mkWallScript s.name s.path) wall) ++ [ pkgs.chafa ]
-    );
+    ++ lib.optionals (compositor && toolsOn) (
+      (mkAll wmTools)
+      ++ [
+        jfocus
+        jimg
+      ]
+      ++ (map (s: mkWallScript s.name s.path) wall)
+      ++ [ pkgs.chafa ]
+      ++ compositorDeps
+    )
+    ++ lib.optionals (hjm.mango.enable && toolsOn) (mkAll mango);
 }

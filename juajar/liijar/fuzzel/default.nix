@@ -22,18 +22,6 @@ let
   # unified gate: any wayland compositor or the launcher toggle
   enabled = cfg.niri.enable || cfg.hyprland.enable || cfg.launcher.enable;
 
-  # =-=-=[Script Loader]
-  # shared WM tool scripts live in liijar/wmconfigs/bin.
-  scriptDir = ../wmconfigs/bin;
-  mkScript = name: path: pkgs.writeShellScriptBin name (builtins.readFile path);
-
-  # =-=-=[Scripts]
-  jarScripts = [
-    (mkScript "jsearch" (scriptDir + "/jsearch.sh"))
-    (mkScript "jpower" (scriptDir + "/jpower.sh"))
-    (mkScript "jemoji" (scriptDir + "/jemoji.sh"))
-  ];
-
   # fuzzel.ini values full glass, colorless, no outline: a very subtle
   # neutral tint over the compositor blur (frosted), solid dark-gray
   # selection for readability.
@@ -60,8 +48,8 @@ let
     }; # end of colors
   }; # end of fuzzelSettings
 
-  # fuzzel binary + launcher helper scripts, same unified gate
-  fuzzelPackages = lib.optionals enabled (jarScripts ++ [ pkgs.fuzzel ]); # end of fuzzelPackages
+  # fuzzel binary, same unified gate (helper scripts live in liijar/scripts)
+  fuzzelPackages = lib.optionals enabled [ pkgs.fuzzel ]; # end of fuzzelPackages
 
   ini = pkgs.formats.ini { };
 in

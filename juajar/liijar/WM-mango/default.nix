@@ -26,7 +26,6 @@ let
   p = config.usrset.theming.colors; # gruvbox palette
   mkArgb = c: a: "0x${builtins.substring 1 6 c}${a}"; # Mango wants RRGGBBAA
   wmc = ../wmconfigs/mango; # shared mango wm configs (liijar)
-  bin = ../wmconfigs/bin; # shared wm tool scripts
 
   # looks.conf with the appearance hexes swapped for the palette. Mango only
   # manages windows: borders are 0px, so these stay muted on purpose.
@@ -82,25 +81,12 @@ let
     exec-once=noctalia-shell
   ''
   + lib.concatMapStringsSep "" (c: "exec-once=${c}\n") (osConfig.sysset.autostart.commands or [ ]);
-
-  jshot = pkgs.writeShellScriptBin "jshot" (builtins.readFile (bin + "/jshot.sh"));
-  jclip = pkgs.writeShellScriptBin "jclip" (builtins.readFile (bin + "/jclip.sh"));
-  jlayout = pkgs.writeShellScriptBin "jlayout" (builtins.readFile (bin + "/jlayout.sh"));
-  jbinds = pkgs.writeShellScriptBin "jbinds" (builtins.readFile (bin + "/jbinds.sh"));
 in
 {
 
   config = lib.mkIf hjm.mango.enable {
     packages = [
-      jshot # wayland screenshot tool (region/screen/window) via grim+slurp+swappy
-      jclip # clipboard history menu (cliphist + fuzzel)
-      jlayout # toggle current tag between scroller and vertical_scroller (SUPER+CTRL+Slash)
-      jbinds # keybind cheat sheet overlay in foot (SUPER+SHIFT+Slash)
-      pkgs.grim # wayland screenshot capture
-      pkgs.slurp # wayland region select for grim
-      pkgs.swappy # wayland screenshot annotation
-      pkgs.hyprpicker # color picker (SUPER+C)
-      pkgs.cliphist # clipboard history storage (jclip)
+      # jshot/jclip/jlayout/jbinds + shared deps now come from liijar/scripts
       pkgs.xwayland-satellite # Xwayland outside the compositor
     ]
     ++ lib.optionals shelljarEnabled [

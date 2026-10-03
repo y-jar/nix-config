@@ -52,6 +52,17 @@ hl.bind("SUPER + SHIFT + S", hl.dsp.exec_cmd("hyprshot region"), { description =
 hl.bind("SUPER + CTRL + SHIFT + S", hl.dsp.exec_cmd("hyprshot monitor"), { description = "Screenshot: screen" })
 hl.bind("SUPER + ALT + S", hl.dsp.exec_cmd("hyprshot window"), { description = "Screenshot: window" })
 
+-- Jar tools (liijar/scripts)
+hl.bind(mainMod .. " + ALT + R", hl.dsp.exec_cmd("jrec"), { description = "Record: screen toggle" })
+hl.bind(mainMod .. " + ALT + I", hl.dsp.exec_cmd("jimg"), { description = "ImageMagick preset menu" })
+hl.bind(mainMod .. " + ALT + F", hl.dsp.exec_cmd("jfocus"), { description = "Scan: blurry images" })
+hl.bind(mainMod .. " + ALT + N", hl.dsp.exec_cmd("jnote"), { description = "Note: quick capture" })
+hl.bind(mainMod .. " + ALT + D", hl.dsp.exec_cmd("jdefine"), { description = "Define word" })
+hl.bind(mainMod .. " + ALT + T", hl.dsp.exec_cmd("jtimer"), { description = "Timer" })
+hl.bind(mainMod .. " + ALT + Y", hl.dsp.exec_cmd("jnight"), { description = "Night light toggle" })
+hl.bind(mainMod .. " + ALT + M", hl.dsp.exec_cmd("jmpris"), { description = "MPRIS player" })
+hl.bind(mainMod .. " + ALT + V", hl.dsp.exec_cmd("jclip"), { description = "Clipboard history" })
+
 -- Window manipulation
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + Backslash", function() utils.float_center() end)

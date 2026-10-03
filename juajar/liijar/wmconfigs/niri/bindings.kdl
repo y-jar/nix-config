@@ -33,6 +33,16 @@ Mod+Shift+P hotkey-overlay-title="Open [P]ower Menu (fuzzel)" { spawn "jpower"; 
     Mod+Ctrl+W hotkey-overlay-title="[W]allpaper GUI (waypaper)" { spawn "waypaper"; }
     // [DICTATION] primary: hold F9 (voxtype built-in); Mod+Ctrl+X toggles
     Mod+Ctrl+X hotkey-overlay-title="[D]ictation (voxtype)" { spawn "voxtype" "record" "toggle"; }
+    // [JAR TOOLS] (liijar/scripts)
+    Mod+Alt+R hotkey-overlay-title="[R]ecord screen (toggle)" { spawn "jrec"; }
+    Mod+Alt+I hotkey-overlay-title="[I]mageMagick menu" { spawn "jimg"; }
+    Mod+Alt+F hotkey-overlay-title="[F]ocus scan (blurry images)" { spawn "jfocus"; }
+    Mod+Alt+N hotkey-overlay-title="Quick [N]ote" { spawn "jnote"; }
+    Mod+Alt+D hotkey-overlay-title="[D]efine word" { spawn "jdefine"; }
+    Mod+Alt+T hotkey-overlay-title="[T]imer" { spawn "jtimer"; }
+    Mod+Alt+Y hotkey-overlay-title="Night light ([Y])" { spawn "jnight"; }
+    Mod+Alt+M hotkey-overlay-title="[M]PRIS player" { spawn "jmpris"; }
+    Mod+Alt+V hotkey-overlay-title="Clipboard history ([V])" { spawn "jclip"; }
 
     // [OVERVIEW]
     Mod+Tab repeat=false hotkey-overlay-title="[T]oggle Overview" { toggle-overview; }
