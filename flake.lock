@@ -243,11 +243,11 @@
     },
     "icon-jar": {
       "locked": {
-        "lastModified": 1790959938,
-        "narHash": "sha256-Tpp0GDXASOVxyLCnvTt6L9mY+L9a3El+KiJb8rcYSC8=",
+        "lastModified": 1790996852,
+        "narHash": "sha256-QTCS9lCx57Xy3zV9EurCWF9pWVzuXRjiDnptrm/kjTo=",
         "owner": "y-jar",
         "repo": "icon-jar",
-        "rev": "ae19bab697a2f7a1071d45e8c4530d5304d7ac00",
+        "rev": "d18d6f399f7c4cc7a8c64874657720f92827f15e",
         "type": "github"
       },
       "original": {
