@@ -223,6 +223,22 @@
         "type": "github"
       }
     },
+    "gruvbox-dark-yazi": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1767640078,
+        "narHash": "sha256-Y/i+eS04T2+Sg/Z7/CGbuQHo5jxewXIgORTQm25uQb4=",
+        "owner": "bennyyip",
+        "repo": "gruvbox-dark.yazi",
+        "rev": "619fdc5844db0c04f6115a62cf218e707de2821e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "bennyyip",
+        "repo": "gruvbox-dark.yazi",
+        "type": "github"
+      }
+    },
     "hjem": {
       "inputs": {
         "nixpkgs": "nixpkgs_2"
@@ -524,6 +540,7 @@
     "root": {
       "inputs": {
         "authentik-nix": "authentik-nix",
+        "gruvbox-dark-yazi": "gruvbox-dark-yazi",
         "hjem": "hjem",
         "icon-jar": "icon-jar",
         "mangowm": "mangowm",

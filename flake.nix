@@ -156,6 +156,11 @@
       url = "github:y-jar/tuneshon";
       inputs.nixpkgs.follows = "nixpkgs";
     }; # end of tuneshon
+    # [gruvbox-dark-yazi] community gruvbox flavor for yazi (theme.toml = [flavor])
+    gruvbox-dark-yazi = {
+      url = "github:bennyyip/gruvbox-dark.yazi";
+      flake = false;
+    }; # end of gruvbox-dark-yazi
     # [cachyos kernel]
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
     # [hjem] THE user backend (home-manager is gone) [https://github.com/feel-co/hjem]

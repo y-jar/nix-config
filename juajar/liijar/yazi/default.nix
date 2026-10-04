@@ -9,66 +9,24 @@
   config,
   lib,
   pkgs,
+  inputs,
   ...
 }:
 let
   cfg = config.usrset.yazi;
-  theme = config.usrset.theming.colors; # gruvbox palette
 
   yaziPackages = [ pkgs.yazi ]; # end of yaziPackages
 
-  # =-=-=[theme colors] =-=-=
-  themeColors = ''
-    [manager]
-    cwd = { fg = "${theme.accent}" }
-    hovered = { bg = "${theme.bg3}" }
-    preview_hovered = { underline = true }
-    find_keyword = { fg = "${theme.yellow}", bold = true }
-    find_position = { fg = "${theme.accent}", bg = "${theme.bg2}" }
-    marker_selected = { fg = "${theme.accent}", bg = "${theme.bg3}" }
-    marker_copied = { fg = "${theme.green}", bg = "${theme.bg3}" }
-    marker_cut = { fg = "${theme.red}", bg = "${theme.bg3}" }
-    tab_active = { fg = "${theme.bg1}", bg = "${theme.accent}" }
-    tab_inactive = { fg = "${theme.fg2}", bg = "${theme.bg2}" }
-    border_symbol = "│"
-    border_style = { fg = "${theme.bg4}" }
-
-    [status]
-    separator_open = { fg = "${theme.accent}" }
-    separator_close = { fg = "${theme.accent}" }
-    mode_normal = { fg = "${theme.bg1}", bg = "${theme.accent}", bold = true }
-    mode_select = { fg = "${theme.bg1}", bg = "${theme.green}", bold = true }
-    mode_unset = { fg = "${theme.bg1}", bg = "${theme.red}", bold = true }
-    filetype = { fg = "${theme.fg2}" }
-    permissions = { fg = "${theme.fg2}" }
-    progress_label = { fg = "${theme.fg0}", bold = true }
-    progress_normal = { fg = "${theme.green}", bg = "${theme.bg3}" }
-    progress_error = { fg = "${theme.red}", bg = "${theme.bg3}" }
-
-    [select]
-    border = { fg = "${theme.accent}" }
-    active = { fg = "${theme.accent}" }
-    inactive = { fg = "${theme.fg2}" }
-
-    [input]
-    border = { fg = "${theme.accent}" }
-    title = { fg = "${theme.fg2}" }
-    value = { fg = "${theme.fg0}" }
-    selected = { fg = "${theme.bg1}", bg = "${theme.accent}" }
-
-    [tasks]
-    border = { fg = "${theme.accent}" }
-    title = { fg = "${theme.fg2}" }
-    hovered = { fg = "${theme.accent}", bold = true }
-
-    [which]
-    mask = { bg = "${theme.bg2}" }
-    cand = { fg = "${theme.fg2}" }
-    rest = { fg = "${theme.fg1}" }
-    desc = { fg = "${theme.fg2}" }
-    separator = { fg = "${theme.bg4}" }
-    key = { fg = "${theme.accent}" }
-  ''; # end of themeColors
+  # =-=-=[theme.toml] =-=-=
+  # The theme is provided by the gruvbox-dark flavor (current yazi schema);
+  # theme.toml only references it. Yazi merges the flavor automatically and
+  # supplies default icons + filetype highlighting (no hand-maintained schema
+  # here to drift).
+  themeToml = pkgs.writeText "theme.toml" ''
+    [flavor]
+    dark  = "gruvbox-dark"
+    light = "gruvbox-dark"
+  '';
 
   # =-=-=[yazi.toml] =-=-=
   yaziToml = pkgs.writeText "yazi.toml" ''
@@ -235,119 +193,6 @@ let
     run = "redo"
   '';
 
-  # =-=-=[theme.toml] =-=-=
-  themeToml = pkgs.writeText "theme.toml" (
-    themeColors
-    + ''
-      [[icon.dirs]]
-      name = ".config"
-      text = ""
-
-      [[icon.dirs]]
-      name = ".git"
-      text = ""
-
-      [[icon.dirs]]
-      name = ".github"
-      text = ""
-
-      [[icon.dirs]]
-      name = ".npm"
-      text = ""
-
-      [[icon.dirs]]
-      name = "Desktop"
-      text = ""
-
-      [[icon.dirs]]
-      name = "Development"
-      text = ""
-
-      [[icon.dirs]]
-      name = "Documents"
-      text = ""
-
-      [[icon.dirs]]
-      name = "Downloads"
-      text = ""
-
-      [[icon.dirs]]
-      name = "Library"
-      text = ""
-
-      [[icon.dirs]]
-      name = "Movies"
-      text = ""
-
-      [[icon.dirs]]
-      name = "Music"
-      text = ""
-
-      [[icon.dirs]]
-      name = "Pictures"
-      text = ""
-
-      [[icon.dirs]]
-      name = "Public"
-      text = ""
-
-      [[icon.dirs]]
-      name = "Videos"
-      text = ""
-
-      [[icon.dirs]]
-      name = "nixos"
-      text = ""
-
-      [[icon.dirs]]
-      name = "Archive"
-      text = ""
-
-      [[icon.dirs]]
-      name = "Media"
-      text = ""
-
-      [[icon.dirs]]
-      name = "Podcasts"
-      text = ""
-
-      [[icon.dirs]]
-      name = "Drive"
-      text = ""
-
-      [[icon.dirs]]
-      name = "KP"
-      text = ""
-
-      [[icon.dirs]]
-      name = "Books"
-      text = ""
-
-      [[icon.dirs]]
-      name = "Games"
-      text = ""
-
-      [[icon.dirs]]
-      name = "Game Saves"
-      text = ""
-
-      [[icon.dirs]]
-      name = "Templates"
-      text = ""
-
-      [[icon.dirs]]
-      name = "Notes"
-      text = ""
-
-      [[icon.dirs]]
-      name = "Projects"
-      text = ""
-
-      [[icon.dirs]]
-      name = "Screenshots"
-      text = ""
-    ''
-  );
 in
 {
   config = lib.mkIf cfg.enable {
@@ -355,6 +200,8 @@ in
       ".config/yazi/yazi.toml".source = yaziToml;
       ".config/yazi/keymap.toml".source = keymapToml;
       ".config/yazi/theme.toml".source = themeToml;
+      # gruvbox-dark flavor (provides all styling; theme.toml just references it)
+      ".config/yazi/flavors/gruvbox-dark.yazi".source = inputs.gruvbox-dark-yazi;
     };
     packages = yaziPackages;
   };
