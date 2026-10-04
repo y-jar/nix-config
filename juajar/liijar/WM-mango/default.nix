@@ -81,6 +81,35 @@ let
     exec-once=noctalia-shell
   ''
   + lib.concatMapStringsSep "" (c: "exec-once=${c}\n") (osConfig.sysset.autostart.commands or [ ]);
+
+  # tablet / pen display mapping (usrset.tabletenable.<name>). Generated only when
+  # a tablet is enabled; mango 0.16.3 supports a single global tablet->output map,
+  # so the first (alphabetical) enabled entry wins.
+  enabledTablets = lib.mapAttrsToList (n: t: { name = n; inherit (t) match; }) (
+    lib.filterAttrs (_: t: t.enable) (hjm.tabletenable or { })
+  );
+  primaryTablet = if enabledTablets == [ ] then null else builtins.head enabledTablets;
+  emptyMatchTablets = lib.filter (t: t.match == "") enabledTablets;
+  generatedTabletBody =
+    (
+      if primaryTablet == null then
+        ""
+      else if primaryTablet.match == "" then
+        "# usrset.tabletenable.${primaryTablet.name} enabled but .match is empty; set it (see hstjar/tabletconf.nix).\n"
+      else
+        "# usrset.tabletenable.${primaryTablet.name} (catalog: hstjar/tabletconf.nix)\n"
+        + "tablet_map_to_mon=${primaryTablet.match}\n"
+    )
+    + lib.optionalString (builtins.length enabledTablets > 1) ''
+      # note: ${toString (builtins.length enabledTablets - 1)} more tablet(s) enabled; mango 0.16.3 maps a single tablet globally.
+    '';
+  generatedTablet =
+    if emptyMatchTablets == [ ] then
+      generatedTabletBody
+    else
+      lib.warn
+        "usrset.tabletenable: enabled tablet(s) without a match: ${lib.concatStringsSep ", " (map (t: t.name) emptyMatchTablets)} (set .match, or add them to hstjar/tabletconf.nix)"
+        generatedTabletBody;
 in
 {
 
@@ -109,6 +138,7 @@ in
       ".config/mango/nix-startups.conf".source =
         pkgs.writeText "mango-nix-startups.conf" generatedStartups;
       ".config/mango/host-inputs.conf".source = targetConfSource;
+      ".config/mango/tablet.conf".source = pkgs.writeText "mango-tablet.conf" generatedTablet;
     };
   }; # end of config
 }

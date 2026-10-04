@@ -8,6 +8,7 @@
 # The script sources live in ./scriptsbin/ (the single copy; the old
 # liijar/wmconfigs/bin copies were merged in here). Buckets:
 #   core    - always installed (nix/repo helpers)
+#   format  - joutputs, always installed (output/EDID formatter; deps baked in)
 #   wmTools - gated on any compositor/launcher (need fuzzel/grim/wl-clipboard...)
 #   wall    - jwall/random-wall, awww env injected, same compositor gate
 #   mango   - jlayout/jbinds (mmsg + mango binds.conf)
@@ -51,6 +52,14 @@ let
   jimg = pkgs.writeShellScriptBin "jimg" ''
     export JIMG_WATERMARK="''${JIMG_WATERMARK:-${watermark}}"
     ${builtins.readFile ./scriptsbin/jimg.sh}
+  '';
+
+  # =-=-=[joutputs] output/EDID formatter; bakes decoder + clipboard paths in
+  # so it works even on hosts without the compositor bucket installed.
+  joutputs = pkgs.writeShellScriptBin "joutputs" ''
+    export JOUTPUTS_DI_EDID_DECODE="${pkgs.libdisplay-info}/bin/di-edid-decode"
+    export JOUTPUTS_WL_COPY="${pkgs.wl-clipboard}/bin/wl-copy"
+    ${builtins.readFile ./scriptsbin/joutputs.sh}
   '';
 
   # =-=-=[Buckets]
@@ -175,6 +184,7 @@ in
 {
   packages =
     (mkAll core)
+    ++ [ joutputs ] # always installed (output/EDID formatter; deps baked in)
     ++ lib.optionals (compositor && toolsOn) (
       (mkAll wmTools)
       ++ [

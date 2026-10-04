@@ -38,6 +38,7 @@
       shelljar.enable = true; # my quickshell island shell (binds.conf is all shjctl)
     };
     launcher.enable = true; # sets launcher fuzzel
+    tabletenable.xppen.enable = true; # map XP-Pen Artist 13.3 Pro pen to its display (hstjar/tabletconf.nix)
     theming = {
       enable = true;
       variant = "dark"; # gruvbox variant (dark|light)

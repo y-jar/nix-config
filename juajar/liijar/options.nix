@@ -12,6 +12,10 @@
 # options anywhere else.
 # =-=-=[end liijar/options.nix] =-=-=
 { lib, pkgs, ... }:
+let
+  # known tablet EDID identities; see the discovery command in the header there.
+  knownTablets = import ../../hstjar/tabletconf.nix;
+in
 {
   options.usrset = {
     # [core]
@@ -40,6 +44,31 @@
       type = lib.types.bool;
       default = true;
       description = "Enable shared helper scripts (jshot/jrec/jimg/jnote/... in liijar/scripts).";
+    };
+
+    # [input]
+    tabletenable = lib.mkOption {
+      type = lib.types.attrsOf (
+        lib.types.submodule (
+          { name, ... }:
+          {
+            options = {
+              enable = lib.mkOption {
+                type = lib.types.bool;
+                default = false;
+                description = "Map the '${name}' pen to its own display (mango tablet_map_to_mon).";
+              };
+              match = lib.mkOption {
+                type = lib.types.str;
+                default = knownTablets.${name}.match or "";
+                description = "mango monitor spec identifying the tablet display. Defaults to the known-tablet catalog (hstjar/tabletconf.nix); set it for uncatalogued tablets. Find it: for e in /sys/class/drm/card*-*/edid; do echo \"$e: $(strings \"$e\" | tr '\\n' ' ')\"; done";
+              };
+            };
+          }
+        )
+      );
+      default = { };
+      description = "Pen-display mappings keyed by device, e.g. { xppen.enable = true; }. Catalog: hstjar/tabletconf.nix. NOTE: mango 0.16.3 maps a single tablet globally (newer mango adds per-device rules).";
     };
 
     # [experience]

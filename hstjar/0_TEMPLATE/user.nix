@@ -46,6 +46,13 @@
       shelljar.enable = false; # my quickshell island shell
     };
     launcher.enable = true; # ~10mib - sets launcher fuzzel
+    # [tablet / pen display] map a pen's absolute coords to its own screen.
+    # Keys come from hstjar/tabletconf.nix (or set match yourself for new devices).
+    # Find a display's identity in a terminal:
+    #   for e in /sys/class/drm/card*-*/edid; do echo "$e: $(strings "$e" | tr '\n' ' ')"; done
+    # then:  tabletenable.<key>.enable = true;
+    # tabletenable.xppen.enable = true;            # XP-Pen Artist 13.3 Pro
+    # tabletenable.myTablet = { enable = true; match = "model:PRODUCT_NAME"; }; # uncatalogued
     resYoink = {
       enable = false; # symlinks resources into ~/resjar/ [~300+mib for wallpapers]
       wallpapers = false;
