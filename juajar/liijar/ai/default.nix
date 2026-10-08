@@ -36,8 +36,9 @@ let
 
   json = pkgs.formats.json { };
 
-  # provider configuration for local models
+  # provider configuration (local llama.cpp + cloud Sonnet 5.5 overrides)
   settings = {
+    # provider settings
     provider = {
       llama = {
         npm = "@ai-sdk/openai-compatible";
@@ -52,8 +53,40 @@ let
           }; # end of qwen3.5-9b
         }; # end of models
       }; # end of llama
+      # Sonnet 5.5 only supports adaptive thinking, but opencode's built-in
+      # variant builder emits thinking.type="enabled" for it (it only knows
+      # opus-4-7/4-6/sonnet-4-6), which upstream rejects. The selected
+      # variant is merged last, so override the variants as well as options.
+      opencode = {
+        models = {
+          "claude-sonnet-5-5" = {
+            options = {
+              thinking = {
+                type = "adaptive";
+              };
+              effort = "high"; # low | medium | high | xhigh | max
+            };
+            variants = {
+              high = {
+                thinking = {
+                  type = "adaptive";
+                };
+                effort = "high";
+              };
+              max = {
+                thinking = {
+                  type = "adaptive";
+                };
+                effort = "max";
+              };
+            };
+          };
+        };
+      }; # end of opencode provider
     }; # end of provider
-  };
+  }; # end of settings
+
+
 
   # global instructions written to ~/.config/opencode/AGENTS.md
   context = ''
@@ -74,6 +107,29 @@ let
 
     - respect development guidelines, and if there is no guidelines file, use your own best judgment
     - also if a readme is available, use it to understand the project's structure and conventions
+
+    ## Commit Messages
+
+    When you make a commit, use this subject format:
+
+    ```
+    <subject>: <feature> + <feature> [+ <feature> ...]
+    ```
+
+    - **subject** — the area in one word, lowercase (e.g. `nix`, `opencode`, `theming`, `scripts`, `docs`).
+    - **feature** — a short lowercase description of what changed. Join multiple with ` + `.
+    - One commit per finished stage; commit before starting the next stage.
+    - Optional body: list details as bullets.
+    - Never use conventional-commit prefixes (`feat:`, `fix:`, `chore:`), emojis, or AI attribution footers.
+    - Never commit unless asked; when asked, commit only the files you actually changed.
+
+    Examples:
+
+    ```
+    theming: gruvbox everywhere + hm leftovers cleanup
+    scripts: unify helper scripts + wayland tool suite
+    docs: installation guide + directory key
+    ```
   '';
 
   # custom agents written to ~/.config/opencode/agents/<name>.md

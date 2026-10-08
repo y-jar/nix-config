@@ -328,6 +328,11 @@ in
         description = "Force-write ~/.config/tuneshon/config.json on login (clobbers GUI edits)";
       };
     };
+    nueon.enable = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Enable nueon (conlang editor; built from the nueon flake input)";
+    };
     bluetooth.enable = lib.mkEnableOption "bluetooth (blueman)";
     fastfetch.enable = lib.mkOption {
       type = lib.types.bool;

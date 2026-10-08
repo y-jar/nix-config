@@ -454,6 +454,19 @@
     },
     "nixpkgs_5": {
       "locked": {
+        "lastModified": 1791011291,
+        "narHash": "sha256-4ettaZ6zgjT1Zgjq6zrmIg87gBvLMvPJGA8u0BBTn6Y=",
+        "rev": "73e728ddb6b7a12d18808f510813a13ee1fe4cce",
+        "type": "tarball",
+        "url": "https://releases.nixos.org/nixpkgs/nixpkgs-26.11pre1084597.73e728ddb6b7/nixexprs.tar.zst"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "type": "indirect"
+      }
+    },
+    "nixpkgs_6": {
+      "locked": {
         "lastModified": 1784497964,
         "narHash": "sha256-WhdsTtaih3DgTPP/PX023b36UNQyMzEoi6GkPyGx0y4=",
         "rev": "241313f4e8e508cb9b13278c2b0fa25b9ca27163",
@@ -463,6 +476,24 @@
       "original": {
         "type": "tarball",
         "url": "https://channels.nixos.org/nixos-unstable/nixexprs.tar.xz"
+      }
+    },
+    "nueon": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_5"
+      },
+      "locked": {
+        "lastModified": 1791397417,
+        "narHash": "sha256-6Dh8RIjEp7FMOlLtdWRHDPYKooL/Nse6Nlg08IamsLQ=",
+        "owner": "y-jar",
+        "repo": "nueon",
+        "rev": "6c5aa190933fbd0414a0fd8db35f5a52520c1cf4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "y-jar",
+        "repo": "nueon",
+        "type": "github"
       }
     },
     "nvf": {
@@ -547,6 +578,7 @@
         "mcskins-jar": "mcskins-jar",
         "nix-cachyos-kernel": "nix-cachyos-kernel",
         "nixpkgs": "nixpkgs_4",
+        "nueon": "nueon",
         "nvf": "nvf",
         "rsakura": "rsakura",
         "shelljar": "shelljar",
@@ -556,7 +588,7 @@
     },
     "rsakura": {
       "inputs": {
-        "nixpkgs": "nixpkgs_5"
+        "nixpkgs": "nixpkgs_6"
       },
       "locked": {
         "lastModified": 1784671607,
