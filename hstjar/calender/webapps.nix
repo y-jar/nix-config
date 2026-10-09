@@ -38,23 +38,33 @@
         url = "https://www.youtube.com";
         mode = "pwa";
         browser = "chromium";
+        icon = "/home/jar/resjar/iconbin/youtube_logo.png";
       }
       {
-        name = "Gmail";
+        name = "gmail";
         url = "https://mail.google.com";
         mode = "pwa";
       }
       {
-        name = "googleMessages";
+        name = "messages";
         url = "https://messages.google.com/web/conversations";
         mode = "pwa";
         browser = "chromium";
+        icon ="/home/jar/resjar/iconbin/messages_logo.png";
       }
       {
-        name = "whale";
+        name = "jellyfin";
         url = "http://whale:8096";
         mode = "pwa";
         browser = "chromium";
+        icon = "/home/jar/resjar/iconbin/jellyfin_logo.png";
+      }
+      {
+        name = "nixdraw";
+        url = "http://whale:3000";
+        mode = "pwa";
+        browser = "chromium";
+        icon = "/home/jar/resjar/iconbin/excalidraw-dark.png";
       }
     ]; # end of apps
   }; # end of sysset.webapps

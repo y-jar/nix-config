@@ -25,12 +25,18 @@
 
 {
   sysset.webapps = {
-    enable = false; # ship disabled by default; set true when you add apps below
+    enable = true; # ship disabled by default; set true when you add apps below
     apps = [
       # EXAMPLE:
       {
-        name = "whale";
+        name = "jellyfin";
         url = "http://whale:8096";
+        mode = "pwa";
+        browser = "chromium";
+      }
+      {
+        name = "nixdraw";
+        url = "http://whale:3000";
         mode = "pwa";
         browser = "chromium";
       }
