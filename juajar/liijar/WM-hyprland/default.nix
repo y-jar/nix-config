@@ -64,6 +64,31 @@ let
   varsBrowser = ''browser = "librewolf"'';
   varsBrowserNew = ''browser = "${config.usrset.browsers.default or "firefox"}"'';
 
+  # [static hl/ files]
+  # hjem must never get a dir symlink for hl/ AND files inside it (the children
+  # would land in a read-only store dir). So every file under hl/ is written
+  # individually; the generated/patched ones are skipped here and written below.
+  generatedHl = [
+    "autostart.lua"
+    "keybinds.lua"
+    "vars.lua"
+    "colors.lua"
+  ];
+  mkHlFiles =
+    subdir:
+    let
+      dir = ./hl + subdir;
+      entries = builtins.readDir dir;
+      regular = lib.filterAttrs (
+        name: type: type == "regular" && !(subdir == "" && builtins.elem name generatedHl)
+      ) entries;
+      nested = lib.filterAttrs (_: type: type == "directory") entries;
+    in
+    lib.mapAttrs' (
+      name: _: lib.nameValuePair ".config/hypr/hl${subdir}/${name}" { source = dir + "/${name}"; }
+    ) regular
+    // lib.concatMapAttrs (name: _: mkHlFiles "${subdir}/${name}") nested;
+
   apply =
     if shelljarEnabled then
       text:
@@ -79,13 +104,12 @@ let
 in
 {
   config = lib.mkIf cfg.enable {
-    files = {
+    files = mkHlFiles "" // {
       ".config/hypr/hyprland.lua".source = ./base.lua; # base linker
       ".config/hypr/hl/autostart.lua".text = apply (builtins.readFile ./hl/autostart.lua);
       ".config/hypr/hl/keybinds.lua".text = apply (builtins.readFile ./hl/keybinds.lua);
       ".config/hypr/hl/vars.lua".text = apply (builtins.readFile ./hl/vars.lua);
-      ".config/hypr/hl/colors.lua".text = colorsLua; # palette-generated
-      ".config/hypr/hl".source = ./hl; # main config (rest of hl)
+      ".config/hypr/hl/colors.lua".source = colorsLua; # palette-generated
       ".config/hypr/host-inputs/input.lua".source = targetLUASource; # host-specific inputs
       # [desktop shell config]
       ".config/shelljar/config.kdl".source = ../shell/shelljar-config.kdl;

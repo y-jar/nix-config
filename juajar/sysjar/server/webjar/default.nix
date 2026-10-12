@@ -14,11 +14,9 @@ let
 in
 {
   options.sysset.server.webjar = {
-    enable = lib.mkEnableOption {
-      description = "Enable the self-hosted web hub (nginx static page)";
-    };
+    enable = lib.mkEnableOption "the self-hosted web hub (nginx static page)";
     port = lib.mkOption {
-      type = lib.types.int;
+      type = lib.types.port;
       default = 80;
       description = "Port to serve the web hub on";
     };

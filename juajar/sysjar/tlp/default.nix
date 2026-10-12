@@ -60,6 +60,13 @@ in
   }; # end of options
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = !config.sysset.powerprofiles.enable;
+        message = "sysset.tlp and sysset.powerprofiles (power-profiles-daemon) are mutually exclusive: set powerprofiles.enable = false on this host.";
+      }
+    ];
+
     services.tlp = {
       enable = true;
       settings = {
@@ -71,6 +78,7 @@ in
       };
     }; # end of tlp
 
+    # beats desktop modules (gnome) that turn power-profiles-daemon on by default
     services.power-profiles-daemon.enable = lib.mkForce false;
 
     # When a charge cap is requested, report at boot whether the hardware

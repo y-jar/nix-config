@@ -101,7 +101,7 @@
         };
       };
       localsend.enable = true;
-      syncthing.enable = false; # continuous file sync (web UI :8384)
+      # syncthing: toggled in user.nix (usrset.syncthing), bridged here by hjemkey
       espanso.enable = true; # espanso daemon + Wayland security wrapper
       flatpak.enable = false; # sets flatpak in the system [still needs to be enabled in user.nix]
       gaming = {

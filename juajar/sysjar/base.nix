@@ -15,6 +15,15 @@ let
   cfg = config.sysset.boot;
   base = config.sysset.base;
 
+  # package-group toggle that defaults ON (a minimal host opts out with false)
+  mkOn =
+    description:
+    lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      inherit description;
+    };
+
   # Derived flag: does this host run any window manager / desktop environment?
   # Headless/server/VM hosts (no WM/DE) skip WM-dependent session variables.
   # Exposed as sysset.hasDesktop so hjem (hjemkey) reuses the same value.
@@ -67,10 +76,10 @@ in
       # Always-on base package groups. Each defaults to true so existing hosts are
       # unaffected; minimal hosts can opt out to keep the system/download small.
       base = {
-        coreTools = lib.mkEnableOption "editor + nh + git core CLI tools";
-        netArchives = lib.mkEnableOption "wget/curl/zip/rar/rsync archive+net tools";
-        fsTools = lib.mkEnableOption "psmisc/pciutils/usbutils/killall/ntfs3g fs tools";
-        imaging = lib.mkEnableOption "image/video codec + thumbnail support stack";
+        coreTools = mkOn "editor + nh + git core CLI tools";
+        netArchives = mkOn "wget/curl/zip/rar/rsync archive+net tools";
+        fsTools = mkOn "psmisc/pciutils/usbutils/killall/ntfs3g fs tools";
+        imaging = mkOn "image/video codec + thumbnail support stack";
       };
     };
   }; # end of options

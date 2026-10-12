@@ -3,7 +3,7 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Polkit authentication agent + rules.
+# goal: Polkit authentication AGENT (user service); the daemon lives in ../security.
 # -=-=-=-=-=-=-=-=-=-=-=
 # =-=-=[polkit] =-=-=
 # Enables the GNOME polkit authentication agent
@@ -25,14 +25,11 @@ in
     enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = "Enable polkit authentication agent (gnome polkit)";
+      description = "Run the gnome polkit authentication AGENT as a user service. The polkit daemon itself is always on (see ../security).";
     }; # end of enable
   }; # end of sysset.polkit
 
   config = lib.mkIf cfg.enable {
-    # [polkit system service]
-    security.polkit.enable = true;
-
     # [polkit gnome auth agent (user service)]
     systemd.user.services.polkit-agent = {
       description = "PolicyKit Authentication by Gnome";

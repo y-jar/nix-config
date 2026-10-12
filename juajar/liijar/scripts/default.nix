@@ -54,6 +54,14 @@ let
     ${builtins.readFile ./scriptsbin/jimg.sh}
   '';
 
+  # =-=-=[fixzsh] zsh-only script (uses `fc -R`), so it must NOT go through
+  # writeShellScriptBin (that forces a bash shebang). Pin the zsh shebang instead.
+  fixzsh = pkgs.writeScriptBin "fixzsh" (
+    lib.replaceStrings [ "#!/usr/bin/env zsh" ] [ "#!${pkgs.zsh}/bin/zsh" ] (
+      builtins.readFile ./scriptsbin/fixzsh.sh
+    )
+  );
+
   # =-=-=[joutputs] output/EDID formatter; bakes decoder + clipboard paths in
   # so it works even on hosts without the compositor bucket installed.
   joutputs = pkgs.writeShellScriptBin "joutputs" ''
@@ -67,10 +75,6 @@ let
     {
       name = "bldjar";
       path = ./scriptsbin/bldjar.sh;
-    }
-    {
-      name = "fixzsh";
-      path = ./scriptsbin/fixzsh.sh;
     }
     {
       name = "ytdl";
@@ -184,7 +188,10 @@ in
 {
   packages =
     (mkAll core)
-    ++ [ joutputs ] # always installed (output/EDID formatter; deps baked in)
+    ++ [
+      fixzsh # zsh script, always installed
+      joutputs
+    ] # always installed (output/EDID formatter; deps baked in)
     ++ lib.optionals (compositor && toolsOn) (
       (mkAll wmTools)
       ++ [

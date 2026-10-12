@@ -96,7 +96,8 @@ get_hosts() {
     for dir in "$HOSTS_DIR"/*/; do
         local name
         name=$(basename "$dir")
-        if [ "$name" != "0_TEMPLATE" ] && [ -d "$dir" ]; then
+        # skip the 0_* scaffolds (0_TEMPLATE, 0_MINIMAL)
+        if [[ "$name" != 0_* ]] && [ -d "$dir" ]; then
             echo "$name"
         fi
     done
@@ -134,21 +135,16 @@ add_host_to_flake() {
         return 0
     fi
 
-    # Find the line before the hjem hosts section
+    # Find the installer marker in flake.nix (new hosts go on the line below it)
     local line_num
-    line_num=$(grep -n '# ========\[hjem hosts' "$FLAKE_PATH" | head -1 | cut -d: -f1)
+    line_num=$(grep -n '===\[INSTALLER: append new hosts' "$FLAKE_PATH" | head -1 | cut -d: -f1)
 
     if [ -z "$line_num" ]; then
-        # Fallback: find the closing of nixosConfigurations base hosts
-        line_num=$(grep -n '# ========\[hjem' "$FLAKE_PATH" | head -1 | cut -d: -f1)
-    fi
-
-    if [ -z "$line_num" ]; then
-        gum log --level error "Could not find insertion point in flake.nix"
+        gum log --level error "Could not find the INSTALLER marker in flake.nix"
         return 1
     fi
 
-    local insert_line=$((line_num - 1))
+    local insert_line="$line_num"
     local new_entry="        ${host} = mkJar \"${host}\"; # ${desc}"
 
     sed -i "${insert_line}a\\${new_entry}" "$FLAKE_PATH"
