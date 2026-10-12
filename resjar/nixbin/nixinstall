@@ -193,6 +193,8 @@ fresh_install() {
         # Copy template
         gum log --level info "Creating host directory from template..."
         cp -r "$TEMPLATE_DIR" "$target_dir"
+        # stamp the real host name into the copied file headers
+        sed -i "s/Host 0_TEMPLATE/Host $host/; s/Host template/Host $host/" "$target_dir"/*.nix
         gum log --level info "Template copied to hstjar/$host/"
     fi
 

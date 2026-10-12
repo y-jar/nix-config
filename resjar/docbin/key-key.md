@@ -10,7 +10,7 @@
 - [Install Guide](./install-guide.md) How to install the system on a new machine
 - [Post Install](./post-install.md) Updating and switching configs after install
 - [To Add a New Config](./add-new-config-guide.md) Adding a new host to the flake
-- [Adding Modules](./adding-modules.md) How NixOS modules and the flake work + adding liijar apps (cowsay reference example)
+- [Adding Modules](./adding-modules.md) How NixOS modules and the flake work + adding liijar apps, sysjar modules, WMs + naming conventions
 
 **Reference:**
 - [Directory Key](./directory-key.md) Directory tree with descriptions of every module

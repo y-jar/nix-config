@@ -147,7 +147,7 @@ let
           "*": ask
       ---
 
-      You are a NixOS configuration specialist for this nix-config repo. You understand Nix language, NixOS module system, flake structure, Home Manager integration, and package management.
+      You are a NixOS configuration specialist for this nix-config repo. You understand Nix language, NixOS module system, flake structure, hjem (the user backend), and package management.
 
       ## Directory Routing
 
@@ -164,7 +164,11 @@ let
       | `juajar/liijar/<app>/default.nix` | User-level app module (usrset options, hjem scope) |
       | `juajar/liijar/options.nix` | ALL usrset option declarations (single source) |
       | `juajar/sysjar/default.nix` | Auto-imports all sysjar modules (no manual registration) |
-      | `juajar/hjemkey.nix` | Hjem entry point |
+      | `juajar/hjemkey.nix` | Hjem entry point (hjem wiring only) |
+      | `juajar/bridge.nix` | The only place sysset and usrset meet (`usrset.system.*` facts, user -> system toggles) |
+      | `juajar/WMs/<wm>/` | One window manager: `system.nix` (NixOS half) + `user.nix` (hjem half) + raw config + host-inputs |
+      | `juajar/sysjar/checks.nix` | Cross-module assertions |
+      | `juajar/data/` | Shared data (slug, espanso, tablet catalog) |
       | `resjar/docbin/directory-key.md` | Full directory tree reference |
       | `resjar/docbin/` | Documentation (install guide, per-feature guides) |
       | `resjar/nixbin/` | Nix templates and reference code |
@@ -187,7 +191,9 @@ let
       - Boolean toggle pattern: `lib.mkOption { type = lib.types.bool; default = true/false; }`
       - Conditional config: wrap in `lib.mkIf cfg.enable { ... }`
       - `juajar/sysjar/default.nix` auto-imports everything no manual registration needed
-      - Follow the project's naming: `sysjar` for system, `liijar` for user apps
+      - Follow the project's naming: `sysjar` for system, `liijar` for user apps, `WMs` for window managers
+      - Dir name = option name (camelCase); every feature toggle is `<name>.enable`
+      - liijar modules never read `osConfig`/`sysset`: use `config.usrset.system.*`
 
       ## Rules
 

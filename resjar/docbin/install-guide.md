@@ -41,8 +41,11 @@ nhs PICKEDHOST     # deploy (this is the switch)
 > **My predefined PICKEDHOST options** (or scaffold a brand new one):
 > - `calender`: main desktop PC
 > - `candle`: gaming mini build
+> - `fearra`: personal theater pc
+> - `petrichor`: kwaytea's Pewta
 > - `vmjar`: virtual machine config
 > - `whale`: server system
+> - `yil01`: Thinkpad laptop
 > - `yilyonix`: test bench (laptop/tablet)
 > - `ziiemar`: personal laptop (HP)
 

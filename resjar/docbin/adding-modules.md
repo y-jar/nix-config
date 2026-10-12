@@ -92,3 +92,45 @@ juajar/liijar/<app>/
 4. done `liijar/default.nix` auto-imports every app dir. no registration, no key edits
 
 gotchas the example comments cover: `//` does not compose `lib.mkIf` (use `lib.mkMerge`), hjem config files are read-only store symlinks (self-saving apps can't persist), no user systemd units (write the unit file + the dirSetup bus), need a system service? that's sysjar territory.
+
+## Adding a system module (sysjar)
+
+same idea on the system side: [juajar/sysjar/](../../juajar/sysjar) is auto-imported (every root `.nix` + every dir), so a new feature is one dir:
+
+```
+juajar/sysjar/<feature>/
+  default.nix   # options.sysset.<feature>.* + config = lib.mkIf cfg.enable { ... }
+```
+
+- declare the options in the SAME file as the config (sub-files of a module read the parent's options)
+- a check that only concerns this module (an assertion) lives in the module; a check that compares modules lives in [juajar/sysjar/checks.nix](../../juajar/sysjar/checks.nix)
+- open the firewall in the module that owns the service, never in `networking`
+- hosts flip it in `hstjar/<host>/system.nix`
+
+## Adding a window manager
+
+a WM is ONE dir in [juajar/WMs/](../../juajar/WMs), holding everything about it:
+
+```
+juajar/WMs/<wm>/
+  system.nix    # NixOS half: sysset.<wm>.enable + programs.<wm>   (routed by WMs/default.nix)
+  user.nix      # hjem half: dotfiles + packages, reads usrset.<wm>.* (routed by WMs/hjem.nix)
+  ...           # the raw config data (lua/kdl/conf) and host-inputs/<host>.<ext>
+```
+
+copy the closest existing WM, declare `usrset.<wm>.*` in `liijar/options.nix`, done. use `WMs/lib.nix` `hostInput` for the per-host file with the `0-unknown` fallback.
+
+## Where system facts come from (sysset vs usrset)
+
+`liijar` modules never read `osConfig` or `sysset`. what they need to know about the machine is in `config.usrset.system.*` (`platform`, `hasDesktop`, `unfree`, `mullvad`, `autostart`, `webapps`, ...). on NixOS [juajar/bridge.nix](../../juajar/bridge.nix) fills them from `sysset.*`, and it is also the one place where a `usrset` toggle reaches the system side (nvf, syncthing, theming, electron). a bridged value has ONE owner: set it in `user.nix`, not in `system.nix`.
+
+`usrset.system.platform` (`nixos` | `debian`) switches the NixOS-only pieces off (nh/nixos-rebuild aliases, `/run/current-system` paths, tuneshon). `usrset.packages.install = false` drops every module's packages so the host's own package manager provides the binaries and hjem only writes dotfiles.
+
+## Naming conventions
+
+- **dir name = option name**: `chatApps/` is `usrset.chatApps`, `powerProfiles/` is `sysset.powerProfiles`. camelCase for multi-word names, in dirs and options alike
+- **every feature toggle is `<name>.enable`**, including sub-features (`media.mpv.enable`, `dev.python.enable`, `base.coreTools.enable`). plain bools are only for modes and settings (`nueon.binary`, `tuneshon.overwrite`, `theming.blackness`)
+- **gate with `lib.mkIf cfg.enable`** on the whole `config`; use `lib.mkMerge` for several gated pieces (`//` does not compose `mkIf`)
+- **declare options once**: `usrset.*` only in `liijar/options.nix`; `sysset.*` in the module that owns them
+- **data is not a module**: shared data goes in `juajar/data/`, raw WM config next to its WM; data dirs have no `default.nix` so the importers skip them
+- **no home-manager leftovers**: files are keyed home-relative (`.config/app/x`, no `~/` prefix), and no module writes `home.*` / `programs.*` in `liijar`

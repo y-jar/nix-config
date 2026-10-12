@@ -3,7 +3,7 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Host 0_TEMPLATE: imports system + hardware + boot for this machine.
+# goal: Host fearra: imports system + hardware + boot for this machine.
 # -=-=-=-=-=-=-=-=-=-=-=
 { ... }:
 

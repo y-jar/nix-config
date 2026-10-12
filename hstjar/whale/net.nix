@@ -1,6 +1,6 @@
 # ╃
 #  .▀▀█▀▀ .
-#    :▓.:   ar <3>
+#    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
 # goal: Host whale: fleet identity (ssh + dns pins, applied to every host).

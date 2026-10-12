@@ -260,10 +260,12 @@ Paste:
 > [!NOTE] This config is currently in a state of active development.
 
 1. [flake.nix](flake.nix): main flake defines hosts, inputs, and per-system configurations.
-2. [hstjar/](./hstjar): per-host configs (one folder per machine, each with `system.nix` + `user.nix` toggle sheets).
-3. [juajar/](./juajar): shared NixOS modules:
-   - [sysjar/](./juajar/sysjar): system-level modules (NixOS options under `sysset.*`).
-   - [liijar/](./juajar/liijar): user-level apps one `<app>/default.nix` per app (auto-imported, same shape as sysjar). Also holds the `usrset.*` option declarations, shared shell aliases/functions, and raw WM configs.
+2. [hstjar/](./hstjar): per-host configs (one folder per machine: `system.nix` + `user.nix` toggle sheets, plus boot, hardware, autostart, webapps, and optional `net.nix` / `mnt.nix`).
+3. [juajar/](./juajar): shared modules:
+   - [sysjar/](./juajar/sysjar): system-level modules (NixOS options under `sysset.*`), one dir per feature, auto-imported.
+   - [liijar/](./juajar/liijar): user-level apps (hjem scope, options under `usrset.*`), one `<app>/default.nix` per app, auto-imported. All `usrset.*` options are declared in `options.nix`.
+   - [WMs/](./juajar/WMs): window managers (hyprland, niri, mango), one dir each with its system half, its hjem half, its raw config data and per-host inputs. Two small routers pick them up.
+   - [bridge.nix](./juajar/bridge.nix): the only place `sysset` and `usrset` meet. [hjemkey.nix](./juajar/hjemkey.nix) is the hjem wiring.
 4. [resjar/](./resjar): resources docs, templates, images.
 5. `.rotjar/`: temporary files in rotation (gitignored). Anything in here won't be around for long.
 
@@ -287,7 +289,7 @@ The most useful aliases available after install:
 | `ckhrd` | `lsblk && fdisk -l` | Check storage blocks |
 | `,` | `nix shell` (function) | Quick flake-based shell `, git curl` for interactive, `, git curl -- ls` for one-shot |
 
-Full alias list: [liijar/shell](juajar/liijar/zsh/) · [installer shell](shell.nix)
+Full alias list: [liijar/zsh](juajar/liijar/zsh/) · [installer shell](shell.nix)
 
 ## Core Usage & Tips
 

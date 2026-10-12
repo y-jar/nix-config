@@ -1,6 +1,6 @@
 # ╃
 #  .▀▀█▀▀ .
-#    :▓.:   ar <3>
+#    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
 # goal: Host petrichor: fleet identity (kway's machine - never on my lan).

@@ -87,6 +87,8 @@ pkgs.mkShell {
             if [ -d "$template_dir" ]; then
                 echo -e "\e[1;32m==> Copying template to $target_dir/\e[0m"
                 cp -r "$template_dir" "$target_dir"
+                # stamp the real host name into the copied file headers
+                sed -i "s/Host 0_TEMPLATE/Host $1/; s/Host template/Host $1/" "$target_dir"/*.nix
                 echo -e "\e[1;32m|!!! $1 is now a fresh system, /\e[0m"
                 echo -e "|!!!  Please fill out $1's system.nix and user.nix"
                 echo -e "|!!!  Please copy the template in the flake.nix and set it up for $1"

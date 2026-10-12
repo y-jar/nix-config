@@ -3,7 +3,7 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Host 0_TEMPLATE: user toggle sheet (usrset).
+# goal: Host fearra: user toggle sheet (usrset).
 # -=-=-=-=-=-=-=-=-=-=-=
 # This is the USER configuration file for this host (one sheet).
 # - Each option below is a toggle: enable only what you need (sizes are rough).

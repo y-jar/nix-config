@@ -3,7 +3,7 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Host 0_TEMPLATE: system-level toggle sheet (sysset).
+# goal: Host petrichor: system-level toggle sheet (sysset).
 # -=-=-=-=-=-=-=-=-=-=-=
 # This is the SYSTEM configuration file for this host.
 # - It's a checklist to fill out: enable what you need, leave the rest off.

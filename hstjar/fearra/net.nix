@@ -1,9 +1,9 @@
 # ╃
 #  .▀▀█▀▀ .
-#    :▓.:   ar <3>
+#    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Host template: fleet identity (ssh + dns pins, applied to every host).
+# goal: Host fearra: fleet identity (ssh + dns pins, applied to every host).
 # -=-=-=-=-=-=-=-=-=-=-=
 # NOTE (IMPORTANT): this file is PURE DATA, not a module - the networking
 # module (juajar/sysjar/networking) imports every hstjar/*/net.nix as a

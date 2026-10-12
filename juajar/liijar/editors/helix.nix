@@ -6,7 +6,7 @@
 # goal: Helix editor settings (pure data -> ~/.config/helix/config.toml).
 # -=-=-=-=-=-=-=-=-=-=-=
 # Converted from the old home-manager programs.helix.settings; imported by
-# ./hjem.nix and serialized with pkgs.formats.toml. ref: https://github.com/ryan4yin/nix-config
+# ./default.nix and serialized with pkgs.formats.toml. ref: https://github.com/ryan4yin/nix-config
 {
   editor = {
     # Display & cursor

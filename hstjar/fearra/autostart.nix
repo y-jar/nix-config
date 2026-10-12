@@ -3,7 +3,7 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Host 0_TEMPLATE: apps to autostart at Window Manager session start.
+# goal: Host fearra: apps to autostart at Window Manager session start.
 # -=-=-=-=-=-=-=-=-=-=-=
 # Note (IMPORTANT): this only applies to Window Managers (niri / hyprland).
 # Full desktop environments (GNOME/Cinnamon/...) do NOT read this.
