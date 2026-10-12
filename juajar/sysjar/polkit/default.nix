@@ -30,6 +30,13 @@ in
   }; # end of sysset.polkit
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = config.security.polkit.enable;
+        message = "sysset.polkit (the auth agent) needs the polkit daemon: set sysset.security.polkit.enable = true.";
+      }
+    ];
+
     # [polkit gnome auth agent (user service)]
     systemd.user.services.polkit-agent = {
       description = "PolicyKit Authentication by Gnome";

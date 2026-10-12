@@ -28,22 +28,21 @@
     }; # end of sysset.kernel.variant
   }; # end of options
 
-  config = {
-    # Apply cachyos overlay only when a cachyos variant is selected
-    nixpkgs.overlays = lib.optionals (
-      builtins.match "cachyos-.*" config.sysset.kernel.variant != null
-    ) [ inputs.nix-cachyos-kernel.overlays.pinned ];
+  config =
+    let
+      v = config.sysset.kernel.variant;
+      isCachy = builtins.match "cachyos-.*" v != null;
+    in
+    lib.mkMerge [
+      # "default" sets nothing: NixOS (or a hardware module) picks the kernel
+      (lib.mkIf (v == "latest") {
+        boot.kernelPackages = pkgs.linuxPackages_latest;
+      })
 
-    # Map variant string to kernel package
-    boot.kernelPackages =
-      let
-        v = config.sysset.kernel.variant;
-      in
-      if v == "default" then
-        pkgs.linuxPackages
-      else if v == "latest" then
-        pkgs.linuxPackages_latest
-      else
-        pkgs.cachyosKernels."linuxPackages-${v}";
-  }; # end of config
+      # cachyos overlay + kernel only when a cachyos variant is selected
+      (lib.mkIf isCachy {
+        nixpkgs.overlays = [ inputs.nix-cachyos-kernel.overlays.pinned ];
+        boot.kernelPackages = pkgs.cachyosKernels."linuxPackages-${v}";
+      })
+    ]; # end of config
 }

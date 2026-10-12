@@ -24,6 +24,7 @@ in
       }; # end of qemu
     }; # end of virtualisation.libvirtd
     virtualisation.spiceUSBRedirection.enable = true; # Allows USB redirection via SPICE.
+    networking.firewall.trustedInterfaces = [ "virbr0" ]; # libvirt's virtual bridge for vms
 
     environment.systemPackages = [
       pkgs.dnsmasq # guest DNS/DHCP for libvirt networks

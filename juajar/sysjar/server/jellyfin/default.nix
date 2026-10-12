@@ -32,6 +32,13 @@ in
   }; # end of options
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.juser != "";
+        message = "sysset.server.jellyfin.juser must name the user jellyfin runs as (it is empty).";
+      }
+    ];
+
     services.jellyfin = {
       enable = true;
       openFirewall = true; # Open firewall for Jellyfin[8096 and another port]

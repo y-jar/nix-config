@@ -3,7 +3,7 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Nix settings (experimental features, substituters, garbage collection).
+# goal: Nix settings (flakes, unfree toggle, nh, nix-ld, optional store cleanup).
 # -=-=-=-=-=-=-=-=-=-=-=
 {
   lib,
@@ -25,6 +25,18 @@ in
     description = "Allow unfree nixpkgs packages (nixpkgs.config.allowUnfree). Default true so existing hosts keep working.";
   }; # end of sysset.nix.unfree.enable
 
+  options.sysset.nix.nh.enable = lib.mkOption {
+    type = lib.types.bool;
+    default = true;
+    description = "Install nh (nix helper) and point NH_OS_FLAKE at ~/nix-config; nh's own weekly clean runs unless storeClean is enabled.";
+  }; # end of sysset.nix.nh.enable
+
+  options.sysset.nix.nixLd.enable = lib.mkOption {
+    type = lib.types.bool;
+    default = true;
+    description = "Enable nix-ld so unpatched binaries (editor plugins, downloaded tools) can run.";
+  }; # end of sysset.nix.nixLd.enable
+
   options.sysset.nix.storeClean = {
     enable = lib.mkEnableOption "automatic Nix store cleanup (nix.gc systemd timer)";
     dates = lib.mkOption {
@@ -44,64 +56,66 @@ in
     }; # end of persistent
   }; # end of sysset.nix.storeClean
 
-  config = {
-    # set up nh
-    programs.nh = {
-      enable = true;
-      flake = "$HOME/nix-config"; # sets NH_OS_FLAKE variable for you/me/all
-      clean = {
-        # nh's own weekly GC timer conflicts with nix.gc, so only one may be
-        # active: storeClean.enable takes over, otherwise nh cleans.
-        # (nhc/nh-clean the CLI command still works either way.)
-        enable = !storeClean.enable;
-        extraArgs = "--keep-since 5d --keep 5";
-      }; # end of clean config
-    }; # end of nh config
+  config = lib.mkMerge [
+    {
+      # Allow unfree packages (per-host toggle)
+      nixpkgs.config.allowUnfree = cfg.enable;
 
-    # Allow unfree packages (per-host toggle)
-    nixpkgs.config.allowUnfree = cfg.enable;
+      # Permit the currently-EOL electron that electron editors (vscodium/obsidian)
+      # pull from the latest nixpkgs, only on hosts that actually install one.
+      # Version-scoped: a future nixpkgs that resolves them to a non-EOL electron
+      # ignores this entry entirely (no pinning, updates unaffected).
+      nixpkgs.config.permittedInsecurePackages = lib.mkIf config.sysset.usesElectronEditor [
+        "electron-41.10.7"
+      ];
 
-    # Permit the currently-EOL electron that electron editors (vscodium/obsidian)
-    # pull from the latest nixpkgs, only on hosts that actually install one.
-    # Version-scoped: a future nixpkgs that resolves them to a non-EOL electron
-    # ignores this entry entirely (no pinning, updates unaffected).
-    nixpkgs.config.permittedInsecurePackages = lib.mkIf config.sysset.usesElectronEditor [
-      "electron-41.10.7"
-    ];
+      # nix itself: flakes everywhere, sane store hygiene
+      nix.settings = {
+        download-buffer-size = 134217728; # around 128mb
+        experimental-features = [
+          "pipe-operators"
+          "nix-command"
+          "flakes"
+        ]; # End of experimental-features
 
-    # Enables nix-ld to run unpatched binaries (like in my neovim config)
-    # acts as a compatability thing, if this has an issue, or i dont like it, SHUT OFF HEHEHE
-    programs.nix-ld.enable = true;
+        # [binary caches] no third-party substituters: default cache.nixos.org only.
 
-    # nix stuff
+        # [perf & hygiene]
+        auto-optimise-store = true; # dedupe identical store paths
+        trusted-users = [
+          "root"
+          "@wheel"
+        ]; # let wheel users run privileged nix ops
+        use-xdg-base-directories = true; # keep nix's user config/cache in ~/.config & ~/.cache
+      }; # end of nix settings
+    }
 
-    # options for nix
-    nix.settings = {
-      download-buffer-size = 134217728; # around 128mb
-      experimental-features = [
-        "pipe-operators"
-        "nix-command"
-        "flakes"
-      ]; # End of experimental-features
+    (lib.mkIf config.sysset.nix.nh.enable {
+      programs.nh = {
+        enable = true;
+        flake = "$HOME/nix-config"; # sets NH_OS_FLAKE variable for you/me/all
+        clean = {
+          # nh's own weekly GC timer conflicts with nix.gc, so only one may be
+          # active: storeClean.enable takes over, otherwise nh cleans.
+          # (nhc/nh-clean the CLI command still works either way.)
+          enable = !storeClean.enable;
+          extraArgs = "--keep-since 5d --keep 5";
+        }; # end of clean config
+      }; # end of nh config
+    })
 
-      # [binary caches]
-      # no third-party substituters: default cache.nixos.org only.
-
-      # [perf & hygiene]
-      auto-optimise-store = true; # dedupe identical store paths
-      trusted-users = [
-        "root"
-        "@wheel"
-      ]; # let wheel users run privileged nix ops
-      use-xdg-base-directories = true; # keep nix's user config/cache in ~/.config & ~/.cache
-    }; # end of nix settings
+    # Runs unpatched binaries (like in my neovim config). If it causes trouble, set false.
+    (lib.mkIf config.sysset.nix.nixLd.enable {
+      programs.nix-ld.enable = true;
+    })
 
     # [automatic store cleanup] opt-in per host (sysset.nix.storeClean.enable).
     # Deletes old generations on a timer; the manual `nsc` alias is the hard wipe.
-    nix.gc = lib.mkIf storeClean.enable {
-      automatic = true;
-      inherit (storeClean) dates options persistent;
-    }; # end of nix.gc
-
-  }; # end of config
+    (lib.mkIf storeClean.enable {
+      nix.gc = {
+        automatic = true;
+        inherit (storeClean) dates options persistent;
+      };
+    })
+  ]; # end of config
 }

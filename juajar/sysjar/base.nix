@@ -89,7 +89,7 @@ in
   config = {
     sysset.hasDesktop = hasDesktop;
 
-    time.timeZone = "America/New_York";
+    time.timeZone = lib.mkDefault "America/New_York"; # hosts can override
 
     # Use zsh
     # NOTE: at a point i ran into a weird zsh error, run this if commands dont work
