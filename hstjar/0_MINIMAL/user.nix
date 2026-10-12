@@ -118,6 +118,8 @@
     dictation.enable = false;
     git.enable = true; # git
     tuneshon.enable = false; # NixOS update tool (gui + cli)
+    nueon.enable = false; # conlang editor/creation app
+    nueon.binary = false; # use the prebuilt release .deb
     bluetooth.enable = false;
     dev = {
       enable = false; # OFF: no dev toolchains

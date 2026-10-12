@@ -126,6 +126,8 @@
     dictation.enable = false; # voxtype push-to-talk dictation + meeting/VTT transcript (F9)
     git.enable = true; # ~10mib - git + gh + lazygit
     tuneshon.enable = false; # NixOS update tool (gui + cli)
+    nueon.enable = true; # conlang editor/creation app
+    nueon.binary = true; # use the prebuilt release .deb
     bluetooth.enable = false; # ~5mib - blueman
     dev = {
       enable = false; # dev master toggle

@@ -331,7 +331,12 @@ in
     nueon.enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = "Enable nueon (conlang editor; built from the nueon flake input)";
+      description = "Enable nueon (conlang editor/creation app)";
+    };
+    nueon.binary = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Use the prebuilt release .deb (nueon-bin) instead of building from source";
     };
     bluetooth.enable = lib.mkEnableOption "bluetooth (blueman)";
     fastfetch.enable = lib.mkOption {

@@ -124,6 +124,8 @@
     dictation.enable = false;
     git.enable = true;
     tuneshon.enable = false; # NixOS update tool (gui + cli)
+    nueon.enable = true; # conlang editor/creation app
+    nueon.binary = true; # use the prebuilt release .deb
     bluetooth.enable = true;
     fastfetch.enable = true;
     dev = {

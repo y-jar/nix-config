@@ -454,19 +454,6 @@
     },
     "nixpkgs_5": {
       "locked": {
-        "lastModified": 1791011291,
-        "narHash": "sha256-4ettaZ6zgjT1Zgjq6zrmIg87gBvLMvPJGA8u0BBTn6Y=",
-        "rev": "73e728ddb6b7a12d18808f510813a13ee1fe4cce",
-        "type": "tarball",
-        "url": "https://releases.nixos.org/nixpkgs/nixpkgs-26.11pre1084597.73e728ddb6b7/nixexprs.tar.zst"
-      },
-      "original": {
-        "id": "nixpkgs",
-        "type": "indirect"
-      }
-    },
-    "nixpkgs_6": {
-      "locked": {
         "lastModified": 1784497964,
         "narHash": "sha256-WhdsTtaih3DgTPP/PX023b36UNQyMzEoi6GkPyGx0y4=",
         "rev": "241313f4e8e508cb9b13278c2b0fa25b9ca27163",
@@ -480,14 +467,16 @@
     },
     "nueon": {
       "inputs": {
-        "nixpkgs": "nixpkgs_5"
+        "nixpkgs": [
+          "nixpkgs"
+        ]
       },
       "locked": {
-        "lastModified": 1791397417,
-        "narHash": "sha256-6Dh8RIjEp7FMOlLtdWRHDPYKooL/Nse6Nlg08IamsLQ=",
+        "lastModified": 1791729980,
+        "narHash": "sha256-txmhqwSavdl0krolRQN1b2xn72uvacD+r1Z4mb6Q1YM=",
         "owner": "y-jar",
         "repo": "nueon",
-        "rev": "6c5aa190933fbd0414a0fd8db35f5a52520c1cf4",
+        "rev": "bec8292bc1d077f194943fb6d9769fcd98a3706d",
         "type": "github"
       },
       "original": {
@@ -588,7 +577,7 @@
     },
     "rsakura": {
       "inputs": {
-        "nixpkgs": "nixpkgs_6"
+        "nixpkgs": "nixpkgs_5"
       },
       "locked": {
         "lastModified": 1784671607,
@@ -722,11 +711,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1790985306,
-        "narHash": "sha256-9F2mBb574POS5J4Lep3TflJyA1VZE50LcRcfuv5n5VA=",
+        "lastModified": 1791572841,
+        "narHash": "sha256-bsh/KzVhVoBmS+Gg6h0ar3nPE89zdlzJYU/quW2NQ1w=",
         "owner": "y-jar",
         "repo": "tuneshon",
-        "rev": "e1be4dae0e831f3f56c70a4a6a12115d16d74086",
+        "rev": "dc778b89e0f8d72bb79164ec14183a64a3214ce1",
         "type": "github"
       },
       "original": {
@@ -763,11 +752,11 @@
     "wall-jar": {
       "flake": false,
       "locked": {
-        "lastModified": 1790569229,
-        "narHash": "sha256-7tAiDSJMpAm4K2Et6HSV+PnWG7R+p9LcaOWbtZCh28Q=",
+        "lastModified": 1791572182,
+        "narHash": "sha256-VQL10tk3aaCGhcFp+B3bKHcX97NhYjdSavXklyJa5d0=",
         "owner": "y-jar",
         "repo": "wall-jar",
-        "rev": "e7251c5e01857790dc843735aa5e0413a4593ce0",
+        "rev": "187ffd9f57fc623f50515d819b2de289a4ff68fa",
         "type": "github"
       },
       "original": {

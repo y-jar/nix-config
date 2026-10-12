@@ -137,7 +137,8 @@
       logFile = "/home/jar/.config/tuneshon/tuneshon.log"; # default
       overwrite = true; # don't clobber GUI edits
     };
-    nueon.enable = true; # conlang editor (source build via flake input)
+    nueon.enable = true; # conlang editor/creation app
+    nueon.binary = false; # build from source (dev machine)
     bluetooth.enable = false; # sets blueman in home packages
     dev = {
       enable = true; # dev master toggle

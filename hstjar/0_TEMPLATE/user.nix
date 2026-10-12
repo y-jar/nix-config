@@ -143,6 +143,8 @@
       logFile = "/home/PLEASECHANGEME_USERNAME/.config/tuneshon/tuneshon.log"; # default location
       overwrite = false; # true = force-reseed config.json each login (clobbers GUI edits)
     };
+    nueon.enable = false; # conlang editor/creation app
+    nueon.binary = false; # use the prebuilt release .deb
     bluetooth.enable = false; # ~5mib - blueman
     dev = {
       enable = false; # dev master toggle

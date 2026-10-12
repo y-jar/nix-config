@@ -3,7 +3,7 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Host 0_TEMPLATE: browser apps treated as desktop apps (webapps).
+# goal: Host fearra: browser apps treated as desktop apps (webapps).
 # -=-=-=-=-=-=-=-=-=-=-=
 # Each entry becomes a fuzzel/rofi-searchable app. Fill in real apps below.
 #
@@ -25,11 +25,11 @@
 
 {
   sysset.webapps = {
-    enable = false; # ship disabled by default; set true when you add apps below
+    enable = true; # ship disabled by default; set true when you add apps below
     apps = [
       {
-        name = "whale";
-        url = "http://whale:8096";
+        name = "YouTube Music";
+        url = "https://music.youtube.com";
         mode = "pwa";
         browser = "chromium";
       }
@@ -38,6 +38,33 @@
         url = "https://www.youtube.com";
         mode = "pwa";
         browser = "chromium";
+        icon = "/home/jar/resjar/iconbin/youtube_logo.png";
+      }
+      {
+        name = "gmail";
+        url = "https://mail.google.com";
+        mode = "pwa";
+      }
+      {
+        name = "messages";
+        url = "https://messages.google.com/web/conversations";
+        mode = "pwa";
+        browser = "chromium";
+        icon ="/home/jar/resjar/iconbin/messages_logo.png";
+      }
+      {
+        name = "jellyfin";
+        url = "http://whale:8096";
+        mode = "pwa";
+        browser = "chromium";
+        icon = "/home/jar/resjar/iconbin/jellyfin_logo.png";
+      }
+      {
+        name = "nixdraw";
+        url = "http://whale:3000";
+        mode = "pwa";
+        browser = "chromium";
+        icon = "/home/jar/resjar/iconbin/excalidraw-dark.png";
       }
     ]; # end of apps
   }; # end of sysset.webapps
