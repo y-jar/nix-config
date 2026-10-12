@@ -35,7 +35,7 @@
 │   │   └── <wm>/               # hyprland | niri | mango: system.nix + user.nix + raw config data + host-inputs/
 │   ├── sysjar/                 # System-level modules (NixOS options under sysset.*)
 │   │   ├── base.nix            # Always-active: core system, CLI tools, Wayland basics
-│   │   ├── kernelPicker.nix    # Kernel variant picker (default/cachyos-latest/...)
+│   │   ├── kernel/             # Kernel variant picker (default/cachyos-latest/...)
 │   │   ├── ai/                 # llama.cpp + Open WebUI (rocm/cuda/cpu)
 │   │   ├── audio/              # PipeWire stack + audio tools (+ jar-audio addon)
 │   │   ├── automount/          # Auto-mount removable media (udisks2)
@@ -47,8 +47,8 @@
 │   │   ├── cosmic/             # COSMIC desktop environment + greeter
 │   │   ├── espanso/            # Espanso daemon + Wayland security wrapper
 │   │   ├── flatpak/            # Flatpak service
-│   │   ├── fonts-emoji/        # System fonts + emoji (Nerd, Japanese, tape font)
-│   │   ├── gaming-hardware/    # Steam, gaming drivers, Vulkan, GStreamer
+│   │   ├── fonts/              # System fonts + emoji (Nerd, Japanese, tape font)
+│   │   ├── gaming/             # Steam, gaming drivers, Vulkan, GStreamer
 │   │   ├── gdm/                # GDM display manager
 │   │   ├── gnome/              # GNOME desktop + companion apps
 │   │   ├── localsend/          # LocalSend file sharing
@@ -64,7 +64,7 @@
 │   │   ├── security/           # Polkit rules, rtkit, udisks2
 │   │   ├── server/             # Server modules (Jellyfin, komga, sleepyjar, nixdraw, webjar, outline, authentik, vpn)
 │   │   ├── syncthing/          # System syncthing service
-│   │   ├── system-scripts/     # System-level shell scripts (nru, updatejar)
+│   │   ├── systemScripts/      # System-level shell scripts (nru, updatejar)
 │   │   ├── tlp/                # TLP laptop power management + battery thresholds
 │   │   ├── users/              # User account creation + groups
 │   │   ├── v412/               # v4l2loopback kernel module (OBS virtual cam)
