@@ -6,7 +6,7 @@
 
 # Niri
 
-Scrollable tiling Wayland compositor. Configured via `juajar/liijar/WM-niri/` with KDL config files and per-host inputs.
+Scrollable tiling Wayland compositor. Configured via `juajar/WMs/niri/` with KDL config files and per-host inputs.
 
 System-level: enabled in `sysset.niri.enable`.
 User-level: enabled in `usrset.niri.enable`.

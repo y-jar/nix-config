@@ -6,7 +6,7 @@
 # goal: Niri KDL config generation.
 # -=-=-=-=-=-=-=-=-=-=-=
 # =-=-=[niri] =-=-=
-# Copies the KDL config files (from liijar/wmconfigs/niri, shared with the
+# Copies the KDL config files (from juajar/WMs/niri, shared with the
 # old home-manager side). The desktop shell spawn + launcher/settings binds are
 # gated on usrset.niri.{shelljar,noctalia}.enable (mirrors the old home-manager
 # config). Mod+D launcher follows the desktop shell: shelljar -> noctalia -> fuzzel.
@@ -24,14 +24,15 @@ let
   hjm = config.usrset;
   p = config.usrset.theming.colors; # gruvbox palette
 
-  wmc = ../wmconfigs/niri; # shared niri wm configs (liijar)
-  kdlDir = wmc;
-  hostInputsDir = wmc + "/host-inputs";
+  wmlib = import ../lib.nix;
+  kdlDir = ./.; # the niri kdl files live next to this module
 
-  # [select host-specific input file]
-  hostSpecificFile = hostInputsDir + "/${hostnm}.kdl";
-  targetKdlSource =
-    if builtins.pathExists hostSpecificFile then hostSpecificFile else hostInputsDir + "/0-unknown.kdl";
+  # [select host-specific input file] (falls back to 0-unknown.kdl)
+  targetKdlSource = wmlib.hostInput {
+    dir = kdlDir;
+    host = hostnm;
+    ext = "kdl";
+  };
 
   shelljarEnabled = hjm.niri.shelljar.enable or false;
   noctaliaEnabled = hjm.niri.noctalia.enable or false;
@@ -96,11 +97,11 @@ let
     + lib.concatMapStringsSep "" (c: "spawn-at-startup \"${c}\"\n") config.usrset.system.autostart
     + lib.optionalString shelljarEnabled ''
       spawn-at-startup "shelljar"
-      // desktop shell (quickshell island shell) spawned by WM-niri
+      // desktop shell (quickshell island shell) spawned by WMs/niri
     ''
     + lib.optionalString (noctaliaEnabled && !shelljarEnabled) ''
       spawn-at-startup "noctalia-shell"
-      // desktop shell spawned by WM-niri
+      // desktop shell spawned by WMs/niri
     '';
 
   # audio channel pinning, generated if the audio addon is enabled.

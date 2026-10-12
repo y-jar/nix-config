@@ -171,7 +171,7 @@ EOF
 # --- hstjar/<host>/user.nix ---
     tabletenable.mytablet.enable = true;
 
-# --- optional: wmconfigs/mango/host-inputs/<host>.conf  (adjust geometry) ---
+# --- optional: juajar/WMs/mango/host-inputs/<host>.conf  (adjust geometry) ---
 EOF
   [ -n "$refr" ] && printf '# refresh options: %s Hz\n' "$refr"
   cat <<EOF

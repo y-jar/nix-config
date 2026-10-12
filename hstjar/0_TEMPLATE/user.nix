@@ -16,7 +16,7 @@
 #   - Pair options here with the matching system toggles in ./system.nix.
 #   - Per-app behaviour lives in juajar/liijar/<app>/default.nix; shared shell
 #     aliases/functions live in juajar/liijar/shell/.
-#   - For extra Hyprland/Niri per-host config see juajar/liijar/wmconfigs (host-inputs).
+#   - For extra Hyprland/Niri per-host config see juajar/WMs/<wm>/host-inputs.
 {
   hyprlandEnable,
   niriEnable,

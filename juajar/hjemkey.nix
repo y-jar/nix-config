@@ -54,6 +54,7 @@
       # the host user.nix sets the per-host toggles.
       extraModules = [
         ./liijar
+        ./WMs/hjem.nix # window manager dotfiles (see WMs/default.nix)
         (hostDir + "/user.nix")
       ];
 

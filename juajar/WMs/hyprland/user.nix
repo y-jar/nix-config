@@ -41,9 +41,12 @@ let
     })
   '';
 
-  hostSpecificFile = ./host-inputs + "/${hostnm}.lua"; # host-specific input
-  targetLUASource =
-    if builtins.pathExists hostSpecificFile then hostSpecificFile else ./host-inputs/0-unknown.lua;
+  # host-specific input (falls back to 0-unknown.lua)
+  targetLUASource = (import ../lib.nix).hostInput {
+    dir = ./.;
+    host = hostnm;
+    ext = "lua";
+  };
 
   # Desktop shell gating (mirror of the niri/mango modules): shelljar replaces noctalia.
   shelljarEnabled = config.usrset.hyprland.shelljar.enable or false;
@@ -112,7 +115,7 @@ in
       ".config/hypr/hl/colors.lua".source = colorsLua; # palette-generated
       ".config/hypr/host-inputs/input.lua".source = targetLUASource; # host-specific inputs
       # [desktop shell config]
-      ".config/shelljar/config.kdl".source = ../shell/shelljar-config.kdl;
+      ".config/shelljar/config.kdl".source = ../../liijar/shell/shelljar-config.kdl;
     }; # end of files
     packages = [
       pkgs.waypaper # GUI wallpaper setter for Wayland-based window managers

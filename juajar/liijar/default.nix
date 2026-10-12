@@ -7,7 +7,7 @@
 # -=-=-=-=-=-=-=-=-=-=-=
 # Same auto-importer as sysjar: pulls in every root .nix file (options.nix,
 # profile-bus.nix) plus every app dir. App dirs must carry a default.nix;
-# the data dirs (shell/, wmconfigs/) don't, so they're skipped naturally.
+# the data dir (shell/) doesn't, so it is skipped naturally. WM modules live in ../WMs.
 {
   lib,
   ...

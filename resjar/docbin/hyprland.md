@@ -6,7 +6,7 @@
 
 # Hyprland
 
-Configured via `juajar/liijar/WM-hyprland/`. Symlinks Lua config files into `~/.config/hypr/` with per-host inputs for different machines.
+Configured via `juajar/WMs/hyprland/`. Symlinks Lua config files into `~/.config/hypr/` with per-host inputs for different machines.
 
 System-level: enabled in `sysset.hyprland.enable` (~19MiB).
 User-level: enabled in `usrset.hyprland.enable`.

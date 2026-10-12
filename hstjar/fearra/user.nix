@@ -10,7 +10,7 @@
 # - Keep `shell.enable` true it's the default shell for most systems.
 # - WM toggles mirror the system sheet (./system.nix) via the *Enable args.
 # - Pair options here with the matching system toggles in ./system.nix.
-# - For extra Hyprland/Niri per-host config see juajar/liijar/wmconfigs (host-inputs).
+# - For extra Hyprland/Niri per-host config see juajar/WMs/<wm>/host-inputs.
 {
   hyprlandEnable,
   niriEnable,

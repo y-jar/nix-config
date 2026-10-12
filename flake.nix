@@ -30,6 +30,7 @@
           }; # end of special args
           modules = [
             ./juajar/sysjar # Base system core entry
+            ./juajar/WMs # Window managers: NixOS half (the hjem half rides in hjemkey)
             ./juajar/hjemkey.nix # Hjem entry (user backend)
             ./hstjar/${hostName} # Host-specific directory entry [what happens here can depend on each system]
           ]; # end of modules

@@ -20,16 +20,19 @@
 │   ├── yilyonix/               # Test bench (laptop/tablet)
 │   └── ziiemar/                # Personal laptop (HP)
 │
-├── juajar/                     # Shared NixOS modules
-│   ├── hjemkey.nix             # Hjem entry point (THE user backend)
-│   ├── lib/                    # Shared helpers (slug.nix for webapps)
-│   └── liijar/                 # User-level apps (hjem scope)
-│       ├── default.nix         # Auto-importer (same as sysjar) every app dir
-│       ├── options.nix         # The usrset.* option declarations (single source)
-│       ├── profile-bus.nix     # .profile dirSetup lines bus
-│       ├── shell/              # Shared zsh aliases + functions + repl
-│       ├── wmconfigs/          # Raw niri/mango KDL/conf + j* wm tool scripts
-│       └── <app>/              # One dir per app: default.nix (+ asset siblings)
+├── juajar/                     # Shared modules
+│   ├── hjemkey.nix             # Hjem entry point (THE user backend): hjem wiring only
+│   ├── bridge.nix              # The ONLY place sysset <-> usrset meet (usrset.system facts, user -> system toggles)
+│   ├── data/                   # Shared data (slug.nix, espansoconf.nix, tabletconf.nix)
+│   ├── liijar/                 # User-level apps (hjem scope)
+│   │   ├── default.nix         # Auto-importer (same as sysjar) every app dir
+│   │   ├── options.nix         # The usrset.* option declarations (single source)
+│   │   ├── profile-bus.nix     # writes ~/.profile (POSIX sh) + the dirSetup lines bus
+│   │   ├── shell/              # Shared zsh aliases + functions + repl
+│   │   └── <app>/              # One dir per app: default.nix (+ asset siblings)
+│   ├── WMs/                    # Window managers, one dir each (router: default.nix = NixOS side, hjem.nix = user side)
+│   │   ├── lib.nix             # Shared helpers (host-inputs lookup w/ 0-unknown fallback)
+│   │   └── <wm>/               # hyprland | niri | mango: system.nix + user.nix + raw config data + host-inputs/
 │   ├── sysjar/                 # System-level modules (NixOS options under sysset.*)
 │   │   ├── base.nix            # Always-active: core system, CLI tools, Wayland basics
 │   │   ├── kernelPicker.nix    # Kernel variant picker (default/cachyos-latest/...)
@@ -67,9 +70,6 @@
 │   │   ├── v412/               # v4l2loopback kernel module (OBS virtual cam)
 │   │   ├── virt/               # virt role: none | host (libvirtd/QEMU) | guest (qemu-guest)
 │   │   ├── webapps/            # Web-apps-as-desktop-apps definitions (sysset.webapps)
-│   │   ├── WM-hyprland/        # Hyprland compositor enable + companion apps
-│   │   ├── WM-mango/           # Mango compositor enable
-│   │   └── WM-niri/            # Niri compositor enable
 │
 └── resjar/                     # Resources (docs, nix templates, images)
     ├── asciiartbin/            # ASCII art banners (the jar sig, jn banner)

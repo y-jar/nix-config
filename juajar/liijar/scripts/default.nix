@@ -6,7 +6,7 @@
 # goal: installs ALL shared helper scripts (single source of truth).
 # -=-=-=-=-=-=-=-=-=-=-=
 # The script sources live in ./scriptsbin/ (the single copy; the old
-# liijar/wmconfigs/bin copies were merged in here). Buckets:
+# the old wmconfigs/bin copies were merged in here). Buckets:
 #   core    - always installed (nix/repo helpers)
 #   format  - joutputs, always installed (output/EDID formatter; deps baked in)
 #   wmTools - gated on any compositor/launcher (need fuzzel/grim/wl-clipboard...)

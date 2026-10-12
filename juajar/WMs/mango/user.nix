@@ -7,7 +7,7 @@
 # -=-=-=-=-=-=-=-=-=-=-=
 # =-=-=[mango] =-=-=
 # Copies the category config.conf dotfiles + per-host host-inputs file.
-# Category configs live in liijar/wmconfigs/mango (shared with the
+# Category configs live in juajar/WMs/mango (shared with the
 # old home-manager side). nix-startups.conf is generated from the shell toggles
 # (shelljar) + system autostart. Im gay
 # =-=-=[end mango] =-=-=
@@ -24,7 +24,8 @@ let
   hjm = config.usrset;
   p = config.usrset.theming.colors; # gruvbox palette
   mkArgb = c: a: "0x${builtins.substring 1 6 c}${a}"; # Mango wants RRGGBBAA
-  wmc = ../wmconfigs/mango; # shared mango wm configs (liijar)
+  wmlib = import ../lib.nix;
+  wmc = ./.; # the mango conf files live next to this module
 
   # looks.conf with the appearance hexes swapped for the palette. Mango only
   # manages windows: borders are 0px, so these stay muted on purpose.
@@ -57,18 +58,18 @@ let
       (builtins.readFile (wmc + "/looks.conf"))
   );
 
-  hostSpecificFile = wmc + "/host-inputs/${hostnm}.conf";
-  targetConfSource =
-    if builtins.pathExists hostSpecificFile then
-      hostSpecificFile
-    else
-      wmc + "/host-inputs/0-unknown.conf";
+  # host-specific input file (falls back to 0-unknown.conf)
+  targetConfSource = wmlib.hostInput {
+    dir = wmc;
+    host = hostnm;
+    ext = "conf";
+  };
 
   shelljarEnabled = hjm.mango.shelljar.enable or false;
   noctaliaEnabled = hjm.mango.noctalia.enable or false;
   generatedStartups = ''
     # mango (mangowm) nix-generated startups
-    # Contents injected by liijar/WM-mango/hjem.nix.
+    # Contents injected by WMs/mango/user.nix.
     # Don't hand-edit: rebuild to regenerate.
   ''
   + lib.optionalString shelljarEnabled ''
