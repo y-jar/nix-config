@@ -7,11 +7,11 @@
 # -=-=-=-=-=-=-=-=-=-=-=
 { config, lib, ... }:
 let
-  cfg = config.sysset.virtcam;
+  cfg = config.sysset.virtCam;
 in
 {
   options = {
-    sysset.virtcam.enable = lib.mkOption {
+    sysset.virtCam.enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
       description = "Enable the OBS Virtual Camera";

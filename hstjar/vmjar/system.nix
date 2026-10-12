@@ -36,10 +36,10 @@
 
       # =============[base / core packages]
       base = {
-        coreTools = true;
-        netArchives = true;
-        fsTools = true;
-        imaging = true;
+        coreTools.enable = true;
+        netArchives.enable = true;
+        fsTools.enable = true;
+        imaging.enable = true;
       };
       # =============[base / core packages]^^^
 
@@ -76,17 +76,17 @@
       };
       boot.quiet = false; # silence kernel/udev/systemd startup logs
       boot.fastMenu = false; # set boot loader timeout to 1 second
-      boot.plymouth.enable = true; # custom boot splash logo
+      plymouth.enable = true; # custom boot splash logo
       bluetooth.enable = false; # sets blueman in home packages
       automount.enable = true; # auto-mount removable media (udisks2)
       # [power management]
-      tlp.enable = false; # NOTE: mutually exclusive with powerprofiles, pick one
+      tlp.enable = false; # NOTE: mutually exclusive with powerProfiles, pick one
       tlp.startChargeThreshold = 0;
       tlp.stopChargeThreshold = 100;
       tlp.cpuEppOnBattery = "balance_power"; # (default|performance|balance_performance|balance_power|power)
       tlp.platformProfileOnBattery = "balanced"; # (cool|quiet|balanced|performance)
       tlp.pcieAspmOnBattery = "default"; # (default|performance|powersave|powersupersave)
-      powerprofiles.enable = false;
+      powerProfiles.enable = false;
       audio = {
         enable = true; # sets audio and adds some apps
         addon.enable = false; # adds my audio setup
@@ -94,8 +94,8 @@
       # =============[hardware]^^^
 
       # =============[software]
-      unfree.enable = true; # allow unfree packages (spotify, chromium, vscodium, steam, ...)
-      UseNixPkgsYoinks.enable = false;
+      nix.unfree.enable = true; # allow unfree packages (spotify, chromium, vscodium, steam, ...)
+      nix.nixpkgsYoinks.enable = false;
       ai = {
         enable = false; # sets AI tools (llama.cpp, opencode, etc.)
         llama = {
@@ -121,7 +121,7 @@
         codecs.enable = false; # GPU-less host: skip GStreamer/VA-API tooling
         steam.enable = false; # sets steam and associated libraries for gaming, but not more important drivers
       }; # end of gaming
-      virtcam.enable = false; # sets virtual camera for things like OBS
+      virtCam.enable = false; # sets virtual camera for things like OBS
       virt = {
         role = "guest"; # this system runs inside a VM
       }; # end of virt

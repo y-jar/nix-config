@@ -19,11 +19,11 @@
   ...
 }:
 let
-  cfg = config.sysset.cockpit;
+  cfg = config.sysset.server.cockpit;
 
   pluginPackages =
-    lib.optional cfg.machines pkgs.cockpit-machines
-    ++ lib.optional cfg.podman pkgs.cockpit-podman
+    lib.optional cfg.machines.enable pkgs.cockpit-machines
+    ++ lib.optional cfg.podman.enable pkgs.cockpit-podman
     ++ cfg.extraPlugins;
 
   # this host's own net.nix (pure data; the same file the networking module
@@ -36,7 +36,7 @@ let
   hostIp = netData.ip or null;
 in
 {
-  options.sysset.cockpit = {
+  options.sysset.server.cockpit = {
     enable = lib.mkEnableOption "Cockpit web management UI";
 
     port = lib.mkOption {
@@ -57,8 +57,8 @@ in
       description = "Allow plain-HTTP access (settings.WebService.AllowUnencrypted). Use on a trusted LAN or behind a TLS reverse proxy.";
     }; # end of allowUnencrypted
 
-    machines = lib.mkEnableOption "cockpit-machines (manage KVM/QEMU VMs via libvirt)";
-    podman = lib.mkEnableOption "cockpit-podman (manage containers)";
+    machines.enable = lib.mkEnableOption "cockpit-machines (manage KVM/QEMU VMs via libvirt)";
+    podman.enable = lib.mkEnableOption "cockpit-podman (manage containers)";
 
     extraOrigins = lib.mkOption {
       type = lib.types.listOf lib.types.str;

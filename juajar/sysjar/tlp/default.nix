@@ -62,8 +62,8 @@ in
   config = lib.mkIf cfg.enable {
     assertions = [
       {
-        assertion = !config.sysset.powerprofiles.enable;
-        message = "sysset.tlp and sysset.powerprofiles (power-profiles-daemon) are mutually exclusive: set powerprofiles.enable = false on this host.";
+        assertion = !config.sysset.powerProfiles.enable;
+        message = "sysset.tlp and sysset.powerProfiles (power-profiles-daemon) are mutually exclusive: set powerProfiles.enable = false on this host.";
       }
     ];
 

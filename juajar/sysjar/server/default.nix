@@ -10,5 +10,6 @@
     ./outline.nix # sets up the outline wiki server
     ./authentik.nix # sets up the authentik SSO IdP
     ./mysql.nix # MySQL/MariaDB server (sysset.server.mysql)
+    ./cockpit.nix # Cockpit web management UI (sysset.server.cockpit)
   ];
 }

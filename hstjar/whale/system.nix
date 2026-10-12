@@ -36,10 +36,10 @@
 
       # =============[base / core packages]
       base = {
-        coreTools = true;
-        netArchives = true;
-        fsTools = true;
-        imaging = true;
+        coreTools.enable = true;
+        netArchives.enable = true;
+        fsTools.enable = true;
+        imaging.enable = true;
       };
       # =============[base / core packages]^^^
 
@@ -75,18 +75,18 @@
       };
       boot.quiet = false; # silence kernel/udev/systemd startup logs
       boot.fastMenu = false; # set boot loader timeout to 1 second
-      boot.plymouth.enable = true; # custom boot splash logo
+      plymouth.enable = true; # custom boot splash logo
       neverSleep.enable = true; # disable system idle sleep
       bluetooth.enable = false; # sets blueman in home packages
       automount.enable = true; # auto-mount removable media (udisks2)
       # [power management]
-      tlp.enable = false; # NOTE: mutually exclusive with powerprofiles, pick one
+      tlp.enable = false; # NOTE: mutually exclusive with powerProfiles, pick one
       tlp.startChargeThreshold = 0;
       tlp.stopChargeThreshold = 100;
       tlp.cpuEppOnBattery = "balance_power"; # (default|performance|balance_performance|balance_power|power)
       tlp.platformProfileOnBattery = "balanced"; # (cool|quiet|balanced|performance)
       tlp.pcieAspmOnBattery = "default"; # (default|performance|powersave|powersupersave)
-      powerprofiles.enable = false;
+      powerProfiles.enable = false;
       audio = {
         enable = true; # sets audio and adds some apps
         addon.enable = false; # adds my audio setup
@@ -94,9 +94,9 @@
       # =============[hardware]^^^
 
       # =============[software]
-      unfree.enable = true; # allow unfree packages (spotify, chromium, vscodium, steam, ...)
-      systemStoreClean.enable = true; # auto weekly Nix GC (--delete-older-than 14d)
-      UseNixPkgsYoinks.enable = false;
+      nix.unfree.enable = true; # allow unfree packages (spotify, chromium, vscodium, steam, ...)
+      nix.storeClean.enable = true; # auto weekly Nix GC (--delete-older-than 14d)
+      nix.nixpkgsYoinks.enable = false;
       ai = {
         enable = false; # sets AI tools (llama.cpp, opencode, etc.)
         llama = {
@@ -122,25 +122,25 @@
         codecs.enable = false; # GPU-less host: skip GStreamer/VA-API tooling
         steam.enable = false; # sets steam and associated libraries for gaming, but not more important drivers
       }; # end of gaming
-      virtcam.enable = false; # sets virtual camera for things like OBS
+      virtCam.enable = false; # sets virtual camera for things like OBS
       virt = {
         role = "host"; # libvirtd/QEMU (managed via cockpit-machines)
         gui = false; # headless: no virt-manager/gnome-boxes
       }; # end of virt
       portal.enable = true; # XDG portal file pickers
       polkit.enable = true; # polkit authentication agent (gnome polkit)
-      cockpit = {
-        enable = true; # Cockpit web management UI (port 9090)
-        openFirewall = true; # open 9090 on the LAN
-        allowUnencrypted = true; # plain http on the trusted LAN (no TLS terminator yet)
-        machines = true; # cockpit-machines (KVM/libvirt management)
-        podman = true; # cockpit-podman (container management)
-        extraOrigins = [ ]; # auto origins cover whale, whale.local, 192.168.1.10
-      }; # end of cockpit
       # =============[software]^^^
 
       # =============[Server]
       server = {
+        cockpit = {
+          enable = true; # Cockpit web management UI (port 9090)
+          openFirewall = true; # open 9090 on the LAN
+          allowUnencrypted = true; # plain http on the trusted LAN (no TLS terminator yet)
+          machines.enable = true; # cockpit-machines (KVM/libvirt management)
+          podman.enable = true; # cockpit-podman (container management)
+          extraOrigins = [ ]; # auto origins cover whale, whale.local, 192.168.1.10
+        }; # end of cockpit
         komga.enable = true; # manga/comic server (port 25600)
         jellyfin = {
           enable = true; # sets jellyfin server.  note: the default port is 8096.

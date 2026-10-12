@@ -28,7 +28,7 @@ let
       pkgs.browsh # browser within a TUI
     ]
     ++ lib.optionals mullvadEnabled [
-      pkgs.mullvad-vpn # VPN client 300Mib (mirrors sysset.server.vpn.mullvad)
+      pkgs.mullvad-vpn # VPN client 300Mib (mirrors sysset.networking.mullvad)
     ];
 in
 {

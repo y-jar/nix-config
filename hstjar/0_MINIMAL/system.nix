@@ -32,10 +32,10 @@
       # =============[base / core packages]
       # Minimal: keep just the essentials. imaging (codecs) is OFF to save space.
       base = {
-        coreTools = true; # neovim + nh + git keep
-        netArchives = true; # wget + curl + zip + rsync small, keep
-        fsTools = true; # psmisc + pciutils + usbutils small, keep
-        imaging = false; # image/video codec + thumbnail libs OFF (large)
+        coreTools.enable = true; # neovim + nh + git keep
+        netArchives.enable = true; # wget + curl + zip + rsync small, keep
+        fsTools.enable = true; # psmisc + pciutils + usbutils small, keep
+        imaging.enable = false; # image/video codec + thumbnail libs OFF (large)
       };
       # =============[base / core packages]^^^
 
@@ -65,13 +65,13 @@
       };
       boot.quiet = false;
       boot.fastMenu = false;
-      boot.plymouth.enable = false;
+      plymouth.enable = false;
 
       neverSleep.enable = false;
       bluetooth.enable = false;
       automount.enable = true; # auto-mount removable media (small, handy)
       tlp.enable = false;
-      powerprofiles.enable = true;
+      powerProfiles.enable = true;
       audio = {
         enable = true; # ~100mib - PipeWire (WM needs audio)
         addon.enable = false;
@@ -79,7 +79,7 @@
       # =============[hardware]^^^
 
       # =============[software]
-      UseNixPkgsYoinks.enable = false;
+      nix.nixpkgsYoinks.enable = false;
       fonts = {
         enable = true; # install fonts (master)
         minimal = true; # only terminal font + essentials (drops ~700MiB rounded-mgenplus)
@@ -111,13 +111,15 @@
         codecs.enable = false; # OFF: no GStreamer/VA-API tooling
         steam.enable = false;
       };
-      virtcam.enable = false;
+      virtCam.enable = false;
       virt = {
         role = "none";
       };
       portal.enable = false;
       polkit.enable = false;
       # =============[software]^^^
+
+      networking.mullvad.enable = false; # mullvad vpn
 
       # =============[Server]
       server = {
@@ -146,9 +148,6 @@
           enable = false; # sets authentik SSO IdP (login provider for outline)
           port = 9000; # web UI/API port
         }; # end of authentik
-        vpn = {
-          mullvad.enable = false;
-        };
       }; # end of server
       # =============[Server]^^^
     }; # end of sysset

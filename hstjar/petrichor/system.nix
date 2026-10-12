@@ -32,10 +32,10 @@
       # Always-on package groups. Default true keeps a useful baseline; disable
       # groups you don't need to shrink the system/download.
       base = {
-        coreTools = true; # neovim + nh + git
-        netArchives = true; # wget + curl + zip + rar + rsync
-        fsTools = true; # psmisc + pciutils + usbutils + ntfs3g
-        imaging = true; # image/video codec + thumbnail support
+        coreTools.enable = true; # neovim + nh + git
+        netArchives.enable = true; # wget + curl + zip + rar + rsync
+        fsTools.enable = true; # psmisc + pciutils + usbutils + ntfs3g
+        imaging.enable = true; # image/video codec + thumbnail support
       };
       # =============[base / core packages]^^^
 
@@ -72,21 +72,21 @@
       };
       boot.quiet = false;
       boot.fastMenu = false;
-      boot.plymouth.enable = false; # custom logo boot splash via plymouth
+      plymouth.enable = false; # custom logo boot splash via plymouth
 
       neverSleep.enable = false; # disable system idle sleep
       bluetooth.enable = false; # ~10mib - sets blueman in home packages
       automount.enable = true; # auto-mount removable media (udisks2)
       # [power management]
-      # NOTE: tlp and powerprofiles are mutually exclusive, pick one
-      # tlp is better for battery capping (laptops), powerprofiles gives a tray selector
+      # NOTE: tlp and powerProfiles are mutually exclusive, pick one
+      # tlp is better for battery capping (laptops), powerProfiles gives a tray selector
       tlp.enable = false;
       tlp.startChargeThreshold = 0; # 0 = always charge, 75 = resume charging at 75%
       tlp.stopChargeThreshold = 100; # 100 = no cap, 80 = stop charging at 80%
       tlp.cpuEppOnBattery = "balance_power"; # (default|performance|balance_performance|balance_power|power)
       tlp.platformProfileOnBattery = "balanced"; # (cool|quiet|balanced|performance)
       tlp.pcieAspmOnBattery = "default"; # (default|performance|powersave|powersupersave)
-      powerprofiles.enable = true;
+      powerProfiles.enable = true;
       audio = {
         enable = true; # ~100mib - PipeWire + audio tools
         addon.enable = false; # adds my audio setup
@@ -94,8 +94,8 @@
       # =============[hardware]^^^
 
       # =============[software]
-      unfree.enable = true; # allow unfree packages (spotify, chromium, vscodium, steam, ...)
-      UseNixPkgsYoinks.enable = false;
+      nix.unfree.enable = true; # allow unfree packages (spotify, chromium, vscodium, steam, ...)
+      nix.nixpkgsYoinks.enable = false;
       ai = {
         enable = false; # ~2gib - llama.cpp + models (auto-downloaded via models-preset)
         llama = {
@@ -120,7 +120,7 @@
         }; # end of drivers
         steam.enable = true; # ~2gib - Steam client + 32-bit libs
       }; # end of gaming
-      virtcam.enable = true; # ~5mib - virtual camera for OBS
+      virtCam.enable = true; # ~5mib - virtual camera for OBS
       virt = {
         role = "host"; # libvirtd/QEMU on this host
         gui = true; # virt-manager + gnome-boxes
@@ -128,6 +128,8 @@
       portal.enable = true; # XDG portal file pickers
       polkit.enable = true; # polkit authentication agent (gnome polkit)
       # =============[software]^^^
+
+      networking.mullvad.enable = false; # mullvad vpn
 
       # =============[Server]
       server = {
@@ -164,9 +166,6 @@
           enable = false; # sets authentik SSO IdP (login provider for outline)
           port = 9000; # web UI/API port
         }; # end of authentik
-        vpn = {
-          mullvad.enable = false;
-        };
       }; # end of server
       # =============[Server]^^^
     }; # end of sysset

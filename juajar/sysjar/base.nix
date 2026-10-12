@@ -18,10 +18,12 @@ let
   # package-group toggle that defaults ON (a minimal host opts out with false)
   mkOn =
     description:
-    lib.mkOption {
-      type = lib.types.bool;
-      default = true;
-      inherit description;
+    {
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        inherit description;
+      };
     };
 
   # Derived flag: does this host run any window manager / desktop environment?
@@ -97,7 +99,7 @@ in
       dconf.enable = true; # key/value preference storage (GCONF successor)
       evince.enable = true; # PDF thumbnailing
       # tell NixOS to include these in the generated pixbuf loaders cache
-      gdk-pixbuf.modulePackages = lib.mkIf base.imaging [
+      gdk-pixbuf.modulePackages = lib.mkIf base.imaging.enable [
         pkgs.librsvg
         pkgs.webp-pixbuf-loader
       ];
@@ -115,7 +117,7 @@ in
       # use https://search.nixos.org/ to find more packages (and options).
       systemPackages = lib.mkMerge [
         # [base]
-        (lib.mkIf base.coreTools [
+        (lib.mkIf base.coreTools.enable [
           pkgs.neovim # extensible terminal editor
           pkgs.nh # nix helper (builds/deploys this config)
           pkgs.git # version control
@@ -124,7 +126,7 @@ in
         ])
 
         # [Archives & net serv]
-        (lib.mkIf base.netArchives [
+        (lib.mkIf base.netArchives.enable [
           pkgs.wget # file retrieval over HTTP/HTTPS/FTP
           pkgs.curl # URL-transfer CLI
           pkgs.zip # zip archiver
@@ -134,7 +136,7 @@ in
         ])
 
         # [tools & file system]
-        (lib.mkIf base.fsTools [
+        (lib.mkIf base.fsTools.enable [
           pkgs.psmisc # killall + fuser
           pkgs.pciutils # lspci
           pkgs.usbutils # lsusb
@@ -143,7 +145,7 @@ in
         ])
 
         # [image format support]
-        (lib.mkIf base.imaging [
+        (lib.mkIf base.imaging.enable [
           pkgs.webp-pixbuf-loader # webp support for GTK apps
           pkgs.libheif # heif/avif support
           pkgs.libjxl # jpeg-xl support

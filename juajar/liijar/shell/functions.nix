@@ -17,7 +17,7 @@
 ''
   # quick nix shell: , git curl   or   , git curl -- ls   (modern, flake-based)
   # Boots an interactive shell (no `-- <cmd>`) or runs a one-off command (`-- <cmd>`).
-  # Unfree temp installs are allowed only on hosts where sysset.unfree.enable is true.
+  # Unfree temp installs are allowed only on hosts where sysset.nix.unfree.enable is true.
   ,() {
     local -a pref=() pkgs=() args=()
     local sep=0 p

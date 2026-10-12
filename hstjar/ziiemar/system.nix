@@ -58,10 +58,10 @@
 
       # =============[base / core packages]
       base = {
-        coreTools = true;
-        netArchives = true;
-        fsTools = true;
-        imaging = true;
+        coreTools.enable = true;
+        netArchives.enable = true;
+        fsTools.enable = true;
+        imaging.enable = true;
       };
       # =============[base / core packages]^^^
 
@@ -99,10 +99,10 @@
       };
       boot.quiet = false; # silence kernel/udev/systemd startup logs
       boot.fastMenu = false; # set boot loader timeout to 1 second
-      boot.plymouth.enable = true; # custom boot splash logo
+      plymouth.enable = true; # custom boot splash logo
       bluetooth.enable = true; # sets blueman in home packages
       # [power management]
-      # NOTE: tlp and powerprofiles are mutually exclusive, pick one
+      # NOTE: tlp and powerProfiles are mutually exclusive, pick one
       tlp.enable = true;
       tlp.startChargeThreshold = 0;
       tlp.stopChargeThreshold = 80; # no hard cap on HP consumer; BIOS "Adaptive Battery Optimizer" is adaptive
@@ -116,8 +116,8 @@
       # =============[hardware]^^^
 
       # =============[software]
-      unfree.enable = true; # allow unfree packages (spotify, chromium, vscodium, steam, ...)
-      UseNixPkgsYoinks.enable = false;
+      nix.unfree.enable = true; # allow unfree packages (spotify, chromium, vscodium, steam, ...)
+      nix.nixpkgsYoinks.enable = false;
       ai = {
         enable = true; # sets AI tools (llama.cpp, opencode, etc.)
         llama = {
@@ -142,7 +142,7 @@
         }; # end of drivers
         steam.enable = true; # sets steam and associated libraries for gaming, but not more important drivers
       }; # end of gaming
-      virtcam.enable = false; # sets virtual camera for things like OBS
+      virtCam.enable = false; # sets virtual camera for things like OBS
       virt = {
         role = "host"; # libvirtd/QEMU on this host
         gui = true; # virt-manager + gnome-boxes

@@ -14,7 +14,7 @@
 }:
 # NOTE: planned to move to a more modular layout; for now this is a simple default config
 let
-  vpncfg = config.sysset.server.vpn;
+  netcfg = config.sysset.networking;
 
   # [fleet phone book] every hstjar/<host>/net.nix is pure data:
   #   ip / hostKey = identity (single source of truth per host)
@@ -50,11 +50,9 @@ let
 in
 {
   options = {
-    sysset.server = {
-      vpn = {
-        mullvad.enable = lib.mkEnableOption "Mullvad VPN";
-      }; # end of sysset.server.vpn
-    }; # end of sysset.server
+    sysset.networking = {
+      mullvad.enable = lib.mkEnableOption "Mullvad VPN";
+    }; # end of sysset.networking
   }; # end of options
 
   config = {
@@ -85,7 +83,7 @@ in
         }; # end of publish
       }; # end of avahi
       # [vpn]
-      mullvad-vpn.enable = vpncfg.mullvad.enable; # mullvad vpn
+      mullvad-vpn.enable = netcfg.mullvad.enable; # mullvad vpn
     }; # end of services
     networking = {
       # NOTE: If hostname is changed, be sure to match it on flake.nix and in the shell aliases in

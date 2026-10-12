@@ -6,7 +6,7 @@
 # goal: `jn` (jar's nix shell) - a playful interactive shell launcher.
 # Shows the jar banner, runs a gum "favorite plant?" quiz, then spawns a
 # themed `nix shell` based on the answer. Per-host gated on
-# sysset.unfree.enable and sysset.UseNixPkgsYoinks.enable.
+# sysset.nix.unfree.enable and sysset.nix.nixpkgsYoinks.enable.
 # -=-=-=-=-=-=-=-=-=-=-=
 {
   lib,

@@ -42,7 +42,6 @@
 │   │   ├── autostart/          # WM session autostart commands (sysset.autostart)
 │   │   ├── bluetooth/          # Bluetooth hardware
 │   │   ├── cinnamon/           # Cinnamon desktop environment
-│   │   ├── cockpit/            # Cockpit web management UI (+ machines/podman plugins)
 │   │   ├── console/            # TTY console font
 │   │   ├── cosmic/             # COSMIC desktop environment + greeter
 │   │   ├── espanso/            # Espanso daemon + Wayland security wrapper
@@ -60,14 +59,14 @@
 │   │   ├── plymouth/           # Boot splash logo
 │   │   ├── polkit/             # Polkit auth agent (gnome)
 │   │   ├── portal/             # XDG portals (per-DE backend selection)
-│   │   ├── ppd/                # Power Profiles Daemon
+│   │   ├── powerProfiles/      # Power Profiles Daemon
 │   │   ├── security/           # Polkit rules, rtkit, udisks2
-│   │   ├── server/             # Server modules (Jellyfin, komga, sleepyjar, nixdraw, webjar, outline, authentik, vpn)
+│   │   ├── server/             # Server modules (Jellyfin, komga, sleepyjar, nixdraw, webjar, outline, authentik, mysql, cockpit)
 │   │   ├── syncthing/          # System syncthing service
 │   │   ├── systemScripts/      # System-level shell scripts (nru, updatejar)
 │   │   ├── tlp/                # TLP laptop power management + battery thresholds
 │   │   ├── users/              # User account creation + groups
-│   │   ├── v412/               # v4l2loopback kernel module (OBS virtual cam)
+│   │   ├── virtCam/            # v4l2loopback kernel module (OBS virtual cam)
 │   │   ├── virt/               # virt role: none | host (libvirtd/QEMU) | guest (qemu-guest)
 │   │   ├── webapps/            # Web-apps-as-desktop-apps definitions (sysset.webapps)
 │

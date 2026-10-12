@@ -8,13 +8,13 @@
 { config, lib, ... }:
 
 let
-  cfg = config.sysset.powerprofiles;
+  cfg = config.sysset.powerProfiles;
 in
 {
   options = {
-    sysset.powerprofiles = {
+    sysset.powerProfiles = {
       enable = lib.mkEnableOption "Enable power profiles daemon";
-    }; # end of powerprofiles
+    }; # end of powerProfiles
   }; # end of options
 
   config = lib.mkIf cfg.enable {

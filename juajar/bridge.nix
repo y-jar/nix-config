@@ -30,9 +30,9 @@ in
     hjem.users.${mainUser}.usrset.system = {
       platform = "nixos";
       hasDesktop = config.sysset.hasDesktop;
-      unfree = config.sysset.unfree.enable;
-      nixpkgsYoinks = config.sysset.UseNixPkgsYoinks.enable;
-      mullvad = config.sysset.server.vpn.mullvad.enable;
+      unfree = config.sysset.nix.unfree.enable;
+      nixpkgsYoinks = config.sysset.nix.nixpkgsYoinks.enable;
+      mullvad = config.sysset.networking.mullvad.enable;
       audioAddon = config.sysset.audio.addon.enable;
       autostart = config.sysset.autostart.commands;
       webapps = config.sysset.webapps; # browser-apps-as-desktop-apps (sysset.webapps)
