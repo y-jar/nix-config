@@ -115,7 +115,7 @@ in
       ".config/hypr/hl/colors.lua".source = colorsLua; # palette-generated
       ".config/hypr/host-inputs/input.lua".source = targetLUASource; # host-specific inputs
       # [desktop shell config]
-      ".config/shelljar/config.kdl".source = ../../liijar/shell/shelljar-config.kdl;
+      ".config/shelljar/config.kdl".source = ../shelljar-config.kdl;
     }; # end of files
     packages = [
       pkgs.waypaper # GUI wallpaper setter for Wayland-based window managers

@@ -7,7 +7,7 @@
 # -=-=-=-=-=-=-=-=-=-=-=
 # This is the USER configuration file for this host (one sheet).
 # - Each option below is a toggle: enable only what you need.
-# - Keep `shell.enable` true it's the default shell for most systems.
+# - Keep `zsh.enable` true it's the default shell for most systems.
 # - WM toggles mirror the system sheet (./system.nix) via the *Enable args.
 # - Pair options here with the matching system toggles in ./system.nix.
 {
@@ -24,7 +24,7 @@
 
     # core [users, shell, basic things]
     # enables zsh shell with aliases [should be on by default]
-    shell.enable = true;
+    zsh.enable = true;
     wine.enable = true; # ~500mib - windows compatibility layer (opt-in)
 
     # =========[experience]
@@ -38,8 +38,8 @@
       enable = mangoEnable; # mango (mangowm) the compositor calender runs
       shelljar.enable = true; # my quickshell island shell (binds.conf is all shjctl)
     };
-    launcher.enable = true; # sets launcher fuzzel
-    tabletenable.xppen.enable = true; # map XP-Pen Artist 13.3 Pro pen to its display (juajar/data/tabletconf.nix)
+    fuzzel.enable = true; # sets launcher fuzzel
+    tablets.xppen.enable = true; # map XP-Pen Artist 13.3 Pro pen to its display (juajar/data/tabletconf.nix)
     theming = {
       enable = true;
       variant = "dark"; # gruvbox variant (dark|light)
@@ -121,8 +121,8 @@
     # =========[creative tools]^^^
 
     # =========[management]
-    inputmethods.japanese.enable = true; # sets japanese input
-    inputmethods.korean.enable = false; # sets korean input
+    inputMethods.japanese.enable = true; # sets japanese input
+    inputMethods.korean.enable = false; # sets korean input
     ai = {
       enable = aiEnable; # sets AI tools like opencode, llama.cpp
       opencode.enable = true; # opencode CLI + GUI (keep even if local llama is off)

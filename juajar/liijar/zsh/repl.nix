@@ -6,7 +6,7 @@
 # goal: nix repl entry for the jar flake.
 # -=-=-=-=-=-=-=-=-=-=-=
 # Usage (see the `repl` zsh alias):
-#   nix repl --file ~/nix-config/juajar/liijar/shell/repl.nix
+#   nix repl --file ~/nix-config/juajar/liijar/zsh/repl.nix
 # Then poke around:
 #   jar.calender.config.hjem
 #   cfg "ziiemar".config.sysset

@@ -17,7 +17,7 @@
   nrs = "nixos-rebuild switch --sudo --flake ~/nix-config#${hostnm}"; # hard building
   nrt = "nixos-rebuild test --sudo --flake ~/nix-config#${hostnm}"; # testing
   buildiso = "sh ~/nix-config/resjar/nixbin/buildiso.sh"; # build recovery ISO
-  repl = "nix repl --file ~/nix-config/juajar/liijar/shell/repl.nix"; # poke the flake
+  repl = "nix repl --file ~/nix-config/juajar/liijar/zsh/repl.nix"; # poke the flake
   neconf = "cd /etc/nixos"; # nix config (system-installed mirror)
   rllm = "sudo systemctl restart llama-cpp";
   sllm = "sudo systemctl restart llama-cpp";

@@ -20,7 +20,7 @@ let
   strip = c: builtins.substring 1 6 c; # "#rrggbb" -> "rrggbb"
 
   # unified gate: any wayland compositor or the launcher toggle
-  enabled = cfg.niri.enable || cfg.hyprland.enable || cfg.launcher.enable;
+  enabled = cfg.niri.enable || cfg.hyprland.enable || cfg.fuzzel.enable;
 
   # fuzzel.ini values full glass, colorless, no outline: a very subtle
   # neutral tint over the compositor blur (frosted), solid dark-gray
@@ -54,7 +54,7 @@ let
   ini = pkgs.formats.ini { };
 in
 {
-  config = lib.mkIf (cfg.niri.enable || cfg.hyprland.enable || cfg.launcher.enable) {
+  config = lib.mkIf (cfg.niri.enable || cfg.hyprland.enable || cfg.fuzzel.enable) {
     packages = fuzzelPackages;
     files.".config/fuzzel/fuzzel.ini".source = ini.generate "fuzzel.ini" fuzzelSettings;
   }; # end of config

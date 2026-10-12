@@ -82,11 +82,11 @@ let
   ''
   + lib.concatMapStringsSep "" (c: "exec-once=${c}\n") config.usrset.system.autostart;
 
-  # tablet / pen display mapping (usrset.tabletenable.<name>). Generated only when
+  # tablet / pen display mapping (usrset.tablets.<name>). Generated only when
   # a tablet is enabled; mango 0.16.3 supports a single global tablet->output map,
   # so the first (alphabetical) enabled entry wins.
   enabledTablets = lib.mapAttrsToList (n: t: { name = n; inherit (t) match; }) (
-    lib.filterAttrs (_: t: t.enable) (hjm.tabletenable or { })
+    lib.filterAttrs (_: t: t.enable) (hjm.tablets or { })
   );
   primaryTablet = if enabledTablets == [ ] then null else builtins.head enabledTablets;
   emptyMatchTablets = lib.filter (t: t.match == "") enabledTablets;
@@ -95,9 +95,9 @@ let
       if primaryTablet == null then
         ""
       else if primaryTablet.match == "" then
-        "# usrset.tabletenable.${primaryTablet.name} enabled but .match is empty; set it (see juajar/data/tabletconf.nix).\n"
+        "# usrset.tablets.${primaryTablet.name} enabled but .match is empty; set it (see juajar/data/tabletconf.nix).\n"
       else
-        "# usrset.tabletenable.${primaryTablet.name} (catalog: juajar/data/tabletconf.nix)\n"
+        "# usrset.tablets.${primaryTablet.name} (catalog: juajar/data/tabletconf.nix)\n"
         + "tablet_map_to_mon=${primaryTablet.match}\n"
     )
     + lib.optionalString (builtins.length enabledTablets > 1) ''
@@ -108,7 +108,7 @@ let
       generatedTabletBody
     else
       lib.warn
-        "usrset.tabletenable: enabled tablet(s) without a match: ${lib.concatStringsSep ", " (map (t: t.name) emptyMatchTablets)} (set .match, or add them to juajar/data/tabletconf.nix)"
+        "usrset.tablets: enabled tablet(s) without a match: ${lib.concatStringsSep ", " (map (t: t.name) emptyMatchTablets)} (set .match, or add them to juajar/data/tabletconf.nix)"
         generatedTabletBody;
 in
 {

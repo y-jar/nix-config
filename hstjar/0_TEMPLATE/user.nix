@@ -11,11 +11,11 @@
 #   - Every option below is declared once in juajar/liijar/options.nix; this file
 #     only sets values. Most are opt-in (default false).
 #   - Each option is a toggle: enable only what you need (sizes are rough comments).
-#   - Keep `shell.enable` true: it's the default shell for most systems.
+#   - Keep `zsh.enable` true: it's the default shell for most systems.
 #   - WM toggles mirror the system sheet (./system.nix) via the *Enable args.
 #   - Pair options here with the matching system toggles in ./system.nix.
 #   - Per-app behaviour lives in juajar/liijar/<app>/default.nix; shared shell
-#     aliases/functions live in juajar/liijar/shell/.
+#     aliases/functions live in juajar/liijar/zsh/.
 #   - For extra Hyprland/Niri per-host config see juajar/WMs/<wm>/host-inputs.
 {
   hyprlandEnable,
@@ -30,7 +30,7 @@
 
     # core [users, shell, basic things]
     # enables zsh shell with aliases [should be on by default]
-    shell.enable = true;
+    zsh.enable = true;
     wine.enable = false; # ~500mib - windows compatibility layer (opt-in)
     # cowsay.enable = true; # reference example module copy juajar/liijar/cowsay for new apps
 
@@ -45,14 +45,14 @@
       enable = mangoEnable; # mango (mangowm)
       shelljar.enable = false; # my quickshell island shell
     };
-    launcher.enable = true; # ~10mib - sets launcher fuzzel
+    fuzzel.enable = true; # ~10mib - sets launcher fuzzel
     # [tablet / pen display] map a pen's absolute coords to its own screen.
     # Keys come from juajar/data/tabletconf.nix (or set match yourself for new devices).
     # Find a display's identity in a terminal:
     #   for e in /sys/class/drm/card*-*/edid; do echo "$e: $(strings "$e" | tr '\n' ' ')"; done
-    # then:  tabletenable.<key>.enable = true;
-    # tabletenable.xppen.enable = true;            # XP-Pen Artist 13.3 Pro
-    # tabletenable.myTablet = { enable = true; match = "model:PRODUCT_NAME"; }; # uncatalogued
+    # then:  tablets.<key>.enable = true;
+    # tablets.xppen.enable = true;            # XP-Pen Artist 13.3 Pro
+    # tablets.myTablet = { enable = true; match = "model:PRODUCT_NAME"; }; # uncatalogued
     resYoink = {
       enable = false; # symlinks resources into ~/resjar/ [~300+mib for wallpapers]
       wallpapers = false;
@@ -127,8 +127,8 @@
     # =========[creative tools]^^^
 
     # =========[management]
-    inputmethods.japanese.enable = false; # ~100mib - fcitx5 + Mozc
-    inputmethods.korean.enable = false; # ~100mib - fcitx5 + Hangul
+    inputMethods.japanese.enable = false; # ~100mib - fcitx5 + Mozc
+    inputMethods.korean.enable = false; # ~100mib - fcitx5 + Hangul
     ai = {
       enable = aiEnable; # sets AI tools like opencode, llama.cpp
       opencode.enable = true; # opencode CLI + GUI (keep even if local llama is off)

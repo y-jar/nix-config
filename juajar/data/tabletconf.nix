@@ -5,8 +5,8 @@
 # -=-=-=-=-=-=-=-=-=-=-=
 # goal: Shared known-tablet catalog: device -> mango monitor spec.
 # -=-=-=-=-=-=-=-=-=-=-=
-# Consumed by juajar/liijar/options.nix to default usrset.tabletenable.<key>.match,
-# so a host only writes:   tabletenable.xppen.enable = true;
+# Consumed by juajar/liijar/options.nix to default usrset.tablets.<key>.match,
+# so a host only writes:   tablets.xppen.enable = true;
 #
 # FIND A TABLET DISPLAY'S IDENTITY IN A TERMINAL
 #   for e in /sys/class/drm/card*-*/edid; do

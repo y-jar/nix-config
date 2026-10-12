@@ -20,7 +20,7 @@
     email = "kwayckyle@gmail.com"; # [CHANGE THIS] for git
 
     # core [users, shell, basic things]
-    shell.enable = true;
+    zsh.enable = true;
     wine.enable = true; # ~500mib - windows compatibility layer (opt-in)
 
     # =========[experience]
@@ -34,7 +34,7 @@
       enable = mangoEnable;
       shelljar.enable = true; # my quickshell island shell
     };
-    launcher.enable = true; # ~10mib - sets launcher fuzzel
+    fuzzel.enable = true; # ~10mib - sets launcher fuzzel
     theming = {
       enable = true;
       variant = "dark";
@@ -116,8 +116,8 @@
     # =========[creative tools]^^^
 
     # =========[management]
-    inputmethods.japanese.enable = false; # ~100mib - fcitx5 + Mozc
-    inputmethods.korean.enable = false; # ~100mib - fcitx5 + Hangul
+    inputMethods.japanese.enable = false; # ~100mib - fcitx5 + Mozc
+    inputMethods.korean.enable = false; # ~100mib - fcitx5 + Hangul
     ai = {
       enable = aiEnable; # sets AI tools like opencode, llama.cpp
       opencode.enable = true; # opencode CLI + GUI (keep even if local llama is off)

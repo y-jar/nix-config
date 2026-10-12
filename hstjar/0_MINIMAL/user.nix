@@ -22,7 +22,7 @@
     email = "PLEASECHANGEME_EMAIL"; # [CHANGE THIS] for git
 
     # core [shell]
-    shell.enable = true;
+    zsh.enable = true;
 
     # =========[experience]
     hyprland.enable = hyprlandEnable;
@@ -35,7 +35,7 @@
       enable = mangoEnable; # mango (mangowm) default WM on this minimal host
       shelljar.enable = false; # my quickshell island shell
     };
-    launcher.enable = true; # ~10mib - fuzzel launcher
+    fuzzel.enable = true; # ~10mib - fuzzel launcher
     resYoink = {
       enable = false; # resources OFF (~300+mib)
       wallpapers = false;
@@ -108,8 +108,8 @@
     # =========[creative tools]^^^
 
     # =========[management]
-    inputmethods.japanese.enable = false;
-    inputmethods.korean.enable = false;
+    inputMethods.japanese.enable = false;
+    inputMethods.korean.enable = false;
     ai = {
       enable = aiEnable; # sets AI tools like opencode, llama.cpp
       opencode.enable = true; # opencode (NON-local models only)

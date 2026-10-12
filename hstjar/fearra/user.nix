@@ -7,7 +7,7 @@
 # -=-=-=-=-=-=-=-=-=-=-=
 # This is the USER configuration file for this host (one sheet).
 # - Each option below is a toggle: enable only what you need (sizes are rough).
-# - Keep `shell.enable` true it's the default shell for most systems.
+# - Keep `zsh.enable` true it's the default shell for most systems.
 # - WM toggles mirror the system sheet (./system.nix) via the *Enable args.
 # - Pair options here with the matching system toggles in ./system.nix.
 # - For extra Hyprland/Niri per-host config see juajar/WMs/<wm>/host-inputs.
@@ -26,7 +26,7 @@
 
     # core [users, shell, basic things]
     # enables zsh shell with aliases [should be on by default]
-    shell.enable = true;
+    zsh.enable = true;
     wine.enable = false; # ~500mib - windows compatibility layer (opt-in)
     # cowsay.enable = true; # reference example module copy juajar/liijar/cowsay for new apps
 
@@ -41,7 +41,7 @@
       enable = mangoEnable; # mango (mangowm)
       shelljar.enable = true; # my quickshell island shell
     };
-    launcher.enable = true; # ~10mib - sets launcher fuzzel
+    fuzzel.enable = true; # ~10mib - sets launcher fuzzel
     resYoink = {
       enable = false; # symlinks resources into ~/resjar/ [~300+mib for wallpapers]
       wallpapers = true;
@@ -116,8 +116,8 @@
     # =========[creative tools]^^^
 
     # =========[management]
-    inputmethods.japanese.enable = false; # ~100mib - fcitx5 + Mozc
-    inputmethods.korean.enable = false; # ~100mib - fcitx5 + Hangul
+    inputMethods.japanese.enable = false; # ~100mib - fcitx5 + Mozc
+    inputMethods.korean.enable = false; # ~100mib - fcitx5 + Hangul
     ai = {
       enable = aiEnable; # sets AI tools like opencode, llama.cpp
       opencode.enable = false; # opencode CLI + GUI (keep even if local llama is off)

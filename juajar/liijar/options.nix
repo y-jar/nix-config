@@ -92,7 +92,7 @@ in
       default = "";
       description = "Git user email";
     };
-    shell.enable = lib.mkOption {
+    zsh.enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
       description = "Enable zsh shell";
@@ -103,14 +103,14 @@ in
       default = true; # always installed unless a host turns it off
       description = "Enable cowsay. REFERENCE EXAMPLE module copy juajar/liijar/cowsay/ for new apps";
     };
-    tools.enable = lib.mkOption {
+    scripts.enable = lib.mkOption {
       type = lib.types.bool;
       default = true;
       description = "Enable shared helper scripts (jshot/jrec/jimg/jnote/... in liijar/scripts).";
     };
 
     # [input]
-    tabletenable = lib.mkOption {
+    tablets = lib.mkOption {
       type = lib.types.attrsOf (
         lib.types.submodule (
           { name, ... }:
@@ -166,7 +166,7 @@ in
       shelljar.enable = lib.mkEnableOption "shelljar (my quickshell island shell) for mango";
       noctalia.enable = lib.mkEnableOption "noctalia desktop shell for mango";
     };
-    launcher.enable = lib.mkOption {
+    fuzzel.enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
       description = "Enable fuzzel launcher";
@@ -346,7 +346,7 @@ in
 
     # [management]
     dictation.enable = lib.mkEnableOption "push-to-talk dictation + transcript (voxtype)";
-    inputmethods = {
+    inputMethods = {
       japanese.enable = lib.mkEnableOption "japanese input (fcitx5 + mozc)";
       korean.enable = lib.mkEnableOption "korean input (fcitx5 + hangul)";
     };

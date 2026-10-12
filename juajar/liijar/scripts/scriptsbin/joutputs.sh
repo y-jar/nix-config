@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # joutputs: list connected DRM outputs and print paste-ready Nix blocks for
-# configuring usrset.tabletenable (see juajar/data/tabletconf.nix).
+# configuring usrset.tablets (see juajar/data/tabletconf.nix).
 #
 # Usage: joutputs [options] [connector|all]
 #   (none)          list connected outputs
@@ -26,7 +26,7 @@ WLCOPY="${JOUTPUTS_WL_COPY:-wl-copy}"
 usage() {
   cat <<'EOF'
 joutputs: list connected DRM outputs and print paste-ready Nix blocks for
-configuring usrset.tabletenable (see juajar/data/tabletconf.nix).
+configuring usrset.tablets (see juajar/data/tabletconf.nix).
 
 Usage: joutputs [options] [connector|all]
   (none)          list connected outputs
@@ -169,7 +169,7 @@ EOF
   };
 
 # --- hstjar/<host>/user.nix ---
-    tabletenable.mytablet.enable = true;
+    tablets.mytablet.enable = true;
 
 # --- optional: juajar/WMs/mango/host-inputs/<host>.conf  (adjust geometry) ---
 EOF

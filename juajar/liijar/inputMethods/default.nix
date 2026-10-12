@@ -4,11 +4,11 @@
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
 # goal: fcitx5/mozc/hangul input methods.
-# =-=-=[inputmethods] =-=-=
+# =-=-=[inputMethods] =-=-=
 # Japanese/Korean input: fcitx5 + mozc/hangul. Direct dotfile writes
 # (fcitx5 profile/config/conf files + mozc config1.db) and the IME
 # environment variables.
-# =-=-=[end inputmethods] =-=-=
+# =-=-=[end inputMethods] =-=-=
 {
   config,
   lib,
@@ -17,7 +17,7 @@
 }:
 
 let
-  cfg = config.usrset.inputmethods;
+  cfg = config.usrset.inputMethods;
 
   # fcitx5 addons, gated per input method
   addons = [

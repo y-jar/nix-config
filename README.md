@@ -169,7 +169,7 @@ Paste:
 <details>
   <summary><b>Keybinds Quick Ref</b></summary>
 
-  Full reference: [Niri](resjar/docbin/niri.md) · [Hyprland](resjar/docbin/hyprland.md) · [mozc keymap](juajar/liijar/inputmethods/keymap.tsv)
+  Full reference: [Niri](resjar/docbin/niri.md) · [Hyprland](resjar/docbin/hyprland.md) · [mozc keymap](juajar/liijar/inputMethods/keymap.tsv)
 
   #### Hyprland
 
@@ -287,7 +287,7 @@ The most useful aliases available after install:
 | `ckhrd` | `lsblk && fdisk -l` | Check storage blocks |
 | `,` | `nix shell` (function) | Quick flake-based shell `, git curl` for interactive, `, git curl -- ls` for one-shot |
 
-Full alias list: [liijar/shell](juajar/liijar/shell/) · [installer shell](shell.nix)
+Full alias list: [liijar/shell](juajar/liijar/zsh/) · [installer shell](shell.nix)
 
 ## Core Usage & Tips
 

@@ -7,7 +7,7 @@
 # -=-=-=-=-=-=-=-=-=-=-=
 # =-=-=[config1-db.nix] =-=-=
 # Builds mozc's binary config1.db from keymap.tsv.
-# Shared helper for the inputmethods module (mozc config1.db builder).
+# Shared helper for the inputMethods module (mozc config1.db builder).
 #
 # mozc stores its config as a protobuf (mozc.config.Config) at
 # ~/.config/mozc/config1.db. We encode the keymap table (TSV) into a

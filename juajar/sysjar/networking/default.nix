@@ -87,7 +87,7 @@ in
     }; # end of services
     networking = {
       # NOTE: If hostname is changed, be sure to match it on flake.nix and in the shell aliases in
-      #   juajar/liijar/shell/aliases.nix
+      #   juajar/liijar/zsh/aliases.nix
       networkmanager.enable = true;
       hostName = "${hostnm}"; # sets HOSTNAME
       #[ for resolving local ip info]

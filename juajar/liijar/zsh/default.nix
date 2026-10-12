@@ -5,7 +5,7 @@
 # -=-=-=-=-=-=-=-=-=-=-=
 # goal: zsh: zshenv + zshrc + fzfrc generation.
 # -=-=-=-=-=-=-=-=-=-=-=
-# Aliases + shell functions are single-sourced in juajar/liijar/shell/.
+# Aliases + shell functions are single-sourced in juajar/liijar/zsh/.
 {
   config,
   lib,
@@ -27,11 +27,11 @@ let
 
   # portable set everywhere; the nh/nixos-rebuild/host-service extras only on NixOS
   aliases =
-    import ../shell/aliases.nix
-    // lib.optionalAttrs isNixos (import ../shell/aliases-nixos.nix { inherit hostnm; });
+    import ./aliases.nix
+    // lib.optionalAttrs isNixos (import ./aliases-nixos.nix { inherit hostnm; });
   functions =
-    import ../shell/functions.nix { inherit lib uf; }
-    + lib.optionalString isNixos (import ../shell/functions-nixos.nix { inherit hostnm; });
+    import ./functions.nix { inherit lib uf; }
+    + lib.optionalString isNixos (import ./functions-nixos.nix { inherit hostnm; });
 
   # attrset of aliases -> `alias k=v` lines. Bodies are single-quoted
   # (with ' escaped as '\'') so $/$(...) stay literal until invocation;
@@ -125,7 +125,7 @@ let
   '';
 in
 {
-  config = lib.mkIf hjm.shell.enable {
+  config = lib.mkIf hjm.zsh.enable {
     files = {
       ".zshenv".source = zshenv;
       ".zshrc".source = zshrc;

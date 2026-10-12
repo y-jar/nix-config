@@ -24,8 +24,8 @@ let
 
   # =-=-=[Gate]
   # compositor/launcher union: these scripts need a wayland session + fuzzel.
-  compositor = hjm.niri.enable || hjm.hyprland.enable || hjm.mango.enable || hjm.launcher.enable;
-  toolsOn = hjm.tools.enable;
+  compositor = hjm.niri.enable || hjm.hyprland.enable || hjm.mango.enable || hjm.fuzzel.enable;
+  toolsOn = hjm.scripts.enable;
 
   # =-=-=[Script Loader]
   mkScript = name: path: pkgs.writeShellScriptBin name (builtins.readFile path);
