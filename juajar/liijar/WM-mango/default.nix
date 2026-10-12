@@ -18,7 +18,6 @@
   pkgs,
   inputs,
   hostnm,
-  osConfig,
   ...
 }:
 let
@@ -80,7 +79,7 @@ let
     # desktop shell (noctalia)
     exec-once=noctalia-shell
   ''
-  + lib.concatMapStringsSep "" (c: "exec-once=${c}\n") (osConfig.sysset.autostart.commands or [ ]);
+  + lib.concatMapStringsSep "" (c: "exec-once=${c}\n") config.usrset.system.autostart;
 
   # tablet / pen display mapping (usrset.tabletenable.<name>). Generated only when
   # a tablet is enabled; mango 0.16.3 supports a single global tablet->output map,

@@ -9,7 +9,6 @@
   config,
   lib,
   pkgs,
-  osConfig,
   ...
 }:
 let
@@ -17,7 +16,7 @@ let
 
   # mullvad-vpn is a VPN, not a browser: mirror the system toggle instead of
   # leaking its ~300MiB onto every host with browsers enabled.
-  mullvadEnabled = osConfig.sysset.server.vpn.mullvad.enable or false;
+  mullvadEnabled = config.usrset.system.mullvad;
 
   # browser packages, gated per usrset.browsers toggle
   browserPackages =

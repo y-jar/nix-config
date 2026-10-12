@@ -12,7 +12,6 @@
   config,
   lib,
   pkgs,
-  osConfig,
   inputs,
   ...
 }:
@@ -61,7 +60,7 @@ in
       ++ lib.optionals cfg.wine.enable [
         pkgs.wine # Wine is a compatibility layer for running Windows programs on Unix-like systems
       ]
-      ++ lib.optionals (osConfig.sysset.UseNixPkgsYoinks.enable or false) [
+      ++ lib.optionals (cfg.system.nixpkgsYoinks) [
         inputs.rsakura.packages.x86_64-linux.default # a cool thing whisper did, awesone of them to add it as a pkgs in nix! ref: https://github.com/preprocessor/rsakura
       ];
     }

@@ -13,9 +13,8 @@
 #   - Global hjem settings (clobberByDefault)
 #   - extraModules loading (liijar auto-import + host user.nix)
 #   - The .profile (dirSetup bootstrap + hjem environment loadEnv)
-#   - specialArgs (feature flags for liijar modules)
-#   - The bridges (usrset.editors.nvf -> sysset.nvf,
-#                   usrset.syncthing -> sysset.syncthing)
+#   - specialArgs (host flags for liijar modules)
+#   (the sysset <-> usrset bridges live in ./bridge.nix)
 #
 # What goes in hstjar/<host>/user.nix:
 #   - Per-host toggle switches (usrset.*)
@@ -44,6 +43,7 @@
   imports = [
     inputs.hjem.nixosModules.default # hjem: manages user home dirs
     inputs.nvf.nixosModules.default # nvf: neovim config (NixOS module)
+    ./bridge.nix # sysset <-> usrset glue (the only place they meet)
   ];
 
   config = {
@@ -88,35 +88,10 @@
     hjem.specialArgs = {
       inherit hostnm;
       inherit inputs;
-      hasDesktop = config.sysset.hasDesktop or false;
       hyprlandEnable = config.sysset.hyprland.enable or false;
       niriEnable = config.sysset.niri.enable or false;
       mangoEnable = config.sysset.mango.enable or false;
       aiEnable = config.sysset.ai.enable or false;
-      webapps = config.sysset.webapps; # browser-apps-as-desktop-apps (webapps.nix)
-    };
-
-    # [bridges]
-    # These usrset toggles live inside the hjem user submodule; surface them
-    # to their system-level gates so the host's user.nix stays the source of
-    # truth. nvf: sysjar/nvf. syncthing: sysjar/syncthing (runs as mainUser).
-    sysset.nvf.enable = config.hjem.users.${config.sysset.mainUser}.usrset.editors.nvf.enable or false;
-    # electron-based editors (vscodium/obsidian) pull an EOL insecure electron;
-    # surface it so sysjar/nix can permit it only on the hosts that use one.
-    sysset.usesElectronEditor =
-      config.hjem.users.${config.sysset.mainUser}.usrset.editors.vscodium.enable or false
-      || config.hjem.users.${config.sysset.mainUser}.usrset.editors.obsidian.enable or false;
-    sysset.syncthing.enable =
-      config.hjem.users.${config.sysset.mainUser}.usrset.syncthing.enable or false;
-    # theming facts so the system side (dconf/flatpak) names the exact theme.
-    sysset.theming = {
-      enable = config.hjem.users.${config.sysset.mainUser}.usrset.theming.enable or false;
-      accent = config.hjem.users.${config.sysset.mainUser}.usrset.theming.accent or "orange";
-      variant = config.hjem.users.${config.sysset.mainUser}.usrset.theming.variant or "dark";
-      gtkThemeName =
-        config.hjem.users.${config.sysset.mainUser}.usrset.theming.gtkThemeName or "Gruvbox-Orange-Dark";
-      iconThemeName =
-        config.hjem.users.${config.sysset.mainUser}.usrset.theming.iconThemeName or "Gruvbox-Plus-Dark";
     };
   };
 }

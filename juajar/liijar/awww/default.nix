@@ -11,9 +11,9 @@
 # scripts/shelljar pass no CLI flags for it; the env vars land in the user
 # environment -> .profile via loadEnv.
 {
+  config,
   lib,
   pkgs,
-  hasDesktop,
   ...
 }:
 
@@ -27,7 +27,7 @@ let
   }; # end of awwwSessionVariables
 in
 {
-  config = lib.mkIf hasDesktop {
+  config = lib.mkIf config.usrset.system.hasDesktop {
     packages = awwwPackages;
 
     environment.sessionVariables = awwwSessionVariables; # end of sessionVariables

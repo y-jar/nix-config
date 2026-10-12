@@ -17,7 +17,6 @@
   lib,
   pkgs,
   inputs,
-  osConfig,
   hostnm,
   ...
 }:
@@ -94,9 +93,7 @@ let
 
   generatedStartups =
     builtins.readFile (kdlDir + "/startups.kdl")
-    + lib.concatMapStringsSep "" (c: "spawn-at-startup \"${c}\"\n") (
-      osConfig.sysset.autostart.commands or [ ]
-    )
+    + lib.concatMapStringsSep "" (c: "spawn-at-startup \"${c}\"\n") config.usrset.system.autostart
     + lib.optionalString shelljarEnabled ''
       spawn-at-startup "shelljar"
       // desktop shell (quickshell island shell) spawned by WM-niri
@@ -107,7 +104,7 @@ let
     '';
 
   # audio channel pinning, generated if the audio addon is enabled.
-  generatedStartupsAudio = lib.optionalString (osConfig.sysset.audio.addon.enable or false) ''
+  generatedStartupsAudio = lib.optionalString (config.usrset.system.audioAddon) ''
     spawn-at-startup "qpwgraph"
     // Pin the jar-audio hub as default sink/source so "Desktop audio" streams
     // (discord, obs) always capture jar-cap.monitor = the full mix. Retries until

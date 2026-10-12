@@ -5,17 +5,17 @@
 # -=-=-=-=-=-=-=-=-=-=-=
 # goal: Desktop tweaks: ddcutil + wayland session vars (desktop hosts only).
 # -=-=-=-=-=-=-=-=-=-=-=
-# Gated on the hasDesktop specialArg. Session vars land in hjem's user
+# Gated on usrset.system.hasDesktop. Session vars land in hjem's user
 # environment (loaded from ~/.profile).
 {
+  config,
   lib,
   pkgs,
-  hasDesktop,
   ...
 }:
 
 {
-  config = lib.mkIf hasDesktop {
+  config = lib.mkIf config.usrset.system.hasDesktop {
     packages = [ pkgs.ddcutil ]; # desktop monitor brightness via DDC/CI (shelljar BrightnessService)
 
     environment.sessionVariables = {

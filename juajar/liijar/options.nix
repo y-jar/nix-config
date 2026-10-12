@@ -18,6 +18,52 @@ let
 in
 {
   options.usrset = {
+    # [system facts]
+    # What the user modules need to know about the machine they run on. NOT toggles:
+    # on NixOS juajar/bridge.nix fills them from sysset.*; on any other host leave the
+    # defaults or set them in that host's user.nix. liijar modules read these instead
+    # of `osConfig` / extra specialArgs, which keeps the user layer portable.
+    system = {
+      hasDesktop = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Host runs a graphical session (WM/DE). Gates desktop-only session vars and packages.";
+      };
+      unfree = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Host allows unfree packages (drives the `,` temp-install and jn).";
+      };
+      nixpkgsYoinks = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Host uses the nixpkgs yoinks overlay (rsakura etc.).";
+      };
+      mullvad = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Host runs the Mullvad VPN service; the user side installs its GUI.";
+      };
+      audioAddon = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Host runs the jar-audio pipewire addon; compositors pin its sink at startup.";
+      };
+      autostart = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        description = "Per-host extra compositor autostart commands (sysset.autostart.commands).";
+      };
+      webapps = lib.mkOption {
+        type = lib.types.raw;
+        default = {
+          enable = false;
+          apps = [ ];
+        };
+        description = "Browser-apps-as-desktop-apps definitions ({ enable, apps }), same shape as sysset.webapps.";
+      };
+    };
+
     # [core]
     name = lib.mkOption {
       type = lib.types.str;

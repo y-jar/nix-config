@@ -42,8 +42,9 @@
 #       hjemDotfiles.dirSetup          (lines merged into ~/.profile see
 #                                      liijar/dictation for the systemctl
 #                                      --user enable pattern)
-#   - osConfig reaches system-level config (osConfig.sysset.*), and the
-#     hasDesktop/hostnm/inputs specialArgs are available as function args.
+#   - machine facts (hasDesktop, unfree, ...) come from config.usrset.system.*
+#     (filled by juajar/bridge.nix on NixOS). Do NOT read osConfig/sysset here.
+#     hostnm and inputs are available as function args.
 #   - need a SYSTEM service or /etc file? that's sysjar territory (see
 #     juajar/sysjar/syncthing for the user-service-as-mainUser pattern).
 # =-=-=[end liijar/cowsay] =-=-=

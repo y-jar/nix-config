@@ -11,7 +11,6 @@
   lib,
   pkgs,
   hostnm,
-  osConfig,
   ...
 }:
 let
@@ -22,7 +21,7 @@ let
   zshAutosuggestions = pkgs.zsh-autosuggestions;
 
   # Whether this host allows unfree packages (drives the modern `,` temp-install).
-  uf = osConfig.sysset.unfree.enable or false;
+  uf = hjm.system.unfree;
 
   aliases = import ../shell/aliases.nix { inherit hostnm; };
   functions = import ../shell/functions.nix {

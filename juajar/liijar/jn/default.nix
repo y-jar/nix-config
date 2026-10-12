@@ -10,14 +10,14 @@
 # -=-=-=-=-=-=-=-=-=-=-=
 {
   lib,
-  osConfig,
+  config,
   pkgs,
   ...
 }:
 let
   # Per-host gates.
-  unfreeAllowed = osConfig.sysset.unfree.enable or false;
-  yoinkEnabled = osConfig.sysset.UseNixPkgsYoinks.enable or false;
+  unfreeAllowed = config.usrset.system.unfree;
+  yoinkEnabled = config.usrset.system.nixpkgsYoinks;
   # rsakura is only offered when the host trusts the yoinks overlay AND unfree.
   seaweedHasRsakura = yoinkEnabled && unfreeAllowed;
 

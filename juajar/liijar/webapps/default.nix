@@ -5,7 +5,7 @@
 # -=-=-=-=-=-=-=-=-=-=-=
 # goal: web apps (browser apps as desktop apps).
 # -=-=-=-=-=-=-=-=-=-=-=
-# Reads the host's sysset.webapps (passed via the `webapps` specialArg) and
+# Reads the host's sysset.webapps (bridged into usrset.system.webapps) and
 # writes per-app launcher scripts + .desktop entries into ~/.local/bin and
 # ~/.local/share/applications. Mode pwa/app hand off to the browser in a
 # standalone (isolated) window; mode tabbed opens the url as a normal tab.
@@ -13,12 +13,11 @@
   config,
   lib,
   pkgs,
-  webapps,
   ...
 }:
 
 let
-  cfg = webapps;
+  cfg = config.usrset.system.webapps;
 
   # =-=-=[helpers]
   # Effective browser for an app: explicit override, else tabbed -> default, app/pwa -> chromium.
