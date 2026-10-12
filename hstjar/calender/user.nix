@@ -16,8 +16,7 @@
   mangoEnable,
   aiEnable,
   ...
-}:
-{
+}: {
   usrset = {
     name = "y-jar"; # [CHANGE THIS] for git
     email = "park.7qs@gmail.com"; # [CHANGE THIS] for git
@@ -85,7 +84,7 @@
       discord.enable = true;
       halloy.enable = false;
     };
-    espanso = import ../../juajar/data/espansoconf.nix { }; # espanso text expander
+    espanso = import ../../juajar/data/espansoconf.nix {}; # espanso text expander
     flatpak.enable = false; # sets flatpak and adds bazaar
     # [file explorers]
     nautilus.enable = true; # sets nautilus
@@ -110,9 +109,9 @@
 
     # =========[creative tools]
     art = {
-      enable = false; # art master toggle
+      enable = true; # art master toggle
       imageTools.enable = true; # krita, gimp, inkscape, ...
-      threeD.enable = false; # blender, blockbench
+      threeD.enable = true; # blender, blockbench
       astronomy.enable = true; # stellarium, celestia
     };
     office.enable = true; # sets libreoffice and other apps
