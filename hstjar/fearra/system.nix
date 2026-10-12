@@ -94,7 +94,7 @@
       # =============[hardware]^^^
 
       # =============[software]
-      # unfree.enable = false; # OPT-OUT: forbid unfree packages (spotify, chromium, vscodium, steam, ...). Defaults to true.
+      # nix.unfree.enable = false; # OPT-OUT: forbid unfree packages (spotify, chromium, vscodium, steam, ...). Defaults to true.
       nix.nixpkgsYoinks.enable = false;
       ai = {
         enable = false; # ~2gib - llama.cpp + models (auto-downloaded via models-preset)
