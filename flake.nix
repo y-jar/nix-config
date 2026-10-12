@@ -32,6 +32,38 @@
             ./hstjar/${hostName} # Host-specific directory entry [what happens here can depend on each system]
           ]; # end of modules
         }; # end of mkJar
+
+      # =-=-=[Recovery ISO] shared body: installer tools + jarhelp/nixinstall
+      mkIso =
+        base:
+        nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            "${nixpkgs}/nixos/modules/installer/cd-dvd/${base}"
+            (
+              { pkgs, lib, ... }:
+              {
+                environment.systemPackages = [
+                  pkgs.git
+                  pkgs.vim
+                  pkgs.nh
+                  pkgs.fastfetch
+                  pkgs.neovim
+                  pkgs.gum
+                  pkgs.fzf
+                  (pkgs.writeShellScriptBin "jarhelp" (builtins.readFile ./resjar/nixbin/jarhelp))
+                  (pkgs.writeShellScriptBin "nixinstall" (builtins.readFile ./resjar/nixbin/nixinstall))
+                ];
+                networking.hostName = "recovery";
+                services.openssh.enable = true;
+                boot.zfs.forceImportRoot = false; # recommended; silence zfs warning
+                users.users.root.initialHashedPassword = lib.mkForce null; # silence pw warning; "nixos" still wins
+                users.users.root.initialPassword = "nixos";
+                system.stateVersion = "26.05";
+              }
+            )
+          ]; # End of modules
+        }; # end of mkIso
     in
     {
       # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=!!HOSTS!!=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -54,58 +86,10 @@
         fearra = mkJar "fearra"; # personal theater pc
 
         # ========[ISO / recovery]
-        iso = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [
-            "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
-            ({ pkgs, lib, ... }: {
-              environment.systemPackages = [
-                pkgs.git
-                pkgs.vim
-                pkgs.nh
-                pkgs.fastfetch
-                pkgs.neovim
-                pkgs.gum
-                pkgs.fzf
-                (pkgs.writeShellScriptBin "jarhelp" (builtins.readFile ./resjar/nixbin/jarhelp))
-                (pkgs.writeShellScriptBin "nixinstall" (builtins.readFile ./resjar/nixbin/nixinstall))
-              ];
-              networking.hostName = "recovery";
-              services.openssh.enable = true;
-              boot.zfs.forceImportRoot = false; # recommended; silence zfs/xfs? warning
-              users.users.root.initialHashedPassword = lib.mkForce null; # silence pw warning; "nixos" still wins
-              users.users.root.initialPassword = "nixos";
-              system.stateVersion = "26.05";
-            })
-          ]; # End of modules
-        }; # End of iso
+        iso = mkIso "installation-cd-minimal.nix"; # nix build .#iso
 
         # ========[ISO / recovery - graphical GNOME]
-        iso-gnome = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [
-            "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-graphical-gnome.nix"
-            ({ pkgs, lib, ... }: {
-              environment.systemPackages = [
-                pkgs.git
-                pkgs.vim
-                pkgs.nh
-                pkgs.fastfetch
-                pkgs.neovim
-                pkgs.gum
-                pkgs.fzf
-                (pkgs.writeShellScriptBin "jarhelp" (builtins.readFile ./resjar/nixbin/jarhelp))
-                (pkgs.writeShellScriptBin "nixinstall" (builtins.readFile ./resjar/nixbin/nixinstall))
-              ];
-              networking.hostName = "recovery";
-              services.openssh.enable = true;
-              boot.zfs.forceImportRoot = false; # recommended; silence zfs warning
-              users.users.root.initialHashedPassword = lib.mkForce null; # silence pw warning; "nixos" still wins
-              users.users.root.initialPassword = "nixos";
-              system.stateVersion = "26.05";
-            })
-          ]; # End of modules
-        }; # End of iso-gnome
+        iso-gnome = mkIso "installation-cd-graphical-gnome.nix"; # nix build .#iso-gnome
       }; # end of nixosConfigurations
 
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt; # nix fmt

@@ -88,12 +88,10 @@
       inherit hostnm;
       inherit inputs;
       hasDesktop = config.sysset.hasDesktop or false;
-      gnomeEnable = config.sysset.gnome.enable or false;
       hyprlandEnable = config.sysset.hyprland.enable or false;
       niriEnable = config.sysset.niri.enable or false;
       mangoEnable = config.sysset.mango.enable or false;
       aiEnable = config.sysset.ai.enable or false;
-      cosmicEnable = config.sysset.cosmic.enable or false;
       webapps = config.sysset.webapps; # browser-apps-as-desktop-apps (webapps.nix)
     };
 
