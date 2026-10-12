@@ -49,19 +49,19 @@
     };
     resYoink = {
       enable = true; # symlinks resources into ~/resjar/
-      wallpapers = true;
-      icons = true;
-      profilePictures = true;
-      minecraftSkins = true;
+      wallpapers.enable = true;
+      icons.enable = true;
+      profilePictures.enable = true;
+      minecraftSkins.enable = true;
     };
     # =========[experience]^^^
 
     # =========[appstream]
     browsers = {
       enable = true; # sets firefox and librewolf [work and personal]
-      firefox = true; # firefox [work]
-      librewolf = true; # librewolf [personal]
-      chromium = true; # needed for native webapps (`--app` mode)
+      firefox.enable = true; # firefox [work]
+      librewolf.enable = true; # librewolf [personal]
+      chromium.enable = true; # needed for native webapps (`--app` mode)
       default = "firefox"; # preferred browser: WM Mod+B + default mime browser
     };
     terminal = {
@@ -94,12 +94,12 @@
     # [media]
     media = {
       enable = true; # media master toggle
-      mpv = true; # mpv video player + yt-dlp
-      downloaders = true; # ffmpeg + yt-dlp
-      musicApps = false; # quodlibet, gapless, blanket
-      audioEditor = false; # audacity
-      viewers = true; # yacreader, constrict, anki
-      defaultApps = true; # default mime apps + loupe/showtime/file-roller
+      mpv.enable = true; # mpv video player + yt-dlp
+      downloaders.enable = true; # ffmpeg + yt-dlp
+      musicApps.enable = false; # quodlibet, gapless, blanket
+      audioEditor.enable = false; # audacity
+      viewers.enable = true; # yacreader, constrict, anki
+      defaultApps.enable = true; # default mime apps + loupe/showtime/file-roller
     };
     keepass.enable = true; # sets keepassxc
     gaming = {
@@ -111,9 +111,9 @@
     # =========[creative tools]
     art = {
       enable = false; # art master toggle
-      imageTools = true; # krita, gimp, inkscape, ...
-      threeD = false; # blender, blockbench
-      astronomy = true; # stellarium, celestia
+      imageTools.enable = true; # krita, gimp, inkscape, ...
+      threeD.enable = false; # blender, blockbench
+      astronomy.enable = true; # stellarium, celestia
     };
     office.enable = true; # sets libreoffice and other apps
     obs.enable = true; # sets up obs studio
@@ -142,13 +142,13 @@
     bluetooth.enable = false; # sets blueman in home packages
     dev = {
       enable = true; # dev master toggle
-      python = true; # python (pyenv + pip)
-      dotnet = false; # dotnet SDK
-      node = false; # nodejs
-      cc = false; # gcc
-      go = false; # go
-      nixTools = true; # nix language servers + formatters
-      sqlTools = true; # dbeaver
+      python.enable = true; # python (pyenv + pip)
+      dotnet.enable = false; # dotnet SDK
+      node.enable = false; # nodejs
+      cc.enable = false; # gcc
+      go.enable = false; # go
+      nixTools.enable = true; # nix language servers + formatters
+      sqlTools.enable = true; # dbeaver
     };
     fastfetch.enable = true; # sets fastfetch
     # =========[management]^^^

@@ -17,7 +17,7 @@ let
   # per-sub-toggle art package buckets
   artPackages =
     # [image processing]
-    lib.optionals (cfg.enable && cfg.imageTools) [
+    lib.optionals (cfg.enable && cfg.imageTools.enable) [
       pkgs.drawio # Desktop version of draw.io for creating diagrams
       pkgs.upscayl # AI image upscaler
       pkgs.converseen # batch image converter/resizer
@@ -33,13 +33,13 @@ let
     ]
 
     # [3d]
-    ++ lib.optionals (cfg.enable && cfg.threeD) [
+    ++ lib.optionals (cfg.enable && cfg.threeD.enable) [
       pkgs.blender # 3D modeling/animation
       pkgs.blockbench # 3D model editor (mincraft)
     ]
 
     # [astronomy] ref: https://github.com/ryan4yin/nix-config
-    ++ lib.optionals (cfg.enable && cfg.astronomy) [
+    ++ lib.optionals (cfg.enable && cfg.astronomy.enable) [
       pkgs.stellarium # planetarium
       pkgs.celestia # 3D space simulation
     ]; # end of artPackages

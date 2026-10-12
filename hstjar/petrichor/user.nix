@@ -44,19 +44,19 @@
     };
     resYoink = {
       enable = true; # symlinks resources into ~/resjar/ [~300+mib for wallpapers]
-      wallpapers = true;
-      icons = true;
-      profilePictures = false;
-      minecraftSkins = false;
+      wallpapers.enable = true;
+      icons.enable = true;
+      profilePictures.enable = false;
+      minecraftSkins.enable = false;
     };
     # =========[experience]^^^
 
     # =========[appstream]
     browsers = {
       enable = true; # ~500mib - librewolf + firefox
-      firefox = true; # firefox [work]
-      librewolf = false; # librewolf [personal]
-      chromium = false; # enables chromium [personal]
+      firefox.enable = true; # firefox [work]
+      librewolf.enable = false; # librewolf [personal]
+      chromium.enable = false; # enables chromium [personal]
       default = "firefox"; # preferred browser: WM Super+B/Mod+B + default mime browser
     };
     terminal = {
@@ -89,12 +89,12 @@
     # [media]
     media = {
       enable = true; # media master toggle
-      mpv = true; # mpv video player + yt-dlp
-      downloaders = false; # ffmpeg + yt-dlp
-      musicApps = true; # quodlibet, gapless, blanket
-      audioEditor = false; # audacity
-      viewers = true; # yacreader, constrict, anki
-      defaultApps = true; # default mime apps + loupe/showtime/file-roller
+      mpv.enable = true; # mpv video player + yt-dlp
+      downloaders.enable = false; # ffmpeg + yt-dlp
+      musicApps.enable = true; # quodlibet, gapless, blanket
+      audioEditor.enable = false; # audacity
+      viewers.enable = true; # yacreader, constrict, anki
+      defaultApps.enable = true; # default mime apps + loupe/showtime/file-roller
     };
     keepass.enable = true; # ~100mib
     gaming = {
@@ -106,9 +106,9 @@
     # =========[creative tools]
     art = {
       enable = true; # art master toggle
-      imageTools = true; # krita, gimp, inkscape, ...
-      threeD = false; # blender, blockbench
-      astronomy = true; # stellarium, celestia
+      imageTools.enable = true; # krita, gimp, inkscape, ...
+      threeD.enable = false; # blender, blockbench
+      astronomy.enable = true; # stellarium, celestia
     };
     office.enable = true; # ~800mib - LibreOffice + Pandoc
     obs.enable = true; # ~400mib - OBS Studio + plugins
@@ -131,12 +131,12 @@
     bluetooth.enable = false; # ~5mib - blueman
     dev = {
       enable = false; # dev master toggle
-      dotnet = true; # dotnet SDK
-      node = true; # nodejs
-      cc = true; # gcc
-      go = true; # go
-      nixTools = true; # nix language servers + formatters
-      sqlTools = false; # dbeaver
+      dotnet.enable = true; # dotnet SDK
+      node.enable = true; # nodejs
+      cc.enable = true; # gcc
+      go.enable = true; # go
+      nixTools.enable = true; # nix language servers + formatters
+      sqlTools.enable = false; # dbeaver
     };
     fastfetch.enable = true; # sets fastfetch
     # =========[management]^^^

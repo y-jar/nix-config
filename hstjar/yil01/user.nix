@@ -44,19 +44,19 @@
     };
     resYoink = {
       enable = true;
-      wallpapers = true;
-      icons = true;
-      profilePictures = true;
-      minecraftSkins = false;
+      wallpapers.enable = true;
+      icons.enable = true;
+      profilePictures.enable = true;
+      minecraftSkins.enable = false;
     };
     # =========[experience]^^^
 
     # =========[appstream]
     browsers = {
       enable = true;
-      firefox = true; # firefox [work]
-      librewolf = false; # librewolf [personal]
-      chromium = false;
+      firefox.enable = true; # firefox [work]
+      librewolf.enable = false; # librewolf [personal]
+      chromium.enable = false;
       default = "firefox"; # preferred browser: WM Mod+B + default mime browser
     };
     terminal = {
@@ -87,12 +87,12 @@
     ranger.enable = false;
     media = {
       enable = false;
-      mpv = true;
-      downloaders = false;
-      musicApps = false;
-      audioEditor = false;
-      viewers = false;
-      defaultApps = true;
+      mpv.enable = true;
+      downloaders.enable = false;
+      musicApps.enable = false;
+      audioEditor.enable = false;
+      viewers.enable = false;
+      defaultApps.enable = true;
     };
     keepass.enable = true;
     gaming = {
@@ -104,9 +104,9 @@
     # =========[creative tools]
     art = {
       enable = false;
-      imageTools = false;
-      threeD = false;
-      astronomy = false;
+      imageTools.enable = false;
+      threeD.enable = false;
+      astronomy.enable = false;
     };
     office.enable = true;
     obs.enable = false;
@@ -130,12 +130,12 @@
     fastfetch.enable = true;
     dev = {
       enable = false; # dev master toggle
-      dotnet = true; # dotnet SDK
-      node = true; # nodejs
-      cc = false; # gcc
-      go = false; # go
-      nixTools = true; # nix language servers + formatters
-      sqlTools = false; # dbeaver
+      dotnet.enable = true; # dotnet SDK
+      node.enable = true; # nodejs
+      cc.enable = false; # gcc
+      go.enable = false; # go
+      nixTools.enable = true; # nix language servers + formatters
+      sqlTools.enable = false; # dbeaver
     };
     # =========[management]^^^
   }; # end of usrset

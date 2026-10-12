@@ -21,9 +21,9 @@ let
   # browser packages, gated per usrset.browsers toggle
   browserPackages =
     # firefox policy dropped with home-manager Ctrl+. pops the GTK emoji dialog again, jemoji covers emoji
-    lib.optionals (cfg.enable && cfg.firefox) [ pkgs.firefox ]
-    ++ lib.optionals (cfg.enable && cfg.librewolf) [ pkgs.librewolf ]
-    ++ lib.optionals (cfg.enable && cfg.chromium) [ pkgs.chromium ]
+    lib.optionals (cfg.enable && cfg.firefox.enable) [ pkgs.firefox ]
+    ++ lib.optionals (cfg.enable && cfg.librewolf.enable) [ pkgs.librewolf ]
+    ++ lib.optionals (cfg.enable && cfg.chromium.enable) [ pkgs.chromium ]
     ++ lib.optionals cfg.enable [
       pkgs.browsh # browser within a TUI
     ]

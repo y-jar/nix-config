@@ -25,8 +25,8 @@ let
 
   # home-relative path -> flake input (null = toggle off)
   resyoinkFiles = {
-    "resjar/wall-jar" = if cfg.wallpapers then inputs.wall-jar else null;
-    "resjar/mcskins-jar" = if cfg.minecraftSkins then inputs.mcskins-jar else null;
+    "resjar/wall-jar" = if cfg.wallpapers.enable then inputs.wall-jar else null;
+    "resjar/mcskins-jar" = if cfg.minecraftSkins.enable then inputs.mcskins-jar else null;
   }; # end of resyoinkFiles
 
   # [filter out entries with no source]
@@ -42,11 +42,11 @@ in
     # icon-jar owns these bins: dump the contents into ~/resjar/{iconbin,pfpbin}.
     jarRes = {
       icons = {
-        enable = cfg.icons;
+        enable = cfg.icons.enable;
         dest = "resjar/iconbin";
       };
       pfps = {
-        enable = cfg.profilePictures;
+        enable = cfg.profilePictures.enable;
         dest = "resjar/pfpbin";
       };
     };

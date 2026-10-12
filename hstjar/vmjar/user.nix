@@ -44,19 +44,19 @@
     };
     resYoink = {
       enable = true;
-      wallpapers = true;
-      icons = true;
-      profilePictures = true;
-      minecraftSkins = false;
+      wallpapers.enable = true;
+      icons.enable = true;
+      profilePictures.enable = true;
+      minecraftSkins.enable = false;
     };
     # =========[experience]^^^
 
     # =========[appstream]
     browsers = {
       enable = true; # sets firefox and librewolf [work and personal]
-      firefox = true; # firefox [work]
-      librewolf = false; # librewolf [personal]
-      chromium = true; # enables chromium [personal]
+      firefox.enable = true; # firefox [work]
+      librewolf.enable = false; # librewolf [personal]
+      chromium.enable = true; # enables chromium [personal]
       default = "firefox"; # preferred browser: WM Super+B + default mime browser
     };
     terminal = {
@@ -89,12 +89,12 @@
     # [media]
     media = {
       enable = true; # media master toggle
-      mpv = true; # mpv video player + yt-dlp
-      downloaders = true; # ffmpeg + yt-dlp
-      musicApps = true; # quodlibet, gapless, blanket
-      audioEditor = true; # audacity
-      viewers = true; # yacreader, constrict, anki
-      defaultApps = true; # default mime apps + loupe/showtime/file-roller
+      mpv.enable = true; # mpv video player + yt-dlp
+      downloaders.enable = true; # ffmpeg + yt-dlp
+      musicApps.enable = true; # quodlibet, gapless, blanket
+      audioEditor.enable = true; # audacity
+      viewers.enable = true; # yacreader, constrict, anki
+      defaultApps.enable = true; # default mime apps + loupe/showtime/file-roller
     };
     keepass.enable = true; # sets keepassxc
     gaming = {
@@ -106,9 +106,9 @@
     # =========[creative tools]
     art = {
       enable = false; # art master toggle
-      imageTools = false; # krita, gimp, inkscape, ...
-      threeD = false; # blender, blockbench
-      astronomy = false; # stellarium, celestia
+      imageTools.enable = false; # krita, gimp, inkscape, ...
+      threeD.enable = false; # blender, blockbench
+      astronomy.enable = false; # stellarium, celestia
     };
     office.enable = false; # sets libreoffice and other apps
     obs.enable = false; # sets up obs studio
@@ -131,12 +131,12 @@
     bluetooth.enable = false; # sets blueman in home packages
     dev = {
       enable = false; # dev master toggle
-      dotnet = false; # dotnet SDK
-      node = false; # nodejs
-      cc = false; # gcc
-      go = false; # go
-      nixTools = false; # nix language servers + formatters
-      sqlTools = false; # dbeaver
+      dotnet.enable = false; # dotnet SDK
+      node.enable = false; # nodejs
+      cc.enable = false; # gcc
+      go.enable = false; # go
+      nixTools.enable = false; # nix language servers + formatters
+      sqlTools.enable = false; # dbeaver
     };
     fastfetch.enable = true; # sets fastfetch
     # =========[management]^^^

@@ -38,19 +38,19 @@
     fuzzel.enable = true; # ~10mib - fuzzel launcher
     resYoink = {
       enable = false; # resources OFF (~300+mib)
-      wallpapers = false;
-      icons = false;
-      profilePictures = false;
-      minecraftSkins = false;
+      wallpapers.enable = false;
+      icons.enable = false;
+      profilePictures.enable = false;
+      minecraftSkins.enable = false;
     };
     # =========[experience]^^^
 
     # =========[appstream]
     browsers = {
       enable = true;
-      firefox = true; # keep only firefox (drop librewolf/chromium to save ~1.5GiB)
-      librewolf = false;
-      chromium = false;
+      firefox.enable = true; # keep only firefox (drop librewolf/chromium to save ~1.5GiB)
+      librewolf.enable = false;
+      chromium.enable = false;
       default = "firefox";
     };
     terminal = {
@@ -81,12 +81,12 @@
     ranger.enable = false;
     media = {
       enable = false; # OFF: minimal media
-      mpv = false;
-      downloaders = false;
-      musicApps = false;
-      audioEditor = false;
-      viewers = false;
-      defaultApps = true;
+      mpv.enable = false;
+      downloaders.enable = false;
+      musicApps.enable = false;
+      audioEditor.enable = false;
+      viewers.enable = false;
+      defaultApps.enable = true;
     };
     keepass.enable = true; # ~100mib password manager (privacy-important)
     gaming = {
@@ -98,9 +98,9 @@
     # =========[creative tools]
     art = {
       enable = false; # OFF
-      imageTools = false;
-      threeD = false;
-      astronomy = false;
+      imageTools.enable = false;
+      threeD.enable = false;
+      astronomy.enable = false;
     };
     office.enable = false; # OFF
     obs.enable = false; # OFF
@@ -123,13 +123,13 @@
     bluetooth.enable = false;
     dev = {
       enable = false; # OFF: no dev toolchains
-      python = false;
-      dotnet = false;
-      node = false;
-      cc = false;
-      go = false;
-      nixTools = true; # keep nix tooling (comes with this repo)
-      sqlTools = false;
+      python.enable = false;
+      dotnet.enable = false;
+      node.enable = false;
+      cc.enable = false;
+      go.enable = false;
+      nixTools.enable = true; # keep nix tooling (comes with this repo)
+      sqlTools.enable = false;
     };
     fastfetch.enable = true;
     # =========[management]^^^

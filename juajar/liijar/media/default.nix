@@ -47,30 +47,30 @@ let
 
   # per-sub-toggle media package buckets
   mediaPackages =
-    lib.optionals (cfg.enable && cfg.mpv) [
+    lib.optionals (cfg.enable && cfg.mpv.enable) [
       pkgs.mpv
     ]
-    ++ lib.optionals (cfg.enable && cfg.musicApps) [
+    ++ lib.optionals (cfg.enable && cfg.musicApps.enable) [
       pkgs.blanket # background noises
       pkgs.quodlibet # media player
       pkgs.gapless # lightweight GTK4 music player
       pkgs.spotify # music streaming (unfree) ~300miB
     ]
-    ++ lib.optionals (cfg.enable && cfg.audioEditor) [
+    ++ lib.optionals (cfg.enable && cfg.audioEditor.enable) [
       pkgs.audacity # audio editor
     ]
-    ++ lib.optionals (cfg.enable && cfg.viewers) [
+    ++ lib.optionals (cfg.enable && cfg.viewers.enable) [
       pkgs.yacreader # ebook/manga reader
       pkgs.constrict # file shrinker
       pkgs.anki # spaced-repetition flashcards
     ]
-    ++ lib.optionals (cfg.enable && cfg.downloaders) [
+    ++ lib.optionals (cfg.enable && cfg.downloaders.enable) [
       pkgs.ffmpeg
       pkgs.yt-dlp # audio/video downloader
       pkgs.qbittorrent # torrent client
       webtoonDl # webtoon.com comics as PDF/CBZ
     ]
-    ++ lib.optionals (cfg.enable && cfg.defaultApps) [
+    ++ lib.optionals (cfg.enable && cfg.defaultApps.enable) [
       pkgs.loupe # image viewer (GTK4/Rust, Wayland-native)
       pkgs.showtime # video player (GNOME)
       pkgs.file-roller # archive manager (GNOME)
@@ -147,7 +147,7 @@ in
     (lib.mkIf cfg.enable {
       files.".config/mimeapps.list".source = mimeApps;
     })
-    (lib.mkIf cfg.mpv {
+    (lib.mkIf cfg.mpv.enable {
       files.".config/mpv/mpv.conf".source = mpvConf;
     })
   ];

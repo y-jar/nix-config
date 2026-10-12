@@ -230,17 +230,17 @@ in
         default = true;
         description = "Enable browsers (librewolf + firefox)";
       };
-      firefox = lib.mkOption {
+      firefox.enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
         description = "Enable firefox [work]";
       };
-      librewolf = lib.mkOption {
+      librewolf.enable = lib.mkOption {
         type = lib.types.bool;
         default = true;
         description = "Enable librewolf [personal]";
       };
-      chromium = lib.mkOption {
+      chromium.enable = lib.mkOption {
         type = lib.types.bool;
         default = true;
         description = "Enable chromium [needed for native webapps (`--app` mode)]";
@@ -320,12 +320,12 @@ in
     };
     media = {
       enable = lib.mkEnableOption "media tools (master toggle)";
-      mpv = lib.mkEnableOption "mpv video player + yt-dlp integration";
-      downloaders = lib.mkEnableOption "ffmpeg + yt-dlp download/transcode CLI";
-      musicApps = lib.mkEnableOption "music players (quodlibet, gapless, blanket, spotify)";
-      audioEditor = lib.mkEnableOption "audacity audio editor";
-      viewers = lib.mkEnableOption "misc viewers (yacreader, constrict, anki)";
-      defaultApps = lib.mkEnableOption "default mime apps + loupe/showtime/file-roller";
+      mpv.enable = lib.mkEnableOption "mpv video player + yt-dlp integration";
+      downloaders.enable = lib.mkEnableOption "ffmpeg + yt-dlp download/transcode CLI";
+      musicApps.enable = lib.mkEnableOption "music players (quodlibet, gapless, blanket, spotify)";
+      audioEditor.enable = lib.mkEnableOption "audacity audio editor";
+      viewers.enable = lib.mkEnableOption "misc viewers (yacreader, constrict, anki)";
+      defaultApps.enable = lib.mkEnableOption "default mime apps + loupe/showtime/file-roller";
     };
     keepass.enable = lib.mkEnableOption "keepassxc";
     gaming = {
@@ -336,9 +336,9 @@ in
     # [creative]
     art = {
       enable = lib.mkEnableOption "art tools (master toggle)";
-      imageTools = lib.mkEnableOption "2D/painting tools (krita, gimp, inkscape, ...)";
-      threeD = lib.mkEnableOption "3D tools (blender, blockbench)";
-      astronomy = lib.mkEnableOption "astronomy apps (stellarium, celestia)";
+      imageTools.enable = lib.mkEnableOption "2D/painting tools (krita, gimp, inkscape, ...)";
+      threeD.enable = lib.mkEnableOption "3D tools (blender, blockbench)";
+      astronomy.enable = lib.mkEnableOption "astronomy apps (stellarium, celestia)";
     };
     office.enable = lib.mkEnableOption "office (libreoffice + pandoc)";
     obs.enable = lib.mkEnableOption "obs studio";
@@ -409,22 +409,22 @@ in
     };
     dev = {
       enable = lib.mkEnableOption "dev tools (master toggle)";
-      python = lib.mkEnableOption "python (pyenv + pip)";
-      dotnet = lib.mkEnableOption "dotnet (C#/.NET) SDK";
-      node = lib.mkEnableOption "nodejs (JS/TS runtime)";
-      cc = lib.mkEnableOption "gcc (C/C++ compiler)";
-      go = lib.mkEnableOption "go toolchain";
-      nixTools = lib.mkEnableOption "nix language servers + formatters";
-      sqlTools = lib.mkEnableOption "dbeaver + sql clients";
+      python.enable = lib.mkEnableOption "python (pyenv + pip)";
+      dotnet.enable = lib.mkEnableOption "dotnet (C#/.NET) SDK";
+      node.enable = lib.mkEnableOption "nodejs (JS/TS runtime)";
+      cc.enable = lib.mkEnableOption "gcc (C/C++ compiler)";
+      go.enable = lib.mkEnableOption "go toolchain";
+      nixTools.enable = lib.mkEnableOption "nix language servers + formatters";
+      sqlTools.enable = lib.mkEnableOption "dbeaver + sql clients";
     };
 
     # [resources]
     resYoink = {
       enable = lib.mkEnableOption "resource symlinks (wallpapers, icons, pfps)";
-      wallpapers = lib.mkEnableOption "wallpapers symlink (resjar/wall-jar)";
-      icons = lib.mkEnableOption "icons symlink (resjar/iconbin) via icon-jar hjem module";
-      profilePictures = lib.mkEnableOption "profile pictures symlink (resjar/pfpbin) via icon-jar hjem module";
-      minecraftSkins = lib.mkEnableOption "minecraft skins symlink (resjar/mcskins-jar)";
+      wallpapers.enable = lib.mkEnableOption "wallpapers symlink (resjar/wall-jar)";
+      icons.enable = lib.mkEnableOption "icons symlink (resjar/iconbin) via icon-jar hjem module";
+      profilePictures.enable = lib.mkEnableOption "profile pictures symlink (resjar/pfpbin) via icon-jar hjem module";
+      minecraftSkins.enable = lib.mkEnableOption "minecraft skins symlink (resjar/mcskins-jar)";
     };
   }; # end of usrset
 }

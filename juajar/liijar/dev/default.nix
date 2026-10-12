@@ -17,7 +17,7 @@ let
   # per-sub-toggle toolchain buckets; the python bucket carries the fuller
   # list (python3/uv/gcc + zlib/openssl/direnv)
   devPackages =
-    lib.optionals (cfg.enable && cfg.python) [
+    lib.optionals (cfg.enable && cfg.python.enable) [
       pkgs.python3 # python runtime
       pkgs.uv # rust based python package installer
       pkgs.gcc # compiler for native python deps
@@ -25,19 +25,19 @@ let
       pkgs.openssl # tls lib (native python deps)
       pkgs.direnv # per-project environment switching
     ]
-    ++ lib.optionals (cfg.enable && cfg.dotnet) [
+    ++ lib.optionals (cfg.enable && cfg.dotnet.enable) [
       pkgs.dotnet-sdk_8 # C#/.NET SDK
     ]
-    ++ lib.optionals (cfg.enable && cfg.node) [
+    ++ lib.optionals (cfg.enable && cfg.node.enable) [
       pkgs.nodejs # JS/TS runtime
     ]
-    ++ lib.optionals (cfg.enable && cfg.cc) [
+    ++ lib.optionals (cfg.enable && cfg.cc.enable) [
       pkgs.gcc # C/C++ compiler
     ]
-    ++ lib.optionals (cfg.enable && cfg.go) [
+    ++ lib.optionals (cfg.enable && cfg.go.enable) [
       pkgs.go # go toolchain
     ]
-    ++ lib.optionals (cfg.enable && cfg.nixTools) [
+    ++ lib.optionals (cfg.enable && cfg.nixTools.enable) [
       pkgs.nixd # Nix language server
       pkgs.nixfmt # Nix formatter
       pkgs.nil # Nix language server
@@ -47,7 +47,7 @@ let
       pkgs.nurl # fetch a URL and output a nix hash
       pkgs.nix-init # generate a nix package from a repo URL
     ]
-    ++ lib.optionals (cfg.enable && cfg.sqlTools) [
+    ++ lib.optionals (cfg.enable && cfg.sqlTools.enable) [
       pkgs.dbeaver-bin # universal SQL client
     ]; # end of devPackages
 in
