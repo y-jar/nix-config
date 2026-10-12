@@ -55,9 +55,9 @@ in
     hjemDotfiles.dirSetup = lib.mkBefore ''
       # [tuneshon] pre-seed config dir
       mkdir -p "$HOME/.config/tuneshon"
-      if [[ "${
+      if [ "${
         if cfg.overwrite then "true" else "false"
-      }" == "true" || ! -f "$HOME/.config/tuneshon/config.json" ]]; then
+      }" = "true" ] || [ ! -f "$HOME/.config/tuneshon/config.json" ]; then
         cat > "$HOME/.config/tuneshon/config.json" <<TUNESHON_EOF
       ${seed}
       TUNESHON_EOF

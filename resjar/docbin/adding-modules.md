@@ -73,7 +73,7 @@ in this repo the user side is handled by hjem (home-manager is long gone). the w
   };
 }
 ```
-hjem modules are evaluated *inside* the user submodule, so an app module writes `packages` and `files."~/.config/app/config".source` directly no home.* / programs.* anything.
+hjem modules are evaluated *inside* the user submodule, so an app module writes `packages` and `files.".config/app/config".source` directly no home.* / programs.* anything.
 
 ## Adding an app to the jar (the modern way)
 
