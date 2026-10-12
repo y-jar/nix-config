@@ -95,9 +95,9 @@ let
       if primaryTablet == null then
         ""
       else if primaryTablet.match == "" then
-        "# usrset.tabletenable.${primaryTablet.name} enabled but .match is empty; set it (see hstjar/tabletconf.nix).\n"
+        "# usrset.tabletenable.${primaryTablet.name} enabled but .match is empty; set it (see juajar/data/tabletconf.nix).\n"
       else
-        "# usrset.tabletenable.${primaryTablet.name} (catalog: hstjar/tabletconf.nix)\n"
+        "# usrset.tabletenable.${primaryTablet.name} (catalog: juajar/data/tabletconf.nix)\n"
         + "tablet_map_to_mon=${primaryTablet.match}\n"
     )
     + lib.optionalString (builtins.length enabledTablets > 1) ''
@@ -108,7 +108,7 @@ let
       generatedTabletBody
     else
       lib.warn
-        "usrset.tabletenable: enabled tablet(s) without a match: ${lib.concatStringsSep ", " (map (t: t.name) emptyMatchTablets)} (set .match, or add them to hstjar/tabletconf.nix)"
+        "usrset.tabletenable: enabled tablet(s) without a match: ${lib.concatStringsSep ", " (map (t: t.name) emptyMatchTablets)} (set .match, or add them to juajar/data/tabletconf.nix)"
         generatedTabletBody;
 in
 {

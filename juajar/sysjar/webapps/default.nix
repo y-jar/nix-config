@@ -22,7 +22,7 @@ let
   cfg = config.sysset.webapps;
 
   # Turn a display name into a safe launcher/desktop id (shared helper).
-  toSlug = import ../../lib/slug.nix { inherit lib; };
+  toSlug = import ../../data/slug.nix { inherit lib; };
 
   # Names that normalize to the same slug would clobber launcher/desktop/profile
   # ids (listToAttrs in liijar/webapps). Guarded against below.

@@ -14,7 +14,7 @@
 { lib, pkgs, ... }:
 let
   # known tablet EDID identities; see the discovery command in the header there.
-  knownTablets = import ../../hstjar/tabletconf.nix;
+  knownTablets = import ../data/tabletconf.nix;
 in
 {
   options.usrset = {
@@ -61,14 +61,14 @@ in
               match = lib.mkOption {
                 type = lib.types.str;
                 default = knownTablets.${name}.match or "";
-                description = "mango monitor spec identifying the tablet display. Defaults to the known-tablet catalog (hstjar/tabletconf.nix); set it for uncatalogued tablets. Find it: for e in /sys/class/drm/card*-*/edid; do echo \"$e: $(strings \"$e\" | tr '\\n' ' ')\"; done";
+                description = "mango monitor spec identifying the tablet display. Defaults to the known-tablet catalog (juajar/data/tabletconf.nix); set it for uncatalogued tablets. Find it: for e in /sys/class/drm/card*-*/edid; do echo \"$e: $(strings \"$e\" | tr '\\n' ' ')\"; done";
               };
             };
           }
         )
       );
       default = { };
-      description = "Pen-display mappings keyed by device, e.g. { xppen.enable = true; }. Catalog: hstjar/tabletconf.nix. NOTE: mango 0.16.3 maps a single tablet globally (newer mango adds per-device rules).";
+      description = "Pen-display mappings keyed by device, e.g. { xppen.enable = true; }. Catalog: juajar/data/tabletconf.nix. NOTE: mango 0.16.3 maps a single tablet globally (newer mango adds per-device rules).";
     };
 
     # [experience]

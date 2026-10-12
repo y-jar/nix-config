@@ -33,7 +33,7 @@ let
       "chromium";
 
   # Lowercase name; spaces/punct -> '-' (shared helper).
-  toSlug = import ../../lib/slug.nix { inherit lib; };
+  toSlug = import ../../data/slug.nix { inherit lib; };
 
   # Warn when a non-tabbed webapp picks a browser without --app/frameless mode.
   warnIfNoAppMode =

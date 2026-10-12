@@ -80,7 +80,7 @@
       discord.enable = true;
       halloy.enable = false;
     };
-    espanso = import ../espansoconf.nix { enable = false; }; # espanso text expander [headless server, no graphical session]
+    espanso = import ../../juajar/data/espansoconf.nix { enable = false; }; # espanso text expander [headless server, no graphical session]
     flatpak.enable = false; # sets flatpak and adds bazaar
     # [file explorers]
     nautilus.enable = true; # sets nautilus

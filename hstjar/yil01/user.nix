@@ -80,7 +80,7 @@
       discord.enable = true;
       halloy.enable = true;
     };
-    espanso = import ../espansoconf.nix { enable = true; }; # espanso text expander
+    espanso = import ../../juajar/data/espansoconf.nix { enable = true; }; # espanso text expander
     flatpak.enable = false;
     nautilus.enable = true;
     yazi.enable = true;

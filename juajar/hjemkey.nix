@@ -54,7 +54,7 @@
       # liijar/ auto-imports every app + the usrset option declarations;
       # the host user.nix sets the per-host toggles.
       extraModules = [
-        ../juajar/liijar
+        ./liijar
         ../hstjar/${hostnm}/user.nix
       ];
 

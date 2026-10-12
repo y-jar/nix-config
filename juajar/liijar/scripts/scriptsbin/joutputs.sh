@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # joutputs: list connected DRM outputs and print paste-ready Nix blocks for
-# configuring usrset.tabletenable (see hstjar/tabletconf.nix).
+# configuring usrset.tabletenable (see juajar/data/tabletconf.nix).
 #
 # Usage: joutputs [options] [connector|all]
 #   (none)          list connected outputs
@@ -26,7 +26,7 @@ WLCOPY="${JOUTPUTS_WL_COPY:-wl-copy}"
 usage() {
   cat <<'EOF'
 joutputs: list connected DRM outputs and print paste-ready Nix blocks for
-configuring usrset.tabletenable (see hstjar/tabletconf.nix).
+configuring usrset.tabletenable (see juajar/data/tabletconf.nix).
 
 Usage: joutputs [options] [connector|all]
   (none)          list connected outputs
@@ -155,7 +155,7 @@ emit_block() {
     scale="${rest#* }"
   fi
   cat <<EOF
-# --- hstjar/tabletconf.nix  (rename the key to your device) ---
+# --- juajar/data/tabletconf.nix  (rename the key to your device) ---
   mytablet = {
     # ${conn}  ${model}  ${serial:-no serial}
     match = "model:${model}";

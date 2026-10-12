@@ -39,7 +39,7 @@
       shelljar.enable = true; # my quickshell island shell (binds.conf is all shjctl)
     };
     launcher.enable = true; # sets launcher fuzzel
-    tabletenable.xppen.enable = true; # map XP-Pen Artist 13.3 Pro pen to its display (hstjar/tabletconf.nix)
+    tabletenable.xppen.enable = true; # map XP-Pen Artist 13.3 Pro pen to its display (juajar/data/tabletconf.nix)
     theming = {
       enable = true;
       variant = "dark"; # gruvbox variant (dark|light)
@@ -85,7 +85,7 @@
       discord.enable = true;
       halloy.enable = false;
     };
-    espanso = import ../espansoconf.nix { }; # espanso text expander
+    espanso = import ../../juajar/data/espansoconf.nix { }; # espanso text expander
     flatpak.enable = false; # sets flatpak and adds bazaar
     # [file explorers]
     nautilus.enable = true; # sets nautilus

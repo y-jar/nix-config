@@ -47,7 +47,7 @@
     };
     launcher.enable = true; # ~10mib - sets launcher fuzzel
     # [tablet / pen display] map a pen's absolute coords to its own screen.
-    # Keys come from hstjar/tabletconf.nix (or set match yourself for new devices).
+    # Keys come from juajar/data/tabletconf.nix (or set match yourself for new devices).
     # Find a display's identity in a terminal:
     #   for e in /sys/class/drm/card*-*/edid; do echo "$e: $(strings "$e" | tr '\n' ' ')"; done
     # then:  tabletenable.<key>.enable = true;
@@ -91,7 +91,7 @@
       discord.enable = true; # ~300mib
       halloy.enable = true; # ~69mib nice
     };
-    espanso = import ../espansoconf.nix {enable = false;}; # ~30mib - espanso text expander
+    espanso = import ../../juajar/data/espansoconf.nix {enable = false;}; # ~30mib - espanso text expander
     flatpak.enable = false; # ~10mib - flatpak + bazaar
     # [file explorers]
     nautilus.enable = true; # ~50mib
