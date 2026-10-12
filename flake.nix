@@ -99,6 +99,7 @@
           iso-gnome = self.nixosConfigurations.iso-gnome.config.system.build.isoImage; # nix build .#iso-gnome
           rsakura = inputs.rsakura.packages.x86_64-linux.default; # nix shell ~/nix-config#rsakura
           nueon = inputs.nueon.packages.x86_64-linux.default; # nix build .#nueon
+          nueon-bin = inputs.nueon.packages.x86_64-linux.nueon-bin; # nix build .#nueon-bin
         };
       };
     }; # end of flake outputs
@@ -142,10 +143,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     }; # end of tuneshon
     # [nueon] my conlang editor/creation app (Tauri: Rust + Svelte)
-    # NOTE: no nixpkgs.follows on purpose: keep nueon's closure isolated on its
-    # own pinned nixpkgs (like rsakura/authentik-nix).
+    # nixpkgs.follows so the runtime WebKit/GTK closure is shared with the system
+    # (no duplicate). The binary path uses the prebuilt release .deb.
     nueon = {
       url = "github:y-jar/nueon";
+      inputs.nixpkgs.follows = "nixpkgs";
     }; # end of nueon
     # [gruvbox-dark-yazi] community gruvbox flavor for yazi (theme.toml = [flavor])
     gruvbox-dark-yazi = {

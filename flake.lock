@@ -644,11 +644,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1791069264,
-        "narHash": "sha256-s+hA7BJ+VaEur8CFZHWDNVSxOk6nOOirzp0bj2H3UpI=",
+        "lastModified": 1791738253,
+        "narHash": "sha256-uTZV1BwMtSqttZejBEDpmlEkzmMQkQW5W5m+oqwb3TU=",
         "owner": "y-jar",
         "repo": "shelljar",
-        "rev": "710899935ea37858b45120be56431f677a2de7aa",
+        "rev": "e211245963a24c944ed33c6128ab0983f4080d35",
         "type": "github"
       },
       "original": {
@@ -752,11 +752,11 @@
     "wall-jar": {
       "flake": false,
       "locked": {
-        "lastModified": 1791572182,
-        "narHash": "sha256-VQL10tk3aaCGhcFp+B3bKHcX97NhYjdSavXklyJa5d0=",
+        "lastModified": 1791813945,
+        "narHash": "sha256-z8vzk1aLtYwaMAew4JZHnscu2kGi3Vi0kPtMiyth76g=",
         "owner": "y-jar",
         "repo": "wall-jar",
-        "rev": "187ffd9f57fc623f50515d819b2de289a4ff68fa",
+        "rev": "20ec0f9529016bf37b3cdb26756ba106047bee3d",
         "type": "github"
       },
       "original": {

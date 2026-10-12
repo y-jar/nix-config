@@ -21,8 +21,12 @@
 #   category = "Network"      XDG category for grouping
 #   extraArgs = [ "--start-maximized" ]
 # -=-=-=-=-=-=-=-=-=-=-=
-{ ... }:
+{ config, ... }:
 
+let
+  # icons land in the main user's home via resYoink (not necessarily "jar")
+  iconDir = "/home/${config.sysset.mainUser}/resjar/iconbin";
+in
 {
   sysset.webapps = {
     enable = true; # ship disabled by default; set true when you add apps below
@@ -38,7 +42,7 @@
         url = "https://www.youtube.com";
         mode = "pwa";
         browser = "chromium";
-        icon = "/home/jar/resjar/iconbin/youtube_logo.png";
+        icon = "${iconDir}/youtube_logo.png";
       }
       {
         name = "gmail";
@@ -50,21 +54,21 @@
         url = "https://messages.google.com/web/conversations";
         mode = "pwa";
         browser = "chromium";
-        icon ="/home/jar/resjar/iconbin/messages_logo.png";
+        icon = "${iconDir}/messages_logo.png";
       }
       {
         name = "jellyfin";
         url = "http://whale:8096";
         mode = "pwa";
         browser = "chromium";
-        icon = "/home/jar/resjar/iconbin/jellyfin_logo.png";
+        icon = "${iconDir}/jellyfin_logo.png";
       }
       {
         name = "nixdraw";
         url = "http://whale:3000";
         mode = "pwa";
         browser = "chromium";
-        icon = "/home/jar/resjar/iconbin/excalidraw-dark.png";
+        icon = "${iconDir}/excalidraw-dark.png";
       }
     ]; # end of apps
   }; # end of sysset.webapps
