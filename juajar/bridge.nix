@@ -28,6 +28,7 @@ in
   config = {
     # [system -> user] facts read by liijar via config.usrset.system.*
     hjem.users.${mainUser}.usrset.system = {
+      platform = "nixos";
       hasDesktop = config.sysset.hasDesktop;
       unfree = config.sysset.unfree.enable;
       nixpkgsYoinks = config.sysset.UseNixPkgsYoinks.enable;

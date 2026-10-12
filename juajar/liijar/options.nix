@@ -24,6 +24,14 @@ in
     # defaults or set them in that host's user.nix. liijar modules read these instead
     # of `osConfig` / extra specialArgs, which keeps the user layer portable.
     system = {
+      platform = lib.mkOption {
+        type = lib.types.enum [
+          "nixos"
+          "debian"
+        ];
+        default = "nixos";
+        description = "What the host OS is. NixOS-only pieces (nh/nixos-rebuild aliases, /run/current-system paths, tuneshon) switch off on anything else.";
+      };
       hasDesktop = lib.mkOption {
         type = lib.types.bool;
         default = false;
@@ -62,6 +70,15 @@ in
         };
         description = "Browser-apps-as-desktop-apps definitions ({ enable, apps }), same shape as sysset.webapps.";
       };
+    };
+
+    # [packages]
+    # false = deliver configs only: every `packages` list is dropped so the host's own
+    # package manager (apt on debian) owns the binaries. See liijar/platform.nix.
+    packages.install = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Install the nix packages of every enabled module. Set false on hosts where the system package manager provides the binaries and hjem should only write dotfiles.";
     };
 
     # [core]

@@ -3,26 +3,18 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Shared zsh alias set (single source of truth).
+# goal: Portable zsh alias set (works on any host; NixOS-only ones are in aliases-nixos.nix).
 # -=-=-=-=-=-=-=-=-=-=-=
 # Consumed by the zsh module so every host gets the exact same aliases:
 #   - juajar/liijar/zsh/default.nix (generated `alias k=v` lines)
-# Takes `hostnm` so per-host rebuild aliases target the right system.
+# Nothing here may assume NixOS (no nh / nixos-rebuild / /etc/nixos / system units).
 # -=-=-=-=-=-=-=-=-=-=-=
-{ hostnm }:
 {
   # ========[sys nix]
-  nht = "nh os test --accept-flake-config ~/nix-config#${hostnm}"; # base test
-  nhs = "nh os switch --accept-flake-config ~/nix-config#${hostnm}"; # base switch
-  nhc = "nh clean all --keep 7"; # base cleanup
-  nsc = "sudo nix-collect-garbage -d"; # dense clean: drop all old generations (vs nhc --keep 7)
+  nsc = "sudo nix-collect-garbage -d"; # dense clean: drop all old generations (vs nhc --keep 7 on NixOS)
   nsr = "sudo nix-store --verify --check-contents --repair";
-  nrs = "nixos-rebuild switch --sudo --flake ~/nix-config#${hostnm}"; # hard building
-  nrt = "nixos-rebuild test --sudo --flake ~/nix-config#${hostnm}"; # testing
-  buildiso = "sh ~/nix-config/resjar/nixbin/buildiso.sh"; # build recovery ISO
   ns = "nix-shell"; # load dev enviroment
   nsp = "nix search nixpkgs";
-  repl = "nix repl --file ~/nix-config/juajar/liijar/shell/repl.nix"; # poke the flake
   # ========[app aliases]
   nv = "nvim";
   zd = "zeditor";
@@ -34,7 +26,6 @@
   #[jar]
   jars = "git pull --rebase origin main";
   jnconf = "cd ~/nix-config"; # nix config jar [move over into nix config]
-  neconf = "cd /etc/nixos"; # nix config (system-installed mirror)
   jkconf = "cd ~/kilnjar"; # kiln jar [my dev / project folder]
   jkrconf = "cd ~/kilnjar/reposjar"; # kiln jar [my dev / project folder]
   # [hyprland]
@@ -62,19 +53,10 @@
   dl = "ytdl"; # youtube downloader
   shlvl = "echo $SHLVL";
   # [AI]
-  rllm = "sudo systemctl restart llama-cpp";
-  sllm = "sudo systemctl restart llama-cpp";
-  stllm = "sudo systemctl start llama-cpp";
   # [t480 related commands]
   cbat = "acpi -b"; # check battery status combined
-  # [whale related comands]
-  grepauth = "sudo grep AUTHENTIK_BOOTSTRAP_PASSWORD /var/lib/authentik/env"; # grep authentik bootstrap password
-  erroroutline = "journalctl -u outline-oidc-provision"; # journalctl for outline oidc provisioning
-  whealth = "systemctl is-active outline authentik authentik-worker && ss -tln | grep -E ':(3001|9000) ' && curl -sk https://whale.local:3001/ -o /dev/null -w 'outline: HTTP %{http_code}' && echo && curl -s http://localhost:9000/if/flow/default-authentication-flow/ -o /dev/null -w 'authentik: HTTP %{http_code}'"; # post-switch whale check: services, ports, web endpoints
   # [fleet ssh (see hstjar/*/net.nix + sysjar/networking)]
   fkey = "ssh-keyscan -t ed25519"; # scan a host's fleet key: fkey <hostname>.local
-  # [host checks]
-  wdry = "out=$(nix build --print-out-paths --no-link /home/jar/nix-config#nixosConfigurations.$(hostname).config.system.build.toplevel) && echo BUILD-OK $out && sudo $out/bin/switch-to-configuration dry-activate && echo DRY-OK"; # pre-flight this host: build + dry-run activation (changes nothing)
 
   # =========[Extra]
   mcube = "mangohud vkcube --present_mode 1"; # needs mangohud+vulkan-tools

@@ -40,6 +40,13 @@ let
 in
 {
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = config.usrset.system.platform == "nixos";
+        message = "usrset.tuneshon is a NixOS flake update tool: it needs usrset.system.platform = \"nixos\".";
+      }
+    ];
+
     # Bake the host's config dir into the installed binary wrapper
     # (TUNESHON_CONFIG_DIR), so a desktop-launched "update" always points at
     # the right repo even though launchers don't source ~/.profile.

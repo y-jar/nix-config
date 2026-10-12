@@ -106,6 +106,10 @@ let
     WantedBy=default.target
   '';
 
+  # where the system keeps its binaries (voxtype shells out to them)
+  systemBinPath =
+    if config.usrset.system.platform == "nixos" then "/run/current-system/sw/bin" else "/usr/local/bin:/usr/bin:/bin";
+
   voxtypeServiceUnit = pkgs.writeText "voxtype.service" ''
     [Unit]
     Description=Voxtype dictation daemon
@@ -115,7 +119,7 @@ let
     ExecStart=${lib.getExe pkgs.voxtype}
     Restart=on-failure
     RestartSec=3
-    Environment=PATH=${runtimeBinPath}:/run/current-system/sw/bin
+    Environment=PATH=${runtimeBinPath}:${systemBinPath}
 
     [Install]
     WantedBy=default.target

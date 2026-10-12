@@ -6,13 +6,12 @@
 # goal: Shared zsh function block (single source of truth).
 # -=-=-=-=-=-=-=-=-=-=-=
 # Consumed by the zsh module (generated .zshrc text):
+# Portable only (nix tooling, no NixOS rebuild); the *tm helpers live in functions-nixos.nix.
 # Takes:
-#   hostnm - host name for the *tm rebuild helpers (defaults to current host)
 #   uf     - whether this host allows unfree packages (drives the `,` helper)
 # -=-=-=-=-=-=-=-=-=-=-=
 {
   lib,
-  hostnm,
   uf,
 }:
 ''
@@ -32,24 +31,6 @@
     else
       "''$pref[@]" nix shell ${lib.optionalString uf "--impure"} "''${pkgs[@]}"
     fi
-  }
-
-  # host-target rebuild/test (default to current host: nhtm ziiemar)
-  nhtm() {
-    local target="''${1:-${hostnm}}"
-    nh os test --accept-flake-config ~/nix-config#"$target"
-  }
-  nhsm() {
-    local target="''${1:-${hostnm}}"
-    nh os switch --accept-flake-config ~/nix-config#"$target"
-  }
-  nrtm() {
-    local target="''${1:-${hostnm}}"
-    nixos-rebuild test --sudo --flake ~/nix-config#"$target"
-  }
-  nrsm() {
-    local target="''${1:-${hostnm}}"
-    nixos-rebuild switch --sudo --flake ~/nix-config#"$target"
   }
 
   # update the lock, or only specific inputs (nfu shelljar ; nfu shelljar nvf)

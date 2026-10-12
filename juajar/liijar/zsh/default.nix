@@ -23,11 +23,15 @@ let
   # Whether this host allows unfree packages (drives the modern `,` temp-install).
   uf = hjm.system.unfree;
 
-  aliases = import ../shell/aliases.nix { inherit hostnm; };
-  functions = import ../shell/functions.nix {
-    inherit lib hostnm;
-    inherit uf;
-  };
+  isNixos = hjm.system.platform == "nixos";
+
+  # portable set everywhere; the nh/nixos-rebuild/host-service extras only on NixOS
+  aliases =
+    import ../shell/aliases.nix
+    // lib.optionalAttrs isNixos (import ../shell/aliases-nixos.nix { inherit hostnm; });
+  functions =
+    import ../shell/functions.nix { inherit lib uf; }
+    + lib.optionalString isNixos (import ../shell/functions-nixos.nix { inherit hostnm; });
 
   # attrset of aliases -> `alias k=v` lines. Bodies are single-quoted
   # (with ' escaped as '\'') so $/$(...) stay literal until invocation;
