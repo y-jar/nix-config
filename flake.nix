@@ -25,6 +25,8 @@
           specialArgs = {
             inherit inputs self;
             hostnm = hostName; # Dynamically sets hostnm for networking/Zsh
+            hostDir = ./hstjar/${hostName}; # this host's dir (user.nix, net.nix, ...)
+            fleetDir = ./hstjar; # every host dir, for fleet-wide data (net.nix phone book)
           }; # end of special args
           modules = [
             ./juajar/sysjar # Base system core entry

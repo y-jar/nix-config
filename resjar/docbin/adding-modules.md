@@ -61,8 +61,8 @@ in this repo the user side is handled by hjem (home-manager is long gone). the w
     hjem = {
       clobberByDefault = true; # hjem overwrites conflicting files instead of backing them up
       extraModules = [
-        ../juajar/liijar # the app tree (auto-imported)
-        ../hstjar/''${hostnm}/user.nix # the host's toggle sheet
+        ./liijar # the app tree (auto-imported)
+        (hostDir + "/user.nix") # the host's toggle sheet (hostDir comes from mkJar specialArgs)
       ];
       users.''${mainUser} = {
         enable = true;

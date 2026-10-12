@@ -36,6 +36,7 @@
   lib,
   inputs,
   hostnm,
+  hostDir,
   ...
 }:
 
@@ -55,7 +56,7 @@
       # the host user.nix sets the per-host toggles.
       extraModules = [
         ./liijar
-        ../hstjar/${hostnm}/user.nix
+        (hostDir + "/user.nix")
       ];
 
       # [main user dotfiles]

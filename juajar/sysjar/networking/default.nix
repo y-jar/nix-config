@@ -7,6 +7,7 @@
 # -=-=-=-=-=-=-=-=-=-=-=
 {
   hostnm,
+  fleetDir,
   config,
   lib,
   ...
@@ -21,7 +22,7 @@ let
   #   knows        = optional list of hosts THIS one pins
   # entries with a real ip are pinnable; hostKey = null means dns-only.
   # host configs cannot see each other, but a shared data import can.
-  fleetRoot = ../../../hstjar;
+  fleetRoot = fleetDir;
   fleetRaw = lib.filterAttrs (
     name: type: type == "directory" && builtins.pathExists (fleetRoot + "/${name}/net.nix")
   ) (builtins.readDir fleetRoot);

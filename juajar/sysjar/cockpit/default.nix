@@ -15,6 +15,7 @@
   lib,
   pkgs,
   hostnm,
+  hostDir,
   ...
 }:
 let
@@ -29,7 +30,7 @@ let
   # reads). ip feeds the LAN origin so cockpit is reachable by address too.
   netData =
     let
-      p = ../../../hstjar/${hostnm}/net.nix;
+      p = hostDir + "/net.nix";
     in
     if builtins.pathExists p then import p else { };
   hostIp = netData.ip or null;
