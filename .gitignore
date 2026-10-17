@@ -3,3 +3,4 @@
 result
 resjar/nixbin/.testlog
 .todo
+nix-config.bundle
