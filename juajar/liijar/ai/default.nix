@@ -17,17 +17,21 @@
   config,
   lib,
   pkgs,
+  inputs,
   ...
 }:
 
 let
   hjm = config.usrset.ai;
 
+  # opencode from unstable: newer than the copy in stable nixpkgs (1.19 vs 1.15)
+  unstablePkgs = inputs.nixpkgsUnstable.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+
   # opencode + uv + lmstudio under the ai.* fine toggles
   aiPackages =
     lib.optionals (hjm.enable && hjm.opencode.enable) [
-      pkgs.opencode # AI coding agent (TUI)
-      pkgs.opencode-desktop # AI coding agent (desktop GUI)
+      unstablePkgs.opencode # AI coding agent (TUI) [pinned to nixpkgs-unstable]
+      unstablePkgs.opencode-desktop # AI coding agent (desktop GUI) [pinned to nixpkgs-unstable]
       pkgs.uv # rust based python package installer (opencode dep)
     ]
     ++ lib.optionals (hjm.enable && hjm.lmstudio.enable) [
@@ -53,6 +57,23 @@ let
           }; # end of qwen3.5-9b
         }; # end of models
       }; # end of llama
+      lmstudio = {
+        npm = "@ai-sdk/openai-compatible";
+        name = "LM Studio (local)";
+        options = {
+          baseURL = "http://localhost:1234/v1";
+        };
+        models = {
+          "qwen3.8-27b" = {
+            name = "Qwen 3.8 27B";
+            tool_call = true;
+            limit = {
+              context = 151072; # Keep this aligned with load in LM Studio
+              output = 10000;
+            };
+          };
+        };
+      };
       # Sonnet 5.5 only supports adaptive thinking, but opencode's built-in
       # variant builder emits thinking.type="enabled" for it (it only knows
       # opus-4-7/4-6/sonnet-4-6), which upstream rejects. The selected
@@ -117,8 +138,6 @@ let
       }; # end of opencode-go provider
     }; # end of provider
   }; # end of settings
-
-
 
   # global instructions written to ~/.config/opencode/AGENTS.md
   context = ''

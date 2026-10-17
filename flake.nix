@@ -111,6 +111,9 @@
     # [nixpkgs]
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
 
+    # [nixpkgs-unstable] pulls a newer opencode than stable ships (1.19 vs 1.15)
+    nixpkgsUnstable.url = "github:nixos/nixpkgs/nixos-unstable";
+
     # [mangowm] wayland compositor (dwl-based) ships nixosModules.mango
     mangowm = {
       url = "github:mangowm/mango";
