@@ -23,4 +23,5 @@
 {
   ip = "192.168.1.10"; # stable lan address (dhcp-reserved)
   hostKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL0qZlOl6bq8VaRE1TLeWf2O7IpIQiuSkptTJDHocJpD"; # scanned 2026-09-24
+  knows = [ "calender"];
 }

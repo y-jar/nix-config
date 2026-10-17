@@ -65,6 +65,7 @@ let
                 type = "adaptive";
               };
               effort = "high"; # low | medium | high | xhigh | max
+              sendReasoning = false; # don't replay signed thinking blocks (avoids "Invalid signature" 400)
             };
             variants = {
               high = {
@@ -72,17 +73,48 @@ let
                   type = "adaptive";
                 };
                 effort = "high";
+                sendReasoning = false;
               };
               max = {
                 thinking = {
                   type = "adaptive";
                 };
                 effort = "max";
+                sendReasoning = false;
               };
             };
           };
         };
       }; # end of opencode provider
+      # Haiku 5.5 (and other 5.x) reject thinking.type="enabled"; force adaptive.
+      # Same variant caveat as sonnet: the selected variant merges last, so
+      # override its variants too (built-in builder emits enabled for high/max).
+      opencode-go = {
+        models = {
+          "claude-haiku-5-5" = {
+            options = {
+              thinking = {
+                type = "adaptive";
+              };
+              sendReasoning = false;
+            };
+            variants = {
+              high = {
+                thinking = {
+                  type = "adaptive";
+                };
+                sendReasoning = false;
+              };
+              max = {
+                thinking = {
+                  type = "adaptive";
+                };
+                sendReasoning = false;
+              };
+            };
+          };
+        };
+      }; # end of opencode-go provider
     }; # end of provider
   }; # end of settings
 

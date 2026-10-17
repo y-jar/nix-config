@@ -21,5 +21,5 @@
 {
   ip = "192.168.1.5"; # stable lan address (dhcp-reserved)
   hostKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINmxywfMQLgLRzRGL7OP6bPzSfdNSgDa3l3S7QIxkm5/"; # scanned 2026-09-19
-  # knows = [ ]; # if un commneted, this will mark it as "I only know myself" and will eval other hosts like any other non-delairative system.
+  knows = [ "whale" ]; # if un commneted, this will mark it as "I only know myself" and will eval other hosts like any other non-delairative system.
 }
