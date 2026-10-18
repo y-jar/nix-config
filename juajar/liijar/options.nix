@@ -70,6 +70,16 @@ in
         };
         description = "Browser-apps-as-desktop-apps definitions ({ enable, apps }), same shape as sysset.webapps.";
       };
+      aiModels = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        description = "Active Ollama model tags for the host (filled by bridge on NixOS).";
+      };
+      aiContextLength = lib.mkOption {
+        type = lib.types.int;
+        default = 8192;
+        description = "Active Ollama context length for the host (filled by bridge on NixOS).";
+      };
     };
 
     # [packages]

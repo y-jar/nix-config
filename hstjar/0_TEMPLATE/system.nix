@@ -114,6 +114,12 @@
           enable = true; # local llama.cpp (set false to use opencode/non-local only)
           gpu = "rocm"; # llama.cpp backend: rocm (AMD) | cuda (NVIDIA) | cpu
         };
+        ollama = {
+          enable = false; # Ollama backend (multi-GPU; qwen2.5-coder:32b)
+          gpu = "rocm"; # Ollama backend: rocm (AMD) | cuda (NVIDIA) | vulkan | cpu
+          contextLength = 8192; # default context length
+          devices = ""; # comma-separated GPU UUIDs/indices (empty = all detected). Looks like: devices = "GPU-6a91c53ed47a63c3,GPU-6a91c53ed47aawd";
+        };
         port = 11434;
         webui = {
           enable = false; # Open WebUI chat interface (~2gib)

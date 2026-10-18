@@ -63,6 +63,11 @@ let
       port = s.ai.port;
     }
     {
+      name = "ai (ollama)";
+      enable = s.ai.enable && s.ai.ollama.enable;
+      port = s.ai.port;
+    }
+    {
       name = "ai (open webui)";
       enable = s.ai.enable && s.ai.webui.enable;
       port = s.ai.webui.port;
@@ -86,8 +91,12 @@ in
       }";
     }
     {
-      assertion = !(s.ai.enable && s.ai.webui.enable) || s.ai.llama.enable;
-      message = "sysset.ai.webui needs the local llama.cpp server: set sysset.ai.llama.enable = true.";
+      assertion = !(s.ai.enable && s.ai.webui.enable) || (s.ai.llama.enable || s.ai.ollama.enable);
+      message = "sysset.ai.webui needs a local AI backend: set sysset.ai.llama.enable or sysset.ai.ollama.enable = true.";
+    }
+    {
+      assertion = !(s.ai.llama.enable && s.ai.ollama.enable);
+      message = "sysset.ai: enable only one of llama or ollama at a time.";
     }
   ];
 }

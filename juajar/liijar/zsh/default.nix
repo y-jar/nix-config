@@ -28,10 +28,13 @@ let
   # portable set everywhere; the nh/nixos-rebuild/host-service extras only on NixOS
   aliases =
     import ./aliases.nix
+    // lib.optionalAttrs (hjm.ai.enable) (import ./aliases-ai.nix)
+    // lib.optionalAttrs (isNixos && hjm.ai.enable) (import ./aliases-ai-nixos.nix { inherit hostnm; })
     // lib.optionalAttrs isNixos (import ./aliases-nixos.nix { inherit hostnm; });
   functions =
     import ./functions.nix { inherit lib uf; }
-    + lib.optionalString isNixos (import ./functions-nixos.nix { inherit hostnm; });
+    + lib.optionalString isNixos (import ./functions-nixos.nix { inherit hostnm; })
+    + lib.optionalString (isNixos && hjm.ai.enable) (import ./functions-ai.nix { inherit lib pkgs; });
 
   # attrset of aliases -> `alias k=v` lines. Bodies are single-quoted
   # (with ' escaped as '\'') so $/$(...) stay literal until invocation;

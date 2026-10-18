@@ -36,6 +36,8 @@ in
       audioAddon = config.sysset.audio.addon.enable;
       autostart = config.sysset.autostart.commands;
       webapps = config.sysset.webapps; # browser-apps-as-desktop-apps (sysset.webapps)
+      aiModels = config.sysset.ai.ollama.activeModels; # active Ollama model tags
+      aiContextLength = config.sysset.ai.ollama.contextLength; # Ollama context window
     };
 
     # [user -> system] nvf: sysjar/nvf. syncthing: sysjar/syncthing (runs as mainUser).

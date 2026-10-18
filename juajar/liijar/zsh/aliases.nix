@@ -21,7 +21,6 @@
   code = "codium";
   brw = "browsh"; # TUI based browser
   b = "browsh"; # browser
-  oc = "opencode"; # Ai thing
   # ========[util]
   #[jar]
   jars = "git pull --rebase origin main";

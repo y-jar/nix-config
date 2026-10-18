@@ -88,12 +88,23 @@
       nix.unfree.enable = true; # allow unfree packages (spotify, chromium, vscodium, steam, ...)
       nix.nixpkgsYoinks.enable = true;
       ai = {
-        enable = true; # sets AI tools (opencode, llama.cpp)
+        enable = true; # sets AI tools (opencode, llama.cpp, ollama)
         llama = {
-          enable = false; # local llama.cpp (set false to keep opencode/non-local only)
+          enable = false; # local llama.cpp (kept available but disabled on this host)
           gpu = "rocm"; # llama.cpp backend: rocm (AMD) | cuda (NVIDIA) | cpu
         };
-        host = "127.0.0.1"; # keep llama.cpp local (not exposed on the LAN)
+        ollama = {
+          enable = true; # Ollama backend (multi-GPU)
+          gpu = "rocm"; # Ollama backend: rocm (AMD) | cuda (NVIDIA) | vulkan | cpu
+          modelSet = "medium"; # small | medium | large | custom
+          contextLength = 32768; # KV cache spills to RAM; avoids constant compaction
+          # Prefer UUIDs from `rocminfo`; currently only the 9070 XT is installed.
+          # Append the 9060 XT UUID here after it is moved into this machine.
+          devices = "GPU-6a91c53ed47a63c3"; # exclude Granite Ridge iGPU
+          syncModels = true; # set true once to prune models outside the active set
+        };
+
+        host = "127.0.0.1"; # keep local backend private to this machine
         port = 11434;
         webui = {
           enable = false; # Open WebUI chat interface

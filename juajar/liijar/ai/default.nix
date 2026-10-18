@@ -23,6 +23,7 @@
 
 let
   hjm = config.usrset.ai;
+  usrset = config.usrset;
 
   # opencode from unstable: newer than the copy in stable nixpkgs (1.19 vs 1.15)
   unstablePkgs = inputs.nixpkgsUnstable.legacyPackages.${pkgs.stdenv.hostPlatform.system};
@@ -40,8 +41,43 @@ let
 
   json = pkgs.formats.json { };
 
+  # [ollama] model tags + context window are facts the bridge fills from sysset.ai
+  # (usrset.system.*), so the opencode limits can never drift from what Ollama serves.
+  ollamaModelTags =
+    if (usrset.system.aiModels or [ ]) == [ ] then
+      [
+        "qwen2.5-coder:14b"
+        "qwen3.5:9b"
+      ]
+    else
+      usrset.system.aiModels;
+
+  ollamaContext = usrset.system.aiContextLength or 8192;
+
+  ollamaModels = lib.listToAttrs (
+    map (model: lib.nameValuePair model {
+      name = model;
+      tool_call = true;
+      limit = {
+        context = ollamaContext;
+        input = ollamaContext;
+        output = 8192;
+      };
+    }) ollamaModelTags
+  );
+
   # provider configuration (local llama.cpp + cloud Sonnet 5.5 overrides)
   settings = {
+    # Local models advertise a small default window, so opencode's 20k compaction
+    # buffer would fire on nearly every turn and the summary model can loop. Keep a
+    # small buffer and let the full `limit.input` drive compaction instead.
+    compaction = {
+      auto = true;
+      prune = true;
+      keep.tokens = 8000;
+      buffer = 4096;
+    }; # end of compaction
+
     # provider settings
     provider = {
       llama = {
@@ -57,6 +93,14 @@ let
           }; # end of qwen3.5-9b
         }; # end of models
       }; # end of llama
+      ollama = {
+        npm = "@ai-sdk/openai-compatible";
+        name = "Ollama (local)";
+        options = {
+          baseURL = "http://localhost:11434/v1";
+        }; # end of options
+        models = ollamaModels;
+      }; # end of ollama
       lmstudio = {
         npm = "@ai-sdk/openai-compatible";
         name = "LM Studio (local)";

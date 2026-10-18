@@ -92,6 +92,12 @@
           enable = false; # OFF: no local llama.cpp (saves ~2.7GiB ROCm)
           gpu = "cpu"; # llama backend: rocm | cuda | cpu
         };
+        ollama = {
+          enable = false; # OFF: no Ollama backend
+          gpu = "cpu"; # Ollama backend: rocm | cuda | vulkan | cpu
+          contextLength = 8192;
+          devices = ""; # comma-separated GPU UUIDs/indices (empty = all detected)
+        };
         port = 11434;
         webui = {
           enable = false;
