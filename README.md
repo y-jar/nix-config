@@ -277,16 +277,15 @@ The most useful aliases available after install:
 
 | Alias | Command | Purpose |
 | :--- | :--- | :--- |
-| `nhs` | `nh os switch` | Deploy system config (auto-detects host) |
+| `nhs` | `nh os switch` | Deploy system config (targets this host) |
 | `nht` | `nh os test` | Test config without writing to bootloader |
 | `updatejar` | pull + test + (ask) deploy | One-command host update: jars → nht → prompt for nhs → jar art |
 | `nhc` | `nh clean all --keep 7` | Clean old generations, keep last 7 |
 | `nrs` / `nrt` | `nixos-rebuild switch/test` | Hard rebuild fallback (uses sudo) |
-| `jnconf` | `cd ~/nix-config` | Jump to config dir |
 | `jars` | `git pull --rebase origin main` | Pull latest config |
 | `ff` | `fastfetch` | System info |
 | `nv` / `zd` / `code` | nvim / zeditor / codium | Editor shortcuts |
-| `ckhrd` | `lsblk && fdisk -l` | Check storage blocks |
+| `chkhrd` | `lsblk && fdisk -l` | Check storage blocks |
 | `,` | `nix shell` (function) | Quick flake-based shell `, git curl` for interactive, `, git curl -- ls` for one-shot |
 
 Full alias list: [liijar/zsh](juajar/liijar/zsh/) · [installer shell](shell.nix)
@@ -296,10 +295,9 @@ Full alias list: [liijar/zsh](juajar/liijar/zsh/) · [installer shell](shell.nix
 **Day-to-day workflow:**
 ```bash
 updatejar    # the whole loop: pull, test, ask to deploy, jar art
-nhs          # deploy system config (auto-detects host)
+nhs          # deploy system config (targets this host)
 nht          # test before deploying
 nhc          # clean up old generations
-jnconf       # jump to config dir
 rz           # reload zsh after alias changes
 ```
 

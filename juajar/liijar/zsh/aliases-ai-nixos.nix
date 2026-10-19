@@ -8,7 +8,6 @@
 { hostnm }:
 {
   rllm = "sudo systemctl restart llama-cpp";
-  sllm = "sudo systemctl restart llama-cpp";
   stllm = "sudo systemctl start llama-cpp";
   rollm = "sudo systemctl restart ollama";
   sollm = "sudo systemctl start ollama";
