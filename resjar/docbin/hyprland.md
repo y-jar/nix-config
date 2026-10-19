@@ -42,4 +42,4 @@ hl.monitor({
 
 If no host file matches, `0-unknown.lua` is used.
 
-Keybinds are defined in the WM's config files — read them there.
+Keybinds are defined in the WM's config files; read them there.

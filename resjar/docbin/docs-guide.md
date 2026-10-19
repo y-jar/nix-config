@@ -20,12 +20,12 @@ concept or a procedure outlive the code.
 
 ## What belongs where
 
-- **Learning** — the "why" and "how to think about it" (Nix, modules, PipeWire,
+- **Learning**: the "why" and "how to think about it" (Nix, modules, PipeWire,
   sysadmin habits). Written once, rarely changes.
-- **Procedure** — steps to get somewhere (install, add a host, migrate a server).
+- **Procedure**: steps to get somewhere (install, add a host, migrate a server).
   Keep steps, but never embed lists that live in the tree. Tell the reader how to
   look (`ls hstjar/`).
-- **Reference** — indexes that help you navigate. Keep them thin; they point at
+- **Reference**: indexes that help you navigate. Keep them thin; they point at
   code, they don't restate it.
 
 ## Style
@@ -39,5 +39,5 @@ concept or a procedure outlive the code.
 
 ## When to add a doc
 
-Add one when the knowledge is *not obvious from reading the code* — a concept,
+Add one when the knowledge is *not obvious from reading the code*: a concept,
 a gotcha, a procedure with ordering. Otherwise a code comment is enough.

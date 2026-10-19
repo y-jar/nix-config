@@ -35,6 +35,6 @@ inside a column; you move columns and windows around them.
 - **Tabbed:** toggle stacked vs tabbed within a column
 - **Width:** cycle preset column widths
 
-Workspaces are dynamic — created as needed, no fixed names like Hyprland.
+Workspaces are dynamic, created as needed, no fixed names like Hyprland.
 
-Keybinds are defined in the WM's config files — read them there.
+Keybinds are defined in the WM's config files; read them there.

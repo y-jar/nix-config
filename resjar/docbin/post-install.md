@@ -20,8 +20,8 @@ nhs              # deploy with nh (or nrs for the nixos-rebuild fallback)
 
 Two paths:
 
-- **Flatpaks** — open your app store, go to updates, update.
-- **System + system apps** — after a while, or after a config change:
+- **Flatpaks**: open your app store, go to updates, update.
+- **System + system apps**: after a while, or after a config change:
 
 ```bash
 cd ~/nix-config

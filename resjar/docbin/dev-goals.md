@@ -29,7 +29,7 @@ lessons and the habits that made NixOS click.
 - **`lib.mkIf` gates, `//` doesn't.** Merging attrsets with `//` silently drops
   earlier keys; use `mkMerge` when composing gated pieces.
 - **The store is immutable.** If an app needs to write its own config, it can't
-  live as a read-only symlink — give it a real path.
+  live as a read-only symlink; give it a real path.
 - **Generations are your undo.** Every switch is a new generation; you can boot
   any of them. `nh clean all --keep 7` keeps it tidy.
 - **Reproduce, don't repair.** If a fix isn't in the config, it's not a fix, it's

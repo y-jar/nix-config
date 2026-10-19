@@ -15,7 +15,7 @@ merges their options, and evaluates the result. An option is declared once and
 set anywhere; everyone reads it back from `config`.
 
 A flake is just inputs + outputs. Inputs are fetched and locked in `flake.lock`
-(nothing is "usable" yet, just downloaded). Outputs build on those inputs — here,
+(nothing is "usable" yet, just downloaded). Outputs build on those inputs. Here,
 the outputs are NixOS configurations:
 
 ```nix
@@ -38,19 +38,19 @@ the outputs are NixOS configurations:
 ```
 
 `@inputs` captures the whole input set so later modules can reach it. In this
-repo you don't write that by hand — `mkJar "HOSTNAME"` builds the system and
+repo you don't write that by hand: `mkJar "HOSTNAME"` builds the system and
 wires the shared modules in for you.
 
 ## The shape of this repo
 
 Two scopes, one rule each:
 
-- **`sysjar/`** — system modules, options under `sysset.*`, auto-imported.
-- **`liijar/`** — user apps, options under `usrset.*`, auto-imported by the hjem
+- **`sysjar/`**: system modules, options under `sysset.*`, auto-imported.
+- **`liijar/`**: user apps, options under `usrset.*`, auto-imported by the hjem
   backend. Every app is one dir with a `default.nix`.
 
 User apps are evaluated *inside* the user submodule, so an app writes `packages`
-and `files.".config/app/config".source` directly — no `home.*` / `programs.*`.
+and `files.".config/app/config".source` directly, no `home.*` / `programs.*`.
 
 > [!TIP]
 > [cowsay/](../../juajar/liijar/cowsay) is the commented reference example. Read
@@ -59,11 +59,11 @@ and `files.".config/app/config".source` directly — no `home.*` / `programs.*`.
 ## Adding an app (liijar)
 
 1. declare the toggle (`usrset.<app>.enable`) in
-   [`liijar/options.nix`](../../juajar/liijar/options.nix) — and only there
+   [`liijar/options.nix`](../../juajar/liijar/options.nix), and only there
 2. copy `cowsay/` to `liijar/<app>/` and put your packages/config in `default.nix`
 3. flip the toggle in the host's `hstjar/<host>/user.nix`
 
-That's it — `liijar/default.nix` auto-imports every app dir. No registration.
+That's it: `liijar/default.nix` auto-imports every app dir. No registration.
 
 ## Adding a system module (sysjar)
 
@@ -97,7 +97,7 @@ and `host-inputs/<host>.<ext>`. Copy the closest existing WM and declare
   (`media.mpv.enable`, `dev.python.enable`). Plain bools are only for modes and
   settings.
 - **gate with `lib.mkIf cfg.enable`** on the whole config. Use `lib.mkMerge` to
-  compose several gated pieces — `//` does *not* compose `mkIf`.
+  compose several gated pieces; `//` does *not* compose `mkIf`.
 - **declare options once.** `usrset.*` in `liijar/options.nix`; `sysset.*` in the
   module that owns them.
 - **data is not a module.** Shared data goes in `juajar/data/`; raw WM config
@@ -106,5 +106,5 @@ and `host-inputs/<host>.<ext>`. Copy the closest existing WM and declare
   (`.config/app/x`, no `~/` prefix).
 
 For where system facts come from (`sysset` vs `usrset` / `bridge.nix`), read the
-comments in [`juajar/bridge.nix`](../../juajar/bridge.nix) — it's the one place
+comments in [`juajar/bridge.nix`](../../juajar/bridge.nix), the one place
 they meet.
