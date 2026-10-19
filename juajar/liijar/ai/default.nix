@@ -19,9 +19,7 @@
   pkgs,
   inputs,
   ...
-}:
-
-let
+}: let
   hjm = config.usrset.ai;
   usrset = config.usrset;
 
@@ -39,31 +37,32 @@ let
       pkgs.lmstudio # local LLM runtime (~2.3GiB)
     ]; # end of aiPackages
 
-  json = pkgs.formats.json { };
+  json = pkgs.formats.json {};
 
   # [ollama] model tags + context window are facts the bridge fills from sysset.ai
   # (usrset.system.*), so the opencode limits can never drift from what Ollama serves.
   ollamaModelTags =
-    if (usrset.system.aiModels or [ ]) == [ ] then
-      [
-        "qwen2.5-coder:14b"
-        "qwen3.5:9b"
-      ]
-    else
-      usrset.system.aiModels;
+    if (usrset.system.aiModels or []) == []
+    then [
+      "qwen2.5-coder:14b"
+      "qwen3.5:9b"
+    ]
+    else usrset.system.aiModels;
 
   ollamaContext = usrset.system.aiContextLength or 8192;
 
   ollamaModels = lib.listToAttrs (
-    map (model: lib.nameValuePair model {
-      name = model;
-      tool_call = true;
-      limit = {
-        context = ollamaContext;
-        input = ollamaContext;
-        output = 8192;
-      };
-    }) ollamaModelTags
+    map (model:
+      lib.nameValuePair model {
+        name = model;
+        tool_call = true;
+        limit = {
+          context = ollamaContext;
+          input = ollamaContext;
+          output = 8192;
+        };
+      })
+    ollamaModelTags
   );
 
   # provider configuration (local llama.cpp + cloud Sonnet 5.5 overrides)
@@ -211,8 +210,8 @@ let
     <subject>: <feature> + <feature> [+ <feature> ...]
     ```
 
-    - **subject** — the area in one word, lowercase (e.g. `nix`, `opencode`, `theming`, `scripts`, `docs`).
-    - **feature** — a short lowercase description of what changed. Join multiple with ` + `.
+    - **subject** the area in one word, lowercase (e.g. `nix`, `opencode`, `theming`, `scripts`, `docs`).
+    - **feature** a short lowercase description of what changed. Join multiple with ` + `.
     - One commit per finished stage; commit before starting the next stage.
     - Optional body: list details as bullets.
     - Never use conventional-commit prefixes (`feat:`, `fix:`, `chore:`), emojis, or AI attribution footers.
@@ -376,8 +375,7 @@ let
       - Use `[[root_name]]` Obsidian links when referencing vocabulary roots in documentation
     '';
   }; # end of agents
-in
-{
+in {
   config = {
     # opencode + uv + lmstudio under the ai.* gates (see aiPackages)
     packages = aiPackages;
@@ -385,12 +383,12 @@ in
     files = lib.mkIf (hjm.enable && hjm.opencode.enable) (
       {
         ".config/opencode/opencode.json".source = json.generate "opencode.json" (
-          { "$schema" = "https://opencode.ai/config.json"; } // settings
+          {"$schema" = "https://opencode.ai/config.json";} // settings
         );
         ".config/opencode/AGENTS.md".source = pkgs.writeText "AGENTS.md" context;
       }
       // lib.mapAttrs' (
-        name: path: lib.nameValuePair ".config/opencode/agents/${name}.md" { source = path; }
+        name: path: lib.nameValuePair ".config/opencode/agents/${name}.md" {source = path;}
       ) (lib.mapAttrs (name: text: pkgs.writeText "${name}.md" text) agents)
     );
   }; # end of config
