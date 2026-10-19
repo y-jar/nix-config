@@ -2,14 +2,13 @@
 -- Colors follow the terminal's gruvbox ANSI palette (usrset.theming); the
 -- shipped `default` theme maps onto the terminal colors so vis looks gruvbox.
 -- vis has no built-in LSP; use nvf (neovim) for that. Syntax highlighting is
--- on by default (syntax auto).
+-- on by default (syntax auto). $EDITOR and the `v` alias point here.
 
 require('vis')
 
 -- window-scoped options (apply to each newly opened window)
 vis.events.subscribe(vis.events.WIN_OPEN, function(win)
 	win.options.numbers = true        -- absolute line numbers
-	win.options.relativenumbers = true
 	win.options.cursorline = true     -- highlight current line
 	win.options.showtabs = true       -- render tab markers
 	win.options.expandtab = true      -- tabs -> spaces
@@ -30,6 +29,12 @@ local PAIRS = {
 	{ o = '<', c = '>' },
 }
 
+-- the byte under the cursor (nil-safe), read from the window's file
+local function char_at_cursor()
+	local f = vis.win.file
+	return f and f:content(vis.win.selection.pos, vis.win.selection.pos + 1) or ''
+end
+
 for _, p in ipairs(PAIRS) do
 	-- opening char: insert the pair (vis:insert bypasses mappings so no
 	-- recursion), then park the cursor between the two.
@@ -41,9 +46,7 @@ for _, p in ipairs(PAIRS) do
 	-- closing char: if the char under the cursor is the matching close, skip
 	-- past it; otherwise insert the closing char literally.
 	vis:map(vis.modes.INSERT, p.c, function()
-		local line = vis.win.file.lines[vis.win.selection.line]
-		local ahead = line and line:sub(vis.win.selection.col, vis.win.selection.col) or ''
-		if ahead == p.c then
+		if char_at_cursor() == p.c then
 			vis.win.selection.pos = vis.win.selection.pos + 1
 		else
 			vis:insert(p.c)

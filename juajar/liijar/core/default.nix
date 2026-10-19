@@ -83,7 +83,10 @@ in
         # coreTools); colors follow the terminal's gruvbox ANSI palette.
         ".config/vis/visrc.lua".source = ./visrc.lua;
       };
-      environment.sessionVariables.BAT_THEME = "gruvbox-dark";
+      environment.sessionVariables = {
+        BAT_THEME = "gruvbox-dark";
+        EDITOR = "vis"; # lightweight vi-style editor (alias: v)
+      };
     }
   ]; # end of config
 }

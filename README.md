@@ -73,7 +73,7 @@ Toggled per host, so a machine only ships what it needs.
 - **Desktops & compositors:** GNOME · Cinnamon · COSMIC · Hyprland · Niri · Mango
 - **Shells:** Noctalia · Wayle (Quickshell)
 - **Terminals:** Foot · Kitty · Alacritty
-- **Editors:** NVF (neovim) · VSCodium · Zed · Helix · Obsidian
+- **Editors:** NVF (neovim) · vis · VSCodium · Zed · Helix · Obsidian
 - **Browsers:** Firefox · LibreWolf · Browsh
 - **Media & creative:** MPV · Gapless · Blender · Krita · GIMP · OBS · Kdenlive
 - **Gaming:** Steam · Heroic · Prism · MangoHud
@@ -85,10 +85,10 @@ See [Desktops & Shells](resjar/docbin/desktops-shells.md) and the
 
 ### System Layout =-=-=-=-=-
 
-1. [flake.nix](flake.nix) — inputs, hosts, ISOs.
-2. [hstjar/](./hstjar) — per-host configs.
-3. [juajar/](./juajar) — shared modules (sysjar, liijar, WMs, bridge, hjemkey).
-4. [resjar/](./resjar) — docs, templates, images, scripts.
+1. [flake.nix](flake.nix) inputs, hosts, ISOs.
+2. [hstjar/](./hstjar) per-host configs.
+3. [juajar/](./juajar) shared modules (sysjar, liijar, WMs, bridge, hjemkey).
+4. [resjar/](./resjar) docs, templates, images, scripts.
 
 > Full breakdown in the [Directory Key](resjar/docbin/directory-key.md).
 
@@ -104,7 +104,7 @@ The ones i actually use. Source of truth is [liijar/zsh](juajar/liijar/zsh/).
 | `nhc` | `nh clean all --keep 7` | clean old generations, keep 7 |
 | `nrs` / `nrt` | `nixos-rebuild switch/test` | hard rebuild fallback (sudo) |
 | `jars` | `git pull --rebase origin main` | pull latest config |
-| `nv` / `zd` / `code` | nvim / zeditor / codium | editors |
+| `nv` / `v` / `zd` / `code` | nvim / vis / zeditor / codium | editors |
 | `chkhrd` | `lsblk && fdisk -l` | storage check |
 | `,` | `nix shell` (function) | quick one-off shells, `, git curl` |
 

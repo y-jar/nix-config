@@ -17,6 +17,7 @@
   nsp = "nix search nixpkgs";
   # ========[app aliases]
   nv = "nvim";
+  v = "vis"; # lightweight vi-style editor
   zd = "zeditor";
   code = "codium";
   brw = "browsh"; # TUI based browser

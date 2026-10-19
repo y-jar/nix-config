@@ -122,7 +122,7 @@ in
           pkgs.nh # nix helper (builds/deploys this config)
           pkgs.git # version control
           pkgs.eza
-          pkgs.vis # terminal file viewer
+          pkgs.vis # lightweight vi-style editor (alias: v)
         ])
 
         # [Archives & net serv]
