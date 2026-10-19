@@ -55,7 +55,7 @@ sysset.server.webjar = {
 Edit `index.html` and add a card block:
 ```html
 <a class="card" href="http://host:port">
-    <div class="card-icon">&#128EncodingException;</div>
+    <div class="card-icon">&#128279;</div>
     <div class="card-name">Service Name</div>
     <div class="card-desc">Short description.</div>
     <div class="card-host">hostname</div>

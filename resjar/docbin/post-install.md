@@ -6,24 +6,26 @@
 
 # Post Install
 
-## What's Next to Do?
-Some important things to do after installing:
+## Switching to a newer config
 
-### How do I switch to a newer version of the nixos config?
-To switch to a newer version of the nixos config (after updating), you can run the following commands:
+After pulling changes:
+
 ```bash
-cd ~/nix-config && git add .
-nrs # rebuild system with nixos-rebuild
-nhs # rebuild system with nh (nix helper)
+cd ~/nix-config
+git add .        # flake needs to see the files
+nhs              # deploy with nh (or nrs for the nixos-rebuild fallback)
 ```
 
-### How do I Update My System / Apps?
-Depending on what, this can be done in two ways: `flatpak app updates`, or `system & system app updates`.
+## Updating the system and apps
 
-- **Apps On Flathub or Is A Flatpak**
-  - Go in the appstore of your choice, navigate to updates, click update.
-- **Apps in System And System**
-  - > You would run this after a period of time, or making a change to the config.
-  - Run `cd ~/nix-config` then run `git add .` so the command below can work `:)`
-  - Run `nru` to update flake inputs and rebuild
-  - Run `nhs` to rebuild and deploy using the nix helper
+Two paths:
+
+- **Flatpaks** — open your app store, go to updates, update.
+- **System + system apps** — after a while, or after a config change:
+
+```bash
+cd ~/nix-config
+git add .
+nru              # update flake inputs + rebuild
+nhs              # deploy
+```

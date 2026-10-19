@@ -6,24 +6,12 @@
 
 # Coloring
 
-Pseudo-Gruvbox palette: warm and dark, orange accent. Single source of truth is
-[`juajar/liijar/theming/palette.nix`](../../juajar/liijar/theming/palette.nix);
-every app module reads the derived `usrset.theming.colors`.
+Pseudo-Gruvbox: warm, dark, orange accent. One palette drives everything.
 
-Core swatches:
-<p color="#14110f">bg0 (deepest)</a>
-<p color="#1a1714">bg1 (window)</a>
-<p color="#221e1a">bg2 (panel)</a>
-<p color="#2b2622">bg3 (selection)</a>
-<p color="#3a332c">bg4 (hover/border)</a>
-<p color="#ebdbb2">fg0</a>
-<p color="#d5c4a1">fg1</a>
-<p color="#a89984">fg2</a>
-<p color="#928374">grey</a>
-<p color="#d65d0e">accent (orange)</a>
-<p color="#fe8019">accent bright</a>
+**Source of truth:** [`juajar/liijar/theming/palette.nix`](../../juajar/liijar/theming/palette.nix).
+Every app module reads the derived `usrset.theming.colors` — never hardcode a
+hex, edit the palette. Restart/rebuild to see the change.
 
-Old blue:
-<p color="#4f587e">Jar's Cloud Burst</a>
-<p color="#1c2635">Dark Cloud Burst</a>
-<p color="#4f587e">Yiniln Burst</a>
+The derived colors cover backgrounds (`bg0`–`bg4`), foregrounds (`fg0`–`fg2`),
+`grey`, and `accent` / `accent bright`. Names are stable; values come from the
+palette file.

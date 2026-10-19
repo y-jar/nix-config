@@ -6,126 +6,29 @@
 
 # Hyprland
 
-Configured via `juajar/WMs/hyprland/`. Symlinks Lua config files into `~/.config/hypr/` with per-host inputs for different machines.
+Dynamic tiling Wayland compositor. Config lives in
+[juajar/WMs/hyprland/](../../juajar/WMs/hyprland) as Lua files, symlinked into
+`~/.config/hypr/`.
 
-System-level: enabled in `sysset.hyprland.enable` (~19MiB).
-User-level: enabled in `usrset.hyprland.enable`.
+- **System side:** `sysset.hyprland.enable` (installs the package).
+- **User side:** `usrset.hyprland.enable` (deploys the config, picks host inputs).
 
-## Config structure
+## How it's wired
 
-```
-WindowManager[hyprland]/
-├── base.lua              # entry point requires all hl/*.lua files
-├── default.nix           # NixOS module deploys config, selects host-inputs
-├── hl/
-│   ├── animations.lua    # animation curves
-│   ├── autostart.lua     # startup apps (noctalia, easyeffects, etc.)
-│   ├── colors.lua        # color definitions
-│   ├── genr.lua          # general settings layout, gaps, blur, input, cursor
-│   ├── keybinds.lua      # all keybindings
-│   ├── rules.lua         # window, workspace, and layer rules
-│   ├── shell-rules.lua   # noctalia/wayle layer rules
-│   ├── vars.lua          # variables app names, modifiers
-│   └── scripts-bin/
-│       ├── hypr-workspace.sh   # per-monitor workspace dispatcher
-│       └── launch_first_available.sh
-└── host-inputs/
-    ├── calender.lua      # triple-monitor config (DP-3, HDMI-A-1, DP-2)
-    ├── ziiemar.lua       # laptop config
-    ├── yilyonix.lua      # test bench
-    └── 0-unknown.lua     # fallback
-```
+The WM dir has two halves: its system module and its user module, plus the raw
+config data. Per-machine monitor layouts live in `host-inputs/<host>.lua`, with a
+`0-unknown.lua` fallback selected by hostname. See
+[Desktops & Shells](./desktops-shells.md) for the general pattern.
 
 ## Per-monitor workspaces
 
-Each monitor gets its own range of 10 workspaces. Monitors are ordered by position (x, then y), and each gets an offset:
+Each monitor gets a range of 10 workspaces, ordered by position (x, then y):
+1st → 1–10, 2nd → 11–20, 3rd → 21–30. `SUPER+1` targets workspace 1 on the
+focused monitor. Single-monitor hosts just get 1–10, no config needed.
 
-| Position order | Workspace range |
-|---|---|
-| 1st monitor | 1–10 |
-| 2nd monitor | 11–20 |
-| 3rd monitor | 21–30 |
+## Adding a host
 
-`SUPER+1` switches to workspace 1 on whichever monitor you're focused on. Focus stays on the current monitor.
-
-Implemented by `hl/scripts-bin/hypr-workspace.sh` detects the current monitor via `hyprctl activeworkspace`, calculates the absolute workspace number, and dispatches.
-
-Single-monitor hosts automatically get workspaces 1–10 (no config needed).
-
-## Keybinds
-
-### Launchers
-| Key | Action |
-|---|---|
-| `SUPER+Return` | Terminal (foot) |
-| `SUPER+Space` / `SUPER+Shift+D` | Launcher (fuzzel) |
-| `SUPER+E` | File manager (nautilus) |
-| `SUPER+Shift+E` | Text editor (neovim) |
-| `SUPER+A` | App store (bazaar) |
-| `SUPER+B` | Browser (librewolf) |
-| `SUPER+Shift+B` | Browser search (jsearch) |
-| `SUPER+Shift+V` | Volume mixer (pavucontrol) |
-| `SUPER+G` | Gapless (g4music) |
-| `SUPER+C` | Color picker (hyprpicker) |
-| `SUPER+Alt+Space` | Emoji picker (jemoji) |
-
-### Noctalia shell
-| Key | Action |
-|---|---|
-| `SUPER+D` | Launcher toggle |
-| `SUPER+S` | Panel toggle |
-| `SUPER+comma` | Settings toggle |
-
-### Core
-| Key | Action |
-|---|---|
-| `SUPER+Q` | Close window |
-| `SUPER+Shift+Q` | Shutdown/exit |
-| `SUPER+Shift+Alt+Q` | Force kill |
-| `SUPER+Alt+L` | Lock screen (swaylock) |
-
-### Screenshot
-| Key | Action |
-|---|---|
-| `SUPER+Shift+S` | Screenshot: region (hyprshot) |
-| `SUPER+Ctrl+Shift+S` | Screenshot: screen |
-| `SUPER+Alt+S` | Screenshot: window |
-
-### Window manipulation
-| Key | Action |
-|---|---|
-| `SUPER+V` | Toggle float |
-| `SUPER+F` | Fullscreen |
-| `SUPER+Shift+F` | Maximize |
-| `SUPER+grave` | Scratchpad toggle |
-| `SUPER+M` | Move to scratchpad |
-| `SUPER+J` | Toggle split layout |
-
-### Focus navigation
-| Key | Action |
-|---|---|
-| `SUPER+arrows` | Focus direction |
-| `SUPER+brackets` | Focus left/right |
-| `SUPER+Shift+arrows` | Move window direction |
-
-### Workspaces
-| Key | Action |
-|---|---|
-| `SUPER+[1-0]` | Switch workspace (on current monitor) |
-| `SUPER+Shift+[1-0]` | Move window to workspace |
-| `SUPER+Shift+Page_Up/Down` | Move window left/right |
-| `SUPER+scroll` | Cycle workspaces |
-
-### Media keys
-| Key | Action |
-|---|---|
-| `XF86Audio*` | Volume, mute, mic mute |
-| `XF86MonBrightness*` | Screen brightness |
-| `XF86Audio{Next,Prev,Play,Pause}` | Playerctl |
-
-## Adding a new host
-
-Create `host-inputs/<hostname>.lua` with monitor definitions:
+Create `host-inputs/<hostname>.lua`:
 
 ```lua
 hl.monitor({
@@ -137,4 +40,6 @@ hl.monitor({
 })
 ```
 
-The `default.nix` module auto-selects the host file by hostname. If no match is found, `0-unknown.lua` is used.
+If no host file matches, `0-unknown.lua` is used.
+
+Keybinds are defined in the WM's config files — read them there.

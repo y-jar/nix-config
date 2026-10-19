@@ -3,23 +3,34 @@
 - [Documentation Key](./key-key.md)
 
 # Add New Config Guide
-Adding a new config is pretty straightforward.
+
+Adding a host is straightforward.
 
 ## Steps
-1. Head over to the [host directory](../../hstjar) and copy the [0_TEMPLATE/](../../hstjar/0_TEMPLATE) within the same directory. `[If you ran hardto, you wouldn't need to do that]`
-2. Rename the copied directory to the desired config name `[Preferred Name would be the hostname of the system]`. `[again not needed if you ran hardto]`
-3. enter the `[Preferred Name]` directory and edit the two main files `user.nix` and `system.nix`, treat it like a filled-out template(What do you want your system to do?).
-4. After those two files, check the `boot.nix` file for the bootloader issues and make any necessary adjustments(you shouldnt need to but im not gonna say no).
-5. now that you have set up the host config, you now need to hop into the [flake.nix](../../flake.nix) and add the new config to the `nixosConfigurations` block:
-    > NOTE: all instances of `HOSTNAME` should be replaced to what you want `[Or keep it, HOSTNAME is a good name too]`
-    > `mkJar` already wires everything for you (sysjar + WMs + hjemkey + your host dir) so it's just one line. **dont** hand-write `nixpkgs.lib.nixosSystem` unless you know why, a host added that way gets no user config at all (no shell, no apps)
-    ```nix
-    nixosConfigurations = {
-        # this line below is what you add :)  
-        HOSTNAME = mkJar "HOSTNAME"; # hjem is the user backend, wired for you
-    }; # end of nixosConfigurations block
-    ```
-6. **While still in the installer shell..**: same as the [install guide](./install-guide.md), run: `ga` in `~/nix-config` and then either of these options:
-    1. `nhs HOSTNAME`: to switch into the config
-    2. `nht HOSTNAME`: to test the config but not commit `[I get it.. im not sad]`
-7. You're done!
+
+1. Copy [0_TEMPLATE/](../../hstjar/0_TEMPLATE) inside [hstjar/](../../hstjar) and
+   rename it to the host's name. *(Running `hardto <host>` does steps 1–2 for you
+   and grabs the live hardware config.)*
+2. In the new dir, fill in `user.nix` and `system.nix` like a template — what do
+   you want this machine to do?
+3. Check `boot.nix` for bootloader settings (usually fine as-is).
+4. Add the host to `nixosConfigurations` in [flake.nix](../../flake.nix):
+
+   ```nix
+   nixosConfigurations = {
+     HOSTNAME = mkJar "HOSTNAME"; # mkJar wires sysjar + WMs + hjemkey + your dir
+   };
+   ```
+
+   > Don't hand-write `nixpkgs.lib.nixosSystem` here — a host added that way gets
+   > no user config (no shell, no apps). `mkJar` handles it.
+
+5. From the installer shell in `~/nix-config`, stage and deploy:
+
+   ```bash
+   ga              # git add .
+   nht HOSTNAME    # test first
+   nhs HOSTNAME    # switch
+   ```
+
+Done.

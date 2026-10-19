@@ -120,7 +120,7 @@ Screen share through a portal (e.g. `xdg-desktop-portal-wlr`) is **video only** 
 - `startups.kdl` pins `jar-cap` as default sink and `mic-out` as default source so "Desktop audio" always captures the full mix after reboot.
 
 ### The Master Bus (Headphones & Microphone)
-the Headphones and Microphone blocks. These are the "Master Buses" acording to [ @TomShreck @ https://github.com/UndefProphet/.nixos/blob/main/modules/nixos/audio.nix ]
+the Headphones and Microphone blocks. These are the "Master Buses" according to [ @TomShreck @ https://github.com/UndefProphet/.nixos/blob/main/modules/nixos/audio.nix ]
 
 Instead of routing directly to a physical hardware ID (like alsa_output.pci-0000_00_1f.3...), they set up these intermediate master channels:
 

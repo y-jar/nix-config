@@ -6,7 +6,9 @@
 
 # Dev Key
 
-Development-related documentation.
+Entry point for everything development and learning related.
 
-**Links to all dev docs:**
-- [Dev Goals](./dev-goals.md)
+- [Dev Notes & Learning](./dev-goals.md) — lessons and habits from building this
+- [Adding Modules](./adding-modules.md) — how NixOS modules and this flake work
+- [Docs Guide](./docs-guide.md) — how these docs are written and kept alive
+- [OpenCode / AI Setup](./opencode-ai.md) — local AI and custom agents

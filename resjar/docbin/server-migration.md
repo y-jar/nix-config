@@ -1,3 +1,9 @@
+**Links:**
+- [Back Home](../../README.md)
+- [Documentation Key](./key-key.md)
+
+---
+
 # Server Migration: whale (Proxmox VM → bare metal)
 
 Runbook for reinstalling the `whale` host natively (no Proxmox/QEMU wrapper).

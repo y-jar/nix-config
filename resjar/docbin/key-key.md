@@ -6,33 +6,35 @@
 
 # Documentation Key
 
-**Getting started:**
-- [Install Guide](./install-guide.md) How to install the system on a new machine
-- [Post Install](./post-install.md) Updating and switching configs after install
-- [To Add a New Config](./add-new-config-guide.md) Adding a new host to the flake
-- [Adding Modules](./adding-modules.md) How NixOS modules and the flake work + adding liijar apps, sysjar modules, WMs + naming conventions
+Everything lives in `resjar/docbin/`. Start here.
+
+**Start Here:**
+- [Install Guide](./install-guide.md) install the system on a new machine
+- [Post Install](./post-install.md) updating and switching configs after install
+- [Add a New Config](./add-new-config-guide.md) add a new host to the flake
+
+**Learning:**
+- [Dev Key](./dev-key.md) dev hub: lessons, module guide, docs guide
+- [Adding Modules](./adding-modules.md) how NixOS modules and this flake work
+- [Docs Guide](./docs-guide.md) how these docs are written
+- [PipeWire & Audio](./pipewire-audio.md) loopbacks, routing, and audio graph
 
 **Reference:**
-- [Directory Key](./directory-key.md) Directory tree with descriptions of every module
-- [Dev Key](./dev-key.md) Development goals and progress
-- [AI / OpenCode Setup](./opencode-ai.md) OpenCode AI agents and model configuration
+- [Directory Key](./directory-key.md) the four layers and how to navigate them
+- [Coloring](./coloring.md) palette concepts
+- [OpenCode / AI](./opencode-ai.md) local AI and custom agents
+- [Gaming](./gaming.md) Steam / Minecraft troubleshooting
 
-**Window Managers & Desktops:**
-- [Niri Documentation](./niri.md) Niri Wayland compositor help
-- [Hyprland Documentation](./hyprland.md) Hyprland compositor config and tips
-- [Gnome Documentation](./gnome.md) GNOME desktop setup notes
-
-**Shell & UI:**
-- [Noctalia Documentation](./noctalia.md) Noctalia Wayland bar/shell
-- [Wayle Documentation](./wayle.md) Wayle shell notes
+**Desktops & Shells:**
+- [Desktops & Shells](./desktops-shells.md) DE vs compositor vs shell
+- [Niri](./niri.md) scrollable-tiling compositor
+- [Hyprland](./hyprland.md) dynamic tiling compositor
 
 **Self-Hosting:**
-- [Self-Hosting Hub](./netkey.md) Server and self-hosted services (Jellyfin, nixdraw, sleepyjar)
-- [Secrets & Rotation](./secrets.md) Server secrets (authentik/outline), where they live, backup + rotation
-- [Server Migration](./server-migration.md) Reinstalling whale from Proxmox onto bare metal
-
-**Other:**
-- [Pipewire & Audio Documentation](./pipewire&audio-help.md) PipeWire routing and audio setup
-- [Coloring](./coloring.md) Color palette hex values
-- [Gaming](./gaming.md) Gaming troubleshooting (Minecraft, Steam, Wayland)
-- [Mcpelauncher (Bedrock)](./mcpelauncher.md) Bumping/repairing the Minecraft Bedrock launcher overlay
+- [Self-Hosting Hub](./netkey.md) services overview
+- [Jellyfin](./jellyfin.md) media server
+- [Webjar](./webjar.md) link page for services
+- [nixdraw](./nixdraw.md) self-hosted whiteboard
+- [Secrets & Rotation](./secrets.md) where server secrets live
+- [Server Migration](./server-migration.md) reinstalling whale on bare metal
+- [mcpelauncher](./mcpelauncher.md) Minecraft Bedrock launcher runbook
