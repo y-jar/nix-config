@@ -93,7 +93,7 @@
       downloaders.enable = true; # ffmpeg + yt-dlp
       musicApps.enable = true; # quodlibet, gapless, blanket
       audioEditor.enable = true; # audacity
-      viewers.enable = true; # yacreader, constrict, anki
+      viewers.enable = true; # constrict, anki
       defaultApps.enable = true; # default mime apps + loupe/showtime/file-roller
     };
     keepass.enable = true; # sets keepassxc

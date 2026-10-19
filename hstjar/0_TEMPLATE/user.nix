@@ -104,7 +104,7 @@
       downloaders.enable = false; # ffmpeg + yt-dlp
       musicApps.enable = false; # quodlibet, gapless, blanket
       audioEditor.enable = false; # audacity
-      viewers.enable = false; # yacreader, constrict, anki
+      viewers.enable = false; # constrict, anki
       defaultApps.enable = true; # default mime apps + loupe/showtime/file-roller
     };
     keepass.enable = true; # ~100mib

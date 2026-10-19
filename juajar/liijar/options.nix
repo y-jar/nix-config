@@ -334,7 +334,7 @@ in
       downloaders.enable = lib.mkEnableOption "ffmpeg + yt-dlp download/transcode CLI";
       musicApps.enable = lib.mkEnableOption "music players (quodlibet, gapless, blanket, spotify)";
       audioEditor.enable = lib.mkEnableOption "audacity audio editor";
-      viewers.enable = lib.mkEnableOption "misc viewers (yacreader, constrict, anki)";
+      viewers.enable = lib.mkEnableOption "misc viewers (constrict, anki)";
       defaultApps.enable = lib.mkEnableOption "default mime apps + loupe/showtime/file-roller";
     };
     keepass.enable = lib.mkEnableOption "keepassxc";

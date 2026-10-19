@@ -60,7 +60,6 @@ let
       pkgs.audacity # audio editor
     ]
     ++ lib.optionals (cfg.enable && cfg.viewers.enable) [
-      pkgs.yacreader # ebook/manga reader
       pkgs.constrict # file shrinker
       pkgs.anki # spaced-repetition flashcards
     ]
@@ -127,9 +126,6 @@ let
     application/x-7z-compressed=org.gnome.FileRoller.desktop
     application/x-rar=org.gnome.FileRoller.desktop
     application/x-xz=org.gnome.FileRoller.desktop
-    # comic reader (yacreader)
-    application/x-cbz=YACReader.desktop
-    application/vnd.comicbook+zip=YACReader.desktop
     # browser (${config.usrset.browsers.default or "firefox"})
     text/html=${config.usrset.browsers.default or "firefox"}.desktop
     x-scheme-handler/http=${config.usrset.browsers.default or "firefox"}.desktop
