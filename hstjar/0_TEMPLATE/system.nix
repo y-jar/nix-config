@@ -21,9 +21,7 @@
 #     juajar/sysjar/server/mysql.nix for `sysset.server.mysql`.
 #   - Hardware/disk config is per-machine in ./hardware-configuration.nix and is
 #     generated with `hardto <host>`; do not hand-edit it.
-{ ... }:
-
-{
+{...}: {
   config = {
     system.stateVersion = "VersionNumber"; # [first-install marker: do NOT bump]
 
@@ -31,8 +29,8 @@
     sysset = {
       # =============[users]
       mainUser = "PLEASECHANGEME_USERNAME"; # primary user (gets hjem)
-      users = [ "PLEASECHANGEME_USERNAME" ]; # all users (main + any guests)
-      adminUsers = [ "PLEASECHANGEME_USERNAME" ]; # users with sudo access
+      users = ["PLEASECHANGEME_USERNAME"]; # all users (main + any guests)
+      adminUsers = ["PLEASECHANGEME_USERNAME"]; # users with sudo access
       userDescriptions = {
         PLEASECHANGEME_USERNAME = "NAME";
         # add more users as needed
@@ -115,9 +113,13 @@
           gpu = "rocm"; # llama.cpp backend: rocm (AMD) | cuda (NVIDIA) | cpu
         };
         ollama = {
-          enable = false; # Ollama backend (multi-GPU; qwen2.5-coder:32b)
+          enable = false; # Ollama backend (multi-GPU)
           gpu = "rocm"; # Ollama backend: rocm (AMD) | cuda (NVIDIA) | vulkan | cpu
-          contextLength = 8192; # default context length
+          modelSet = "medium"; # small | medium | large | custom
+          contextLength = 8192; # KV cache spills to RAM; avoids constant compaction
+          # Prefer UUIDs from `rocminfo`; currently only the 9070 XT is installed.
+          # Append the 9060 XT UUID here after it is moved into this machine.
+          syncModels = true; # set true once to prune models outside the active set
           devices = ""; # comma-separated GPU UUIDs/indices (empty = all detected). Looks like: devices = "GPU-6a91c53ed47a63c3,GPU-6a91c53ed47aawd";
         };
         port = 11434;

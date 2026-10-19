@@ -96,7 +96,7 @@
         ollama = {
           enable = true; # Ollama backend (multi-GPU)
           gpu = "rocm"; # Ollama backend: rocm (AMD) | cuda (NVIDIA) | vulkan | cpu
-          modelSet = "medium"; # small | medium | large | custom
+          modelSet = "large"; # small | medium | large | custom
           contextLength = 32768; # KV cache spills to RAM; avoids constant compaction
           # Prefer UUIDs from `rocminfo`; currently only the 9070 XT is installed.
           # Append the 9060 XT UUID here after it is moved into this machine.
