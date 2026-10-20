@@ -9,6 +9,7 @@
   lib,
   config,
   inputs,
+  pkgs,
   ...
 }:
 let
@@ -28,6 +29,11 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    # 0.18.2 upstream tree + patches/screen-zoom.patch (cursor-following
+    # compositor zoom on every output). scenefx comes from mango's own
+    # flake lock because scenefx is ABI-tied to the wlroots it was built
+    # against.
+    programs.mango.package = pkgs.callPackage ./package.nix { inherit inputs; };
     programs.mango.enable = true;
 
     # mango is not systemd-launched, so nothing activates the standard session

@@ -117,7 +117,6 @@ in
     packages = [
       # jshot/jclip/jlayout/jbinds + shared deps now come from liijar/scripts
       pkgs.xwayland-satellite # Xwayland outside the compositor
-      pkgs.woomer # boomer-inspired Wayland zoom lens (binds.conf SUPER+Z)
     ]
     ++ lib.optionals shelljarEnabled [
       # desktop shell (binds.conf + generated startups use shjctl)
