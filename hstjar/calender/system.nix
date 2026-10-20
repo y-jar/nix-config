@@ -101,7 +101,7 @@
             "hf.co/unsloth/Qwen3.8-27B-GGUF:UD-Q4_K_XL" # dense 27B, vision + thinking + tools
           ];
           contextLength = 32768; # KV cache spills to RAM; avoids constant compaction
-          keepAlive = "30m"; # keep models resident between calls (agent workflows)
+          keepAlive = "1m"; # keep models resident between calls (agent workflows)
           flashAttention = true; # required for quantized KV cache
           kvCache = "q4_0"; # shrink KV cache ~4x (8GB -> 2GB at 32k on 27B)
           # Prefer UUIDs from `rocminfo`; currently only the 9070 XT is installed.
