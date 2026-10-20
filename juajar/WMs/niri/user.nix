@@ -129,6 +129,7 @@ in
       pkgs.grim
       pkgs.slurp
       pkgs.wf-recorder
+      pkgs.woomer # boomer-inspired Wayland zoom lens (bindings.kdl Mod+Z)
     ]
     # install the desktop shell exactly when it would be spawned
     ++ lib.optionals shelljarEnabled [
