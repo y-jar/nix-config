@@ -39,6 +39,19 @@ in
         pkgs.xdg-desktop-portal-hyprland # hyprland
         pkgs.xdg-desktop-portal-cosmic # cosmic
       ];
+      # wlr portal (niri/mango): 0.8.2's default chooser probes wmenu/wofi/
+      # bemenu/fuzzel via the portal unit's PATH, which only gets coreutils etc.
+      # (no user profile) so every probe 404s and discord screencast dies in the
+      # picker stage. force a store-path fuzzel chooser instead. options:
+      # - 0.8.2 only knows default/none/simple/dmenu - "custom" hard-fails.
+      # - "-dmenu" is NOT a fuzzel flag (misparses as --match-color=enu and
+      #   fuzzel exits with empty stdout -> portal logs "no output found"),
+      #   so use the xdpw-default style "-d" + prompt.
+      wlr.settings.screencast = {
+        chooser_type = "dmenu";
+        chooser_cmd = "${pkgs.fuzzel}/bin/fuzzel -d -l 10 --prompt 'Select a source to share:'";
+      };
+
       config = {
         # inline if statements incase the DE/WM is not enabled
         gnome.default =
