@@ -116,7 +116,7 @@
 
     # [mangowm] wayland compositor (dwl-based) ships nixosModules.mango
     mangowm = {
-      url = "github:mangowm/mango";
+      url = "github:mangowm/mango/0.18.2"; # pinned at the stable tag
       inputs.nixpkgs.follows = "nixpkgs";
     }; # end of mangowm
 

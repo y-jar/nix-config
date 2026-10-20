@@ -74,17 +74,17 @@ let
   ''
   + lib.optionalString shelljarEnabled ''
     # desktop shell (quickshell island shell)
-    exec-once=shelljar
+    exec_once=shelljar
   ''
   + lib.optionalString (noctaliaEnabled && !shelljarEnabled) ''
     # desktop shell (noctalia)
-    exec-once=noctalia-shell
+      exec_once=noctalia-shell
   ''
-  + lib.concatMapStringsSep "" (c: "exec-once=${c}\n") config.usrset.system.autostart;
+  + lib.concatMapStringsSep "" (c: "exec_once=${c}\n") config.usrset.system.autostart;
 
   # tablet / pen display mapping (usrset.tablets.<name>). Generated only when
-  # a tablet is enabled; mango 0.16.3 supports a single global tablet->output map,
-  # so the first (alphabetical) enabled entry wins.
+  # a tablet is enabled; mango 0.18.2 routes every tablet-type device through
+  # a single device_rule whose monitor spec comes from the catalog.
   enabledTablets = lib.mapAttrsToList (n: t: { name = n; inherit (t) match; }) (
     lib.filterAttrs (_: t: t.enable) (hjm.tablets or { })
   );
@@ -98,10 +98,10 @@ let
         "# usrset.tablets.${primaryTablet.name} enabled but .match is empty; set it (see juajar/data/tabletconf.nix).\n"
       else
         "# usrset.tablets.${primaryTablet.name} (catalog: juajar/data/tabletconf.nix)\n"
-        + "tablet_map_to_mon=${primaryTablet.match}\n"
+        + "device_rule=type:tablet,monitor:${primaryTablet.match}\n"
     )
     + lib.optionalString (builtins.length enabledTablets > 1) ''
-      # note: ${toString (builtins.length enabledTablets - 1)} more tablet(s) enabled; mango 0.16.3 maps a single tablet globally.
+      # note: ${toString (builtins.length enabledTablets - 1)} more tablet(s) enabled; device_rule=type:tablet routes all tablets through one spec (per-tablet needs name: rules with device names from mmsg get all-devices).
     '';
   generatedTablet =
     if emptyMatchTablets == [ ] then
@@ -117,6 +117,7 @@ in
     packages = [
       # jshot/jclip/jlayout/jbinds + shared deps now come from liijar/scripts
       pkgs.xwayland-satellite # Xwayland outside the compositor
+      pkgs.woomer # boomer-inspired Wayland zoom lens (binds.conf SUPER+Z)
     ]
     ++ lib.optionals shelljarEnabled [
       # desktop shell (binds.conf + generated startups use shjctl)

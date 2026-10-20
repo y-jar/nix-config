@@ -129,7 +129,7 @@ in
               enable = lib.mkOption {
                 type = lib.types.bool;
                 default = false;
-                description = "Map the '${name}' pen to its own display (mango tablet_map_to_mon).";
+                description = "Map the '${name}' pen to its own display (mango device_rule: type:tablet -> monitor spec).";
               };
               match = lib.mkOption {
                 type = lib.types.str;
@@ -141,7 +141,7 @@ in
         )
       );
       default = { };
-      description = "Pen-display mappings keyed by device, e.g. { xppen.enable = true; }. Catalog: juajar/data/tabletconf.nix. NOTE: mango 0.16.3 maps a single tablet globally (newer mango adds per-device rules).";
+      description = "Pen-display mappings keyed by device, e.g. { xppen.enable = true; }. Catalog: juajar/data/tabletconf.nix. NOTE: mango routes every tablet through one shared device_rule spec (per-tablet needs name: rules with device names from mmsg get all-devices).";
     };
 
     # [experience]
