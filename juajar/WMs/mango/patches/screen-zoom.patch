@@ -13,10 +13,10 @@ index 2df58042..d7d7795a 100644
  	uint32_t animation_duration_move;
 diff --git a/include/mango/manage/zoom.h b/include/mango/manage/zoom.h
 new file mode 100644
-index 00000000..faab589a
+index 00000000..d3731ac1
 --- /dev/null
 +++ b/include/mango/manage/zoom.h
-@@ -0,0 +1,63 @@
+@@ -0,0 +1,64 @@
 +#ifndef MANGO_MANAGE_ZOOM_H
 +#define MANGO_MANAGE_ZOOM_H
 +
@@ -35,8 +35,8 @@ index 00000000..faab589a
 + *   in/out/set/toggle dispatchers move zoom_target between 1.0 and
 + *   config.zoom_max. Each rendered frame screen_zoom_update() eases
 + *   zoom_level toward zoom_target. When zoom_level > 1.0,
-+ *   screen_zoom_render() clamps a cursor centered viewport of the
-+ *   already rendered scene buffer and draws it scaled up to the full
++ *   screen_zoom_render() takes a cursor anchored proportional viewport
++ *   of the already rendered scene buffer, draws it scaled up to the full
 + *   output, swapping that buffer into the pending output commit. While
 + *   zoom_level > 1.0, handle_output_frame keeps scheduling vblank paced
 + *   frames so the viewport keeps following the cursor.
@@ -55,7 +55,8 @@ index 00000000..faab589a
 +
 +/*
 + * Replace the scene rendered buffer inside *state with a magnified one
-+ * (viewport centered on the pointer, clamped to the output edges).
++ * (cursor anchored proportional viewport; the content under the pointer
++ * icon is exactly what the next click hits, at every zoom level).
 + *
 + * Must be called after wlr_scene_output_build_state() succeeded, before
 + * wlr_output_commit_state(). Returns true when the buffer was swapped
@@ -207,10 +208,10 @@ index b7009233..59d9caf6 100644
  void check_vrr_enable(Client *c) {
 diff --git a/src/manage/zoom.c b/src/manage/zoom.c
 new file mode 100644
-index 00000000..64fff7f5
+index 00000000..995cfdb1
 --- /dev/null
 +++ b/src/manage/zoom.c
-@@ -0,0 +1,298 @@
+@@ -0,0 +1,310 @@
 +#include "mango/manage/zoom.h"
 +
 +#include <math.h>
@@ -436,10 +437,21 @@ index 00000000..64fff7f5
 +		return false;
 +	}
 +
-+	/* Viewport: 1 / zoom_level of the buffer, centered on the pointer,
-+	 * clamped so the edges of the screen never leave the picture. Buffer
-+	 * pixels, so cursor room coordinates are scaled by the output scale
-+	 * first, and the monitor origin (m->m) is layout relative. */
++	/* Viewport: 1 / zoom_level of the buffer, anchored to the pointer.
++	 *
++	 * The anchor is chosen so the cursor's own point maps back onto the
++	 * cursor's position on screen: content at cursor x must land at
++	 * (x - vx) * zoom == x, which solves to vx = x * (zoom - 1) / zoom.
++	 * That one property makes the pointer icon WYSIWYG: what sits under
++	 * the icon is exactly the point that receives the click, at every
++	 * zoom level and every pointer position. It also provably keeps the
++	 * viewport inside the buffer for 1 <= zoom when 0 <= cx <= width
++	 * (vx >= 0 and vx + vw <= width), so the viewport chases the pointer
++	 * proportionally at the edges instead of pinning; the clamps below
++	 * stay only as float rounding insurance.
++	 *
++	 * Buffer pixels, so cursor room coordinates are scaled by the output
++	 * scale first, and the monitor origin (m->m) is layout relative. */
 +	int32_t width = output->width;
 +	int32_t height = output->height;
 +
@@ -447,8 +459,9 @@ index 00000000..64fff7f5
 +	float cx = (float)(server.cursor->x - m->m.x) * scale;
 +	float cy = (float)(server.cursor->y - m->m.y) * scale;
 +
-+	float vx = cx - (float)width / (2.0f * zoom_level);
-+	float vy = cy - (float)height / (2.0f * zoom_level);
++	float zoom_anchor = (zoom_level - 1.0f) / zoom_level;
++	float vx = cx * zoom_anchor;
++	float vy = cy * zoom_anchor;
 +	float vw = (float)width / zoom_level;
 +	float vh = (float)height / zoom_level;
 +

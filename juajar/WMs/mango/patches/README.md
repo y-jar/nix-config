@@ -5,7 +5,10 @@
 Compositor-level live screen zoom: a Hyprland-style magnifier over the entire
 rendered screen that follows the cursor in real time, on every output at
 once. This is the port of the MangoWC-Zoom patch (MangoWC repo,
-`patches/zoom.patch`) rewritten for mango 0.18.2 internals.
+`patches/zoom.patch`) rewritten for mango 0.18.2 internals, with one fix on
+top of upstream: the render viewport is cursor-anchored instead of
+cursor-centered + clamped (see below), which removes the pointer click/aim
+drift the upstream patch shows near off-center and edge positions.
 
 ## How
 
@@ -15,10 +18,16 @@ with an ease-out each rendered frame. On every output commit
 
 * `wlr_scene_output_build_state()` renders the whole scene into a buffer.
 * `screen_zoom_render()` (src/manage/zoom.c) samples that buffer through a
-  clamped viewport of `1 / zoom_level` size, centered on the pointer
-  (output-scale corrected, edges pinned to the buffer bounds), draws it
-  bilinear-filtered scaled up over an opaque black clear, and swaps that
-  zoom buffer into the pending output state.
+  viewport of `1 / zoom_level` size anchored at
+  `vx = cx * (zoom - 1) / zoom` (output-scale corrected). The anchor is
+  solved so the cursor's own point maps onto the cursor's screen position:
+  content under the pointer icon is exactly what receives the click, at
+  every zoom level and position. For `0 <= cx <= width` and `zoom >= 1` the
+  viewport provably stays inside the buffer (`vx >= 0`,
+  `vx + vw <= width`), so the view chases the pointer proportionally at the
+  screen edges instead of pinning there; the remaining clamps are float
+  rounding insurance only. The magnified view is drawn bilinear-filtered
+  over an opaque black clear and swapped into the pending output state.
 * While zoomed, tearing page flips are disabled in the commit path.
 * `handle_output_frame()` calls `screen_zoom_update()` once per raw frame
   (eases the level, frees the swapchain when settled at 1.0), keeps the
@@ -45,14 +54,28 @@ screen_zoom_set,2.5     # target pinned to a value
 screen_zoom_toggle,0    # 1.0 <-> zoom_max
 ```
 
-In-tree bindings:
+In-tree bindings (binds.conf):
 
 ```
-axisbind=SUPER+SHIFT,up,screen_zoom_in
-axisbind=SUPER+SHIFT,down,screen_zoom_out
-bind=SUPER+SHIFT,0,screen_zoom_reset
-bind=SUPER,Z,screen_zoom_toggle
+bind=SUPER,Z,screen_zoom_toggle,0                 # on: cap, off: reset
+bind=SUPER+SHIFT,X,screen_zoom_in,0               # step in by zoom_speed
+bind=SUPER+SHIFT,C,screen_zoom_out,0              # step out by zoom_speed
+bind=SUPER+SHIFT,0,screen_zoom_reset,0            # back to 1.0
+axisbind=SUPER+SHIFT,UP,screen_zoom_in            # wheel: step in
+axisbind=SUPER+SHIFT,DOWN,screen_zoom_out         # wheel: step out
 ```
+
+Usage matrix:
+
+| Action                                        | Binding                  |
+|-----------------------------------------------|--------------------------|
+| toggle between off and zoom_max               | SUPER+Z                  |
+| fine scroll zoom                             | SUPER+SHIFT + mouse wheel |
+| step in / out while zoomed                   | SUPER+SHIFT+X / SUPER+SHIFT+C |
+| reset to 1.0                                 | SUPER+SHIFT+0            |
+
+Note: plain SUPER wheel intentionally stays on tag view switching; zoom never
+took the wheel without Shift.
 
 ## Files
 
