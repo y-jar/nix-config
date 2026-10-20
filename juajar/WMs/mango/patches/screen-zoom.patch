@@ -208,10 +208,10 @@ index b7009233..59d9caf6 100644
  void check_vrr_enable(Client *c) {
 diff --git a/src/manage/zoom.c b/src/manage/zoom.c
 new file mode 100644
-index 00000000..995cfdb1
+index 00000000..3333848f
 --- /dev/null
 +++ b/src/manage/zoom.c
-@@ -0,0 +1,310 @@
+@@ -0,0 +1,313 @@
 +#include "mango/manage/zoom.h"
 +
 +#include <math.h>
@@ -278,15 +278,18 @@ index 00000000..995cfdb1
 +		return;
 +	}
 +
-+	/* Ease out: close most of the distance each frame, then creep. Plain
-+	 * numbers, deliberately independent of the frame clock, same as the
-+	 * original zoom patch. */
++	/* Ease out: close most of the distance each frame, then settle. Plain
++	 * numbers, deliberately independent of the frame clock. Tuned
++	 * snappier than the upstream Zoom patch (0.15 per frame, creeping to
++	 * 0.002): 0.28 lands in roughly 16 frames at 60 Hz and the 0.005
++	 * threshold cuts the long end tail, which matters for scroll zoom
++	 * where each ratchet has to finish before the next notch reads. */
 +	float diff = zoom_target - zoom_level;
-+	if (fabsf(diff) <= 0.002f) {
++	if (fabsf(diff) <= 0.005f) {
 +		zoom_level = zoom_target;
 +		zoom_animating = false;
 +	} else {
-+		zoom_level += diff * 0.15f;
++		zoom_level += diff * 0.28f;
 +	}
 +
 +	/* Free the swapchain only once the zoom fully settled back at 1.0 and
