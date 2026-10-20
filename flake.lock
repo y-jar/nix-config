@@ -489,11 +489,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1792202332,
-        "narHash": "sha256-CDlcntcnH/GOlY/augOAflsJhI/xvN2IKR0+TKCtwCo=",
+        "lastModified": 1792524728,
+        "narHash": "sha256-3VJb8VyKrGGv1p5YC/XjljsKoaXFDXfvKQxs+RFrouw=",
         "owner": "y-jar",
         "repo": "nueon",
-        "rev": "30250222c5eae9942a71bb209305fc1d1a9850c9",
+        "rev": "f1ab254d8e83dd1b3a338f4aad2c43e4acfaa2c4",
         "type": "github"
       },
       "original": {
