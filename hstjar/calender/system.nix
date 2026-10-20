@@ -96,8 +96,14 @@
         ollama = {
           enable = true; # Ollama backend (multi-GPU)
           gpu = "rocm"; # Ollama backend: rocm (AMD) | cuda (NVIDIA) | vulkan | cpu
-          modelSet = "large"; # small | medium | large | custom
+          modelSet = "custom"; # small | medium | large | custom
+          customModels = [
+            "hf.co/unsloth/Qwen3.8-27B-GGUF:UD-Q4_K_XL" # dense 27B, vision + thinking + tools
+          ];
           contextLength = 32768; # KV cache spills to RAM; avoids constant compaction
+          keepAlive = "30m"; # keep models resident between calls (agent workflows)
+          flashAttention = true; # required for quantized KV cache
+          kvCache = "q4_0"; # shrink KV cache ~4x (8GB -> 2GB at 32k on 27B)
           # Prefer UUIDs from `rocminfo`; currently only the 9070 XT is installed.
           # Append the 9060 XT UUID here after it is moved into this machine.
           devices = "GPU-6a91c53ed47a63c3"; # exclude Granite Ridge iGPU

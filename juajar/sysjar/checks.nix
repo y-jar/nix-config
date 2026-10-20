@@ -98,5 +98,9 @@ in
       assertion = !(s.ai.llama.enable && s.ai.ollama.enable);
       message = "sysset.ai: enable only one of llama or ollama at a time.";
     }
+    {
+      assertion = !(s.ai.enable && s.ai.ollama.enable && s.ai.ollama.kvCache != "f16") || s.ai.ollama.flashAttention;
+      message = "sysset.ai.ollama.kvCache (${s.ai.ollama.kvCache}) requires flashAttention = true.";
+    }
   ];
 }
