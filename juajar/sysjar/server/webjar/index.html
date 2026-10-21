@@ -17,7 +17,11 @@
         <!-- service cards -->
         <div class="grid">
             <!--hosting-->
-            <a class="card" href="https://whale:9090">
+            <!-- [keep http] cockpit is plain-http on the LAN (AllowUnencrypted); the
+                 https link was a cert-warning + firefox login-loop trap. never
+                 re-point this at https:// (upstream cockpit #18260 makes
+                 link-initiated logins loop back once any scheme-mixing starts). -->
+            <a class="card" href="http://whale:9090">
                 <div class="card-icon">♡</div>
                 <div class="card-name">Dashboard</div>
                 <div class="card-desc">Dashboard for Whale</div>

@@ -7,8 +7,12 @@
 # -=-=-=-=-=-=-=-=-=-=-=
 # Cockpit listens on `port` (default 9090). On a trusted LAN set
 # allowUnencrypted = true and openFirewall = true; behind a TLS reverse proxy
-# leave allowUnencrypted = false. Plugins are real packages (cockpit-machines,
-# cockpit-podman) added via services.cockpit.plugins, not systemPackages.
+# leave allowUnencrypted = false. Links pointing here (webjar cards etc.) must
+# stay in ONE scheme/site: cockpit's SameSite=strict session cookie plus
+# upstream cockpit #18260 makes link-initiated logins loop back to the login
+# page once browser flow mixes http/https or arrives via cross-site state.
+# Plugins are real packages (cockpit-machines, cockpit-podman) added via
+# services.cockpit.plugins, not systemPackages.
 # -=-=-=-=-=-=-=-=-=-=-=
 {
   config,

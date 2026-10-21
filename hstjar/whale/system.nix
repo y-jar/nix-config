@@ -17,7 +17,7 @@
 # And remember, your configuration is yours to customize.
 # After you're done, head over to ./user.nix to configure your user!
 #*/-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-{...}: {
+{ ... }: {
   config = {
     system.stateVersion = "26.05"; # [first-install marker: do NOT bump]
     #            [system state version from first install]
@@ -26,8 +26,8 @@
     sysset = {
       # =============[users]
       mainUser = "jar";
-      users = ["jar"];
-      adminUsers = ["jar"];
+      users = [ "jar" ];
+      adminUsers = [ "jar" ];
       userDescriptions = {
         jar = "jar";
       };
@@ -138,7 +138,10 @@
           allowUnencrypted = true; # plain http on the trusted LAN (no TLS terminator yet)
           machines.enable = true; # cockpit-machines (KVM/libvirt management)
           podman.enable = true; # cockpit-podman (container management)
-          extraOrigins = []; # auto origins cover whale, whale.local, 192.168.1.10
+          extraOrigins = [
+            "http://192.168.1.23:9090"
+            "https://192.168.1.23:9090"
+          ]; # auto origins cover whale, whale.local, 192.168.1.10; .23 added here (whale's second LAN address - ws upgrades 403 without it)
         }; # end of cockpit
         komga.enable = true; # manga/comic server (port 25600)
         jellyfin = {
