@@ -17,8 +17,7 @@
 # And remember, your configuration is yours to customize.
 # After you're done, head over to ./user.nix to configure your user!
 #*/-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-{ ... }:
-{
+{...}: {
   config = {
     system.stateVersion = "26.05"; # [first-install marker: do NOT bump]
     #            [system state version from first install]
@@ -27,8 +26,8 @@
     sysset = {
       # =============[users]
       mainUser = "jar";
-      users = [ "jar" ];
-      adminUsers = [ "jar" ];
+      users = ["jar"];
+      adminUsers = ["jar"];
       userDescriptions = {
         jar = "jar";
       };
@@ -139,7 +138,7 @@
           allowUnencrypted = true; # plain http on the trusted LAN (no TLS terminator yet)
           machines.enable = true; # cockpit-machines (KVM/libvirt management)
           podman.enable = true; # cockpit-podman (container management)
-          extraOrigins = [ ]; # auto origins cover whale, whale.local, 192.168.1.10
+          extraOrigins = []; # auto origins cover whale, whale.local, 192.168.1.10
         }; # end of cockpit
         komga.enable = true; # manga/comic server (port 25600)
         jellyfin = {
@@ -148,7 +147,7 @@
         }; # end of jellyfin
         sleepyjar = {
           enable = true; # sets sleepy service
-          interval = "weekly"; # sets interval for sleepy service
+          interval = "daily"; # sets interval for sleepy service
           # some* options for sleepy service:
           # daily: reboots every midnight
           # weekly: reboots every Sunday at midnight
@@ -164,7 +163,7 @@
           port = 80;
         };
         outline = {
-          enable = true; # sets outline wiki server (local postgres+redis)
+          enable = false; # sets outline wiki server (local postgres+redis)
           port = 3001; # 3000 is nixdraw's on this host
           publicUrl = "https://whale.local:3001"; # browse URL; SSO redirects must match it
           # NOTE: must be a multi-label host (whale.local, not whale) - outline
@@ -193,7 +192,7 @@
           };
         }; # end of outline
         authentik = {
-          enable = true; # sets authentik SSO IdP (login provider for outline)
+          enable = false; # sets authentik SSO IdP (login provider for outline)
           port = 9000; # web UI/API port (akadmin password: sudo grep AUTHENTIK_BOOTSTRAP_PASSWORD /var/lib/authentik/env)
           adminEmail = "akadmin@whale.local"; # declared akadmin email (converged by authentik-akadmin-email)
         }; # end of authentik

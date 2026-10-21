@@ -12,9 +12,7 @@
   mangoEnable,
   aiEnable,
   ...
-}:
-
-{
+}: {
   usrset = {
     name = "y-jar"; # [CHANGE THIS] for git
     email = "park.7qs@gmail.com"; # [CHANGE THIS] for git
@@ -34,16 +32,16 @@
       enable = mangoEnable;
       shelljar.enable = false; # my quickshell island shell
     };
-    fuzzel.enable = true; # sets launcher fuzzel
+    fuzzel.enable = false; # sets launcher fuzzel
     theming = {
-      enable = true;
+      enable = false;
       variant = "dark";
       accent = "orange";
       blackness = true;
       cursorSize = 36;
     };
     resYoink = {
-      enable = true;
+      enable = false;
       wallpapers.enable = true;
       icons.enable = true;
       profilePictures.enable = true;
@@ -53,7 +51,7 @@
 
     # =========[appstream]
     browsers = {
-      enable = true; # sets firefox and librewolf [work and personal]
+      enable = false; # sets firefox and librewolf [work and personal]
       firefox.enable = true; # firefox [work]
       librewolf.enable = false; # librewolf [personal]
       chromium.enable = true; # enables chromium [personal]
@@ -76,14 +74,14 @@
       pycharm.enable = false; # sets pycharm
     }; # end of editors
     chatApps = {
-      enable = true;
+      enable = false;
       discord.enable = true;
       halloy.enable = false;
     };
-    espanso = import ../../juajar/data/espansoconf.nix { enable = false; }; # espanso text expander [headless server, no graphical session]
+    espanso = import ../../juajar/data/espansoconf.nix {enable = false;}; # espanso text expander [headless server, no graphical session]
     flatpak.enable = false; # sets flatpak and adds bazaar
     # [file explorers]
-    nautilus.enable = true; # sets nautilus
+    nautilus.enable = false; # sets nautilus
     yazi.enable = true; # sets yazi
     ranger.enable = false; # sets ranger
     # [media]
@@ -126,8 +124,8 @@
     dictation.enable = false; # voxtype push-to-talk dictation + meeting/VTT transcript (F9)
     git.enable = true; # sets git
     tuneshon.enable = false; # NixOS update tool (gui + cli)
-    nueon.enable = true; # conlang editor/creation app
-    nueon.binary = true; # use the prebuilt release .deb
+    nueon.enable = false; # conlang editor/creation app
+    nueon.binary = false; # use the prebuilt release .deb
     bluetooth.enable = false; # sets blueman in home packages
     dev = {
       enable = false; # dev master toggle
