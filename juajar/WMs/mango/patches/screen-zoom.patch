@@ -205,7 +205,7 @@ index 34fc0adf..9330c3ca 100644
  		wlr_idle_notifier_v1_notify_activity(server.idle_notifier, server.seat);
  
 diff --git a/src/manage/monitor.c b/src/manage/monitor.c
-index b7009233..e1da0878 100644
+index b7009233..20be5388 100644
 --- a/src/manage/monitor.c
 +++ b/src/manage/monitor.c
 @@ -22,6 +22,7 @@
@@ -216,7 +216,7 @@ index b7009233..e1da0878 100644
  #include <fcntl.h>
  #include <scenefx/render/fx_renderer/fx_renderer.h>
  #include <scenefx/types/wlr_scene.h>
-@@ -392,6 +393,16 @@ bool mango_scene_output_commit(struct wlr_scene_output *scene_output,
+@@ -392,6 +393,29 @@ bool mango_scene_output_commit(struct wlr_scene_output *scene_output,
  	if (!wlr_scene_output_build_state(scene_output, state, &opts))
  		return false;
  
@@ -228,12 +228,25 @@ index b7009233..e1da0878 100644
 +	bool zoomed = screen_zoom_render(m, state);
 +	if (zoomed) {
 +		frame_allow_tearing = false;
++
++		// The swapped buffer is a full recomposition: the scene's partial
++		// damage no longer matches its content (the magnified view pans,
++		// previous zoom levels...). Damage-reducing capture paths
++		// (ext-image-copy-capture, e.g. PipeWire screen shares) copy only
++		// the committed damage region and would splice stale content
++		// everywhere else. Report the whole buffer as changed.
++		pixman_region32_t zoom_damage;
++		pixman_region32_init_rect(&zoom_damage, 0, 0,
++								  (unsigned int)wlr_output->width,
++								  (unsigned int)wlr_output->height);
++		wlr_output_state_set_damage(state, &zoom_damage);
++		pixman_region32_fini(&zoom_damage);
 +	}
 +
  	if (frame_allow_tearing) {
  		state->tearing_page_flip = true;
  	} else {
-@@ -804,6 +815,11 @@ void handle_new_output(struct wl_listener *listener, void *data) {
+@@ -804,6 +828,11 @@ void handle_new_output(struct wl_listener *listener, void *data) {
  	for (int i = 0; i < PERTAG_SLOTS; i++)
  		m->pertag->scroller_state[i] = NULL;
  
@@ -245,7 +258,7 @@ index b7009233..e1da0878 100644
  	if (server.chvt_backup_tag &&
  		regex_match(server.chvt_backup_monitor_name, m->wlr_output->name)) {
  		m->tagset[0] = m->tagset[1] =
-@@ -887,6 +903,9 @@ void handle_output_destroy(struct wl_listener *listener, void *data) {
+@@ -887,6 +916,9 @@ void handle_output_destroy(struct wl_listener *listener, void *data) {
  	wlr_scene_output_destroy(m->scene_output);
  	wlr_output_layout_remove(server.output_layout, m->wlr_output);
  
@@ -255,7 +268,7 @@ index b7009233..e1da0878 100644
  	monitor_close(m);
  	if (m->blur) {
  		wlr_scene_node_destroy(&m->blur->node);
-@@ -1339,6 +1358,12 @@ void handle_output_frame(struct wl_listener *listener, void *data) {
+@@ -1339,6 +1371,12 @@ void handle_output_frame(struct wl_listener *listener, void *data) {
  	if (!m->wlr_output->enabled || !server.allow_frame_scheduling)
  		return;
  
@@ -268,23 +281,27 @@ index b7009233..e1da0878 100644
  	// Draws layers and fade-out effects.
  	for (i = 0; i < LENGTH(m->layers); i++) {
  		layer_list = &m->layers[i];
-@@ -1363,8 +1388,14 @@ void handle_output_frame(struct wl_listener *listener, void *data) {
+@@ -1363,8 +1401,18 @@ void handle_output_frame(struct wl_listener *listener, void *data) {
  			resizing_on_this_mon = true;
  	}
  
 +	// Zoom must disable skipping while busy (animating or pointer moved
 +	// since the last commit); once zoomed and at rest, normal skipping
-+	// resumes so output captures are quiet.
++	// resumes so output captures are quiet. The one carve out: a capture
++	// session explicitly requesting a frame (wlr_output_update_needs_frame)
++	// while zoomed at rest still needs a commit, otherwise its share
++	// freezes waiting for content that was never rendered.
  	if (!config.animations && !server.grab_client && !need_more_frames &&
 -		resizing_on_this_mon) {
-+		resizing_on_this_mon && !screen_zoom_busy(m)) {
++		resizing_on_this_mon && !screen_zoom_busy(m) &&
++		(!screen_zoom_active_monitor(m) || !m->wlr_output->needs_frame)) {
 +		// Consume the pointer activity marker here: the frame that gets
 +		// skipped would re-render otherwise, so the marker is spent.
 +		m->zoom_pointer_dirty = false;
  		monitor_check_skip_frame_timeout(m);
  		goto skip;
  	}
-@@ -1380,10 +1411,22 @@ skip:
+@@ -1380,10 +1428,22 @@ skip:
  	clock_gettime(CLOCK_MONOTONIC, &now);
  	wlr_scene_output_send_frame_done(m->scene_output, &now);
  
@@ -309,10 +326,10 @@ index b7009233..e1da0878 100644
  void check_vrr_enable(Client *c) {
 diff --git a/src/manage/zoom.c b/src/manage/zoom.c
 new file mode 100644
-index 00000000..bbc6367c
+index 00000000..2fb4b5da
 --- /dev/null
 +++ b/src/manage/zoom.c
-@@ -0,0 +1,381 @@
+@@ -0,0 +1,438 @@
 +#include "mango/manage/zoom.h"
 +
 +#include <math.h>
@@ -335,8 +352,10 @@ index 00000000..bbc6367c
 + * Screen zoom internals.
 + *
 + * Zoom state lives per monitor (see struct Monitor): only the output under
-+ * the pointer is magnified, other screens stay at 1.0 so they can be
-+ * compared side by side, and each screen holds its own level until reset.
++ * the pointer is magnified, other screens stay at 1.0. The zoom follows the
++ * pointer across monitors: when the pointer moves to a different screen
++ * while one is zoomed, the zoom handsover to the new screen (same target)
++ * and the previous screen eases back to 1.0 (zoom_migrate_to below).
 + *
 + * Rendering pipeline recap, per monitor frame:
 + *
@@ -358,10 +377,50 @@ index 00000000..bbc6367c
 + * refresh. pointer activity is tracked through screen_zoom_mark_pointer_
 + * activity() and consumed by the frame skip check. */
 +
++/* The monitor whose zoom the user last kept active; zoom follows the
++ * pointer, so this is where migration decisions read and write. */
++static struct Monitor *zoom_owner = NULL;
++
++static bool zoom_nudge_target(struct Monitor *m, float target);
++
 +/* Monitor under the pointer; the zoom dispatch target. */
 +static struct Monitor *zoom_hover_monitor(void) {
 +	struct Monitor *m = monitor_at_point(server.cursor->x, server.cursor->y);
 +	return m ? m : server.selected_monitor;
++}
++
++/*
++ * Zoom follows the pointer: hand the zoom over to m. When another screen
++ * owns the zoom, that one eases back to 1.0 and m picks up the same zoom
++ * target. No-op when m is the current owner or nothing is zoomed. */
++static void zoom_migrate_to(struct Monitor *m) {
++	if (m == zoom_owner) {
++		zoom_owner = m;
++		return;
++	}
++	if (!m || !zoom_owner || zoom_owner->zoom_target <= 1.0f) {
++		return;
++	}
++
++	float target = zoom_owner->zoom_target;
++	struct Monitor *prev = zoom_owner;
++	zoom_owner = m;
++	zoom_nudge_target(m, target);
++	zoom_nudge_target(prev, 1.0f);
++}
++
++/*
++ * Enforce the one-zoomed-screen invariant for dispatch acts that zoom the
++ * monitor under the pointer without a pointer epoch (bind/keyboard zoom):
++ * drop zoom on every other screen back to 1.0. */
++static void zoom_drop_others(struct Monitor *m) {
++	struct Monitor *mo = NULL;
++	wl_list_for_each(mo, &server.monitors, link) {
++		if (mo != m && mo->zoom_target > 1.0f) {
++			zoom_nudge_target(mo, 1.0f);
++		}
++	}
++	zoom_owner = m;
 +}
 +
 +bool screen_zoom_busy(struct Monitor *m) {
@@ -375,6 +434,9 @@ index 00000000..bbc6367c
 +void screen_zoom_destroy(struct Monitor *m) {
 +	if (!m) {
 +		return;
++	}
++	if (zoom_owner == m) {
++		zoom_owner = NULL;
 +	}
 +	if (m->zoom_swapchain) {
 +		wlr_swapchain_destroy(m->zoom_swapchain);
@@ -444,6 +506,7 @@ index 00000000..bbc6367c
 +int32_t screen_zoom_in(const Arg *arg) {
 +	(void)arg;
 +	struct Monitor *m = zoom_hover_monitor();
++	zoom_drop_others(m);
 +	zoom_nudge_target(m, m->zoom_target + config.zoom_speed);
 +	return 0;
 +}
@@ -451,6 +514,7 @@ index 00000000..bbc6367c
 +int32_t screen_zoom_out(const Arg *arg) {
 +	(void)arg;
 +	struct Monitor *m = zoom_hover_monitor();
++	zoom_drop_others(m);
 +	zoom_nudge_target(m, m->zoom_target - config.zoom_speed);
 +	return 0;
 +}
@@ -471,7 +535,9 @@ index 00000000..bbc6367c
 +	Arg val = {0};
 +	if (arg)
 +		val = *arg;
-+	zoom_nudge_target(zoom_hover_monitor(), val.f);
++	struct Monitor *m = zoom_hover_monitor();
++	zoom_drop_others(m);
++	zoom_nudge_target(m, val.f);
 +	return 0;
 +}
 +
@@ -480,6 +546,7 @@ index 00000000..bbc6367c
 +	/* At rest (or resting on the way back) jump to full magnification,
 +	 * otherwise return to 1.0. zoom_level follows via the animation. */
 +	struct Monitor *m = zoom_hover_monitor();
++	zoom_drop_others(m);
 +	if (m->zoom_target > 1.0f) {
 +		zoom_nudge_target(m, 1.0f);
 +	} else {
@@ -498,7 +565,14 @@ index 00000000..bbc6367c
 + *
 + * Returns true when a zoomed monitor was marked and poked. */
 +bool screen_zoom_mark_pointer_activity(struct Monitor *m) {
-+	if (!m || m->zoom_level <= 1.0f) {
++	if (!m) {
++		return false;
++	}
++	/* Migration first: a pointer epoch landing on a different monitor than
++	 * the zoomed one hands the zoom over there, even if that monitor was
++	 * not zoomed itself (zoom_level <= 1). */
++	zoom_migrate_to(m);
++	if (m->zoom_level <= 1.0f) {
 +		return false;
 +	}
 +	m->zoom_pointer_dirty = true;

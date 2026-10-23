@@ -10,15 +10,21 @@ mango 0.18.2 internals, with several fixes on top of upstream:
 * The render viewport is cursor-anchored instead of cursor-centered +
   clamped, which removes the pointer click/aim drift the upstream patch
   shows near off-center and edge positions.
-* Zoom is per monitor: only the output under the pointer is magnified and
-  each screen holds its own level until reset, so one screen can stay at
-  1.0 for comparing while the other is zoomed.
+* Zoom is per monitor and follows the pointer: only the output under the
+  pointer is magnified; moving to another screen hands the zoom over there
+  (same target) and the previous screen eases back to 1.0.
 * Easing is snappier than upstream (0.28 per frame, 0.005 settle) so wheel
   ratchets finish cleanly instead of creeping.
-* While a zoomed monitor sits idle (no animation, no pointer movement) the
-  normal frame skip logic applies again, so output captures (PipeWire,
-  e.g. a Discord screen share) are not handed a fresh frame every refresh.
-  Pointer activity re-renders the magnified view on demand.
+* Streaming friendly: while a zoomed monitor sits idle (no animation, no
+  pointer movement) the normal frame skip logic applies again, so output
+  captures are not handed a fresh frame every refresh. While zoomed, the
+  commit reports FULL buffer damage: capture pipelines
+  (ext-image-copy-capture, e.g. PipeWire/Discord shares) copy only the
+  damaged region into their buffers, and a swapped zoom buffer always
+  recomposes the whole frame, so stale-region splicing must be avoided.
+  A capture session that explicitly requests a frame while zoomed at rest
+  always gets one rendered (wlr_output needs_frame is honored in the skip
+  path), instead of being left waiting.
 
 ## How
 
@@ -70,6 +76,19 @@ screen_zoom_reset,0     # 1.0 on EVERY monitor (clean fallback)
 screen_zoom_set,2.5     # target pinned to a value
 screen_zoom_toggle,0    # 1.0 <-> zoom_max on the cursor's monitor
 ```
+
+Migration semantics (zoom_follows-pointer):
+
+* `screen_zoom_mark_pointer_activity()`, called from
+  `pointer_process_motion()` on every pointer epoch, runs
+  `zoom_migrate_to()`: crossing to another monitor while one is zoomed
+  moves the zoom target there and eases the old monitor to 1.0.
+* `in / out / set / toggle` resolve the pointer's monitor and call
+  `zoom_drop_others()`: any other screen that still holds zoom is eased to
+  1.0, then the pressed action applies to the pointer's monitor. This keeps
+  the "one zoomed screen" invariant when bindings are used without a real
+  pointer epoch.
+* `screen_zoom_destroy()` clears the owner pointer (output hotplug).
 
 In-tree bindings (binds.conf):
 
