@@ -11,12 +11,33 @@ index 2df58042..d7d7795a 100644
  	float fadein_begin_opacity;
  	float fadeout_begin_opacity;
  	uint32_t animation_duration_move;
+diff --git a/include/mango/manage/monitor.h b/include/mango/manage/monitor.h
+index 0e976d23..de86c2b6 100644
+--- a/include/mango/manage/monitor.h
++++ b/include/mango/manage/monitor.h
+@@ -90,6 +90,16 @@ struct Monitor {
+ 	float hdr_max_avg_lum;
+ 	// Bypass the EDID-derived capability checks (DisplayID-only panels).
+ 	bool hdr_force;
++	/* Screen zoom state (src/manage/zoom.c): per monitor because only the
++	 * output under the pointer is magnified and each screen holds its own
++	 * level until reset. zoom_level starts at 1.0 (see handle_new_output). */
++	float zoom_level;	 /* current magnification, 1.0 = off */
++	float zoom_target;	 /* where the ease-out animation is heading */
++	bool zoom_animating; /* zoom_level != zoom_target */
++	bool zoom_pointer_dirty; /* pointer moved while zoom at rest */
++	struct wlr_swapchain *zoom_swapchain;
++	uint32_t zoom_swapchain_width;
++	uint32_t zoom_swapchain_height;
+ 	struct wlr_color_transform
+ 		*icc_transform; /* ICC transform loaded from the ICC file. */
+ 	char icc_path[PATH_MAX];
 diff --git a/include/mango/manage/zoom.h b/include/mango/manage/zoom.h
 new file mode 100644
-index 00000000..d3731ac1
+index 00000000..a92e8f1d
 --- /dev/null
 +++ b/include/mango/manage/zoom.h
-@@ -0,0 +1,64 @@
+@@ -0,0 +1,76 @@
 +#ifndef MANGO_MANAGE_ZOOM_H
 +#define MANGO_MANAGE_ZOOM_H
 +
@@ -32,26 +53,40 @@ index 00000000..d3731ac1
 + *
 + * How it works (short version):
 + *
-+ *   in/out/set/toggle dispatchers move zoom_target between 1.0 and
-+ *   config.zoom_max. Each rendered frame screen_zoom_update() eases
-+ *   zoom_level toward zoom_target. When zoom_level > 1.0,
-+ *   screen_zoom_render() takes a cursor anchored proportional viewport
-+ *   of the already rendered scene buffer, draws it scaled up to the full
-+ *   output, swapping that buffer into the pending output commit. While
-+ *   zoom_level > 1.0, handle_output_frame keeps scheduling vblank paced
-+ *   frames so the viewport keeps following the cursor.
++ *   Zoom state lives on struct Monitor: only the output under the pointer
++ *   is magnified, other screens stay at 1.0 and each screen holds its own
++ *   level until reset. in/out/set/toggle move the target monitor's
++ *   zoom_target between 1.0 and config.zoom_max. Each rendered frame
++ *   screen_zoom_update() eases zoom_level toward zoom_target. When
++ *   zoom_level > 1.0, screen_zoom_render() takes a cursor anchored
++ *   proportional viewport of the already rendered scene buffer, draws it
++ *   scaled up to the full output, swapping that buffer into the pending
++ *   output commit.
 + *
 + * Everything is driven from handle_output_frame / mango_scene_output_commit
 + * in src/manage/monitor.c. There is no garbage at zoom_level == 1.0: the
 + * calls become no ops and the zoom swapchain is freed.
 + */
 +
-+/* True while any output should keep re-rendering (zoom or animation running). */
-+bool screen_zoom_active(void);
++/* True while the monitor needs re-render driven by the zoom (animation
++ * running or pointer moved since the last commit). Used to disable the
++ * frame skip logic so a zoomed, ACTIVE screen re-renders each refresh,
++ * while an idle zoomed screen can fall back to normal skipping. */
++bool screen_zoom_busy(struct Monitor *m);
++
++/* True while this monitor is magnified (zoom_level > 1.0). */
++bool screen_zoom_active_monitor(struct Monitor *m);
++
++/* Tear down the monitor's zoom swapchain (output destroy / pump out). */
++void screen_zoom_destroy(struct Monitor *m);
++
++/* Pointer bookkeeping: while zoomed at rest, mark + poke the monitor so
++ * the magnified view pans and the skip path knows to render once. */
++bool screen_zoom_mark_pointer_activity(struct Monitor *m);
 +
 +/* Advance the ease out animation one frame; frees the swapchain on the
 + * frame zoom_level settles back at 1.0. Called once per monitor frame. */
-+void screen_zoom_update(void);
++void screen_zoom_update(struct Monitor *m);
 +
 +/*
 + * Replace the scene rendered buffer inside *state with a magnified one
@@ -69,11 +104,9 @@ index 00000000..d3731ac1
 +
 +/* Binding entries: step, reset or pin the zoom target.
 + *
-+ *   screen_zoom_in:    zoom_target += config.zoom_speed  (clamped 1..max)
-+ *   screen_zoom_out:   zoom_target -= config.zoom_speed  (clamped 1..max)
-+ *   screen_zoom_reset: zoom_target = 1.0
-+ *   screen_zoom_set:   zoom_target = arg->f             (clamped 1..max)
-+ *   screen_zoom_toggle: at rest -> config.zoom_max, else -> 1.0 */
++ * in / out / set / toggle resolve the zoom target to the monitor under
++ * the pointer (per-screen zoom: other outputs keep their own level).
++ * reset clears every monitor's zoom in one go. */
 +int32_t screen_zoom_in(const Arg *arg);
 +int32_t screen_zoom_out(const Arg *arg);
 +int32_t screen_zoom_reset(const Arg *arg);
@@ -144,8 +177,35 @@ index 75a391f4..a55c3d52 100644
  	config.fadein_begin_opacity =
  		CLAMP_FLOAT(config.fadein_begin_opacity, 0.0f, 1.0f);
  	config.fadeout_begin_opacity =
+diff --git a/src/input/pointer.c b/src/input/pointer.c
+index 34fc0adf..9330c3ca 100644
+--- a/src/input/pointer.c
++++ b/src/input/pointer.c
+@@ -9,6 +9,7 @@
+ #include "mango/input/device.h"
+ #include "mango/input/keyboard.h"
+ #include "mango/input/trackpad.h"
++#include "mango/manage/zoom.h"
+ #include "mango/ipc/ipc.h"
+ #include "mango/layout/arrange.h"
+ #include "mango/layout/dwindle.h"
+@@ -1256,6 +1257,14 @@ void pointer_process_motion(uint32_t time, struct wlr_input_device *device,
+ 		}
+ 
+ 		wlr_cursor_move(server.cursor, device, dx, dy);
++
++		// Screen zoom: while a magnified monitor sits at rest, normal frame
++		// skipping is allowed again; the marker here re-renders/pans it on
++		// pointer epochs and pokes the output so the skip path cannot die
++		// waiting for unscheduled frames.
++		screen_zoom_mark_pointer_activity(
++			monitor_at_point(server.cursor->x, server.cursor->y));
++
+ 		pointer_cursor_activity();
+ 		wlr_idle_notifier_v1_notify_activity(server.idle_notifier, server.seat);
+ 
 diff --git a/src/manage/monitor.c b/src/manage/monitor.c
-index b7009233..59d9caf6 100644
+index b7009233..e1da0878 100644
 --- a/src/manage/monitor.c
 +++ b/src/manage/monitor.c
 @@ -22,6 +22,7 @@
@@ -156,11 +216,12 @@ index b7009233..59d9caf6 100644
  #include <fcntl.h>
  #include <scenefx/render/fx_renderer/fx_renderer.h>
  #include <scenefx/types/wlr_scene.h>
-@@ -392,6 +393,15 @@ bool mango_scene_output_commit(struct wlr_scene_output *scene_output,
+@@ -392,6 +393,16 @@ bool mango_scene_output_commit(struct wlr_scene_output *scene_output,
  	if (!wlr_scene_output_build_state(scene_output, state, &opts))
  		return false;
  
-+	// screen zoom: swap in a magnified, cursor centered buffer while active.
++	// screen zoom: swap in a magnified, cursor anchored buffer while this
++	// monitor is zoomed.
 +	// When zoomed the commit is pinned to a normal page flip (no tearing):
 +	// a magnifier racing ahead of the display on a tear would look broken,
 +	// and the zoom loop re-renders on every refresh anyway.
@@ -172,35 +233,75 @@ index b7009233..59d9caf6 100644
  	if (frame_allow_tearing) {
  		state->tearing_page_flip = true;
  	} else {
-@@ -1339,6 +1349,10 @@ void handle_output_frame(struct wl_listener *listener, void *data) {
+@@ -804,6 +815,11 @@ void handle_new_output(struct wl_listener *listener, void *data) {
+ 	for (int i = 0; i < PERTAG_SLOTS; i++)
+ 		m->pertag->scroller_state[i] = NULL;
+ 
++	// Screen zoom: the ecalloc zero-ints are wrong for the animation
++	// bounds, so set the idle defaults explicitly (1.0 = off).
++	m->zoom_level = 1.0f;
++	m->zoom_target = 1.0f;
++
+ 	if (server.chvt_backup_tag &&
+ 		regex_match(server.chvt_backup_monitor_name, m->wlr_output->name)) {
+ 		m->tagset[0] = m->tagset[1] =
+@@ -887,6 +903,9 @@ void handle_output_destroy(struct wl_listener *listener, void *data) {
+ 	wlr_scene_output_destroy(m->scene_output);
+ 	wlr_output_layout_remove(server.output_layout, m->wlr_output);
+ 
++	// Screen zoom state rides on the monitor itself: drop the swapchain
++	// along with it.
++	screen_zoom_destroy(m);
+ 	monitor_close(m);
+ 	if (m->blur) {
+ 		wlr_scene_node_destroy(&m->blur->node);
+@@ -1339,6 +1358,12 @@ void handle_output_frame(struct wl_listener *listener, void *data) {
  	if (!m->wlr_output->enabled || !server.allow_frame_scheduling)
  		return;
  
 +	// Screen zoom: advance the ease out animation once per raw frame so
 +	// magnification glides smoothly regardless of the client pipelines.
-+	screen_zoom_update();
++	screen_zoom_update(m);
++
++	// Draws layers and fade-out effects.
 +
  	// Draws layers and fade-out effects.
  	for (i = 0; i < LENGTH(m->layers); i++) {
  		layer_list = &m->layers[i];
-@@ -1364,7 +1378,7 @@ void handle_output_frame(struct wl_listener *listener, void *data) {
+@@ -1363,8 +1388,14 @@ void handle_output_frame(struct wl_listener *listener, void *data) {
+ 			resizing_on_this_mon = true;
  	}
  
++	// Zoom must disable skipping while busy (animating or pointer moved
++	// since the last commit); once zoomed and at rest, normal skipping
++	// resumes so output captures are quiet.
  	if (!config.animations && !server.grab_client && !need_more_frames &&
 -		resizing_on_this_mon) {
-+		resizing_on_this_mon && !screen_zoom_active()) {
++		resizing_on_this_mon && !screen_zoom_busy(m)) {
++		// Consume the pointer activity marker here: the frame that gets
++		// skipped would re-render otherwise, so the marker is spent.
++		m->zoom_pointer_dirty = false;
  		monitor_check_skip_frame_timeout(m);
  		goto skip;
  	}
-@@ -1384,6 +1398,13 @@ skip:
+@@ -1380,10 +1411,22 @@ skip:
+ 	clock_gettime(CLOCK_MONOTONIC, &now);
+ 	wlr_scene_output_send_frame_done(m->scene_output, &now);
+ 
++	// Zoomed and idle: the frame ended without a re-render (skip) or with
++	// one (commit); the next mark comes from pointer activity, so the
++	// marker is spent either way.
++	m->zoom_pointer_dirty = false;
++
+ 	// If more frames are needed, ensure the next frame is scheduled.
  	if (need_more_frames && server.allow_frame_scheduling) {
  		request_fresh_all_monitors();
  	}
 +
-+	// While the screen zoom is active (rendering or settled), keep the
-+	// pipeline alive at vblank pacing so the viewport keeps chasing the
-+	// cursor and the animation glides, without a busy loop.
-+	if (screen_zoom_active() && server.allow_frame_scheduling) {
++	// While the zoom animates, keep the pipeline alive at vblank pacing
++	// so the level glides without a busy loop. At rest, pointer activity
++	// schedules frames from pointer_process_motion instead.
++	if (m->zoom_animating && server.allow_frame_scheduling) {
 +		wlr_output_schedule_frame(m->wlr_output);
 +	}
  }
@@ -208,10 +309,10 @@ index b7009233..59d9caf6 100644
  void check_vrr_enable(Client *c) {
 diff --git a/src/manage/zoom.c b/src/manage/zoom.c
 new file mode 100644
-index 00000000..3333848f
+index 00000000..bbc6367c
 --- /dev/null
 +++ b/src/manage/zoom.c
-@@ -0,0 +1,313 @@
+@@ -0,0 +1,381 @@
 +#include "mango/manage/zoom.h"
 +
 +#include <math.h>
@@ -224,7 +325,6 @@ index 00000000..3333848f
 +#include <wlr/types/wlr_output.h>
 +#include <wlr/types/wlr_scene.h>
 +
-+#include "mango/animation/common.h"
 +#include "mango/common/log.h"
 +#include "mango/common/server.h"
 +#include "mango/config/parse.h"
@@ -234,47 +334,65 @@ index 00000000..3333848f
 +/*
 + * Screen zoom internals.
 + *
-+ * One shared zoom level is applied to every output, so all monitors stay in
-+ * the same magnification step and the toggle stays predictable.
++ * Zoom state lives per monitor (see struct Monitor): only the output under
++ * the pointer is magnified, other screens stay at 1.0 so they can be
++ * compared side by side, and each screen holds its own level until reset.
 + *
 + * Rendering pipeline recap, per monitor frame:
 + *
 + *   1. wlr_scene_output_build_state() renders the whole scene into a fresh
 + *      buffer (the "state" that will be committed).
-+ *   2. screen_zoom_render() takes the cursor position, clamps a
-+ *      1 / zoom_level sized viewport around it and draws that viewport
-+ *      scaled up onto a buffer owned by the zoom swapchain, bilinear
-+ *      filtered, on a black clear. The resulting buffer replaces the scene
-+ *      buffer inside the pending output state.
++ *   2. screen_zoom_render() takes the cursor position, takes a cursor
++ *      anchored proportional viewport of 1 / zoom_level size and draws it
++ *      scaled up onto a buffer owned by the monitor's zoom swapchain,
++ *      bilinear filtered, on a black clear. The resulting buffer replaces
++ *      the scene buffer inside the pending output state.
 + *   3. wlr_output_commit_state() presents the (possibly swapped) buffer.
 + *
 + * The swapchain is rebuilt lazily whenever the output buffer size changes
 + * and is destroyed as soon as the zoom settles back at 1.0.
-+ */
++ *
++ * Capture friendliness: while a zoomed monitor sits idle (no animation and
++ * no pointer movement seen) the normal frame skip logic stays enabled, so
++ * output captures (PipeWire share) are not handed a fresh frame every
++ * refresh. pointer activity is tracked through screen_zoom_mark_pointer_
++ * activity() and consumed by the frame skip check. */
 +
-+static float zoom_level = 1.0f;	  /* current magnification, 1.0 = off */
-+static float zoom_target = 1.0f;  /* where the animation is heading */
-+static bool zoom_animating = false;
-+static struct wlr_swapchain *zoom_swapchain = NULL;
-+static uint32_t zoom_swapchain_width = 0U;
-+static uint32_t zoom_swapchain_height = 0U;
++/* Monitor under the pointer; the zoom dispatch target. */
++static struct Monitor *zoom_hover_monitor(void) {
++	struct Monitor *m = monitor_at_point(server.cursor->x, server.cursor->y);
++	return m ? m : server.selected_monitor;
++}
 +
-+bool screen_zoom_active(void) { return zoom_level > 1.0f || zoom_animating; }
++bool screen_zoom_busy(struct Monitor *m) {
++	return m && (m->zoom_animating || m->zoom_pointer_dirty);
++}
 +
-+static void zoom_garbage_collect(void) {
-+	if (zoom_level > 1.0f || zoom_target > 1.0f || zoom_animating) {
++bool screen_zoom_active_monitor(struct Monitor *m) {
++	return m && m->zoom_level > 1.0f;
++}
++
++void screen_zoom_destroy(struct Monitor *m) {
++	if (!m) {
 +		return;
 +	}
-+	if (zoom_swapchain) {
-+		wlr_swapchain_destroy(zoom_swapchain);
-+		zoom_swapchain = NULL;
-+		zoom_swapchain_width = 0U;
-+		zoom_swapchain_height = 0U;
++	if (m->zoom_swapchain) {
++		wlr_swapchain_destroy(m->zoom_swapchain);
++		m->zoom_swapchain = NULL;
++		m->zoom_swapchain_width = 0U;
++		m->zoom_swapchain_height = 0U;
 +	}
 +}
 +
-+void screen_zoom_update(void) {
-+	if (!zoom_animating) {
++static void zoom_garbage_collect(struct Monitor *m) {
++	if (m->zoom_level > 1.0f || m->zoom_target > 1.0f || m->zoom_animating) {
++		return;
++	}
++	screen_zoom_destroy(m);
++}
++
++void screen_zoom_update(struct Monitor *m) {
++	if (!m || !m->zoom_animating) {
 +		return;
 +	}
 +
@@ -284,26 +402,26 @@ index 00000000..3333848f
 +	 * 0.002): 0.28 lands in roughly 16 frames at 60 Hz and the 0.005
 +	 * threshold cuts the long end tail, which matters for scroll zoom
 +	 * where each ratchet has to finish before the next notch reads. */
-+	float diff = zoom_target - zoom_level;
++	float diff = m->zoom_target - m->zoom_level;
 +	if (fabsf(diff) <= 0.005f) {
-+		zoom_level = zoom_target;
-+		zoom_animating = false;
++		m->zoom_level = m->zoom_target;
++		m->zoom_animating = false;
 +	} else {
-+		zoom_level += diff * 0.28f;
++		m->zoom_level += diff * 0.28f;
 +	}
 +
 +	/* Free the swapchain only once the zoom fully settled back at 1.0 and
 +	 * nothing is going to redraw through it. */
-+	zoom_garbage_collect();
++	zoom_garbage_collect(m);
 +}
 +
 +/*
-+ * Clamp target into the valid 1.0 .. config.zoom_max window and pin
-+ * config.zoom_level, then kick every monitor so the next animation step
++ * Clamp target into the valid 1.0 .. config.zoom_max window and set the
++ * monitor's zoom_target, then poke that monitor so the next animation step
 + * runs on a fresh frame instead of waiting for user input.
 + *
 + * Returns true when the target changed enough to need repaints. */
-+static bool zoom_nudge_target(float target) {
++static bool zoom_nudge_target(struct Monitor *m, float target) {
 +	float upper = config.zoom_max > 1.0f ? config.zoom_max : 1.0f;
 +	if (target < 1.0f) {
 +		target = 1.0f;
@@ -311,36 +429,49 @@ index 00000000..3333848f
 +		target = upper;
 +	}
 +
-+	if (target == zoom_target) {
++	if (target == m->zoom_target) {
 +		return false;
 +	}
 +
-+	zoom_target = target;
-+	zoom_animating = zoom_target != zoom_level;
-+	request_fresh_all_monitors();
++	m->zoom_target = target;
++	m->zoom_animating = m->zoom_target != m->zoom_level;
++	if (m->wlr_output && m->wlr_output->enabled) {
++		wlr_output_schedule_frame(m->wlr_output);
++	}
 +	return true;
 +}
 +
 +int32_t screen_zoom_in(const Arg *arg) {
 +	(void)arg;
-+	zoom_nudge_target(zoom_target + config.zoom_speed);
++	struct Monitor *m = zoom_hover_monitor();
++	zoom_nudge_target(m, m->zoom_target + config.zoom_speed);
 +	return 0;
 +}
 +
 +int32_t screen_zoom_out(const Arg *arg) {
 +	(void)arg;
-+	zoom_nudge_target(zoom_target - config.zoom_speed);
++	struct Monitor *m = zoom_hover_monitor();
++	zoom_nudge_target(m, m->zoom_target - config.zoom_speed);
 +	return 0;
 +}
 +
 +int32_t screen_zoom_reset(const Arg *arg) {
 +	(void)arg;
-+	zoom_nudge_target(1.0f);
++	/* Reset is the guaranteed clean fallback: clear every screen, so a
++	 * monitor whose zoom persisted while the pointer lives on the other
++	 * one can not be stuck. */
++	struct Monitor *m;
++	wl_list_for_each(m, &server.monitors, link) {
++		zoom_nudge_target(m, 1.0f);
++	}
 +	return 0;
 +}
 +
 +int32_t screen_zoom_set(const Arg *arg) {
-+	zoom_nudge_target(arg ? arg->f : 1.0f);
++	Arg val = {0};
++	if (arg)
++		val = *arg;
++	zoom_nudge_target(zoom_hover_monitor(), val.f);
 +	return 0;
 +}
 +
@@ -348,12 +479,33 @@ index 00000000..3333848f
 +	(void)arg;
 +	/* At rest (or resting on the way back) jump to full magnification,
 +	 * otherwise return to 1.0. zoom_level follows via the animation. */
-+	if (zoom_target > 1.0f) {
-+		zoom_nudge_target(1.0f);
++	struct Monitor *m = zoom_hover_monitor();
++	if (m->zoom_target > 1.0f) {
++		zoom_nudge_target(m, 1.0f);
 +	} else {
-+		zoom_nudge_target(config.zoom_max);
++		zoom_nudge_target(m, config.zoom_max);
 +	}
 +	return 0;
++}
++
++/*
++ * Pointer tracking for the capture friendly idle skip: while a zoomed
++ * monitor sits at rest, the frame skip logic is allowed again, so an
++ * output share stops absorbing full re-renders. Every pointer motion
++ * epoch marks the monitor under the pointer and pokes its output for a
++ * frame so the magnified view pans and the skip path does not deadlock
++ * on unscheduled frames.
++ *
++ * Returns true when a zoomed monitor was marked and poked. */
++bool screen_zoom_mark_pointer_activity(struct Monitor *m) {
++	if (!m || m->zoom_level <= 1.0f) {
++		return false;
++	}
++	m->zoom_pointer_dirty = true;
++	if (m->wlr_output && m->wlr_output->enabled) {
++		wlr_output_schedule_frame(m->wlr_output);
++	}
++	return true;
 +}
 +
 +/*
@@ -365,7 +517,8 @@ index 00000000..3333848f
 + *
 + * Returns the swapchain or NULL on failure; the caller then falls back to
 + * committing the plain scene buffer for this frame. */
-+static struct wlr_swapchain *zoom_get_swapchain(struct wlr_output *output) {
++static struct wlr_swapchain *zoom_get_swapchain(struct Monitor *m) {
++	struct wlr_output *output = m->wlr_output;
 +	struct wlr_allocator *alloc = server.allocator;
 +	struct wlr_renderer *renderer = server.renderer;
 +
@@ -373,9 +526,10 @@ index 00000000..3333848f
 +		return NULL;
 +	}
 +
-+	if (zoom_swapchain && zoom_swapchain_width == (uint32_t)output->width &&
-+		zoom_swapchain_height == (uint32_t)output->height) {
-+		return zoom_swapchain;
++	if (m->zoom_swapchain &&
++		m->zoom_swapchain_width == (uint32_t)output->width &&
++		m->zoom_swapchain_height == (uint32_t)output->height) {
++		return m->zoom_swapchain;
 +	}
 +
 +	const struct wlr_drm_format_set *formats =
@@ -400,28 +554,28 @@ index 00000000..3333848f
 +		return NULL;
 +	}
 +
-+	if (zoom_swapchain) {
-+		wlr_swapchain_destroy(zoom_swapchain);
++	if (m->zoom_swapchain) {
++		wlr_swapchain_destroy(m->zoom_swapchain);
 +	}
-+	zoom_swapchain = swapchain;
-+	zoom_swapchain_width = (uint32_t)output->width;
-+	zoom_swapchain_height = (uint32_t)output->height;
-+	return zoom_swapchain;
++	m->zoom_swapchain = swapchain;
++	m->zoom_swapchain_width = (uint32_t)output->width;
++	m->zoom_swapchain_height = (uint32_t)output->height;
++	return m->zoom_swapchain;
 +}
 +
 +bool screen_zoom_render(struct Monitor *m, struct wlr_output_state *state) {
-+	if (zoom_level <= 1.0f) {
++	if (!m || m->zoom_level <= 1.0f) {
 +		return false;
 +	}
 +
-+	if (!m || !m->wlr_output || !m->scene_output || !state->buffer) {
++	if (!m->wlr_output || !m->scene_output || !state->buffer) {
 +		return false;
 +	}
 +
 +	struct wlr_output *output = m->wlr_output;
 +	struct wlr_renderer *renderer = server.renderer;
 +
-+	struct wlr_swapchain *swapchain = zoom_get_swapchain(output);
++	struct wlr_swapchain *swapchain = zoom_get_swapchain(m);
 +	if (!swapchain) {
 +		return false;
 +	}
@@ -440,7 +594,8 @@ index 00000000..3333848f
 +		return false;
 +	}
 +
-+	/* Viewport: 1 / zoom_level of the buffer, anchored to the pointer.
++	/* Viewport: 1 / zoom_level of the buffer, anchored to the pointer
++	 * (zoom_level means m->zoom_level below).
 +	 *
 +	 * The anchor is chosen so the cursor's own point maps back onto the
 +	 * cursor's position on screen: content at cursor x must land at
@@ -459,14 +614,28 @@ index 00000000..3333848f
 +	int32_t height = output->height;
 +
 +	float scale = output->scale > 0.0f ? output->scale : 1.0f;
-+	float cx = (float)(server.cursor->x - m->m.x) * scale;
-+	float cy = (float)(server.cursor->y - m->m.y) * scale;
++	/* Cursor clamped onto this monitor: with per monitor zoom the pointer
++	 * can be on a different screen while this one stays magnified, and the
++	 * clamped position keeps the viewport pinned instead of overshooting.
++	 * The anchor bounds hold for 0 <= cx <= width. */
++	float cx = (server.cursor->x - (double)m->m.x) * scale;
++	float cy = (server.cursor->y - (double)m->m.y) * scale;
++	if (cx < 0.0f) {
++		cx = 0.0f;
++	} else if (cx > (float)width) {
++		cx = (float)width;
++	}
++	if (cy < 0.0f) {
++		cy = 0.0f;
++	} else if (cy > (float)height) {
++		cy = (float)height;
++	}
 +
-+	float zoom_anchor = (zoom_level - 1.0f) / zoom_level;
++	float zoom_anchor = (m->zoom_level - 1.0f) / m->zoom_level;
 +	float vx = cx * zoom_anchor;
 +	float vy = cy * zoom_anchor;
-+	float vw = (float)width / zoom_level;
-+	float vh = (float)height / zoom_level;
++	float vw = (float)width / m->zoom_level;
++	float vh = (float)height / m->zoom_level;
 +
 +	if (vx < 0.0f) {
 +		vx = 0.0f;
