@@ -17,26 +17,29 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   hjm = config.usrset.ai;
   usrset = config.usrset;
 
-  json = pkgs.formats.json {};
+  json = pkgs.formats.json { };
 
   # [ollama] model tags + context window are facts the bridge fills from sysset.ai
   # (usrset.system.*), so the opencode limits can never drift from what Ollama serves.
   ollamaModelTags =
-    if (usrset.system.aiModels or []) == []
-    then [
-      "qwen2.5-coder:14b"
-      "qwen3.5:9b"
-    ]
-    else usrset.system.aiModels;
+    if (usrset.system.aiModels or [ ]) == [ ] then
+      [
+        "qwen2.5-coder:14b"
+        "qwen3.5:9b"
+      ]
+    else
+      usrset.system.aiModels;
 
   ollamaContext = usrset.system.aiContextLength or 8192;
 
   ollamaModels = lib.listToAttrs (
-    map (model:
+    map (
+      model:
       lib.nameValuePair model {
         name = model;
         tool_call = true;
@@ -45,8 +48,8 @@
           input = ollamaContext;
           output = 8192;
         };
-      })
-    ollamaModelTags
+      }
+    ) ollamaModelTags
   );
 
   # provider configuration (local llama.cpp + cloud Sonnet 5.5 overrides)
@@ -220,12 +223,23 @@
         read: allow
         edit: ask
         bash:
+          "statix *": allow
+          "nix eval *": allow
+          "nix fmt *": allow
+          "nix flake check *": allow
+          "nixos-rebuild dry-build *": allow
+          "nh os test *": allow
           "nix *": allow
-          "nh *": allow
+          "nh os switch *": ask
+          "nh *": ask
+          "nixos-rebuild switch *": ask
+          "updatejar*": ask
           "*": ask
       ---
 
-      You are a NixOS configuration specialist for this nix-config repo. You understand Nix language, NixOS module system, flake structure, hjem (the user backend), and package management.
+      You are a NixOS configuration specialist for this nix-config repo. You understand
+      Nix language, NixOS module system, flake structure, hjem (the user backend), and
+      package management.
 
       ## Directory Routing
 
@@ -237,7 +251,8 @@
       | `hstjar/<host>/user.nix` | Per-host usrset toggles (shared sheet) |
       | `hstjar/<host>/hardware-configuration.nix` | Machine-generated hardware config |
       | `hstjar/<host>/boot.nix` | Boot loader settings |
-      | `hstjar/0_TEMPLATE/` | Template host with ALL available sysset/usrset options |
+      | `hstjar/0_TEMPLATE/` | Template host with ALL sysset/usrset options (hardto copies it for new hosts) |
+      | `hstjar/0_MINIMAL/` | Lean template: full option sheet, heavy groups OFF by default |
       | `juajar/sysjar/<feature>/default.nix` | System-level module (where sysset options are defined) |
       | `juajar/liijar/<app>/default.nix` | User-level app module (usrset options, hjem scope) |
       | `juajar/liijar/options.nix` | ALL usrset option declarations (single source) |
@@ -246,19 +261,24 @@
       | `juajar/bridge.nix` | The only place sysset and usrset meet (`usrset.system.*` facts, user -> system toggles) |
       | `juajar/WMs/<wm>/` | One window manager: `system.nix` (NixOS half) + `user.nix` (hjem half) + raw config + host-inputs |
       | `juajar/sysjar/checks.nix` | Cross-module assertions |
-      | `juajar/data/` | Shared data (slug, espanso, tablet catalog) |
-      | `resjar/docbin/directory-key.md` | Full directory tree reference |
+      | `juajar/data/` | Shared data (espanso, slug, tablet config; data dirs have no default.nix) |
+      | `resjar/docbin/directory-key.md` | Four-layer directory reference |
+      | `resjar/docbin/key-key.md` | Docs index — find the right guide here |
+      | `resjar/docbin/add-new-config-guide.md` | Adding a new host to the flake |
       | `resjar/docbin/` | Documentation (install guide, per-feature guides) |
-      | `resjar/nixbin/` | Nix templates and reference code |
-      | `flake.nix` | Main flake hosts, inputs, system builder (mkJar) |
+      | `resjar/nixbin/` | Installer shell scripts (nixinstall, buildiso, testjar) |
+      | `flake.nix` | Inputs, host list (`mkJar`), ISOs (`mkIso`), formatter (`nix fmt`) |
 
       ## Search Strategy
 
       1. Check `resjar/docbin/directory-key.md` first if lost
-      2. Check `hstjar/0_TEMPLATE/system.nix` for the full list of available sysset options
-      3. Look in `juajar/sysjar/` + `resjar/nixbin/` to see how an existing option is implemented before writing new ones
+      2. Check `hstjar/0_TEMPLATE/system.nix` + `user.nix` for the full list of available options
+         (0_MINIMAL is the same sheet with heavy groups off)
+      3. Look in `juajar/sysjar/` + `juajar/liijar/` (and cowsay) to see how an existing option is
+         implemented before writing new ones
       4. Compare against an established pattern before writing new ones (follow the sysset/usrset convention)
-      5. Read the target host's system.nix + user.nix before suggesting changes never assume what's already set
+      5. Read the target host's system.nix + user.nix before suggesting changes never assume
+         what's already set
 
       ## Module Patterns
 
@@ -268,10 +288,15 @@
       - New app? copy `juajar/liijar/cowsay/` the commented reference example
       - Boolean toggle pattern: `lib.mkOption { type = lib.types.bool; default = true/false; }`
       - Conditional config: wrap in `lib.mkIf cfg.enable { ... }`
+      - Multiple gated sections in one module: `lib.mkMerge [ (lib.mkIf cond { ... }) ... ]`
+        — NEVER `// lib.mkIf` (attrset update does not compose module properties)
       - `juajar/sysjar/default.nix` auto-imports everything no manual registration needed
-      - Follow the project's naming: `sysjar` for system, `liijar` for user apps, `WMs` for window managers
+      - Follow the project's naming: `sysjar` for system, `liijar` for user apps, `WMs` for
+        window managers
       - Dir name = option name (camelCase); every feature toggle is `<name>.enable`
-      - liijar modules never read `osConfig`/`sysset`: use `config.usrset.system.*`
+      - liijar modules are evaluated INSIDE the hjem user submodule: write `packages` /
+        `files."<home-path>".source` directly, no `home.*` / `programs.*`; home-relative keys only
+      - liijar modules never read `osConfig`/`sysset`: use `config.usrset.system.*` (filled by bridge.nix)
 
       ## Rules
 
@@ -286,9 +311,11 @@
 
       Before finishing a task, validate your work:
 
-      - Run `statix check .` (repo uses statix, configured via `statix.toml`) to lint Nix style
-      - Run `nix flake check` to confirm the whole config still evaluates
-      - Run `nixos-rebuild dry-build --flake .#<host>` (or `nh os nixos-rebuild --host <host>`) before declaring anything done
+      - Run `nix fmt` (flake formatter is nixfmt) to format touched files
+      - Run `statix check .` if statix is available (repo has `statix.toml`; empty_pattern disabled)
+      - Run `nix flake check` to confirm the whole config evaluates
+      - Run `nh os test --accept-flake-config ~/nix-config#<host>` (or
+        `nixos-rebuild dry-build --flake .#<host>`) before declaring anything done
       - Compare against an existing module so the change follows established patterns
     '';
 
@@ -359,17 +386,18 @@
       - Use `[[root_name]]` Obsidian links when referencing vocabulary roots in documentation
     '';
   }; # end of agents
-in {
+in
+{
   config = {
     files = lib.mkIf (hjm.enable && hjm.opencode.enable) (
       {
         ".config/opencode/opencode.json".source = json.generate "opencode.json" (
-          {"$schema" = "https://opencode.ai/config.json";} // settings
+          { "$schema" = "https://opencode.ai/config.json"; } // settings
         );
         ".config/opencode/AGENTS.md".source = pkgs.writeText "AGENTS.md" context;
       }
       // lib.mapAttrs' (
-        name: path: lib.nameValuePair ".config/opencode/agents/${name}.md" {source = path;}
+        name: path: lib.nameValuePair ".config/opencode/agents/${name}.md" { source = path; }
       ) (lib.mapAttrs (name: text: pkgs.writeText "${name}.md" text) agents)
     );
   }; # end of config
