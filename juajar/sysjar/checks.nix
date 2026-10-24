@@ -99,7 +99,16 @@ in
       message = "sysset.ai: enable only one of llama or ollama at a time.";
     }
     {
-      assertion = !(s.ai.enable && s.ai.ollama.enable && s.ai.ollama.kvCache != "f16") || s.ai.ollama.flashAttention;
+      assertion =
+        let
+          u = config.hjem.users.${config.sysset.mainUser}.usrset.gaming;
+        in
+        !(u.protonplus.enable && !s.gaming.steam.enable && !u.heroic.enable);
+      message = "usrset.gaming.protonplus needs a managed launcher: enable sysset.gaming.steam (system.nix) or usrset.gaming.heroic (user.nix).";
+    }
+    {
+      assertion =
+        !(s.ai.enable && s.ai.ollama.enable && s.ai.ollama.kvCache != "f16") || s.ai.ollama.flashAttention;
       message = "sysset.ai.ollama.kvCache (${s.ai.ollama.kvCache}) requires flashAttention = true.";
     }
   ];

@@ -23,7 +23,8 @@
   mangoEnable,
   aiEnable,
   ...
-}: {
+}:
+{
   usrset = {
     name = "PLEASECHANGEME_NAME"; # [CHANGE THIS] for git
     email = "PLEASECHANGEME_EMAIL"; # [CHANGE THIS] for git
@@ -91,7 +92,7 @@
       discord.enable = true; # ~300mib
       halloy.enable = true; # ~69mib nice
     };
-    espanso = import ../../juajar/data/espansoconf.nix {enable = false;}; # ~30mib - espanso text expander
+    espanso = import ../../juajar/data/espansoconf.nix { enable = false; }; # ~30mib - espanso text expander
     flatpak.enable = false; # ~10mib - flatpak + bazaar
     # [file explorers]
     nautilus.enable = true; # ~50mib
@@ -111,6 +112,7 @@
     gaming = {
       prism.enable = false; # ~200mib - Prism Launcher [minecraft]
       heroic.enable = false; # ~300mib - Heroic [gog, epic.. other]
+      protonplus.enable = false; # proton-ge/luxtorpeda compat tools manager [needs steam or heroic]
     }; # end of gaming
     # =========[appstream]^^^
 

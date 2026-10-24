@@ -3,7 +3,7 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: gaming: prismlauncher (+ bedrock/zenity extras) + heroic per-toggle.
+# goal: gaming: prismlauncher (+ bedrock/zenity extras) + heroic + protonplus per-toggle.
 # -=-=-=-=-=-=-=-=-=-=-=
 {
   config,
@@ -21,7 +21,8 @@ let
       pkgs.mcpelauncher-ui-qt # bedrock
       pkgs.zenity # mcpelauncher file picker / dialogs
     ]
-    ++ lib.optionals cfg.heroic.enable [ pkgs.heroic ];
+    ++ lib.optionals cfg.heroic.enable [ pkgs.heroic ]
+    ++ lib.optionals cfg.protonplus.enable [ pkgs.protonplus ];
 in
 {
   config = {

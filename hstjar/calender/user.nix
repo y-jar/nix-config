@@ -16,7 +16,8 @@
   mangoEnable,
   aiEnable,
   ...
-}: {
+}:
+{
   usrset = {
     name = "y-jar"; # [CHANGE THIS] for git
     email = "park.7qs@gmail.com"; # [CHANGE THIS] for git
@@ -84,7 +85,7 @@
       discord.enable = true;
       halloy.enable = false;
     };
-    espanso = import ../../juajar/data/espansoconf.nix {}; # espanso text expander
+    espanso = import ../../juajar/data/espansoconf.nix { }; # espanso text expander
     flatpak.enable = false; # sets flatpak and adds bazaar
     # [file explorers]
     nautilus.enable = true; # sets nautilus
@@ -104,6 +105,7 @@
     gaming = {
       prism.enable = true; # sets prismlauncher [minecraft]
       heroic.enable = true; # sets heroic [gog, epic.. other]
+      protonplus.enable = true; # sets protonplus [proton-ge, luxtorpeda..]
     }; # end of gaming
     # =========[appstream]^^^
 

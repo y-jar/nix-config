@@ -341,6 +341,7 @@ in
     gaming = {
       prism.enable = lib.mkEnableOption "prismlauncher (minecraft)";
       heroic.enable = lib.mkEnableOption "heroic (gog + epic)";
+      protonplus.enable = lib.mkEnableOption "protonplus (proton-ge/luxtorpeda compat tools manager gui)";
     };
 
     # [creative]

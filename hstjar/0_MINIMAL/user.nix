@@ -92,6 +92,7 @@
     gaming = {
       prism.enable = false;
       heroic.enable = false;
+      protonplus.enable = false;
     };
     # =========[appstream]^^^
 
