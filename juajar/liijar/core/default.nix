@@ -53,6 +53,7 @@ in
         pkgs.lla # modern ls with icons, plugins, gitignore
         pkgs.sd # sed alternative, intuitive find-and-replace
         pkgs.trash-cli # safe rm to trash instead of permanent delete
+        pkgs.calcurse # calendar + reminders (morning reads `calcurse -n`)
         pkgs.chafa # terminal image/file viewer with sixel/kitty support
         pkgs.cliamp # CLI music player
       ]

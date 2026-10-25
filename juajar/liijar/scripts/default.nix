@@ -70,6 +70,14 @@ let
     ${builtins.readFile ./scriptsbin/joutputs.sh}
   '';
 
+  # =-=-=[morning] dashboard; bakes a curl path in for the weather call
+  # (core runs plain mkScript, so curl is not guaranteed on every host;
+  # the script itself falls back to plain curl for bare-OS use).
+  morning = pkgs.writeShellScriptBin "morning" ''
+    export MORNING_CURL="${pkgs.curl}/bin/curl"
+    ${builtins.readFile ./scriptsbin/morning.sh}
+  '';
+
   # =-=-=[Buckets]
   core = [
     {
@@ -87,6 +95,18 @@ let
     {
       name = "gu";
       path = ./scriptsbin/gu.sh;
+    }
+    {
+      name = "morning";
+      path = ./scriptsbin/morning.sh;
+    }
+    {
+      name = "bootstrap";
+      path = ./scriptsbin/bootstrap.sh;
+    }
+    {
+      name = "sort-files";
+      path = ./scriptsbin/sort-files.sh;
     }
   ];
 
@@ -187,7 +207,9 @@ let
 in
 {
   packages =
-    (mkAll core)
+    # morning is spliced over the plain mkScript entry mkAll core emits:
+    # the wrapper bakes a curl path in (see the morning let above).
+    (map (s: if s.name == "morning" then morning else mkScript s.name s.path) core)
     ++ [
       fixzsh # zsh script, always installed
       joutputs
