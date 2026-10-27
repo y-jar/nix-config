@@ -1,4 +1,14 @@
-# Screen zoom patch for mango (mangowm) 0.18.2
+# mango (mangowm) 0.18.2 patches
+
+Two patch files, applied by ../package.nix on top of the pinned upstream
+mango 0.18.2 rev:
+
+* `screen-zoom.patch` - the live screen zoom feature
+* `switcher-warp.patch` - cursor warp after alt-tab focus (see bottom)
+
+ -------------------------------------------------------------------------------
+
+# Screen zoom patch (screen-zoom.patch)
 
 ## What
 
@@ -139,3 +149,46 @@ meson globs `src/**/*.c`, so the new zoom.c needs no build file changes.
   `wlr_renderer_get_texture_formats(renderer, alloc->buffer_caps)`,
   filter enum `WLR_SCALE_FILTER_BILINEAR`, render pass clip fields take a
   `pixman_region32_t *` directly.
+
+ -------------------------------------------------------------------------------
+
+# Switcher warp patch (switcher-warp.patch)
+
+## What
+
+Alt-tab (`bind=Alt,Tab,switcher,...`) focuses the picked window but leaves
+the cursor where it was, so with `sloppy_focus=1` the next mouse movement
+steals focus back to whatever window sat under the stale cursor position
+instead of the alt-tabbed one. The patch makes `switcher_commit_client()`
+honor `warp_cursor` like every other focus path (focusdir, focusstack,
+focusmon, tagmon, exchange in src/dispatch/bind.c and src/manage/client.c):
+after `client_focus()` it calls `pointer_warp_to_client(tc)`, which warps
+to the target window's center and re-runs `pointer_process_motion()` so
+sloppy focus re-evaluates at the NEW position and stays on the picked
+window.
+
+## How
+
+Two additions in src/switcher/switcher.c:
+
+* `#include "mango/input/pointer.h"`
+* in `switcher_commit_client()`:
+  ```
+  if (config.warpcursor)
+      pointer_warp_to_client(tc);
+  ```
+
+`pointer_warp_to_client` guards on `INSIDEMON(c)` (window inside its
+monitor), true for normal tiled/floating windows. Wheel focus cycling binds
+(`axisbind=SUPER+CTRL,UP/DOWN,focusstack,prev,next` in binds.conf) were
+already consistent: `focus_stack()` in src/dispatch/bind.c warps under
+`warp_cursor` and `get_next_stack_client()` only walks clients with
+`VISIBLEON(next, c->mon)` (same monitor, visible tags, wraps around), so
+SUPER+CTRL wheel cycles inside the current workspace without crossing
+screens or workspaces.
+
+## Rebase notes
+
+Generated separately from the zoom patch: in /tmp/opencode/mango018 commit
+the zoom state first (`git add -A && git commit`), edit switcher.c, then
+`git diff > patches/switcher-warp.patch`.

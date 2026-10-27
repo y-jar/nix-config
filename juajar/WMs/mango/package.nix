@@ -1,4 +1,4 @@
-# goal: build mango 0.18.2 with the in-tree screen-zoom patch.
+# goal: build mango 0.18.2 with in-tree patches: screen-zoom, switcher-warp.
 # inputs.mangowm pins the upstream rev (flake.lock keeps the exact revision),
 # scenefx MUST come from mango's own lock (inputs.mangowm.inputs.scenefx):
 # scenefx is ABI-tied to the wlroots tree the modules were built against, and
@@ -34,7 +34,10 @@ let
   src = stdenv.mkDerivation {
     name = "mango-0.18.2-zoom-source";
     src = inputs.mangowm.outPath; # pinned 0.18.2 rev (flake.lock)
-    patches = [ ./patches/screen-zoom.patch ];
+    patches = [
+      ./patches/screen-zoom.patch
+      ./patches/switcher-warp.patch
+    ];
     installPhase = ''
       runHook preInstall
       cp -a . $out

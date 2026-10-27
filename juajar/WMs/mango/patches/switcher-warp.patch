@@ -1,0 +1,24 @@
+diff --git a/src/switcher/switcher.c b/src/switcher/switcher.c
+index fd3dca85..d4ccf57c 100644
+--- a/src/switcher/switcher.c
++++ b/src/switcher/switcher.c
+@@ -4,6 +4,7 @@
+ #include "mango/manage/client.h"
+ #include "mango/manage/monitor.h"
+ #include "mango/manage/title-message-bar.h"
++#include "mango/input/pointer.h"
+ #include <scenefx/types/wlr_scene.h>
+ #include <wlr/types/wlr_alpha_modifier_v1.h>
+ #include <wlr/types/wlr_color_management_v1.h>
+@@ -368,6 +369,11 @@ void switcher_commit_client(Client *tc) {
+ 		client_view_on_monitor(&(Arg){.ui = get_tags_first_tag(tc->tags)}, true,
+ 							   tc->mon, true);
+ 	client_focus(tc, 1);
++	/* match the other focus paths (bind.c, client.c): honor warp_cursor so
++	 * sloppy focus does not steal focus back to the window under the stale
++	 * cursor position right after alt-tab. */
++	if (config.warpcursor)
++		pointer_warp_to_client(tc);
+ }
+ 
+ void switcher_commit(void) {
