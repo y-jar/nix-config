@@ -21,7 +21,7 @@
 #     juajar/sysjar/server/mysql.nix for `sysset.server.mysql`.
 #   - Hardware/disk config is per-machine in ./hardware-configuration.nix and is
 #     generated with `hardto <host>`; do not hand-edit it.
-{...}: {
+{ ... }: {
   config = {
     system.stateVersion = "VersionNumber"; # [first-install marker: do NOT bump]
 
@@ -29,12 +29,15 @@
     sysset = {
       # =============[users]
       mainUser = "PLEASECHANGEME_USERNAME"; # primary user (gets hjem)
-      users = ["PLEASECHANGEME_USERNAME"]; # all users (main + any guests)
-      adminUsers = ["PLEASECHANGEME_USERNAME"]; # users with sudo access
+      users = [ "PLEASECHANGEME_USERNAME" ]; # all users (main + any guests)
+      adminUsers = [ "PLEASECHANGEME_USERNAME" ]; # users with sudo access
       userDescriptions = {
         PLEASECHANGEME_USERNAME = "NAME";
         # add more users as needed
       };
+      # NOTE: computed, do NOT set by hand:
+      #   hasDesktop        (base.nix derives it from the WM toggles below)
+      #   usesElectronEditor (bridge.nix mirrors it from usrset.editors, see bridge.nix)
       # =============[users]^^^
 
       # =============[base / core packages]
@@ -79,8 +82,16 @@
       console = {
         font = "ter-132n";
       };
+      # [fonts] system font set, declared in juajar/sysjar/fonts/
+      fonts = {
+        enable = true; # master toggle (default true)
+        minimal = false; # true = terminal font + essentials only (drops JP/emoji packs)
+      };
       boot.quiet = false;
       boot.fastMenu = false;
+      # GRUB install target; only needed on hosts booting via GRUB,
+      # leave null on systemd-boot hosts. e.g. "/dev/sda" or "/dev/disk/by-id/..."
+      boot.grubDevice = null;
       plymouth.enable = false; # custom logo boot splash via plymouth
 
       neverSleep.enable = false; # disable system idle sleep
@@ -103,11 +114,22 @@
       # =============[hardware]^^^
 
       # =============[software]
-      # nix.unfree.enable = false; # OPT-OUT: forbid unfree packages (spotify, chromium, vscodium, steam, ...). Defaults to true.
-      # nix.storeClean.enable = true; # auto weekly Nix GC (--delete-older-than 14d)
-      nix.nixpkgsYoinks.enable = false;
+      # [nix] package policy + helper tools, declared in juajar/sysjar/nix/
+      nix = {
+        unfree.enable = true; # false = forbid unfree packages (spotify, chromium, vscodium, steam, ...)
+        nh.enable = true; # nh (nix helper) + NH_OS_FLAKE; nh's own weekly clean runs unless storeClean is on
+        nixLd.enable = true; # run unpatched binaries (editor plugins, downloaded tools)
+        storeClean = {
+          enable = false; # automatic Nix store GC (nix-collect-garbage timer)
+          dates = "weekly"; # systemd calendar spec for cleanup runs
+          options = "--delete-older-than 14d"; # gc flags
+          persistent = true; # catch up a missed cleanup after downtime
+        };
+        nixpkgsYoinks.enable = false; # overlay package yoinks from nixpkgs
+      };
       ai = {
         enable = false; # ~2gib - llama.cpp + models (auto-downloaded via models-preset)
+        host = "0.0.0.0"; # bind address of the local backend; use "127.0.0.1" to keep it private
         llama = {
           enable = true; # local llama.cpp (set false to use opencode/non-local only)
           gpu = "rocm"; # llama.cpp backend: rocm (AMD) | cuda (NVIDIA) | cpu
@@ -121,6 +143,12 @@
           # Append the 9060 XT UUID here after it is moved into this machine.
           syncModels = true; # set true once to prune models outside the active set
           devices = ""; # comma-separated GPU UUIDs/indices (empty = all detected). Looks like: devices = "GPU-6a91c53ed47a63c3,GPU-6a91c53ed47aawd";
+          customModels = [ ]; # model tags, used when modelSet = "custom"
+          keepAlive = "5m"; # OLLAMA_KEEP_ALIVE for loaded models
+          flashAttention = false; # OLLAMA_FLASH_ATTENTION (required for a quantized KV cache)
+          # kvCache: f16 | q8_0 | q4_0; shrinks KV cache (~4x at q4_0), needs flashAttention
+          kvCache = "f16";
+          # NOTE: ai.ollama.activeModels is computed from modelSet (read-only)
         };
         port = 11434;
         webui = {
@@ -148,10 +176,36 @@
       }; # end of virt
       portal.enable = false; # XDG portal file pickers
       polkit.enable = false; # polkit authentication agent (gnome polkit)
+      # [security] daemons, declared in juajar/sysjar/security/ (both default true)
+      security = {
+        polkit.enable = true; # run the polkit daemon (many services and desktop apps need it)
+        rtkit.enable = true; # realtime CPU priority for audio and games
+      };
+      systemScripts.enable = true; # jar system helper scripts (nru, updatejar)
       # =============[software]^^^
 
-      networking.mullvad.enable = false; # mullvad vpn
+      # =============[networking]
+      networking = {
+        networkManager.enable = true; # NetworkManager + adds users to the networkmanager group
+        ssh.enable = true; # run the OpenSSH daemon
+        avahi.enable = true; # mDNS (host.local names, publishing; opens UDP 5353)
+        bbr.enable = true; # TCP BBR congestion control + cake qdisc
+        nameservers = [
+          "8.8.8.8" # google
+          "1.1.1.1" # cloudflare
+        ]; # set [ ] to use whatever DHCP hands out
+        fleet = {
+          enable = true; # pin the fleet: /etc/hosts + known_hosts + per-host ssh blocks from hstjar/*/net.nix
+          defaultUser = "jar"; # ssh login user for fleet hosts whose net.nix has no `user`
+        };
+        mullvad.enable = false; # mullvad vpn
+      };
+      # =============[networking]^^^
 
+      # [bridged toggles] computed from user.nix (bridge.nix) - do NOT set here:
+      #   syncthing.enable  <- usrset.syncthing.enable (runs as mainUser)
+      #   nvf.enable        <- usrset.editors.nvf.enable
+      #   theming.{enable,accent,variant,gtkThemeName,iconThemeName} <- usrset.theming
       # =============[Server]
       server = {
         komga.enable = false; # manga/comic server (port 25600)
@@ -179,13 +233,39 @@
           enable = true; # ~5mib - self-hosted link page (nginx)
           port = 80;
         }; # end of webjar
+        cockpit = {
+          enable = false; # Cockpit web management UI (listens on port, default 9090)
+          port = 9090;
+          openFirewall = false; # open the port for non-localhost access
+          allowUnencrypted = false; # on a trusted LAN: allow http (warn logging)
+          machines.enable = false; # cockpit-machines (manage KVM/QEMU VMs via libvirt)
+          podman.enable = false; # cockpit-podman (manage containers)
+          extraOrigins = [ ]; # extra CSP origins to allow, e.g. [ "https://docs.example.com" ]
+          extraPlugins = [ ]; # extra cockpit plugin package paths
+        }; # end of cockpit
         outline = {
           enable = false; # sets outline wiki server (local postgres+redis)
           port = 3000; # note: use 3001+ if nixdraw is on (it owns 3000)
+          publicUrl = "http://localhost:3000"; # URL users browse from (SSO redirects must match)
+          # extraConfig goes straight to services.outline; needs https? set
+          # sslCertFile/sslKeyFile + forceHttps, and SSO extras live under
+          # extraConfig.oidcAuthentication:
+          # extraConfig.oidcAuthentication = {
+          #   clientId = "outline"; clientSecretFile = "/path/to/secret";
+          #   authUrl = "..."; tokenUrl = "..."; userinfoUrl = "...";
+          #   displayName = "authentik";
+          # };
+          # extraConfig.forceHttps = true;
+          # extraConfig.sslCertFile = "/path/to/cert.pem";
+          # extraConfig.sslKeyFile = "/path/to/key.pem";
         }; # end of outline
         authentik = {
           enable = false; # sets authentik SSO IdP (login provider for outline)
           port = 9000; # web UI/API port
+          adminEmail = "akadmin@PLEASECHANGEME_HOSTNAME.local"; # default: akadmin@<hostname>.local
+          environmentFile = "/var/lib/authentik/env"; # file with secret key etc.
+          # extraConfig goes straight to services.authentik.environmentVariables
+          # extraConfig = { };
         }; # end of authentik
         # --------------------[MySQL / MariaDB  (module: juajar/sysjar/server/mysql.nix)]
         # A local relational database. Safe default: localhost-only

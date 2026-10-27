@@ -32,11 +32,23 @@
     # core [users, shell, basic things]
     # enables zsh shell with aliases [should be on by default]
     zsh.enable = true;
+    # NOTE: granted as bridge.nix (system -> user facts) - do NOT set by hand:
+    #   system.platform/hasDesktop/unfree/nixpkgsYoinks/mullvad/audioAddon/
+    #   autostart/webapps/aiModels/aiContextLength
     wine.enable = false; # ~500mib - windows compatibility layer (opt-in)
+    cowsay.enable = false; # cowsay + fortune pipes - also the example module
     # cowsay.enable = true; # reference example module copy juajar/liijar/cowsay for new apps
 
+    # [kill switches] master shutoffs for whole module layers
+    packages.install = true; # false = drop EVERY module's user packages list (platform.nix)
+    scripts.enable = true; # false = drop the home-manager script buckets (platform.nix)
+
     # =========[experience] [pick one or more if you know what you're doing] [sizes approximate]
-    hyprland.enable = hyprlandEnable;
+    hyprland = {
+      enable = hyprlandEnable;
+      shelljar.enable = false; # my quickshell island shell
+      noctalia.enable = false; # noctalia desktop shell
+    };
     niri = {
       enable = niriEnable;
       shelljar.enable = false; # my quickshell island shell
@@ -45,6 +57,7 @@
     mango = {
       enable = mangoEnable; # mango (mangowm)
       shelljar.enable = false; # my quickshell island shell
+      noctalia.enable = false; # noctalia desktop shell
     };
     fuzzel.enable = true; # ~10mib - sets launcher fuzzel
     # [tablet / pen display] map a pen's absolute coords to its own screen.
@@ -52,7 +65,10 @@
     # Find a display's identity in a terminal:
     #   for e in /sys/class/drm/card*-*/edid; do echo "$e: $(strings "$e" | tr '\n' ' ')"; done
     # then:  tablets.<key>.enable = true;
-    # tablets.xppen.enable = true;            # XP-Pen Artist 13.3 Pro
+    tablets.xppen = {
+      enable = false; # XP-Pen Artist 13.3 Pro (identity from juajar/data/tabletconf.nix)
+      # match = "model:PRODUCT_NAME"; # override the catalogued EDID match for new devices
+    };
     # tablets.myTablet = { enable = true; match = "model:PRODUCT_NAME"; }; # uncatalogued
     resYoink = {
       enable = false; # symlinks resources into ~/resjar/ [~300+mib for wallpapers]
@@ -93,6 +109,9 @@
       halloy.enable = true; # ~69mib nice
     };
     espanso = import ../../juajar/data/espansoconf.nix { enable = false; }; # ~30mib - espanso text expander
+    # The espansoconf import also carries shorts + vars; for stray default.yml
+    # content the declared escape hatch is the espanso.settings attr, see
+    # juajar/liijar/espanso/default.nix.
     flatpak.enable = false; # ~10mib - flatpak + bazaar
     # [file explorers]
     nautilus.enable = true; # ~50mib
@@ -166,6 +185,9 @@
       accent = "orange"; # gruvbox accent (orange is the warm star)
       blackness = true; # darker backgrounds
       cursorSize = 36; # cursor size in pixels (default: 36)
+      # NOTE: theming.colors.* + gtkThemeName/iconThemeName are COMPUTED the
+      # gruvbox palette module derives them from variant/accent/blackness; only
+      # set them if you are hand-mixing a palette (read-only in practice).
     };
   }; # end of usrset
 }
