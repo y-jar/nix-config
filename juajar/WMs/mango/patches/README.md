@@ -118,7 +118,7 @@ Usage matrix:
 | toggle between off and zoom_max (cursor screen)| SUPER+Z                 |
 | fine scroll zoom                              | SUPER+SHIFT + mouse wheel |
 | step in / out while zoomed                    | SUPER+SHIFT+X / SUPER+SHIFT+C |
-| clock all screens back to 1.0                 | SUPER+SHIFT+0            |
+| clear all screens back to 1.0                 | SUPER+SHIFT+0            |
 
 Note: plain SUPER wheel intentionally stays on tag view switching; zoom never
 took the wheel without Shift. One screen zooms at a time (the one under the
