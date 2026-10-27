@@ -87,11 +87,11 @@
     # [media]
     media = {
       enable = true; # media master toggle
-      mpv.enable = true; # mpv video player + yt-dlp
+      mpv.enable = false; # mpv video player + yt-dlp
       downloaders.enable = true; # ffmpeg + yt-dlp
-      musicApps.enable = true; # quodlibet, gapless, blanket
-      audioEditor.enable = true; # audacity
-      viewers.enable = true; # constrict, anki
+      musicApps.enable = false; # quodlibet, gapless, blanket
+      audioEditor.enable = false; # audacity
+      viewers.enable = false; # constrict, anki
       defaultApps.enable = true; # default mime apps + loupe/showtime/file-roller
     };
     keepass.enable = true; # sets keepassxc
