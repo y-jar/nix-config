@@ -211,6 +211,35 @@ let
     scripts: unify helper scripts + wayland tool suite
     docs: installation guide + directory key
     ```
+
+    ## No Simulated Tool Calls
+
+    If you need to read a file, run a command, or make an edit, actually
+    invoke the corresponding tool. Never print a JSON/code block that merely
+    *looks like* a tool call and ask the user to run it themselves — that
+    means the action never happened and anything built on top of it
+    (a "plan," a "current content" summary) is unverified and must be
+    treated as unverified. If you are unable to invoke tools in this
+    session, say so plainly rather than narrating as if you had.
+
+    ## Plan-and-Approve Gate
+
+    For any task that edits files, changes system state, or runs anything beyond
+    read-only inspection:
+
+    1. **Plan first.** List the edits as separate atomic steps — one file, one
+        concern each. Do not fold "add option A" + "add option B" + "add
+        assertions" + "rewrite env vars" + "commit" into one step.
+    2. **Stop and ask**, verbatim:
+        `PLAN READY — reply "approve" to run all steps, "approve <n>" for just
+        step n, or describe what to change.`
+        Then stop. Do not call any tool until the user replies.
+    3. **One tool call per step**, only after approval. Never batch multiple
+        edits into a single shell script "to save time" — that's exactly what
+        bypasses per-change review.
+    4. Treat "Never commit unless asked" as absolute, even if your own plan's
+        last step was "commit." A plan being approved is not the same as being
+        asked to commit — ask again, specifically, before `git commit`.
   '';
 
   # custom agents written to ~/.config/opencode/agents/<name>.md
@@ -317,6 +346,26 @@ let
       - Run `nh os test --accept-flake-config ~/nix-config#<host>` (or
         `nixos-rebuild dry-build --flake .#<host>`) before declaring anything done
       - Compare against an existing module so the change follows established patterns
+
+      ## Workflow
+
+      - Never use `sed -i`, `echo >>`, or heredocs to modify tracked `.nix`
+        files. Options, `config`, and `assertions` must go inside their
+        correct attrset, and blind text substitution isn't scoped to the
+        option you mean to change — use the edit tool with the exact
+        before/after text instead, once per change.
+      - One edit = one concern. "Add an option," "wire it into
+        environmentVariables," and "add an assertion for it" are three edits,
+        not one script.
+      - Re-read the current file section immediately before editing it —
+        don't edit from memory of what you drafted earlier in the
+        conversation.
+      - `nix flake check` / `nh os test` are gates: if either fails, stop and
+        report the failure — do not propose `git commit` in the same breath.
+        A later step depending on an earlier one succeeding is not optional.
+      - Flag any find-and-replace that isn't anchored to a unique string
+        (e.g. a bare `default = false;`) as unsafe before running it, and
+        propose a more specific match instead.
     '';
 
     loomworker = ''
