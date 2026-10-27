@@ -98,9 +98,15 @@
           gpu = "rocm"; # Ollama backend: rocm (AMD) | cuda (NVIDIA) | vulkan | cpu
           modelSet = "custom"; # small | medium | large | custom
           customModels = [
-            "hf.co/unsloth/Qwen3.8-27B-GGUF:UD-Q4_K_XL" # dense 27B, vision + thinking + tools
+            # "qwen3.6:35b-a3b" # MoE 35B / 3B active: agentic coding, vision + thinking (hybrid GPU/CPU by design)
+            "qwen3.5:9b" # dense 9B: fits fully in VRAM incl. KV cache, fast light tier(my current fav)
+            "hf.co/unsloth/Qwen3-14B-GGUF:Q4_K_M"
+            "hf.co/JonathanColetti/Qwen3.8-27B-Uncensored-GGUF:IQ2_M"
+            # these models dont seem to work for tool calling./
+            # "hf.co/bartowski/Qwen2.5-Coder-14B-Instruct-GGUF:Q4_K_M"
+            # "qwen2.5-coder:14b"
           ];
-          contextLength = 32768; # KV cache spills to RAM; avoids constant compaction
+          contextLength = 128000; # KV cache spills to RAM; avoids constant compaction
           keepAlive = "1m"; # keep models resident between calls (agent workflows)
           flashAttention = true; # required for quantized KV cache
           kvCache = "q4_0"; # shrink KV cache ~4x (8GB -> 2GB at 32k on 27B)
