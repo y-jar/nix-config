@@ -22,6 +22,7 @@ in
       pkgs.hunspellDicts.en_US # Hunspell dictionary for English (United States) from Wordlist
       # pkgs.hunspellDicts.en_GB #
       # [Technical Writing]
+      pkgs.texliveFull # texliveFull points to texlive.combined.scheme-full
       pkgs.pandoc # Conversion between documentation formats
       pkgs.projectlibre # Project-Management Software similar to MS-Project
       pkgs.jupyter # Web-based notebook environment for interactive computing; mainly used for school and notetaking
