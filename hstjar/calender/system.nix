@@ -102,6 +102,7 @@
             "qwen3.5:9b" # dense 9B: fits fully in VRAM incl. KV cache, fast light tier(my current fav)
             "hf.co/unsloth/Qwen3-14B-GGUF:Q4_K_M"
             "hf.co/JonathanColetti/Qwen3.8-27B-Uncensored-GGUF:IQ2_M"
+            "hf.co/unsloth/gemma-4-26B-A4B-it-GGUF:UD-Q3_K_M"
             # these models dont seem to work for tool calling./
             # "hf.co/bartowski/Qwen2.5-Coder-14B-Instruct-GGUF:Q4_K_M"
             # "qwen2.5-coder:14b"
