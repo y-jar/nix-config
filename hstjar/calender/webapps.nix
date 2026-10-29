@@ -66,6 +66,13 @@
         browser = "chromium";
         icon = "/home/jar/resjar/iconbin/excalidraw-dark.png";
       }
+      {
+        name = "discord";
+        url = "https://discord.com/channels/@me";
+        mode = "pwa";
+        browser = "chromium";
+        # icon = "/home/jar/resjar/iconbin/excalidraw-dark.png";
+      }
     ]; # end of apps
   }; # end of sysset.webapps
 }
