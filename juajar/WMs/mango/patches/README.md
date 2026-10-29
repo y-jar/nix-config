@@ -1,10 +1,13 @@
 # mango (mangowm) 0.18.2 patches
 
-Two patch files, applied by ../package.nix on top of the pinned upstream
+Three patch files, applied by ../package.nix on top of the pinned upstream
 mango 0.18.2 rev:
 
 * `screen-zoom.patch` - the live screen zoom feature
 * `switcher-warp.patch` - cursor warp after alt-tab focus (see bottom)
+* `stream-privacy.patch` - per-window "hide from screen share" (shield),
+  plus the wlroots hook patch `wlroots-capture-privacy.patch` wired into
+  package.nix's wlroots override, NOT into the mango patch list.
 
  -------------------------------------------------------------------------------
 
@@ -192,3 +195,110 @@ screens or workspaces.
 Generated separately from the zoom patch: in /tmp/opencode/mango018 commit
 the zoom state first (`git add -A && git commit`), edit switcher.c, then
 `git diff > patches/switcher-warp.patch`.
+
+ -------------------------------------------------------------------------------
+
+# Stream privacy patch (stream-privacy.patch + wlroots-capture-privacy.patch)
+
+## What
+
+Per-window "hide from screen share" (the shield feature mango 0.18.2
+ships renamed and extended): windows flagged `shield_when_capture` - via
+the `shield` window rule, or toggled live on the focused window with
+`toggleshield` (SUPER+CTRL+SHIFT+G in binds.conf) - stay fully visible
+and clickable for the user but read as opaque black rectangles inside
+screen shares. Borders/extframes stay, so the viewer sees framed black
+boxes exactly like Hyprland-style "hide from capture".
+
+Difference vs stock mango, which paints the same black rect into the
+scene: the scene rect is part of the one committed output buffer, so the
+USER also sees the blackout whenever any capture session is live. Stock
+plots black at swap time; this patch splits the two views instead.
+
+How it works, since Wayland captures fundamentally read the committed
+output buffer (`ext/image_capture_source_v1/output.c` listens to commit
+and forwards `state->buffer`; `wlr-screencopy` does the same at 0.20):
+
+* `wlroots-capture-privacy.patch` adds one hook to wlroots:
+  `wlr_output_set_ext_capture_privacy(output, render_fn, data)` (public
+  header decl + struct fields + setter + reset in wlr_output_finish);
+  the ext output capture source's frame emission consults the hook and,
+  when the compositor returns a buffer, hands THAT buffer (with full
+  damage) to capture sessions instead of the committed one. Sessions
+  consume frame-event buffers synchronously (verified against
+  `wlr_ext_image_copy_capture_v1.c`), so a compositor-owned rotating
+  swapchain buffer is handed out locked and unlocked inside the patch
+  (unlock after the frame event fan-out). Frame events without an
+  attached session carry no consumer; the hook still fires but does
+  nothing.
+* `stream-privacy.patch` (mango side) registers that hook per monitor:
+  `stream_privacy_render()` collects the shield boxes of flagged clients
+  visible on that monitor, maps them from layout coords into committed
+  buffer pixels (output scale; zoom-aware via a new
+  `screen_zoom_map_box()` export that folds in the viewport
+  `screen_zoom_render` cached for the very commit being captured), blits
+  the committed buffer into a per-monitor privacy swapchain and fills
+  each box opaque black. No shielded window or no active session on that
+  output = hook returns NULL, upstream passthrough, zero rendering.
+* Session bookkeeping reuses mango's capture session tracker
+  (`handle_ext_image_copy_capture_new_session`/`handle_session_destroy`
+  in src/manage/misc.c): each tracker now remembers its output, so the
+  per-monitor session counts start/stop privacy rendering and the last
+  session's end frees its swapchain. Sessions also poke
+  `wlr_output_update_needs_frame` so toggling shield mid-share is
+  visible on the next frame.
+* The on-screen shield scene rect (`client_draw_shield`) is retired as
+  rect rendering; its geometry math is extracted into
+  `client_shield_box()` (src/animation/client.c) which privacy uses.
+  The black rect node stays disabled; c->shield remains structural.
+
+Coverage notes:
+
+* ext-image-copy-capture (PipeWire/desktop portals - your
+  xdg-desktop-portal-wlr 0.8+/Discord flow) is covered.
+* Classic `wlr-screencopy` (grim, OBS screencopy backend) still copying
+  the raw committed buffer is NOT privacy-filtered: `active_capture_count`
+  never counted screencopy anyway, so shielded windows keep their real
+  content in screenshots - matching stock mango's semantics.
+* Window (toplevel) shares carry the window's own subtree only; stock
+  mango already DENIES the capture request for shielded windows
+  (`handle_new_foreign_toplevel_capture_request` returns early). Sharing
+  OTHER windows is unaffected.
+* Overview mode skips shield boxes (mini cards are a separate scene
+  tree); layer surfaces keep stock behavior.
+* Zoom interplay: when the captured monitor is zoomed, rects track the
+  zoom viewport of the SAME commit (zoom render caches viewport state;
+  mango_scene_output_commit invalidates it per frame). During ease-out
+  frames the box may lead/lag slightly.
+
+## Config
+
+* `binds.conf`: `bind=SUPER+CTRL+SHIFT,G,toggleshield`.
+* `rule.conf`: `window_rule=app_id:^org.keepassxc.KeePassXC$,shield_when_capture:1`
+  (commented example), documented in the header comment there.
+
+## Files
+
+* `wlroots-capture-privacy.patch` (against wlroots 0.20.0 AND 0.20.1,
+  tested both): include/wlr/types/wlr_output.h (typedef + 2 struct
+  fields + decl), types/output/output.c (setter + reset in finish),
+  types/ext_image_capture_source_v1/output.c (hook call in the commit
+  listener).
+* `stream-privacy.patch` (mango): include/mango/manage/stream_privacy.h
+  + src/manage/stream_privacy.c (new), Monitor fields
+  (include/mango/manage/monitor.h), hook registration + teardown + zoom
+  viewport cache invalidation + `screen_zoom_map_box()` export
+  (zoom.c/.h), `client_shield_box()` (animation/client.c/.h), session
+  tracker output mapping (manage/misc.c), `toggleshield` dispatcher
+  (config/binding_parse.c).
+
+## Rebase notes
+
+* wlroots hook: /tmp/opencode/wlroots020 (0.20.1 git tree, snapshot
+  985e627 pristine) - `git diff 985e627..HEAD` regenerate against the
+  nixpkgs-pinned wlroots rev when it moves; validated by building
+  `wlroots_0_20.overrideAttrs { patches; }` on both 0.20.0 and 0.20.1.
+* mango: /tmp/opencode/mango018; export via
+  `git diff 01cda615 -- src include ':(exclude)src/switcher'` (zoom
+  snapshot base minus the switcher warp hunks, which live in their own
+  patch).

@@ -1,0 +1,719 @@
+diff --git a/include/mango/animation/client.h b/include/mango/animation/client.h
+index b4baec84..1708d7c7 100644
+--- a/include/mango/animation/client.h
++++ b/include/mango/animation/client.h
+@@ -33,6 +33,11 @@ void global_draw_group_bar(Client *c, int32_t x, int32_t y, int32_t width,
+ void client_draw_shield(Client *c, struct ivec2 clip_box);
+ void client_draw_dim(Client *c, struct ivec2 clip_box);
+ void client_draw_blur(Client *c, struct ivec2 clip_box);
++
++/* Stream privacy: shielded cover box for this client in layout
++ * coordinates; false when the client is not shielded or yields an empty
++ * cover. See src/animation/client.c. */
++bool client_shield_box(Client *c, struct wlr_box *out);
+ void client_draw_split_border(Client *c, bool hit_no_border,
+ 							  struct ivec2 offsets);
+ void client_draw_border(Client *c, struct ivec2 offsets);
+diff --git a/include/mango/manage/monitor.h b/include/mango/manage/monitor.h
+index de86c2b6..c8d43d4f 100644
+--- a/include/mango/manage/monitor.h
++++ b/include/mango/manage/monitor.h
+@@ -100,6 +100,26 @@ struct Monitor {
+ 	struct wlr_swapchain *zoom_swapchain;
+ 	uint32_t zoom_swapchain_width;
+ 	uint32_t zoom_swapchain_height;
++	/* The viewport the last zoom-rendered commit used, cached by
++	 * screen_zoom_render() and consumed by screen_zoom_map_box(). Validity
++	 * flips to true only for the commit that actually swapped a magnified
++	 * buffer in. */
++	float zoom_viewport_x;
++	float zoom_viewport_y;
++	float zoom_viewport_width;
++	float zoom_viewport_height;
++	float zoom_viewport_level; /* zoom_level of that frame */
++	bool zoom_viewport_valid;
++
++	/* Stream privacy capture state (src/manage/stream_privacy.c): per
++	 * monitor because capture sessions bind to one output source each.
++	 * The swapchain buffers shielded-window-covered frames for delivery
++	 * to capture sessions; swapped per frame from the committed buffer. */
++	struct wlr_swapchain *privacy_swapchain;
++	uint32_t privacy_swapchain_width;
++	uint32_t privacy_swapchain_height;
++	int32_t privacy_session_count; /* capture sessions on this output */
++
+ 	struct wlr_color_transform
+ 		*icc_transform; /* ICC transform loaded from the ICC file. */
+ 	char icc_path[PATH_MAX];
+diff --git a/include/mango/manage/stream_privacy.h b/include/mango/manage/stream_privacy.h
+new file mode 100644
+index 00000000..b981d5b6
+--- /dev/null
++++ b/include/mango/manage/stream_privacy.h
+@@ -0,0 +1,46 @@
++#ifndef __MANGO_MANAGE_STREAM_PRIVACY_H__
++#define __MANGO_MANAGE_STREAM_PRIVACY_H__ 1
++
++#include "mango/dispatch/bind.h"
++#include <stdint.h>
++
++/*
++ * Stream privacy (the "shield" feature): windows flagged shield_when_capture
++ * read as opaque black in output captures (PipeWire screen shares) while the
++ * user keeps seeing and interacting with them normally.
++ *
++ * Implementation split:
++ *   - wlroots (patched externally) routes every ext image capture source
++ *     frame event of an output through a compositor hook registered by
++ *     stream_privacy_monitor_register(): see
++ *     wlr_output_set_ext_capture_privacy().
++ *   - The hook (stream_privacy_render) blits the committed buffer into a
++ *     per-monitor privacy swapchain and overdraws the shield boxes of every
++ *     flagged client visible on that output; the capture sees the recomposed
++ *     buffer, the display pipeline is untouched.
++ *
++ * Session bookkeeping lives in src/manage/misc.c (the capture session
++ * tracker): each ext copy-capture session maps to an output and calls the
++ * add/remove handlers here so shared sessions decide when privacy frames
++ * are worth rendering. */
++
++/* Register the wlroots capture privacy hook for m's output. */
++void stream_privacy_monitor_register(struct Monitor *m);
++
++/* Drop the hook and free the privacy swapchain (output teardown). */
++void stream_privacy_monitor_unregister(struct Monitor *m);
++
++/* Called by the capture session tracker: an ext capture session started
++ * for this output (NULL for non-output sources, ignored). */
++void stream_privacy_session_add(struct Monitor *m);
++
++/* The tracked session ended; frees privacy state when the last session
++ * on the output stops. */
++void stream_privacy_session_remove(struct Monitor *m);
++
++/* Dispatcher: toggles shield_when_capture on the target client
++ * (focused window by default) and pokes the outputs so the change shows
++ * up in an active share on the next frame. */
++int32_t stream_privacy_dispatch(const Arg *arg);
++
++#endif
+diff --git a/include/mango/manage/zoom.h b/include/mango/manage/zoom.h
+index a92e8f1d..fac1ea8e 100644
+--- a/include/mango/manage/zoom.h
++++ b/include/mango/manage/zoom.h
+@@ -62,6 +62,20 @@ void screen_zoom_update(struct Monitor *m);
+  * plain scene render, so a commit is never dropped. */
+ bool screen_zoom_render(struct Monitor *m, struct wlr_output_state *state);
+ 
++/*
++ * Map a box from layout coordinates to this monitor's committed buffer
++ * pixel coordinates, folding in the zoom viewport the last committed
++ * frame was rendered with (identity when zoom_level <= 1).
++ *
++ * Consumers of the committed buffer (stream privacy rects) need the same
++ * coordinate space the texture was sampled in; the viewport is therefore
++ * read from the caches zoom_render() filled on that frame, not recomputed
++ * from the current cursor position.
++ *
++ * The result is clipped to the buffer bounds; degenerate boxes collapse
++ * to width/height 0. */
++struct wlr_box screen_zoom_map_box(struct Monitor *m, struct wlr_box box);
++
+ /* Binding entries: step, reset or pin the zoom target.
+  *
+  * in / out / set / toggle resolve the zoom target to the monitor under
+diff --git a/src/animation/client.c b/src/animation/client.c
+index c7ab48bc..1f47765b 100644
+--- a/src/animation/client.c
++++ b/src/animation/client.c
+@@ -485,46 +485,81 @@ void client_draw_group_bar(Client *c, struct ivec2 offsets) {
+ 	}
+ }
+ void client_draw_shield(Client *c, struct ivec2 clip_box) {
++	(void)clip_box;
+ 
+-	int32_t shield_x = 0;
+-	int32_t shield_y = 0;
+-	int32_t shield_width = 0;
+-	int32_t shield_height = 0;
+-
+-	if (server.active_capture_count <= 0 || !c->shield_when_capture) {
+-		if (c->shield->node.enabled) {
+-			wlr_scene_node_lower_to_bottom(&c->shield->node);
+-			wlr_scene_node_set_position(&c->shield->node, 0, 0);
+-			wlr_scene_rect_set_size(c->shield, c->animation.current.width,
+-									c->animation.current.height);
+-			wlr_scene_node_set_enabled(&c->shield->node, false);
+-		}
+-		return;
++	/*
++	 * Stream privacy: the display-side shield rect is fully retired. The
++	 * blackout now happens in the capture buffer of the monitor's active
++	 * sharing sessions (manage/stream_privacy.c), so the user always sees
++	 * the window's real content while viewers see opaque black boxes.
++	 * The scene rect stays around only to be kept disabled; this function
++	 * runs from the usual animation/draw paths to guarantee that. */
++	if (c->shield->node.enabled) {
++		wlr_scene_node_lower_to_bottom(&c->shield->node);
++		wlr_scene_node_set_position(&c->shield->node, 0, 0);
++		wlr_scene_rect_set_size(c->shield, c->animation.current.width,
++								c->animation.current.height);
++		wlr_scene_node_set_enabled(&c->shield->node, false);
++	}
++}
++
++/*
++ * Stream privacy: the region that must read as opaque black in the
++ * committed buffer of the client's monitor, in layout coordinates.
++ *
++ * Uses the same geometry the retired display-side shield scene rect had
++ * (content area between the border margins, minus clip offsets), driven
++ * by the live animation state each commit renders with; the client
++ * node's scene position turns client-local coordinates into layout
++ * ones. Returns false when shield is not enabled for this client or the
++ * cover would be empty. Overview card trees are skipped (the mini card
++ * rendering is a separate concern used only while the overview is
++ * open). */
++bool client_shield_box(Client *c, struct wlr_box *out) {
++	if (!c || !c->shield_when_capture || !c->scene || !c->mon ||
++		c->ov_card_tree) {
++		return false;
+ 	}
+ 
++	int32_t shield_x;
++	int32_t shield_y;
++	int32_t shield_width;
++	int32_t shield_height;
++
+ 	if (client_is_ignore_output_clip(c)) {
+ 		shield_x = c->bw;
+ 		shield_y = c->bw;
+ 		shield_width = c->animation.current.width - 2 * (int32_t)c->bw;
+ 		shield_height = c->animation.current.height - 2 * (int32_t)c->bw;
+ 	} else {
+-		shield_x = clip_box.x + (int32_t)c->bw;
+-		shield_y = clip_box.y + (int32_t)c->bw;
++		struct ivec2 offsets = compute_edge_offsets(c);
++		struct wlr_box clip_box;
++		client_get_clip(c, &clip_box);
++		struct ivec2 surface_clip_offset = clip_to_hide(c, &clip_box, offsets);
++
++		shield_x = surface_clip_offset.x + (int32_t)c->bw;
++		shield_y = surface_clip_offset.y + (int32_t)c->bw;
+ 		shield_width = c->animation.current.width - 2 * (int32_t)c->bw -
+-					   clip_box.width - clip_box.x;
++					   surface_clip_offset.width - surface_clip_offset.x;
+ 		shield_height = c->animation.current.height - 2 * (int32_t)c->bw -
+-						clip_box.height - clip_box.y;
++						surface_clip_offset.height - surface_clip_offset.y;
+ 	}
+ 
+ 	if (shield_width <= 0 || shield_height <= 0) {
+-		wlr_scene_node_set_enabled(&c->shield->node, false);
+-		return;
++		return false;
+ 	}
+ 
+-	wlr_scene_node_raise_to_top(&c->shield->node);
+-	wlr_scene_node_set_position(&c->shield->node, shield_x, shield_y);
+-	wlr_scene_rect_set_size(c->shield, shield_width, shield_height);
+-	wlr_scene_node_set_enabled(&c->shield->node, true);
++	int32_t node_x = 0;
++	int32_t node_y = 0;
++	wlr_scene_node_coords(&c->scene->node, &node_x, &node_y);
++
++	*out = (struct wlr_box){
++		.x = node_x + shield_x,
++		.y = node_y + shield_y,
++		.width = shield_width,
++		.height = shield_height,
++	};
++	return true;
+ }
+ 
+ void client_draw_dim(Client *c, struct ivec2 clip_box) {
+diff --git a/src/config/binding_parse.c b/src/config/binding_parse.c
+index 393e7900..599303d8 100644
+--- a/src/config/binding_parse.c
++++ b/src/config/binding_parse.c
+@@ -13,6 +13,7 @@
+ #include "mango/common/log.h"
+ #include "mango/dispatch/bind.h"
+ #include "mango/manage/zoom.h"
++#include "mango/manage/stream_privacy.h"
+ #include "mango/input/pointer.h"
+ #include "mango/manage/client.h"
+ #include "mango/switcher/switcher.h"
+@@ -868,6 +869,8 @@ FuncType parse_func_name(char *func_name, Arg *arg, char *arg_value,
+ 		(*arg).f = atof(arg_value);
+ 	} else if (strcmp(func_name, "screen_zoom_toggle") == 0) {
+ 		func = screen_zoom_toggle;
++	} else if (strcmp(func_name, "toggleshield") == 0) {
++		func = stream_privacy_dispatch;
+ 	} else {
+ 		return NULL;
+ 	}
+diff --git a/src/manage/misc.c b/src/manage/misc.c
+index 718e9b21..143660cf 100644
+--- a/src/manage/misc.c
++++ b/src/manage/misc.c
+@@ -9,6 +9,7 @@
+ #include "mango/manage/client.h"
+ #include "mango/manage/layer.h"
+ #include "mango/manage/monitor.h"
++#include "mango/manage/stream_privacy.h"
+ 
+ #include <ctype.h>
+ #include <drm_fourcc.h>
+@@ -42,6 +43,7 @@ typedef struct SessionLock {
+ struct capture_session_tracker {
+ 	struct wl_listener session_destroy;
+ 	struct wlr_ext_image_copy_capture_session_v1 *session;
++	struct Monitor *privacy_monitor; /* output the source captures, if any */
+ };
+ 
+ static const LayoutMapping layout_mappings[] = {
+@@ -568,6 +570,10 @@ void handle_session_destroy(struct wl_listener *listener, void *data) {
+ 		}
+ 	}
+ 
++	// Stream privacy: trackers keep the owning output so the counts drop
++	// per monitor and the last session's stop frees its capture buffers.
++	stream_privacy_session_remove(tracker->privacy_monitor);
++
+ 	mango_error(true, WLR_DEBUG, "Capture session ended, active count: %d",
+ 				server.active_capture_count);
+ 	free(tracker);
+@@ -669,6 +675,18 @@ void handle_ext_image_copy_capture_new_session(struct wl_listener *listener,
+ 	// session ends.
+ 	wl_signal_add(&capture_session->events.destroy, &tracker->session_destroy);
+ 
++	// Stream privacy: sessions map per output; window-subtree sources
++	// (and inert setup) carry no output and are ignored.
++	tracker->privacy_monitor = NULL;
++	if (capture_session->source) {
++		struct wlr_output *privacy_output =
++			wlr_output_try_from_ext_image_capture_source_v1(
++				capture_session->source);
++		tracker->privacy_monitor =
++			privacy_output ? privacy_output->data : NULL;
++	}
++	stream_privacy_session_add(tracker->privacy_monitor);
++
+ 	server.active_capture_count++;
+ 
+ 	Client *c = NULL;
+diff --git a/src/manage/monitor.c b/src/manage/monitor.c
+index 20be5388..e5c4ab41 100644
+--- a/src/manage/monitor.c
++++ b/src/manage/monitor.c
+@@ -23,6 +23,7 @@
+ #include "mango/manage/title-message-bar.h"
+ #include "mango/manage/xwayland_primary.h"
+ #include "mango/manage/zoom.h"
++#include "mango/manage/stream_privacy.h"
+ #include <fcntl.h>
+ #include <scenefx/render/fx_renderer/fx_renderer.h>
+ #include <scenefx/types/wlr_scene.h>
+@@ -398,6 +399,10 @@ bool mango_scene_output_commit(struct wlr_scene_output *scene_output,
+ 	// When zoomed the commit is pinned to a normal page flip (no tearing):
+ 	// a magnifier racing ahead of the display on a tear would look broken,
+ 	// and the zoom loop re-renders on every refresh anyway.
++	// The zoom viewport cache describes this frame only: flipped off before
++	// the zoom render and re-set inside it, so stream privacy rects map
++	// through exactly the viewport of the buffer about to be committed.
++	m->zoom_viewport_valid = false;
+ 	bool zoomed = screen_zoom_render(m, state);
+ 	if (zoomed) {
+ 		frame_allow_tearing = false;
+@@ -833,6 +838,11 @@ void handle_new_output(struct wl_listener *listener, void *data) {
+ 	m->zoom_level = 1.0f;
+ 	m->zoom_target = 1.0f;
+ 
++	// Stream privacy: hook this output's capture sources; registration
++	// itself is free (the upstream fast paths are untouched with no
++	// shielded windows around).
++	stream_privacy_monitor_register(m);
++
+ 	if (server.chvt_backup_tag &&
+ 		regex_match(server.chvt_backup_monitor_name, m->wlr_output->name)) {
+ 		m->tagset[0] = m->tagset[1] =
+@@ -919,6 +929,10 @@ void handle_output_destroy(struct wl_listener *listener, void *data) {
+ 	// Screen zoom state rides on the monitor itself: drop the swapchain
+ 	// along with it.
+ 	screen_zoom_destroy(m);
++
++	// Stream privacy state rides on the monitor too: drop the capture
++	// hook before the output goes away.
++	stream_privacy_monitor_unregister(m);
+ 	monitor_close(m);
+ 	if (m->blur) {
+ 		wlr_scene_node_destroy(&m->blur->node);
+diff --git a/src/manage/stream_privacy.c b/src/manage/stream_privacy.c
+new file mode 100644
+index 00000000..d0184542
+--- /dev/null
++++ b/src/manage/stream_privacy.c
+@@ -0,0 +1,283 @@
++/*
++ * Stream privacy renderer: feeds ext output captures a frame in which
++ * shielded windows read as opaque black, while the display keeps showing
++ * real content (see include/mango/manage/stream_privacy.h for the
++ * overview).
++ *
++ * Per frame with an active capture session and at least one shielded
++ * visible window:
++ *   1. collect the shield cover boxes for this monitor (layout coords,
++ *      via client_shield_box())
++ *   2. map them into the committed buffer's coordinate space with
++ *      screen_zoom_map_box() (handles the output scale and, when this
++ *      frame was magnified, the very viewport the zoom render used)
++ *   3. blit the committed buffer into a privacy swapchain buffer and
++ *      fill each mapped box opaque black
++ *   4. hand the buffer to wlroots, which consumes it synchronously in
++ *      copy-capture frame copies and unlocks it right after
++ *
++ * Without a shielded window the hook returns NULL and the committed
++ * buffer passes through ungated: no privacy state is allocated and no
++ * extra rendering happens. */
++
++#include "mango/manage/stream_privacy.h"
++
++#include <drm_fourcc.h>
++#include <time.h>
++#include <wlr/render/allocator.h>
++#include <wlr/render/pass.h>
++#include <wlr/render/swapchain.h>
++#include <wlr/render/wlr_texture.h>
++#include <wlr/types/wlr_output.h>
++
++#include "mango/animation/client.h"
++#include "mango/common/log.h"
++#include "mango/common/server.h"
++#include "mango/manage/client.h"
++#include "mango/manage/monitor.h"
++#include "mango/manage/zoom.h"
++#include <wlr/interfaces/wlr_output.h>
++
++/* Collecting geometry is O(clients) and boxes stay stack sized; a bind
++ * storm with every visible window shielded is the documented ceiling. */
++#define STREAM_PRIVACY_MAX_BOXES 64
++
++static struct wlr_buffer *
++stream_privacy_render(struct wlr_output *output, struct wlr_buffer *committed,
++					  const struct timespec *when, void *data);
++
++static bool privacy_needs_work(struct Monitor *m) {
++	Client *c = NULL;
++	wl_list_for_each(c, &server.clients, link) {
++		if (c->shield_when_capture && !c->iskilling && VISIBLEON(c, m)) {
++			return true;
++		}
++	}
++	return false;
++}
++
++static void privacy_schedule_refresh(struct Monitor *m) {
++	/* Kick the output so a mid-share shield change, or the session
++	 * start/end that turned privacy on or off, is visible next frame
++	 * instead of waiting for the next natural repaint. */
++	if (m->wlr_output && m->wlr_output->enabled &&
++		privacy_needs_work(m)) {
++		wlr_output_update_needs_frame(m->wlr_output);
++	}
++}
++
++void stream_privacy_monitor_register(struct Monitor *m) {
++	if (!m || !m->wlr_output) {
++		return;
++	}
++	wlr_output_set_ext_capture_privacy(m->wlr_output, &stream_privacy_render,
++									   m);
++}
++
++void stream_privacy_monitor_unregister(struct Monitor *m) {
++	if (!m) {
++		return;
++	}
++	if (m->wlr_output) {
++		wlr_output_set_ext_capture_privacy(m->wlr_output, NULL, NULL);
++	}
++	if (m->privacy_swapchain) {
++		wlr_swapchain_destroy(m->privacy_swapchain);
++		m->privacy_swapchain = NULL;
++		m->privacy_swapchain_width = 0U;
++		m->privacy_swapchain_height = 0U;
++	}
++}
++
++void stream_privacy_session_add(struct Monitor *m) {
++	if (!m) {
++		return;
++	}
++	m->privacy_session_count++;
++	privacy_schedule_refresh(m);
++}
++
++void stream_privacy_session_remove(struct Monitor *m) {
++	if (!m) {
++		return;
++	}
++	if (m->privacy_session_count > 0) {
++		m->privacy_session_count--;
++	}
++	if (m->privacy_session_count <= 0) {
++		/* Nothing consumes the privacy buffers anymore: free the
++		 * swapchain so idle monitors do not carry GPU memory. */
++		wlr_swapchain_destroy(m->privacy_swapchain);
++		m->privacy_swapchain = NULL;
++		m->privacy_swapchain_width = 0U;
++		m->privacy_swapchain_height = 0U;
++	}
++	privacy_schedule_refresh(m);
++}
++
++static struct wlr_swapchain *privacy_get_swapchain(struct Monitor *m) {
++	struct wlr_output *output = m->wlr_output;
++	struct wlr_allocator *alloc = server.allocator;
++	struct wlr_renderer *renderer = server.renderer;
++
++	if (!alloc || !renderer) {
++		return NULL;
++	}
++
++	if (m->privacy_swapchain &&
++		m->privacy_swapchain_width == (uint32_t)output->width &&
++		m->privacy_swapchain_height == (uint32_t)output->height) {
++		return m->privacy_swapchain;
++	}
++
++	const struct wlr_drm_format_set *formats =
++		wlr_renderer_get_texture_formats(renderer, alloc->buffer_caps);
++	uint32_t render_format = output->render_format;
++	if (render_format == DRM_FORMAT_INVALID) {
++		render_format = DRM_FORMAT_XRGB8888;
++	}
++	const struct wlr_drm_format *format =
++		wlr_drm_format_set_get(formats, render_format);
++	if (!format) {
++		mango_error(false, WLR_ERROR,
++					"stream privacy: no render format for output");
++		return NULL;
++	}
++
++	struct wlr_swapchain *swapchain =
++		wlr_swapchain_create(alloc, output->width, output->height, format);
++	if (!swapchain) {
++		mango_error(false, WLR_ERROR,
++					"stream privacy: swapchain allocation failed");
++		return NULL;
++	}
++
++	if (m->privacy_swapchain) {
++		wlr_swapchain_destroy(m->privacy_swapchain);
++	}
++	m->privacy_swapchain = swapchain;
++	m->privacy_swapchain_width = (uint32_t)output->width;
++	m->privacy_swapchain_height = (uint32_t)output->height;
++	return m->privacy_swapchain;
++}
++
++static struct wlr_buffer *stream_privacy_render(struct wlr_output *output,
++												struct wlr_buffer *committed,
++												const struct timespec *when,
++												void *data) {
++	(void)when;
++
++	struct Monitor *m = data;
++	if (!m || m->iscleanuping || output->data != m || !m->wlr_output ||
++		m->wlr_output != output || !output->enabled ||
++		m->privacy_session_count <= 0) {
++		return NULL;
++	}
++
++	struct wlr_box boxes[STREAM_PRIVACY_MAX_BOXES];
++	uint32_t n_boxes = 0;
++
++	Client *c = NULL;
++	wl_list_for_each(c, &server.clients, link) {
++		if (!c->shield_when_capture || c->iskilling || !VISIBLEON(c, m)) {
++			continue;
++		}
++		struct wlr_box box;
++		if (!client_shield_box(c, &box)) {
++			continue;
++		}
++		/* Layout coordinates journey into the committed buffer's own
++		 * space: output scale first, zoom viewport second (zoom-aware,
++		 * see screen_zoom_map_box), then clipped to the buffer. */
++		struct wlr_box mapped = screen_zoom_map_box(m, box);
++		if (mapped.width <= 0 || mapped.height <= 0) {
++			continue;
++		}
++		if (n_boxes == STREAM_PRIVACY_MAX_BOXES) {
++			mango_error(false, WLR_DEBUG,
++						"stream privacy: more than %d shielded windows "
++						"on %s, tail windows stay visible in captures",
++						STREAM_PRIVACY_MAX_BOXES, output->name);
++			break;
++		}
++		boxes[n_boxes++] = mapped;
++	}
++
++	if (n_boxes == 0) {
++		return NULL;
++	}
++
++	struct wlr_swapchain *swapchain = privacy_get_swapchain(m);
++	if (!swapchain || !committed) {
++		return NULL;
++	}
++
++	struct wlr_buffer *target = wlr_swapchain_acquire(swapchain);
++	if (!target || target->width != committed->width ||
++		target->height != committed->height) {
++		/* Size change not observed yet: this frame passes through
++		 * unshielded, the swapchain rebuilds on the next hook call
++		 * (privacy_get_swapchain has never seen the new size). */
++		wlr_buffer_unlock(target);
++		return NULL;
++	}
++
++	struct wlr_texture *tex =
++		wlr_texture_from_buffer(server.renderer, committed);
++	if (!tex) {
++		wlr_buffer_unlock(target);
++		return NULL;
++	}
++
++	struct wlr_render_pass *pass =
++		wlr_renderer_begin_buffer_pass(server.renderer, target, NULL);
++	if (!pass) {
++		wlr_texture_destroy(tex);
++		wlr_buffer_unlock(target);
++		return NULL;
++	}
++
++	/* The full committed frame, opaque: it is the exact content the
++	 * display pipeline shows, just sampled into the capture-side
++	 * buffer (the rects go on top below). */
++	wlr_render_pass_add_texture(
++		pass, &(struct wlr_render_texture_options){
++				  .texture = tex,
++				  .src_box = {0, 0, (float)committed->width,
++							  (float)committed->height},
++				  .dst_box = {0, 0, (float)target->width,
++							  (float)target->height},
++				  .blend_mode = WLR_RENDER_BLEND_MODE_NONE,
++			  });
++
++	for (uint32_t i = 0; i < n_boxes; i++) {
++		wlr_render_pass_add_rect(
++			pass, &(struct wlr_render_rect_options){
++					  .box = {boxes[i].x, boxes[i].y, boxes[i].width,
++							  boxes[i].height},
++					  .color = {.r = 0.0f, .g = 0.0f, .b = 0.0f, .a = 1.0f},
++				  });
++	}
++
++	wlr_render_pass_submit(pass);
++	wlr_texture_destroy(tex);
++
++	return target;
++}
++
++int32_t stream_privacy_dispatch(const Arg *arg) {
++	struct Monitor *sel = server.selected_monitor;
++	Client *target = arg->tc ? arg->tc : (sel ? sel->sel : NULL);
++
++	if (!target) {
++		return 0;
++	}
++
++	target->shield_when_capture = !target->shield_when_capture;
++
++	/* Live update: an active share shows the box appear (or the window
++	 * stop being shielded) with the very next frame. */
++	privacy_schedule_refresh(target->mon);
++
++	return 0;
++}
+diff --git a/src/manage/zoom.c b/src/manage/zoom.c
+index 2fb4b5da..57ee150c 100644
+--- a/src/manage/zoom.c
++++ b/src/manage/zoom.c
+@@ -392,6 +392,16 @@ bool screen_zoom_render(struct Monitor *m, struct wlr_output_state *state) {
+ 		vy = (float)height - vh;
+ 	}
+ 
++	/* Cache the fruits of that viewport for downstream consumers of the
++	 * committed buffer: stream privacy rects map through the same
++	 * viewport so their black boxes track magnified content exactly. */
++	m->zoom_viewport_x = vx;
++	m->zoom_viewport_y = vy;
++	m->zoom_viewport_width = vw;
++	m->zoom_viewport_height = vh;
++	m->zoom_viewport_level = m->zoom_level;
++	m->zoom_viewport_valid = true;
++
+ 	/* Full buffer clip region: guards the rect draw and the texture draw
+ 	 * against any coordinate rounding touching the border. */
+ 	pixman_region32_t full;
+@@ -436,3 +446,57 @@ bool screen_zoom_render(struct Monitor *m, struct wlr_output_state *state) {
+ 	wlr_buffer_unlock(zoom_buf);
+ 	return true;
+ }
++
++struct wlr_box screen_zoom_map_box(struct Monitor *m, struct wlr_box box) {
++	if (!m || !m->wlr_output) {
++		return box;
++	}
++
++	struct wlr_output *output = m->wlr_output;
++	int32_t width = output->width;
++	int32_t height = output->height;
++	float scale = output->scale > 0.0f ? output->scale : 1.0f;
++
++	/* Layout points to buffer pixels of the plain (unzoomed) render:
++	 * same projection the pointer anchor uses, dropping any monitor
++	 * origin offset. */
++	float bx = ((float)box.x - (float)m->m.x) * scale;
++	float by = ((float)box.y - (float)m->m.y) * scale;
++	float bw = (float)box.width * scale;
++	float bh = (float)box.height * scale;
++
++	if (m->zoom_viewport_valid) {
++		/* Re-project through the viewport the magnified commit was
++		 * built from: content at viewport-space p lands at
++		 * (p - vp.origin) * zoom in the magnified buffer. */
++		float zoom = m->zoom_viewport_level;
++		if (zoom > 1.0f) {
++			bx = (bx - m->zoom_viewport_x) * zoom;
++			by = (by - m->zoom_viewport_y) * zoom;
++			bw = bw * zoom;
++			bh = bh * zoom;
++		}
++	}
++
++	/* Clip to the buffer: boxes hanging past the edges shrink to the
++	 * visible slice. An empty result simply drops out as w/h <= 0. */
++	float ex = (float)width;
++	float ey = (float)height;
++	float nx = bx < 0.0f ? 0.0f : bx;
++	float ny = by < 0.0f ? 0.0f : by;
++	float er = bx + bw > ex ? ex : bx + bw;
++	float eb = by + bh > ey ? ey : by + bh;
++	if (nx > er) {
++		nx = er;
++	}
++	if (ny > eb) {
++		ny = eb;
++	}
++
++	return (struct wlr_box){
++		.x = (int32_t)lroundf(nx),
++		.y = (int32_t)lroundf(ny),
++		.width = (int32_t)lroundf(er - nx),
++		.height = (int32_t)lroundf(eb - ny),
++	};
++}

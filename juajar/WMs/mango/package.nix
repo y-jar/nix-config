@@ -31,12 +31,20 @@
 }:
 let
   scenefx = (inputs.mangowm.inputs.scenefx.packages.${stdenv.hostPlatform.system}).default;
+  # wlroots with the ext capture privacy hook (juajar/WMs/mango/patches):
+  # a compositor callback swaps each capture source frame's buffer for a
+  # privacy-filtered one; ABI-compatible with upstream 0.20 (field baked
+  # into struct wlr_output, see patches/README.md).
+  wlrootsPrivacy = wlroots_0_20.overrideAttrs (o: {
+    patches = (o.patches or [ ]) ++ [ ./patches/wlroots-capture-privacy.patch ];
+  });
   src = stdenv.mkDerivation {
     name = "mango-0.18.2-zoom-source";
     src = inputs.mangowm.outPath; # pinned 0.18.2 rev (flake.lock)
     patches = [
       ./patches/screen-zoom.patch
       ./patches/switcher-warp.patch
+      ./patches/stream-privacy.patch
     ];
     installPhase = ''
       runHook preInstall
@@ -73,7 +81,7 @@ stdenv.mkDerivation {
     pixman
     wayland
     wayland-protocols
-    wlroots_0_20
+    wlrootsPrivacy
     scenefx
     libGL
     libdrm

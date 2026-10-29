@@ -1,0 +1,134 @@
+diff --git a/include/wlr/types/wlr_output.h b/include/wlr/types/wlr_output.h
+index 4485b36..5860bc1 100644
+--- a/include/wlr/types/wlr_output.h
++++ b/include/wlr/types/wlr_output.h
+@@ -176,6 +176,23 @@ struct wlr_render_pass;
+  * perform rendering on that render pass, and finally call
+  * wlr_output_commit_state().
+  */
++/* Privacy substitution hook for output capture sources (see
++ * wlr_output_set_ext_capture_privacy()).
++ *
++ * Called from ext image capture source frame emission: commits authored with
++ * a buffer get their frame events handed the returned buffer instead of the
++ * committed one. Returning NULL keeps the committed buffer. The callback must
++ * return a buffer matching the committed buffer's width/height (transform and
++ * scale included). Allocation and lifetime are owned by the compositor: the
++ * source guarantees active copy-capture frames consume the returned buffer
++ * synchronously during the call, so a compositor-owned rotating swapchain
++ * buffer is safe to hand out. The callback may be invoked on frame events
++ * even if no capture session is attached; it should stay cheap when nothing
++ * needs privacy (return NULL). */
++typedef struct wlr_buffer *(*wlr_ext_capture_privacy_render_func)(
++	struct wlr_output *output, struct wlr_buffer *committed,
++	const struct timespec *when, void *data);
++
+ struct wlr_output {
+ 	const struct wlr_output_impl *impl;
+ 	struct wlr_backend *backend;
+@@ -266,6 +283,12 @@ struct wlr_output {
+ 
+ 	void *data;
+ 
++	// Privacy filter for output capture sources, see
++	// wlr_output_set_ext_capture_privacy(). Private use by the ext image
++	// capture source.
++	wlr_ext_capture_privacy_render_func ext_capture_privacy_render;
++	void *ext_capture_privacy_data;
++
+ 	struct {
+ 		struct wl_listener display_destroy;
+ 		struct wlr_output_image_description image_description_value;
+@@ -668,4 +691,13 @@ bool wlr_output_configure_primary_swapchain(struct wlr_output *output,
+ struct wlr_render_pass *wlr_output_begin_render_pass(struct wlr_output *output,
+ 	struct wlr_output_state *state, struct wlr_buffer_pass_options *render_options);
+ 
++/**
++ * Register a privacy filter for ext image capture sources bound to this
++ * output. Pass render=NULL (and arbitrary data) to unregister.
++ *
++ * See wlr_ext_capture_privacy_render_func for the call contract.
++ */
++void wlr_output_set_ext_capture_privacy(struct wlr_output *output,
++	wlr_ext_capture_privacy_render_func render, void *data);
++
+ #endif
+diff --git a/types/ext_image_capture_source_v1/output.c b/types/ext_image_capture_source_v1/output.c
+index 0e3a578..cf32fcd 100644
+--- a/types/ext_image_capture_source_v1/output.c
++++ b/types/ext_image_capture_source_v1/output.c
+@@ -134,15 +134,32 @@ static void source_handle_output_commit(struct wl_listener *listener,
+ 
+ 	if (event->state->committed & WLR_OUTPUT_STATE_BUFFER) {
+ 		struct wlr_buffer *buffer = event->state->buffer;
++		struct wlr_output *output = source->output;
++		bool privacy_handled = false;
++
++		// Privacy filter: let the compositor substitute the buffer handed to
++		// capture sessions (e.g. shielding windows from screen shares).
++		if (output->ext_capture_privacy_render != NULL) {
++			struct wlr_buffer *privacy =
++				output->ext_capture_privacy_render(output, buffer,
++					&event->when, output->ext_capture_privacy_data);
++			if (privacy != NULL) {
++				buffer = privacy;
++				privacy_handled = true;
++			}
++		}
+ 
++		// A privacy buffer is recomposed entirely: report the whole frame
++		// as changed so capture sessions never splice stale regions.
+ 		pixman_region32_t full_damage;
+ 		pixman_region32_init_rect(&full_damage, 0, 0, buffer->width, buffer->height);
+ 
+ 		const pixman_region32_t *damage;
+-		if (event->state->committed & WLR_OUTPUT_STATE_DAMAGE) {
+-			damage = &event->state->damage;
+-		} else {
++		if (privacy_handled ||
++				!(event->state->committed & WLR_OUTPUT_STATE_DAMAGE)) {
+ 			damage = &full_damage;
++		} else {
++			damage = &event->state->damage;
+ 		}
+ 
+ 		struct wlr_ext_output_image_capture_source_v1_frame_event frame_event = {
+@@ -154,6 +171,14 @@ static void source_handle_output_commit(struct wl_listener *listener,
+ 		};
+ 		wl_signal_emit_mutable(&source->base.events.frame, &frame_event);
+ 
++		if (privacy_handled) {
++			// The privacy buffer carries the compositor's own lock from
++			// its swapchain: sessions consumed it synchronously in the
++			// frame fan-out above, drop that lock so the swapchain slot
++			// rotates instead of starving.
++			wlr_buffer_unlock(buffer);
++		}
++
+ 		pixman_region32_fini(&full_damage);
+ 	}
+ }
+diff --git a/types/output/output.c b/types/output/output.c
+index 3715950..147554c 100644
+--- a/types/output/output.c
++++ b/types/output/output.c
+@@ -392,6 +392,9 @@ void wlr_output_finish(struct wlr_output *output) {
+ 	wl_signal_emit_mutable(&output->events.destroy, output);
+ 	wlr_addon_set_finish(&output->addons);
+ 
++	// Drop the capture privacy hook so it never outlives its owner.
++	wlr_output_set_ext_capture_privacy(output, NULL, NULL);
++
+ 	assert(wl_list_empty(&output->events.frame.listener_list));
+ 	assert(wl_list_empty(&output->events.damage.listener_list));
+ 	assert(wl_list_empty(&output->events.needs_frame.listener_list));
+@@ -1018,3 +1021,9 @@ bool wlr_output_is_direct_scanout_allowed(struct wlr_output *output) {
+ 
+ 	return true;
+ }
++
++void wlr_output_set_ext_capture_privacy(struct wlr_output *output,
++		wlr_ext_capture_privacy_render_func render, void *data) {
++	output->ext_capture_privacy_render = render;
++	output->ext_capture_privacy_data = data;
++}
