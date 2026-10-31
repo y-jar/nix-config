@@ -81,7 +81,7 @@
       pycharm.enable = true; # sets pycharm
     }; # end of editors
     chatApps = {
-      enable = false;
+      enable = true;
       discord.enable = true;
       halloy.enable = false;
     };
