@@ -16,7 +16,7 @@ let
 
   # chat app packages, gated per usrset.chatApps toggle
   chatPackages =
-    lib.optionals (cfg.enable && cfg.discord.enable) [ pkgs.discord ]
+    lib.optionals (cfg.enable && cfg.discord.enable) [ pkgs.discord pkgs.vesktop ]
     ++ lib.optionals (cfg.enable && cfg.halloy.enable) [ pkgs.halloy ];
 in
 {
