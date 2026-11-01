@@ -222,7 +222,7 @@ let
     read-only inspection:
 
     1. Plan first. List atomic steps: one file, one concern each.
-    2. Stop and ask verbatim: `PLAN READY — reply "approve"/"go" to run all steps, "approve <n>" for just step n, or describe what to change.`
+    2. Stop and ask verbatim: `PLAN READY - reply "approve"/"go" to run all steps, "approve <n>" for just step n, or describe what to change.`
        Then stop; call no tool until the user replies.
     3. One tool call per step, only after approval. Never batch edits into one script.
     4. "Never commit unless asked" is absolute; approving a plan is not asking to commit.
@@ -278,15 +278,15 @@ let
 
       Check `resjar/docbin/directory-key.md` first. Key paths:
 
-      - `hstjar/<host>/` — per-host `system.nix` (sysset), `user.nix` (usrset), `boot.nix`, `hardware-configuration.nix`
-      - `hstjar/0_TEMPLATE/` — full option sheet; `0_MINIMAL/` — same with heavy groups off
-      - `juajar/sysjar/<feature>/default.nix` — sysset option definitions (auto-imported)
-      - `juajar/liijar/<app>/default.nix` — usrset app modules
-      - `juajar/liijar/options.nix` — ALL usrset declarations (single source)
-      - `juajar/bridge.nix` — the only sysset <-> usrset meeting point
-      - `juajar/WMs/<wm>/` — window manager system + user halves
-      - `juajar/sysjar/checks.nix` — cross-module assertions
-      - `resjar/docbin/` — guides; `flake.nix` — inputs, hosts, ISOs, formatter
+      - `hstjar/<host>/` - per-host `system.nix` (sysset), `user.nix` (usrset), `boot.nix`, `hardware-configuration.nix`
+      - `hstjar/0_TEMPLATE/` - full option sheet; `0_MINIMAL/` - same with heavy groups off
+      - `juajar/sysjar/<feature>/default.nix` - sysset option definitions (auto-imported)
+      - `juajar/liijar/<app>/default.nix` - usrset app modules
+      - `juajar/liijar/options.nix` - ALL usrset declarations (single source)
+      - `juajar/bridge.nix` - the only sysset <-> usrset meeting point
+      - `juajar/WMs/<wm>/` - window manager system + user halves
+      - `juajar/sysjar/checks.nix` - cross-module assertions
+      - `resjar/docbin/` - guides; `flake.nix` - inputs, hosts, ISOs, formatter
 
       ## Search Strategy
 
@@ -303,7 +303,7 @@ let
       - Boolean toggle pattern: `lib.mkOption { type = lib.types.bool; default = true/false; }`
       - Conditional config: wrap in `lib.mkIf cfg.enable { ... }`
       - Multiple gated sections in one module: `lib.mkMerge [ (lib.mkIf cond { ... }) ... ]`
-        — NEVER `// lib.mkIf` (attrset update does not compose module properties)
+        - NEVER `// lib.mkIf` (attrset update does not compose module properties)
       - `juajar/sysjar/default.nix` auto-imports everything no manual registration needed
       - Follow the project's naming: `sysjar` for system, `liijar` for user apps, `WMs` for
         window managers
@@ -352,16 +352,16 @@ let
       - Never use `sed -i`, `echo >>`, or heredocs to modify tracked `.nix`
         files. Options, `config`, and `assertions` must go inside their
         correct attrset, and blind text substitution isn't scoped to the
-        option you mean to change — use the edit tool with the exact
+        option you mean to change - use the edit tool with the exact
         before/after text instead, once per change.
       - One edit = one concern. "Add an option," "wire it into
         environmentVariables," and "add an assertion for it" are three edits,
         not one script.
-      - Re-read the current file section immediately before editing it —
+      - Re-read the current file section immediately before editing it -
         don't edit from memory of what you drafted earlier in the
         conversation.
       - `nix flake check` / `nh os test` are gates: if either fails, stop and
-        report the failure — do not propose `git commit` in the same breath.
+        report the failure - do not propose `git commit` in the same breath.
         A later step depending on an earlier one succeeding is not optional.
       - Flag any find-and-replace that isn't anchored to a unique string
         (e.g. a bare `default = false;`) as unsafe before running it, and
