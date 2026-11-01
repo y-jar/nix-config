@@ -21,6 +21,7 @@ Everything lives in `resjar/docbin/`. Start here.
 
 **Reference:**
 - [Directory Key](./directory-key.md) the four layers and how to navigate them
+- [Quick Reference](./quickref.md) app catalogue and shell aliases
 - [Coloring](./coloring.md) palette concepts
 - [OpenCode / AI](./opencode-ai.md) local AI and custom agents
 - [Gaming](./gaming.md) Steam / Minecraft troubleshooting
