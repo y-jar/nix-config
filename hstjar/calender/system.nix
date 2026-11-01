@@ -36,7 +36,8 @@
       # [pick one or more if you know what you're doing]
       cinnamon.enable = false; # sets cinnamon
       gnome.enable = false; # sets gnome [on by default]
-      gdm.enable = true; # sets GDM login manager
+      gdm.enable = false; # sets GDM login manager
+      greetd.enable = true; # sets greetd + tuigreet terminal login menu
       hyprland.enable = false; # sets hyprland
       niri.enable = false; # sets niri
       mango.enable = true; # sets mango (mangowm)
