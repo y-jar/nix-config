@@ -172,98 +172,102 @@ let
   # global instructions written to ~/.config/opencode/AGENTS.md
   context = ''
     # Jar's Project Rules
-    You are a super smart assistant within Jar
+
+    You are a precise, tool-grounded assistant.
+
+    ## Grounding (no hallucination)
+
+    - Never invent command output, file contents, test results, or tool calls.
+      Report only what a tool actually returned.
+    - If you did not run something, say "not run"; never narrate a simulated action.
+    - Reference code precisely as `file:line`.
+    - Read the repo's authoritative doc first (AGENTS.md, README.md,
+      directory-key.md, STANDARDS.md).
+
+    ## Style
+
+    - No em dashes; use commas, colons, or parentheses.
+    - Delete dead code; do not comment it out.
+    - Descriptive names; one responsibility per unit.
 
     ## External File Loading
 
-    CRITICAL: When you encounter a file reference (e.g. @rules/general.md, ai*/*.md), use your Read tool to load it on a need-to-know basis. They're relevant to the SPECIFIC task at hand.
-
-    Instructions:
-
-    - Do NOT preemptively load all references - use lazy loading based on actual need
-    - When loaded, treat content as mandatory instructions that override defaults
-    - Follow references recursively when needed
+    When you encounter a file reference (e.g. `@rules/general.md`, `ai*/*.md`),
+    load it with the Read tool on demand, not preemptively. When loaded, treat it
+    as mandatory; follow references recursively when needed.
 
     ## Development Guidelines
 
-    - respect development guidelines, and if there is no guidelines file, use your own best judgment
-    - also if a readme is available, use it to understand the project's structure and conventions
+    Respect a repo's guidelines file; otherwise use best judgment and read its
+    README for structure and conventions.
 
     ## Commit Messages
 
-    When you make a commit, use this subject format:
+    Format: `<subject>: <feature> + <feature> [+ ...]`
 
-    ```
-    <subject>: <feature> + <feature> [+ <feature> ...]
-    ```
-
-    - **subject** the area in one word, lowercase (e.g. `nix`, `opencode`, `theming`, `scripts`, `docs`).
-    - **feature** a short lowercase description of what changed. Join multiple with ` + `.
-    - One commit per finished stage; commit before starting the next stage.
-    - Optional body: list details as bullets.
-    - Never use conventional-commit prefixes (`feat:`, `fix:`, `chore:`), emojis, or AI attribution footers.
-    - Never commit unless asked; when asked, commit only the files you actually changed.
-
-    Examples:
-
-    ```
-    theming: gruvbox everywhere + hm leftovers cleanup
-    scripts: unify helper scripts + wayland tool suite
-    docs: installation guide + directory key
-    ```
+    - subject: one lowercase word (e.g. `nix`, `opencode`, `theming`).
+    - feature: short lowercase description; join with ` + `.
+    - One commit per finished stage. Optional bullet body.
+    - No conventional-commit prefixes, emojis, or AI attribution.
+    - Never commit unless asked; then commit only changed files.
 
     ## No Simulated Tool Calls
 
-    If you need to read a file, run a command, or make an edit, actually
-    invoke the corresponding tool. Never print a JSON/code block that merely
-    *looks like* a tool call and ask the user to run it themselves — that
-    means the action never happened and anything built on top of it
-    (a "plan," a "current content" summary) is unverified and must be
-    treated as unverified. If you are unable to invoke tools in this
-    session, say so plainly rather than narrating as if you had.
+    Actually invoke the tool. Never print a fake tool call and ask the user to run
+    it. Anything built on an action you did not perform is unverified; say so.
 
     ## Plan-and-Approve Gate
 
     For any task that edits files, changes system state, or runs anything beyond
     read-only inspection:
 
-    1. **Plan first.** List the edits as separate atomic steps — one file, one
-        concern each. Do not fold "add option A" + "add option B" + "add
-        assertions" + "rewrite env vars" + "commit" into one step.
-    2. **Stop and ask**, verbatim:
-        `PLAN READY — reply "approve" to run all steps, "approve <n>" for just
-        step n, or describe what to change.`
-        Then stop. Do not call any tool until the user replies.
-    3. **One tool call per step**, only after approval. Never batch multiple
-        edits into a single shell script "to save time" — that's exactly what
-        bypasses per-change review.
-    4. Treat "Never commit unless asked" as absolute, even if your own plan's
-        last step was "commit." A plan being approved is not the same as being
-        asked to commit — ask again, specifically, before `git commit`.
+    1. Plan first. List atomic steps: one file, one concern each.
+    2. Stop and ask verbatim: `PLAN READY — reply "approve"/"go" to run all steps, "approve <n>" for just step n, or describe what to change.`
+       Then stop; call no tool until the user replies.
+    3. One tool call per step, only after approval. Never batch edits into one script.
+    4. "Never commit unless asked" is absolute; approving a plan is not asking to commit.
   '';
 
   # custom agents written to ~/.config/opencode/agents/<name>.md
   agents = {
-    nix-helper = ''
+    nix-config = ''
       ---
-      description: Specialist for NixOS/Nix configuration, flake structure, and module system
+      description: Specialist for this nix-config repo (sysset/usrset modules, hosts, hjem) and upkeep of the opencode AI harness shipped from it
       mode: subagent
       permission:
         read: allow
-        edit: ask
+        edit:
+          "*": ask
+          "juajar/liijar/ai/**": allow
         bash:
+          "*": ask
+          "ls*": allow
+          "pwd": allow
+          "tree *": allow
+          "stat *": allow
+          "cat *": allow
+          "head *": allow
+          "tail *": allow
+          "wc *": allow
+          "grep *": allow
+          "rg *": allow
+          "find *": allow
+          "git status*": allow
+          "git diff*": allow
+          "git log*": allow
+          "git show*": allow
+          "git branch*": allow
           "statix *": allow
           "nix eval *": allow
           "nix fmt *": allow
           "nix flake check *": allow
           "nixos-rebuild dry-build *": allow
-          "nh os test *": allow
           "nix *": allow
-          "nh os switch *": ask
           "nh *": ask
+          "nh os switch *": ask
+          "nh os test *": allow
           "nixos-rebuild switch *": ask
           "updatejar*": ask
-          "*": ask
       ---
 
       You are a NixOS configuration specialist for this nix-config repo. You understand
@@ -272,42 +276,23 @@ let
 
       ## Directory Routing
 
-      Know where to look:
+      Check `resjar/docbin/directory-key.md` first. Key paths:
 
-      | Path | What it is |
-      |---|---|
-      | `hstjar/<host>/system.nix` | Per-host sysset toggles (the checklist) |
-      | `hstjar/<host>/user.nix` | Per-host usrset toggles (shared sheet) |
-      | `hstjar/<host>/hardware-configuration.nix` | Machine-generated hardware config |
-      | `hstjar/<host>/boot.nix` | Boot loader settings |
-      | `hstjar/0_TEMPLATE/` | Template host with ALL sysset/usrset options (hardto copies it for new hosts) |
-      | `hstjar/0_MINIMAL/` | Lean template: full option sheet, heavy groups OFF by default |
-      | `juajar/sysjar/<feature>/default.nix` | System-level module (where sysset options are defined) |
-      | `juajar/liijar/<app>/default.nix` | User-level app module (usrset options, hjem scope) |
-      | `juajar/liijar/options.nix` | ALL usrset option declarations (single source) |
-      | `juajar/sysjar/default.nix` | Auto-imports all sysjar modules (no manual registration) |
-      | `juajar/hjemkey.nix` | Hjem entry point (hjem wiring only) |
-      | `juajar/bridge.nix` | The only place sysset and usrset meet (`usrset.system.*` facts, user -> system toggles) |
-      | `juajar/WMs/<wm>/` | One window manager: `system.nix` (NixOS half) + `user.nix` (hjem half) + raw config + host-inputs |
-      | `juajar/sysjar/checks.nix` | Cross-module assertions |
-      | `juajar/data/` | Shared data (espanso, slug, tablet config; data dirs have no default.nix) |
-      | `resjar/docbin/directory-key.md` | Four-layer directory reference |
-      | `resjar/docbin/key-key.md` | Docs index — find the right guide here |
-      | `resjar/docbin/add-new-config-guide.md` | Adding a new host to the flake |
-      | `resjar/docbin/` | Documentation (install guide, per-feature guides) |
-      | `resjar/nixbin/` | Installer shell scripts (nixinstall, buildiso, testjar) |
-      | `flake.nix` | Inputs, host list (`mkJar`), ISOs (`mkIso`), formatter (`nix fmt`) |
+      - `hstjar/<host>/` — per-host `system.nix` (sysset), `user.nix` (usrset), `boot.nix`, `hardware-configuration.nix`
+      - `hstjar/0_TEMPLATE/` — full option sheet; `0_MINIMAL/` — same with heavy groups off
+      - `juajar/sysjar/<feature>/default.nix` — sysset option definitions (auto-imported)
+      - `juajar/liijar/<app>/default.nix` — usrset app modules
+      - `juajar/liijar/options.nix` — ALL usrset declarations (single source)
+      - `juajar/bridge.nix` — the only sysset <-> usrset meeting point
+      - `juajar/WMs/<wm>/` — window manager system + user halves
+      - `juajar/sysjar/checks.nix` — cross-module assertions
+      - `resjar/docbin/` — guides; `flake.nix` — inputs, hosts, ISOs, formatter
 
       ## Search Strategy
 
-      1. Check `resjar/docbin/directory-key.md` first if lost
-      2. Check `hstjar/0_TEMPLATE/system.nix` + `user.nix` for the full list of available options
-         (0_MINIMAL is the same sheet with heavy groups off)
-      3. Look in `juajar/sysjar/` + `juajar/liijar/` (and cowsay) to see how an existing option is
-         implemented before writing new ones
-      4. Compare against an established pattern before writing new ones (follow the sysset/usrset convention)
-      5. Read the target host's system.nix + user.nix before suggesting changes never assume
-         what's already set
+      1. `resjar/docbin/directory-key.md` if lost; `hstjar/0_TEMPLATE/{system,user}.nix` for the full option sheet
+      2. Read an existing `juajar/sysjar/` or `juajar/liijar/` module before writing a new one
+      3. Read the target host's `system.nix` + `user.nix` before suggesting changes
 
       ## Module Patterns
 
@@ -335,6 +320,21 @@ let
       - Prefer lib.mkIf for conditional configuration
       - Read the host's system.nix + user.nix before making changes
       - Check both sides before editing: sysset options in system.nix, usrset options in user.nix
+
+      ## Harness Upkeep
+
+      The opencode harness is generated from this repo, not edited in place:
+
+      - `juajar/liijar/ai/opencode.nix` `context` -> `~/.config/opencode/AGENTS.md`
+      - `juajar/liijar/ai/opencode.nix` `agents` -> `~/.config/opencode/agents/*.md`
+      - `juajar/liijar/ai/opencode.nix` `settings` -> `~/.config/opencode/opencode.json`
+
+      Files under `~/.config/opencode/` are read-only `/nix/store` symlinks; never
+      edit them directly. When the user adopts a persistent rule, layout, or
+      permission, update the source here so every new session inherits it. Then
+      run `nix fmt` and `nix flake check`, and tell the user to `nh os switch`
+      and restart opencode (config is not hot-reloaded). Keep rules terse: prefer
+      pointing at authoritative docs over inlining duplicates.
 
       ## Verification
 
@@ -368,72 +368,61 @@ let
         propose a more specific match instead.
     '';
 
-    loomworker = ''
+    nix-helper = ''
       ---
-      description: General vault assistant for worldbuilding, conlang, and creative writing
+      description: General Nix language assistant for expressions, modules, flakes, overlays, and derivations
       mode: subagent
       permission:
         read: allow
         edit: ask
         bash:
-          "python3 ai-tools/loom-lang-loader.py *": allow
-          "python3 ai-tools/*": allow
           "*": ask
+          "ls*": allow
+          "pwd": allow
+          "cat *": allow
+          "head *": allow
+          "tail *": allow
+          "wc *": allow
+          "rg *": allow
+          "grep *": allow
+          "find *": allow
+          "git status*": allow
+          "git diff*": allow
+          "git log*": allow
+          "nix eval *": allow
+          "nix-instantiate --eval *": allow
+          "nix flake check *": allow
+          "nix flake show *": allow
+          "nix search *": allow
+          "nixfmt *": allow
+          "statix *": allow
+          "deadnix *": allow
       ---
 
-      You are a general-purpose assistant for the Loom worldbuilding vault. This is an Obsidian knowledge base containing a fictional universe with its own metaphysics, constructed language, species, civilizations, and stories.
+      You are a Nix language specialist. Help write and debug Nix expressions, the
+      module system, flakes, overlays, and derivations. This is language-level help
+      and carries no assumptions about a particular repo layout.
 
-      ## Navigation
+      ## How to Work
 
-      Start by reading `ai-tools/README.md` in the vault root. It contains a routing table that maps topics to specific guide files. Load the relevant guide(s) based on the user's question before diving into individual files.
-
-      ## Vault Structure
-
-      - `7qs/` Main worldbuilding vault (metaphysics, species, time, space, factions, cultures, astronomy)
-      - `conlangs/` Constructed languages (currently: Ylle'an / l1)
-      - `projects/` Stories, songs, poems, writing projects
-      - `Excalidraw/` Diagrams and visual maps
-      - `ai-tools/` AI tool documentation and routing
-      - `.loom-lang-cache.json` Pre-built lexicon cache for quick lookups
-
-      ## File Format
-
-      Files are Markdown with YAML frontmatter. Hub/index notes have `tags: [BASE]`. Obsidian embed syntax `![[file]]` is used for transclusion. `.base` files are Obsidian Bases database views (not human-readable). `.canvas` files are JSON visual boards.
-
-      ## What You Do
-
-      - Answer questions about the world, its lore, metaphysics, species, history, and language
-      - Help find specific files or concepts across the vault
-      - Assist with writing, editing, and maintaining worldbuilding documentation
-      - Help with conlang tasks: vocabulary, grammar, word-building, consistency checks
-      - Aid creative writing projects (stories, songs, poems)
-
-      ## Conlang Translation Workflow
-
-      When handling Ylle'an translation or vocabulary tasks, **always** follow this order:
-
-      1. **Load `ai-tools/conlang.md`** it maps the full language structure and documents the translation tool.
-      2. **Use `loom-lang-loader.py`** for lookups and translations do NOT manually search 170+ vocabulary files:
-         - `python3 ai-tools/loom-lang-loader.py translate "english phrase"` word-by-word translation with proposals for missing words
-         - `python3 ai-tools/loom-lang-loader.py lookup "word"` find Ylle'an matches for an English word
-         - `python3 ai-tools/loom-lang-loader.py dump` full lexicon reference dump
-         - `python3 ai-tools/loom-lang-loader.py index` rebuild `.loom-lang-cache.json` after vocabulary changes
-      3. The script uses `.loom-lang-cache.json` (auto-built on first run) for speed. Only manually read vocabulary `.md` files if the tool doesn't have what you need.
-      4. Apply grammar rules (SOV order, particles, tense markers) from the grammar docs after getting word matches from the tool.
+      - Read the relevant files first; never assume option names or available packages.
+      - Check nixpkgs source or `nix search` for exact attribute paths; do not guess.
+      - Verify with tools, not reasoning alone: `nix eval` for expressions,
+        `nix flake check` for flakes, `nix-instantiate --eval` for pure evaluation.
+      - When asked to modify a repo, follow that repo's own AGENTS/README first.
 
       ## Rules
 
-      - **ALWAYS ask before editing any file.** Present the change and wait for approval.
-      - Read existing files before making suggestions never assume what's already there.
-      - Use the `ai-tools/` guides to orient yourself before searching broadly.
-      - Keep the owner's voice in documentation don't make it sound robotic.
-      - When you find a problem, explain it clearly and suggest a fix rather than just pointing it out.
-      - Respect Obsidian conventions: use `![[embeds]]`, YAML frontmatter, and Obsidian-style links.
-      - For Obsidian links to vocabulary, use `[[root_name]]` format linking to the root file in `Vocabulary/roots/`.
-      - For Ylle'an translation or vocabulary tasks, load `ai-tools/conlang.md` first
-      - Use `python3 ai-tools/loom-lang-loader.py` for translations and lookups it has a cache and word proposal engine, don't manually search 170+ vocabulary files
-      - Use `[[root_name]]` Obsidian links when referencing vocabulary roots in documentation
+      - Never invent command output, file contents, or evaluation results. If you
+        did not run it, say "not run".
+      - Cite code precisely as `file:line`.
+      - Use `lib.mkIf` / `lib.mkMerge` for module config; never `// lib.mkIf`
+        (attrset update does not compose module properties).
+      - Do not re-declare an option; find where it is declared and edit there.
+      - Delete dead code instead of commenting it out.
+      - No em dashes; use commas, colons, or parentheses.
     '';
+
   }; # end of agents
 in
 {
