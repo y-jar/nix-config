@@ -120,6 +120,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     }; # end of mangowm
 
+    # [lidm] TUI display manager (tty7); sysjar/lidm vendors the unit, the
+    # input provides the packaging (assets/pkg/nix/lidm.nix)
+    lidm = {
+      url = "github:javalsai/lidm";
+      inputs.nixpkgs.follows = "nixpkgs";
+    }; # end of lidm
+
     # =====[ My addons]
     wall-jar = {
       url = "github:y-jar/wall-jar"; # [wallpapers i collected]
