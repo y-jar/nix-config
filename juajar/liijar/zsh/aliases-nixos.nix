@@ -16,6 +16,7 @@
   nhc = "nh clean all --keep 7"; # base cleanup
   nrs = "nixos-rebuild switch --sudo --flake ~/nix-config#${hostnm}"; # hard building
   nrt = "nixos-rebuild test --sudo --flake ~/nix-config#${hostnm}"; # testing
+  nhb = "nh os boot --accept-flake-config ~/nix-config#${hostnm}"; # base boot (set bootloader default only; the ONLY safe way to apply display-manager changes: nhb + reboot)
   buildiso = "sh ~/nix-config/resjar/nixbin/buildiso.sh"; # build recovery ISO
   repl = "nix repl --file ~/nix-config/juajar/liijar/zsh/repl.nix"; # poke the flake
   grepauth = "sudo grep AUTHENTIK_BOOTSTRAP_PASSWORD /var/lib/authentik/env"; # grep authentik bootstrap password
