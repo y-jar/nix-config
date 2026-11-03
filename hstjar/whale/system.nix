@@ -138,6 +138,7 @@
           allowUnencrypted = true; # plain http on the trusted LAN (no TLS terminator yet)
           machines.enable = true; # cockpit-machines (KVM/libvirt management)
           podman.enable = true; # cockpit-podman (container management)
+          files.enable = true; # cockpit-files (file browser)
           extraOrigins = [
             "http://192.168.1.23:9090"
             "https://192.168.1.23:9090"

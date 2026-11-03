@@ -28,6 +28,7 @@ let
   pluginPackages =
     lib.optional cfg.machines.enable pkgs.cockpit-machines
     ++ lib.optional cfg.podman.enable pkgs.cockpit-podman
+    ++ lib.optional cfg.files.enable pkgs.cockpit-files
     ++ cfg.extraPlugins;
 
   # this host's own net.nix (pure data; the same file the networking module
@@ -63,6 +64,7 @@ in
 
     machines.enable = lib.mkEnableOption "cockpit-machines (manage KVM/QEMU VMs via libvirt)";
     podman.enable = lib.mkEnableOption "cockpit-podman (manage containers)";
+    files.enable = lib.mkEnableOption "cockpit-files (file browser)";
 
     extraOrigins = lib.mkOption {
       type = lib.types.listOf lib.types.str;

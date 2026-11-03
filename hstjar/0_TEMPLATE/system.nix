@@ -240,6 +240,7 @@
           allowUnencrypted = false; # on a trusted LAN: allow http (warn logging)
           machines.enable = false; # cockpit-machines (manage KVM/QEMU VMs via libvirt)
           podman.enable = false; # cockpit-podman (manage containers)
+          files.enable = false; # cockpit-files (file browser)
           extraOrigins = [ ]; # extra CSP origins to allow, e.g. [ "https://docs.example.com" ]
           extraPlugins = [ ]; # extra cockpit plugin package paths
         }; # end of cockpit
