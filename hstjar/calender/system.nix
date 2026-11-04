@@ -104,13 +104,15 @@
             "hf.co/unsloth/Qwen3-14B-GGUF:Q4_K_M"
             # "hf.co/JonathanColetti/Qwen3.8-27B-Uncensored-GGUF:IQ2_M"
             "hf.co/unsloth/gemma-4-26B-A4B-it-GGUF:UD-IQ4_XS" # this one really likes mangos aparrently* (13.6GB + ~0.8GB KV @128k)
+            "hf.co/mradermacher/gemma-4-26B-A4B-it-ultra-uncensored-heretic-i1-GGUF:i1-IQ2_M"
             # "hf.co/unsloth/gemma-4-26B-A4B-it-GGUF:UD-Q3_K_XL" # smaller quant incase
             "hf.co/unsloth/gemma-4-12B-it-qat-GGUF:UD-Q4_K_XL" # explicit quant: bare ref resolves latest (404 config blob)
+            # "hf.co/HauhauCS/Gemma4-12B-QAT-Uncensored-HauhauCS-Balanced:Q4_K_M"
             "hf.co/unsloth/gemma-4-31B-it-GGUF:UD-IQ3_XXS" # 3-bit GGUF (~11.8GB): best VRAM headroom for long context on 16GB
             # these models dont seem to work for tool calling./
             # "hf.co/bartowski/Qwen2.5-Coder-14B-Instruct-GGUF:Q4_K_M"
             # "qwen2.5-coder:14b"
-            # quants: UD-IQ2_M
+            # quants: UD-IQ2_M i1-IQ2_M
           ];
           contextLength = 128000; # KV cache spills to RAM; avoids constant compaction
           keepAlive = "1m"; # keep models resident between calls (agent workflows)
