@@ -102,8 +102,11 @@
             # "qwen3.6:35b-a3b" # MoE 35B / 3B active: agentic coding, vision + thinking (hybrid GPU/CPU by design)
             "qwen3.5:9b" # dense 9B: fits fully in VRAM incl. KV cache, fast light tier(my current fav)
             "hf.co/unsloth/Qwen3-14B-GGUF:Q4_K_M"
-            "hf.co/JonathanColetti/Qwen3.8-27B-Uncensored-GGUF:IQ2_M"
-            "hf.co/unsloth/gemma-4-26B-A4B-it-GGUF:UD-Q3_K_M" # this one really likes mangos aparrently*
+            # "hf.co/JonathanColetti/Qwen3.8-27B-Uncensored-GGUF:IQ2_M"
+            "hf.co/unsloth/gemma-4-26B-A4B-it-GGUF:UD-IQ4_XS" # this one really likes mangos aparrently* (13.6GB + ~0.8GB KV @128k)
+            # "hf.co/unsloth/gemma-4-26B-A4B-it-GGUF:UD-Q3_K_XL" # smaller quant incase
+            "hf.co/unsloth/gemma-4-12B-it-qat-GGUF:UD-Q4_K_XL" # explicit quant: bare ref resolves latest (404 config blob)
+            "hf.co/unsloth/gemma-4-31B-it-GGUF:UD-IQ3_XXS" # 3-bit GGUF (~11.8GB): best VRAM headroom for long context on 16GB
             # these models dont seem to work for tool calling./
             # "hf.co/bartowski/Qwen2.5-Coder-14B-Instruct-GGUF:Q4_K_M"
             # "qwen2.5-coder:14b"
