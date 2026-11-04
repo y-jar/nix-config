@@ -110,6 +110,7 @@
             # these models dont seem to work for tool calling./
             # "hf.co/bartowski/Qwen2.5-Coder-14B-Instruct-GGUF:Q4_K_M"
             # "qwen2.5-coder:14b"
+            # quants: UD-IQ2_M
           ];
           contextLength = 128000; # KV cache spills to RAM; avoids constant compaction
           keepAlive = "1m"; # keep models resident between calls (agent workflows)
