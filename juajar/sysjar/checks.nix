@@ -68,6 +68,11 @@ let
       port = s.ai.port;
     }
     {
+      name = "ai (ollama-cpu)";
+      enable = s.ai.enable && s.ai.ollama.enable && s.ai.ollama.cpu.enable;
+      port = s.ai.ollama.cpu.port;
+    }
+    {
       name = "ai (open webui)";
       enable = s.ai.enable && s.ai.webui.enable;
       port = s.ai.webui.port;
@@ -77,6 +82,36 @@ let
   clashes = lib.filterAttrs (_: names: lib.length names > 1) (
     lib.groupBy' (acc: x: acc ++ [ x.name ]) [ ] (x: toString x.port) active
   );
+
+  # [ai models] aliases, nicknames, and the measured VRAM budget.
+  ai = s.ai.ollama;
+  validModelRef =
+    m:
+    builtins.match "hf\\.co/[^/]+/[^:]+(:.+)?$" m != null
+    || builtins.match "[a-zA-Z0-9._-]+(:[a-zA-Z0-9._-]+)?" m != null;
+  validNickname = n: builtins.match "[a-z0-9][a-z0-9._-]*" n != null;
+  modelNames = lib.attrNames ai.models;
+  displayNames = lib.mapAttrsToList (n: m: if m.display != null then m.display else n) ai.models;
+  gpuModels = lib.filterAttrs (_: m: m.target == "gpu") ai.models;
+  gpuModelNames = lib.attrNames gpuModels;
+  hasFootprint = m: m.weightsMB != null && m.kvMBPer1k != null;
+  withinBudget =
+    m:
+    (m.weightsMB + m.kvFixedMB + builtins.div (m.num_ctx + 999) 1000 * m.kvMBPer1k) <= ai.vramBudgetMB;
+  overBudget = builtins.filter (
+    n: hasFootprint gpuModels.${n} && !(withinBudget gpuModels.${n})
+  ) gpuModelNames;
+  modelSourceList = lib.mapAttrsToList (_: m: m.source) ai.models;
+  badRefs = builtins.filter (m: !(validModelRef m)) modelSourceList;
+  badNames = builtins.filter (n: !(validNickname n)) modelNames;
+  sourceCollisions = builtins.filter (n: builtins.elem n modelSourceList) modelNames;
+  cpuModels = lib.filterAttrs (_: m: m.target == "cpu") ai.models;
+  resolves =
+    ref:
+    ref == null
+    || builtins.hasAttr ref ai.models
+    || builtins.elem ref ai.activeModels
+    || builtins.any (m: m.source == ref) (lib.attrValues ai.models);
 in
 {
   assertions = [
@@ -110,6 +145,56 @@ in
       assertion =
         !(s.ai.enable && s.ai.ollama.enable && s.ai.ollama.kvCache != "f16") || s.ai.ollama.flashAttention;
       message = "sysset.ai.ollama.kvCache (${s.ai.ollama.kvCache}) requires flashAttention = true.";
+    }
+  ]
+  ++ lib.optionals (s.ai.enable && s.ai.ollama.enable) [
+    {
+      assertion = ai.modelSet == "custom" -> ai.models != { };
+      message = "sysset.ai.ollama.modelSet is \"custom\" but models is empty.";
+    }
+    {
+      assertion = ai.modelSet != "custom" -> ai.models == { };
+      message = "sysset.ai.ollama.models is set but modelSet = \"${ai.modelSet}\"; set modelSet = \"custom\" to use it.";
+    }
+    {
+      assertion = badRefs == [ ];
+      message = "Invalid Ollama model source(s): ${lib.concatStringsSep ", " badRefs}. Use name:tag or hf.co/org/repo:QUANT.";
+    }
+    {
+      assertion = badNames == [ ];
+      message = "Invalid models nickname(s): ${lib.concatStringsSep ", " badNames}. Use [a-z0-9][a-z0-9._-]*.";
+    }
+    {
+      assertion = sourceCollisions == [ ];
+      message = "models nickname collides with a source tag: ${lib.concatStringsSep ", " sourceCollisions}.";
+    }
+    {
+      assertion = lib.length displayNames == lib.length (lib.unique displayNames);
+      message = "Duplicate models display names: ${lib.concatStringsSep ", " displayNames}.";
+    }
+    {
+      assertion = ai.cpu.enable || lib.length (lib.attrNames cpuModels) == 0;
+      message = "models has target=\"cpu\" but sysset.ai.ollama.cpu.enable = false.";
+    }
+    {
+      assertion = overBudget == [ ];
+      message = "VRAM budget (${toString ai.vramBudgetMB}MB) exceeded for model(s): ${lib.concatStringsSep ", " overBudget}.";
+    }
+    {
+      assertion = ai.models == { } || !ai.syncModels;
+      message = "sysset.ai.ollama.syncModels = true would prune the generated aliases; set it to false when using `models`.";
+    }
+    {
+      assertion = resolves ai.smallModel;
+      message = "sysset.ai.ollama.smallModel is not a nickname, active model, or model source.";
+    }
+    {
+      assertion = resolves ai.mainModel;
+      message = "sysset.ai.ollama.mainModel is not a nickname, active model, or model source.";
+    }
+    {
+      assertion = ai.smallModel == null || ai.mainModel == null || ai.smallModel != ai.mainModel;
+      message = "sysset.ai.ollama.smallModel and mainModel must differ.";
     }
   ];
 }

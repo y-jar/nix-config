@@ -80,6 +80,54 @@ in
         default = 8192;
         description = "Active Ollama context length for the host (filled by bridge on NixOS).";
       };
+      aiModelDefs = lib.mkOption {
+        type = lib.types.attrsOf (
+          lib.types.submodule {
+            options = {
+              alias = lib.mkOption {
+                type = lib.types.str;
+                description = "Nickname / Ollama tag of the model.";
+              };
+              source = lib.mkOption {
+                type = lib.types.str;
+                description = "Ollama source tag the model is created from.";
+              };
+              num_ctx = lib.mkOption {
+                type = lib.types.int;
+                description = "Context length baked into the model.";
+              };
+              display = lib.mkOption {
+                type = lib.types.str;
+                description = "User-facing name (nickname unless overridden).";
+              };
+              target = lib.mkOption {
+                type = lib.types.enum [
+                  "gpu"
+                  "cpu"
+                ];
+                description = "Ollama instance that serves the model.";
+              };
+            };
+          }
+        );
+        default = { };
+        description = "Per-model definitions for opencode (filled by bridge on NixOS).";
+      };
+      aiSmallModel = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = "Small model nickname/source for opencode's small_model (filled by bridge).";
+      };
+      aiMainModel = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = "Primary model nickname/source (filled by bridge).";
+      };
+      aiCpuPort = lib.mkOption {
+        type = lib.types.port;
+        default = 11435;
+        description = "CPU sidecar Ollama port (filled by bridge).";
+      };
     };
 
     # [packages]
@@ -372,6 +420,10 @@ in
         type = lib.types.bool;
         default = true;
         description = "Install LM Studio (~2.3GiB). Disable to keep opencode only";
+      };
+      hermes = {
+        enable = lib.mkEnableOption "Hermes Agent CLI/TUI (NousResearch) + seed ~/.hermes/config.yaml";
+        desktop = lib.mkEnableOption "Hermes Desktop (Electron; requires hermes.enable)";
       };
     };
     git.enable = lib.mkOption {

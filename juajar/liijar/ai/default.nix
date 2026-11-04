@@ -32,8 +32,15 @@ let
     ]
     ++ lib.optionals (hjm.enable && hjm.lmstudio.enable) [
       pkgs.lmstudio # local LLM runtime (~2.3GiB)
+    ]
+    ++ lib.optionals (hjm.enable && hjm.hermes.enable) [
+      inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.default # Hermes CLI/TUI
+    ]
+    ++ lib.optionals (hjm.enable && hjm.hermes.enable && hjm.hermes.desktop) [
+      inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.desktop # Electron app
     ]; # end of aiPackages
-in {
+in
+{
   imports = [ ./opencode.nix ];
 
   config = {

@@ -115,6 +115,10 @@
       enable = aiEnable; # sets AI tools like opencode, llama.cpp
       opencode.enable = true; # opencode (NON-local models only)
       lmstudio.enable = false; # no LM Studio (saves ~2.3GiB)
+      hermes = {
+        enable = false; # NousResearch agent harness; full docs in 0_TEMPLATE
+        desktop = false;
+      };
     };
     dictation.enable = false;
     git.enable = true; # git

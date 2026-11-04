@@ -9,7 +9,7 @@
 #   - <set> = models.nix.ollamaSets.<set> in juajar/sysjar/ai/ollama.nix
 #   - llama presets: `services.llama-cpp.modelsPreset = models.llamaPresets`
 # Edit model availability here; hosts pick via `sysset.ai.ollama.modelSet`
-# (or `customModels` for fully bespoke lists).
+# (or `models` for fully bespoke lists).
 {
   # Curated ollama sets (modelSet = small | medium | large)
   ollamaSets = {

@@ -128,6 +128,10 @@
       enable = aiEnable; # sets AI tools like opencode, llama.cpp
       opencode.enable = true; # opencode CLI + GUI (keep even if local llama is off)
       lmstudio.enable = true; # LM Studio (~2.3GiB) set false to save space
+      hermes = {
+        enable = false; # NousResearch agent harness (CLI/TUI) + config seed
+        desktop = false; # Hermes Desktop (Electron)
+      };
     };
     dictation.enable = false; # push-to-talk dictation + meeting/VTT transcript (voxtype, F9)
     git.enable = true; # sets git

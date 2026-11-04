@@ -137,18 +137,90 @@
         ollama = {
           enable = false; # Ollama backend (multi-GPU)
           gpu = "rocm"; # Ollama backend: rocm (AMD) | cuda (NVIDIA) | vulkan | cpu
-          modelSet = "medium"; # small | medium | large | custom
-          contextLength = 8192; # KV cache spills to RAM; avoids constant compaction
-          # Prefer UUIDs from `rocminfo`; currently only the 9070 XT is installed.
-          # Append the 9060 XT UUID here after it is moved into this machine.
-          syncModels = true; # set true once to prune models outside the active set
-          devices = ""; # comma-separated GPU UUIDs/indices (empty = all detected). Looks like: devices = "GPU-6a91c53ed47a63c3,GPU-6a91c53ed47aawd";
-          customModels = [ ]; # model tags, used when modelSet = "custom"
-          keepAlive = "5m"; # OLLAMA_KEEP_ALIVE for loaded models
-          flashAttention = false; # OLLAMA_FLASH_ATTENTION (required for a quantized KV cache)
-          # kvCache: f16 | q8_0 | q4_0; shrinks KV cache (~4x at q4_0), needs flashAttention
-          kvCache = "f16";
+          modelSet = "medium"; # small | medium | large | custom (custom uses `models`)
           # NOTE: ai.ollama.activeModels is computed from modelSet (read-only)
+
+          # Global context default. Long-context models should use a `models`
+          # entry below instead of raising this for every model.
+          contextLength = 8192;
+          keepAlive = "5m"; # OLLAMA_KEEP_ALIVE; raise (e.g. "30m") for agent workflows
+          # OLLAMA_MAX_LOADED_MODELS: 1 stops a second model evicting the main one.
+          maxLoadedModels = 1;
+          # OLLAMA_NUM_PARALLEL: each extra slot multiplies KV-cache VRAM.
+          numParallel = 1;
+
+          # Prefer UUIDs from `rocminfo`; empty = all detected GPUs.
+          devices = ""; # e.g. "GPU-6a91c53ed47a63c3"
+          # true once to prune models outside the active set; keep false when
+          # using aliases, otherwise the prune deletes the generated aliases.
+          syncModels = false;
+          flashAttention = true; # required for a quantized KV cache
+          # kvCache: f16 | q8_0 | q4_0; q4_0 shrinks KV ~4x and enables long
+          # context on 16GB. Needs flashAttention = true.
+          kvCache = "q4_0";
+
+          # =============[per-model definitions]
+          # nickname -> { source, num_ctx, display?, target? }.
+          # The alias service creates `<nickname>:latest` with
+          #   FROM <source>
+          #   PARAMETER num_ctx <num_ctx>
+          # so the SAME weights can be served at different context lengths.
+          # opencode uses the nickname as the model id and display (unless
+          # `display` overrides it). Nicknames must match
+          # [a-z0-9][a-z0-9._-]* and must not collide with another nickname
+          # or a source tag.
+          #
+          # With modelSet = "custom", the unique sources (split by target)
+          # become the GPU/CPU pull lists. Duplicate sources are allowed: the
+          # same weights at two num_ctx values, or once gpu and once cpu.
+          #
+          # Example (left disabled on purpose): a small model on the CPU
+          # sidecar. CPU models skip the VRAM check; GPU footprints are
+          # optional (see below).
+          #   gem4e2b = {
+          #     source = "hf.co/unsloth/gemma-4-E2B-it-GGUF:Q4_K_M";
+          #     num_ctx = 32768;      # generous context; CPU has RAM to spare
+          #     target = "cpu";       # create it on the sidecar, not the GPU
+          #     # display = "gem4e2b"; # optional; defaults to the nickname
+          #   };
+          models = { };
+
+          # Nickname (preferred) or source tag for opencode's small_model and
+          # the lightweight explore subagent. A source tag resolves to its
+          # nickname automatically.
+          smallModel = null;
+          # Primary chat model nickname/source (used by the Hermes seed).
+          mainModel = null;
+          # Eval-time guard: weights + KV at num_ctx must stay under this MB.
+          # Keep below the card total to leave room for the compositor and
+          # compute buffers (16GB card: ~15000 is realistic).
+          vramBudgetMB = 15000;
+          # Optional per-GPU-model footprint. When both weightsMB and
+          # kvMBPer1k are set, the eval check verifies
+          #   weights + KV(num_ctx) <= vramBudgetMB
+          # for that model. Omit them and Ollama offloads at runtime instead.
+          # weightsMB = GGUF size; kvFixedMB = sliding-window term (0 for
+          # dense); kvMBPer1k = full-attention growth per 1000 tokens.
+          #   gem4-26b = {
+          #     source = "<source tag>";
+          #     num_ctx = 131072;
+          #     weightsMB = 0;
+          #     kvFixedMB = 0;
+          #     kvMBPer1k = 0.0;
+          #   };
+
+          # =============[CPU sidecar]
+          # A second, CPU-only Ollama instance for small models so they do not
+          # compete with the main model for VRAM. It uses its own model store:
+          # the server writes locks/temp files during load, so sharing the GPU
+          # store is unsafe. The gem4e2b example above targets this instance.
+          cpu = {
+            enable = false;
+            port = 11435; # GPU instance stays on ai.port
+            modelsDir = "/var/lib/ollama-cpu/models";
+            keepAlive = "1h"; # RAM is cheap; keep small models hot
+            contextLength = 32768;
+          };
         };
         port = 11434;
         webui = {

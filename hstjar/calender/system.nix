@@ -98,30 +98,80 @@
           enable = true; # Ollama backend (multi-GPU)
           gpu = "rocm"; # Ollama backend: rocm (AMD) | cuda (NVIDIA) | vulkan | cpu
           modelSet = "custom"; # small | medium | large | custom
-          customModels = [
-            # "qwen3.6:35b-a3b" # MoE 35B / 3B active: agentic coding, vision + thinking (hybrid GPU/CPU by design)
-            "qwen3.5:9b" # dense 9B: fits fully in VRAM incl. KV cache, fast light tier(my current fav)
-            "hf.co/unsloth/Qwen3-14B-GGUF:Q4_K_M"
-            # "hf.co/JonathanColetti/Qwen3.8-27B-Uncensored-GGUF:IQ2_M"
-            "hf.co/unsloth/gemma-4-26B-A4B-it-GGUF:UD-IQ4_XS" # this one really likes mangos aparrently* (13.6GB + ~0.8GB KV @128k)
-            "hf.co/mradermacher/gemma-4-26B-A4B-it-ultra-uncensored-heretic-i1-GGUF:i1-IQ2_M"
-            # "hf.co/unsloth/gemma-4-26B-A4B-it-GGUF:UD-Q3_K_XL" # smaller quant incase
-            "hf.co/unsloth/gemma-4-12B-it-qat-GGUF:UD-Q4_K_XL" # explicit quant: bare ref resolves latest (404 config blob)
-            # "hf.co/HauhauCS/Gemma4-12B-QAT-Uncensored-HauhauCS-Balanced:Q4_K_M"
-            "hf.co/unsloth/gemma-4-31B-it-GGUF:UD-IQ3_XXS" # 3-bit GGUF (~11.8GB): best VRAM headroom for long context on 16GB
-            # these models dont seem to work for tool calling./
-            # "hf.co/bartowski/Qwen2.5-Coder-14B-Instruct-GGUF:Q4_K_M"
-            # "qwen2.5-coder:14b"
-            # quants: UD-IQ2_M i1-IQ2_M
-          ];
-          contextLength = 128000; # KV cache spills to RAM; avoids constant compaction
-          keepAlive = "1m"; # keep models resident between calls (agent workflows)
+          # Global default only; each models entry bakes its own num_ctx
+          # into a `FROM <source> + PARAMETER num_ctx` wrapper.  32768 is the
+          # safe default for models without an alias.
+          contextLength = 32768;
+          keepAlive = "30m"; # keep the main model resident between agent turns
+          maxLoadedModels = 1; # never let a second model evict the main one
+          numParallel = 1; # each extra slot doubles KV-cache VRAM
           flashAttention = true; # required for quantized KV cache
-          kvCache = "q4_0"; # shrink KV cache ~4x (8GB -> 2GB at 32k on 27B)
+          kvCache = "q4_0"; # ~4x smaller KV cache; q8_0@64k is an A/B candidate
           # Prefer UUIDs from `rocminfo`; currently only the 9070 XT is installed.
           # Append the 9060 XT UUID here after it is moved into this machine.
           devices = "GPU-6a91c53ed47a63c3"; # exclude Granite Ridge iGPU
-          syncModels = true; # set true once to prune models outside the active set
+          syncModels = false; # one-time prune already done; aliases must survive
+
+          # Per-model context wrappers.  The nickname is the Ollama tag and the
+          # opencode model id (`<nickname>:latest`); display defaults to it.
+          models = {
+            gem4-26b = {
+              source = "hf.co/unsloth/gemma-4-26B-A4B-it-GGUF:UD-IQ4_XS";
+              num_ctx = 131072; # 13.6GB + ~0.8GB KV @128k: main model
+              weightsMB = 13600;
+              kvFixedMB = 56;
+              kvMBPer1k = 5.76;
+            };
+            gem4-26b-heretic = {
+              source = "hf.co/mradermacher/gemma-4-26B-A4B-it-ultra-uncensored-heretic-i1-GGUF:i1-IQ2_M";
+              num_ctx = 131072; # 10.4GB + ~0.8GB KV @128k
+              weightsMB = 10380;
+              kvFixedMB = 56;
+              kvMBPer1k = 5.76;
+            };
+            gem4-31b = {
+              source = "hf.co/unsloth/gemma-4-31B-it-GGUF:UD-IQ3_XXS";
+              num_ctx = 16384; # 11.8GB dense: 128k KV would spill hard :P
+              weightsMB = 11840;
+              kvFixedMB = 236;
+              kvMBPer1k = 23.04;
+            };
+            gem4-12b = {
+              source = "hf.co/unsloth/gemma-4-12B-it-qat-GGUF:UD-Q4_K_XL";
+              num_ctx = 32768;
+              weightsMB = 6720;
+              kvFixedMB = 94;
+              kvMBPer1k = 4.61;
+            };
+            qwen3-14b = {
+              source = "hf.co/unsloth/Qwen3-14B-GGUF:Q4_K_M";
+              num_ctx = 32768;
+              weightsMB = 9000;
+              kvFixedMB = 0;
+              kvMBPer1k = 46.08;
+            };
+            qwen35-9b = {
+              source = "qwen3.5:9b";
+              num_ctx = 32768;
+              weightsMB = 6600;
+              kvFixedMB = 0;
+              kvMBPer1k = 36.86;
+            };
+            gem4e2b = {
+              source = "hf.co/unsloth/gemma-4-E2B-it-GGUF:Q4_K_M";
+              num_ctx = 32768;
+              target = "cpu"; # sidecar; keeps the 26B resident on the GPU
+            };
+          };
+          mainModel = "gem4-26b";
+          smallModel = "gem4e2b"; # opencode small_model + explore subagent
+
+          vramBudgetMB = 15000; # 16GB card minus compositor/compute headroom
+
+          # CPU sidecar for the small model (separate store, separate port).
+          cpu = {
+            enable = true;
+          };
         };
 
         host = "127.0.0.1"; # keep local backend private to this machine

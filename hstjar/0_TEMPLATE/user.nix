@@ -154,6 +154,14 @@
       enable = aiEnable; # sets AI tools like opencode, llama.cpp
       opencode.enable = true; # opencode CLI + GUI (keep even if local llama is off)
       lmstudio.enable = true; # LM Studio (~2.3GiB) set false to save space
+      # Hermes Agent (NousResearch): an alternative agent harness, packaged by
+      # its own flake. The system side seeds ~/.hermes/config.yaml once (points
+      # at the local Ollama backend with the main alias and its num_ctx) and
+      # never overwrites it, so `hermes model` can change it afterwards.
+      hermes = {
+        enable = false; # CLI/TUI + one-time config seed
+        desktop = false; # Electron app (requires enable = true)
+      };
     };
     dictation.enable = false; # voxtype push-to-talk dictation + meeting/VTT transcript (F9)
     git.enable = true; # ~10mib - git + gh + lazygit

@@ -26,6 +26,9 @@ let
 
   # [ollama] model tags + context window are facts the bridge fills from sysset.ai
   # (usrset.system.*), so the opencode limits can never drift from what Ollama serves.
+  aiAliases = usrset.system.aiModelDefs or { };
+  aiSmallModel = usrset.system.aiSmallModel or null;
+
   ollamaModelTags =
     if (usrset.system.aiModels or [ ]) == [ ] then
       [
@@ -37,7 +40,8 @@ let
 
   ollamaContext = usrset.system.aiContextLength or 8192;
 
-  ollamaModels = lib.listToAttrs (
+  # Raw source tags: the debug provider, and the fallback when no aliases exist.
+  rawOllamaModels = lib.listToAttrs (
     map (
       model:
       lib.nameValuePair model {
@@ -51,6 +55,55 @@ let
       }
     ) ollamaModelTags
   );
+
+  # Aliases are the normal model list. The key is `<nickname>:latest` (the real
+  # Ollama tag); `name` is the short user-facing string. `input` reserves 1024
+  # tokens of the context for output so compaction does not fire early.
+  modelsForTarget =
+    target:
+    lib.listToAttrs (
+      lib.mapAttrsToList (
+        nickname: alias:
+        lib.nameValuePair "${nickname}:latest" {
+          name = alias.display;
+          tool_call = true;
+          limit = {
+            context = alias.num_ctx;
+            input = alias.num_ctx - 1024;
+            output = 8192;
+          };
+        }
+      ) (lib.filterAttrs (_: alias: alias.target == target) aiAliases)
+    );
+
+  gpuAliasModels = modelsForTarget "gpu";
+  cpuAliasModels = modelsForTarget "cpu";
+
+  aliasForSource = source: lib.filterAttrs (_: alias: alias.source == source) aiAliases;
+
+  resolveModelId =
+    ref:
+    if ref == null then
+      null
+    else if builtins.hasAttr ref aiAliases then
+      let
+        alias = aiAliases.${ref};
+      in
+      "${if alias.target == "cpu" then "ollama-cpu" else "ollama"}/${ref}:latest"
+    else
+      let
+        matches = aliasForSource ref;
+      in
+      if matches == { } then
+        "ollama/${ref}"
+      else
+        let
+          nickname = builtins.head (lib.attrNames matches);
+          alias = aiAliases.${nickname};
+        in
+        "${if alias.target == "cpu" then "ollama-cpu" else "ollama"}/${nickname}:latest";
+
+  smallModelId = resolveModelId aiSmallModel;
 
   # provider configuration (local llama.cpp + cloud Sonnet 5.5 overrides)
   settings = {
@@ -85,8 +138,18 @@ let
         options = {
           baseURL = "http://localhost:11434/v1";
         }; # end of options
-        models = ollamaModels;
+        models = if gpuAliasModels != { } then gpuAliasModels else rawOllamaModels;
       }; # end of ollama
+      # Raw source tags, kept for debugging pulls/quant behavior. Aliases are
+      # the normal list; these are the un-aliased tags exactly as Ollama sees them.
+      ollama-debug = {
+        npm = "@ai-sdk/openai-compatible";
+        name = "Ollama (raw tags)";
+        options = {
+          baseURL = "http://localhost:11434/v1";
+        }; # end of options
+        models = rawOllamaModels;
+      }; # end of ollama-debug
       lmstudio = {
         npm = "@ai-sdk/openai-compatible";
         name = "LM Studio (local)";
@@ -166,7 +229,24 @@ let
           };
         };
       }; # end of opencode-go provider
+    }
+    // lib.optionalAttrs (cpuAliasModels != { }) {
+      # CPU sidecar for small models; keeps the main model's VRAM untouched.
+      ollama-cpu = {
+        npm = "@ai-sdk/openai-compatible";
+        name = "Ollama (CPU sidecar)";
+        options = {
+          baseURL = "http://localhost:${toString (usrset.system.aiCpuPort or 11435)}/v1";
+        }; # end of options
+        models = cpuAliasModels;
+      }; # end of ollama-cpu
     }; # end of provider
+  }
+  // lib.optionalAttrs (smallModelId != null) {
+    small_model = smallModelId;
+    # Lightweight built-in explorer uses the small model; the build agent keeps
+    # the main model.
+    agent.explore.model = smallModelId;
   }; # end of settings
 
   # global instructions written to ~/.config/opencode/AGENTS.md

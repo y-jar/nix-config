@@ -97,6 +97,9 @@
           gpu = "cpu"; # Ollama backend: rocm | cuda | vulkan | cpu
           contextLength = 8192;
           devices = ""; # comma-separated GPU UUIDs/indices (empty = all detected)
+          # Full model/context/sidecar options (models, smallModel,
+          # mainModel, vramBudgetMB, inline footprints, cpu) are documented in
+          # hstjar/0_TEMPLATE/system.nix.
         };
         port = 11434;
         webui = {

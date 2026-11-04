@@ -19,6 +19,7 @@
   imports = [
     ./ollama.nix
     ./llama-cpp.nix
+    ./hermes.nix
   ];
 
   options.sysset.ai = {
