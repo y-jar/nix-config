@@ -276,25 +276,30 @@ in
     }; # end of ollama config
 
     # [aliases] per-model num_ctx wrappers (FROM <source> + PARAMETER num_ctx).
-    # Runs after the loader has settled, so first-boot pulls finish before we
-    # snapshot the sources. Missing sources are skipped, never fatal.
+    # Each alias polls for its own source (up to 30 min), so this is immune to
+    # loader restart/activating states and slow pulls. Missing sources are
+    # skipped, never fatal. No RemainAfterExit: a loader (re)start re-runs it.
     systemd.services.ollama-model-aliases = lib.mkIf (cfg.models != { }) {
       description = "Create/update Ollama model aliases with per-model num_ctx";
-      wantedBy = [ "ollama.service" ];
-      # Order after BOTH loaders' start so the wait loop below cannot race
-      # ahead of a pull that has not begun yet.
+      wantedBy = [
+        "ollama.service"
+        "ollama-model-loader.service"
+      ]
+      ++ lib.optional cfg.cpu.enable "ollama-cpu-model-loader.service";
       after = [
         "ollama.service"
         "ollama-model-loader.service"
       ]
       ++ lib.optional cfg.cpu.enable "ollama-cpu-model-loader.service";
       bindsTo = [ "ollama.service" ];
+      # A switch that changes the model map re-runs this unit even if the
+      # loaders did not restart.
+      restartTriggers = [ (builtins.toJSON cfg.models) ];
       path = [
         ollamaPackage
         pkgs.coreutils
         pkgs.gnugrep
         pkgs.gawk
-        pkgs.systemd
       ];
       serviceConfig = {
         Type = "oneshot";
@@ -315,14 +320,6 @@ in
           sleep 1
         done
 
-        # Let the model loader finish pulling; cap the wait so a stuck pull
-        # cannot block alias creation forever.
-        tries=0
-        while (systemctl is-active --quiet ollama-model-loader.service || systemctl is-active --quiet ollama-cpu-model-loader.service) && [ "$tries" -lt 360 ]; do
-          tries=$((tries + 1))
-          sleep 5
-        done
-
         create_alias() {
           host="$1"
           source="$2"
@@ -330,10 +327,18 @@ in
           ctx="$4"
           manifest="$5"
           export OLLAMA_HOST="$host"
-          if ! "$OLLAMA_BIN" list 2>/dev/null | awk 'NR > 1 {print $1}' | grep -qxF "$source"; then
-            echo "skip (source not pulled): $source"
-            return 0
-          fi
+          # Poll for this specific source instead of trusting loader state:
+          # Type=exec loaders pass through activating/restarting windows where
+          # `systemctl is-active` is false even though a pull is in progress.
+          tries=0
+          until "$OLLAMA_BIN" list 2>/dev/null | awk 'NR > 1 {print $1}' | grep -qxF "$source"; do
+            tries=$((tries + 1))
+            if [ "$tries" -ge 360 ]; then
+              echo "skip (source not pulled after wait): $source"
+              return 0
+            fi
+            sleep 5
+          done
           modelfile="$(mktemp)"
           printf 'FROM %s\nPARAMETER num_ctx %s\n' "$source" "$ctx" > "$modelfile"
           echo "alias: $source -> $name (num_ctx=$ctx)"
@@ -374,6 +379,14 @@ in
       '';
     };
 
+    # Run alias creation when the GPU pull list finishes. Type=exec loaders
+    # have no completion dependency, so use systemd's OnSuccess.
+    systemd.services.ollama-model-loader =
+      lib.mkIf (cfg.models != { } && (activeOllamaModels != [ ] || cfg.syncModels))
+        {
+          onSuccess = [ "ollama-model-aliases.service" ];
+        };
+
     # [cpu sidecar] a second Ollama instance on CPU for small models. Separate
     # store and port so it never competes with the GPU instance for VRAM.
     systemd.services.ollama-cpu = lib.mkIf cfg.cpu.enable {
@@ -411,6 +424,8 @@ in
       ];
       wants = [ "network-online.target" ];
       bindsTo = [ "ollama-cpu.service" ];
+      # Alias creation also runs when this pull list finishes.
+      onSuccess = [ "ollama-model-aliases.service" ];
       path = [
         pkgs.ollama-cpu
         pkgs.coreutils
@@ -424,7 +439,6 @@ in
       };
       serviceConfig = {
         Type = "oneshot";
-        RemainAfterExit = true;
         Restart = "on-failure";
         RestartSec = "5s";
       };
