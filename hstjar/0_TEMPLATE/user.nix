@@ -164,6 +164,11 @@
       };
     };
     dictation.enable = false; # voxtype push-to-talk dictation + meeting/VTT transcript (F9)
+    # [vpn] launch apps outside the Mullvad tunnel. Enable the shims first,
+    # then list packages (GUI; shim uses meta.mainProgram) or command strings
+    # (CLI; resolved on PATH). Example:
+    # mullvad.bypassEnable = true;
+    # mullvad.bypass = [ pkgs.firefox pkgs.discord "opencode" ];
     git.enable = true; # ~10mib - git + gh + lazygit
     tuneshon = {
       enable = false; # NixOS update tool (gui + cli) - set true to install it

@@ -83,6 +83,10 @@ let
     # fzf tab-completion (compinit ran above)
     source ${pkgs.fzf}/share/fzf/completion.zsh
 
+    # Mullvad bypass shims must win over user-local binaries.
+    ${lib.optionalString (hjm.system.mullvad && hjm.mullvad.bypassEnable) ''
+      export PATH="$HOME/.local/share/mullvad-bypass/bin:$PATH"
+    ''}
     # user-local binaries (webapp launchers, user scripts)
     export PATH="$HOME/.local/bin:$PATH"
 

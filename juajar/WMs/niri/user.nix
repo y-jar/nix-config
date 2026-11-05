@@ -44,8 +44,9 @@ let
 
   # exact browser bind line swapped to the per-host preferred browser.
   bLine = "    Mod+B hotkey-overlay-title=\"Open [B]rowser\" { spawn \"librewolf\"; }";
-  browserCmd = hjm.browsers.default or "firefox";
-  browserBind = "    Mod+B hotkey-overlay-title=\"Open [B]rowser\" { spawn \"${browserCmd}\"; }";
+  browserRaw = hjm.browsers.default or "firefox";
+  # VPN bypass is handled by the Mullvad shim dir from liijar/mullvad.
+  browserBind = "    Mod+B hotkey-overlay-title=\"Open [B]rowser\" { spawn \"${browserRaw}\"; }";
 
   # exact Mod+D launcher line swapped per shell.
   dLine = "    Mod+D hotkey-overlay-title=\"[D]isplay Launcher (shelljar)\" { spawn-sh \"shjctl toggleLauncher $(niri msg -j focused-output | jq -r .name)\"; }";

@@ -9,6 +9,7 @@
   config,
   lib,
   pkgs,
+  inputs,
   ...
 }:
 let
@@ -17,6 +18,10 @@ let
   # mullvad-vpn is a VPN, not a browser: mirror the system toggle instead of
   # leaking its ~300MiB onto every host with browsers enabled.
   mullvadEnabled = config.usrset.system.mullvad;
+
+  # unstable's mullvad-vpn is GUI-only; the daemon comes from unstable mullvad
+  # (system side, juajar/sysjar/networking).
+  unstablePkgs = inputs.nixpkgsUnstable.legacyPackages.${pkgs.stdenv.hostPlatform.system};
 
   # browser packages, gated per usrset.browsers toggle
   browserPackages =
@@ -28,7 +33,7 @@ let
       pkgs.browsh # browser within a TUI
     ]
     ++ lib.optionals mullvadEnabled [
-      pkgs.mullvad-vpn # VPN client 300Mib (mirrors sysset.networking.mullvad)
+      unstablePkgs.mullvad-vpn # VPN GUI 300Mib (mirrors sysset.networking.mullvad)
     ];
 in
 {

@@ -14,10 +14,16 @@
   hostnm,
   config,
   lib,
+  pkgs,
+  inputs,
   ...
 }:
 let
   cfg = config.sysset.networking;
+
+  # Mullvad from unstable: stable ships 2026.2; unstable 2026.5 is the
+  # daemon/CLI package (unstable's mullvad-vpn is GUI-only).
+  unstablePkgs = inputs.nixpkgsUnstable.legacyPackages.${pkgs.stdenv.hostPlatform.system};
 in
 {
   imports = [ ./fleet.nix ];
@@ -96,7 +102,14 @@ in
     })
 
     (lib.mkIf cfg.mullvad.enable {
-      services.mullvad-vpn.enable = true;
+      services.mullvad-vpn = {
+        enable = true;
+        package = unstablePkgs.mullvad; # daemon + mullvad-exclude (pinned to nixpkgs-unstable)
+      };
+      # Put liijar/mullvad's dedicated shim dir on the session PATH so the WM
+      # and .desktop launchers see the shims. This never adds ~/.local/bin; the
+      # dir is empty when usrset.mullvad.bypassEnable is false.
+      environment.sessionVariables.PATH = [ "$HOME/.local/share/mullvad-bypass/bin" ];
     })
   ];
 }

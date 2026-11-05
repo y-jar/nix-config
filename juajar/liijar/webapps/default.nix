@@ -85,6 +85,7 @@ let
         else
           "";
       extra = lib.concatStringsSep " " a.extraArgs;
+      # VPN bypass is handled by the Mullvad shim dir from liijar/mullvad.
       cmd =
         if a.mode == "tabbed" then
           ''${browser} "${a.url}"''

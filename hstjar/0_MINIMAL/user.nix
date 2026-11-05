@@ -121,6 +121,10 @@
       };
     };
     dictation.enable = false;
+    # [vpn] apps outside Mullvad: set bypassEnable = true, then list packages
+    # (GUI) or command strings (CLI). Example:
+    # mullvad.bypassEnable = true;
+    # mullvad.bypass = [ pkgs.firefox "opencode" ];
     git.enable = true; # git
     tuneshon.enable = false; # NixOS update tool (gui + cli)
     nueon.enable = false; # conlang editor/creation app

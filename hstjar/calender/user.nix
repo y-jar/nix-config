@@ -15,6 +15,7 @@
   niriEnable,
   mangoEnable,
   aiEnable,
+  pkgs,
   ...
 }:
 {
@@ -84,6 +85,19 @@
       enable = true;
       discord.enable = true;
       halloy.enable = false;
+    };
+    # Mullvad bypass is implemented but off on this host for now. Flip
+    # bypassEnable to try it. Entries are packages (GUI; shim uses
+    # meta.mainProgram) or command strings (CLI; resolved on PATH).
+    mullvad = {
+      bypassEnable = false; # shims disabled on this host for now
+      bypass = [
+        pkgs.firefox
+        pkgs.chromium
+        pkgs.discord
+        pkgs.vesktop
+        "opencode" # TUI; add "opencode-desktop" for the GUI
+      ]; # librewolf stays tunneled
     };
     espanso = import ../../juajar/data/espansoconf.nix { }; # espanso text expander
     flatpak.enable = false; # sets flatpak and adds bazaar

@@ -64,6 +64,7 @@ let
   keybindCommaNew = ''hl.bind(mainMod .. " + comma", hl.dsp.exec_cmd("shjctl close"))'';
 
   # Swap the hardcoded preferred browser var to the per-host browser.
+  # VPN bypass is handled by the Mullvad shim dir from liijar/mullvad.
   varsBrowser = ''browser = "librewolf"'';
   varsBrowserNew = ''browser = "${config.usrset.browsers.default or "firefox"}"'';
 

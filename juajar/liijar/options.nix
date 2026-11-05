@@ -130,6 +130,36 @@ in
       };
     };
 
+    # [vpn]
+    mullvad = {
+      bypassEnable = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Install the Mullvad bypass shims. Off by default so the shim directory and PATH entry stay inert until you opt in.";
+      };
+      bypass = lib.mkOption {
+        type = lib.types.listOf (lib.types.either lib.types.package lib.types.str);
+        default = [ ];
+        description = ''
+          Launch these apps outside the VPN tunnel via `mullvad-exclude`.
+          Only used when `bypassEnable = true`.
+
+          Entries can be:
+          - packages (e.g. `pkgs.firefox`): a shim is named after the package's
+            `meta.mainProgram` and execs that package's absolute binary. Use
+            this for GUI apps and to pin an exact version.
+          - strings (e.g. `"opencode"`): a shim with that command name resolves
+            the real command from PATH while skipping the Mullvad shim
+            directory, then execs it outside the tunnel.
+
+          Shims live in `~/.local/share/mullvad-bypass/bin`, not
+          `~/.local/bin`. They intercept terminal launches and .desktop entries
+          whose Exec uses the same bare command. Linux Mullvad has no persistent
+          per-app allowlist, so every launch goes through the shim.
+        '';
+      };
+    };
+
     # [packages]
     # false = deliver configs only: every `packages` list is dropped so the host's own
     # package manager (apt on debian) owns the binaries. See liijar/platform.nix.
