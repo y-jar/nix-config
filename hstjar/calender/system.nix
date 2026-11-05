@@ -111,6 +111,7 @@
           # Append the 9060 XT UUID here after it is moved into this machine.
           devices = "GPU-6a91c53ed47a63c3"; # exclude Granite Ridge iGPU
           syncModels = false; # one-time prune already done; aliases must survive
+          autoPrune = true; # remove sources/aliases not declared in `models`
 
           # Per-model context wrappers.  The nickname is the Ollama tag and the
           # opencode model id (`<nickname>:latest`); display defaults to it.
@@ -122,20 +123,20 @@
               kvFixedMB = 56;
               kvMBPer1k = 5.76;
             };
-            gem4-26b-heretic = {
-              source = "hf.co/mradermacher/gemma-4-26B-A4B-it-ultra-uncensored-heretic-i1-GGUF:i1-IQ2_M";
-              num_ctx = 131072; # 10.4GB + ~0.8GB KV @128k
-              weightsMB = 10380;
-              kvFixedMB = 56;
-              kvMBPer1k = 5.76;
-            };
-            gem4-31b = {
-              source = "hf.co/unsloth/gemma-4-31B-it-GGUF:UD-IQ3_XXS";
-              num_ctx = 16384; # 11.8GB dense: 128k KV would spill hard :P
-              weightsMB = 11840;
-              kvFixedMB = 236;
-              kvMBPer1k = 23.04;
-            };
+            # gem4-26b-heretic = {
+            #   source = "hf.co/mradermacher/gemma-4-26B-A4B-it-ultra-uncensored-heretic-i1-GGUF:i1-IQ2_M";
+            #   num_ctx = 131072; # 10.4GB + ~0.8GB KV @128k
+            #   weightsMB = 10380;
+            #   kvFixedMB = 56;
+            #   kvMBPer1k = 5.76;
+            # };
+            # gem4-31b = {
+            #   source = "hf.co/unsloth/gemma-4-31B-it-GGUF:UD-IQ3_XXS";
+            #   num_ctx = 16384; # 11.8GB dense: 128k KV would spill hard :P
+            #   weightsMB = 11840;
+            #   kvFixedMB = 236;
+            #   kvMBPer1k = 23.04;
+            # };
             gem4-12b = {
               source = "hf.co/unsloth/gemma-4-12B-it-qat-GGUF:UD-Q4_K_XL";
               num_ctx = 32768;
@@ -143,13 +144,13 @@
               kvFixedMB = 94;
               kvMBPer1k = 4.61;
             };
-            qwen3-14b = {
-              source = "hf.co/unsloth/Qwen3-14B-GGUF:Q4_K_M";
-              num_ctx = 32768;
-              weightsMB = 9000;
-              kvFixedMB = 0;
-              kvMBPer1k = 46.08;
-            };
+            # qwen3-14b = {
+            #   source = "hf.co/unsloth/Qwen3-14B-GGUF:Q4_K_M";
+            #   num_ctx = 32768;
+            #   weightsMB = 9000;
+            #   kvFixedMB = 0;
+            #   kvMBPer1k = 46.08;
+            # };
             qwen35-9b = {
               source = "qwen3.5:9b";
               num_ctx = 32768;

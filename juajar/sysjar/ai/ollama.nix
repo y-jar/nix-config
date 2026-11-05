@@ -53,6 +53,15 @@ let
     )
   );
 
+  gpuAliasNames = lib.attrNames (lib.filterAttrs (_: model: model.target == "gpu") cfg.models);
+  cpuAliasNames = lib.attrNames (lib.filterAttrs (_: model: model.target == "cpu") cfg.models);
+
+  # `ollama list` shows aliases with :latest, sources keep their own tag.
+  withLatest = names: names ++ map (name: "${name}:latest") names;
+
+  gpuAllowedModels = lib.unique (activeOllamaModels ++ withLatest gpuAliasNames);
+  cpuAllowedModels = lib.unique (activeCpuModels ++ withLatest cpuAliasNames);
+
   ollamaHost = "http://127.0.0.1:${toString aiCfg.port}";
   cpuHost = "http://127.0.0.1:${toString cfg.cpu.port}";
 
@@ -63,12 +72,25 @@ let
         name: alias:
         "create_alias ${
           lib.escapeShellArg (if target == "cpu" then cpuHost else ollamaHost)
-        } ${lib.escapeShellArg alias.source} ${lib.escapeShellArg name} ${toString alias.num_ctx} \"$STATE/${target}.new\""
+        } ${lib.escapeShellArg alias.source} ${lib.escapeShellArg name} ${toString alias.num_ctx}"
       ) (lib.filterAttrs (_: model: model.target == target) cfg.models)
     );
 
   gpuAliasCalls = mkAliasCalls "gpu";
   cpuAliasCalls = mkAliasCalls "cpu";
+
+  gpuAllowedFile = lib.optionalString cfg.autoPrune ''
+    printf '%s\n' ${lib.escapeShellArgs gpuAllowedModels} > "$STATE/gpu.allowed"
+  '';
+  cpuAllowedFile = lib.optionalString cfg.autoPrune ''
+    printf '%s\n' ${lib.escapeShellArgs cpuAllowedModels} > "$STATE/cpu.allowed"
+  '';
+  gpuPrune = lib.optionalString cfg.autoPrune ''
+    prune_models ${lib.escapeShellArg ollamaHost} "$STATE/gpu.allowed"
+  '';
+  cpuPrune = lib.optionalString cfg.autoPrune ''
+    prune_models ${lib.escapeShellArg cpuHost} "$STATE/cpu.allowed"
+  '';
 in
 {
   options.sysset.ai.ollama = {
@@ -113,6 +135,11 @@ in
       default = false;
       description = "Remove Ollama models not listed in the active set";
     }; # end of ollama.syncModels
+    autoPrune = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Remove installed sources and aliases not declared in `models` (custom model set only). Unlike syncModels, this keeps generated aliases.";
+    }; # end of ollama.autoPrune
     keepAlive = lib.mkOption {
       type = lib.types.str;
       default = "5m";
@@ -302,7 +329,9 @@ in
         pkgs.gawk
       ];
       serviceConfig = {
-        Type = "oneshot";
+        # The script polls up to 30 min for late-pulled sources. Keep it out of
+        # switch-to-configuration: a oneshot here blocks nht/nhs on model changes.
+        Type = "exec";
         StateDirectory = "ollama-aliases";
       };
       script = ''
@@ -325,7 +354,6 @@ in
           source="$2"
           name="$3"
           ctx="$4"
-          manifest="$5"
           export OLLAMA_HOST="$host"
           # Poll for this specific source instead of trusting loader state:
           # Type=exec loaders pass through activating/restarting windows where
@@ -344,37 +372,30 @@ in
           echo "alias: $source -> $name (num_ctx=$ctx)"
           "$OLLAMA_BIN" create "$name" -f "$modelfile"
           rm -f "$modelfile"
-          echo "$name" >> "$manifest"
         }
 
-        : > "$STATE/gpu.new"
-        ${gpuAliasCalls}
-        if [ -f "$STATE/gpu.txt" ]; then
-          export OLLAMA_HOST=${lib.escapeShellArg ollamaHost}
-          while IFS= read -r old; do
-            [ -z "$old" ] && continue
-            if ! grep -qxF "$old" "$STATE/gpu.new"; then
-              echo "prune: $old"
-              "$OLLAMA_BIN" rm "$old" || true
+        prune_models() {
+          host="$1"
+          allowed="$2"
+          export OLLAMA_HOST="$host"
+          "$OLLAMA_BIN" list 2>/dev/null | awk 'NR > 1 {print $1}' | while IFS= read -r model; do
+            [ -z "$model" ] && continue
+            if grep -qxF "$model" "$allowed"; then
+              continue
             fi
-          done < "$STATE/gpu.txt"
-        fi
-        sort -u "$STATE/gpu.new" > "$STATE/gpu.txt"
+            echo "prune: $model"
+            "$OLLAMA_BIN" rm "$model" || true
+          done
+        }
+
+        ${gpuAllowedFile}
+        ${gpuPrune}
+        ${gpuAliasCalls}
 
         ${lib.optionalString cfg.cpu.enable ''
-          : > "$STATE/cpu.new"
+          ${cpuAllowedFile}
+          ${cpuPrune}
           ${cpuAliasCalls}
-          if [ -f "$STATE/cpu.txt" ]; then
-            export OLLAMA_HOST=${lib.escapeShellArg cpuHost}
-            while IFS= read -r old; do
-              [ -z "$old" ] && continue
-              if ! grep -qxF "$old" "$STATE/cpu.new"; then
-                echo "prune: $old"
-                "$OLLAMA_BIN" rm "$old" || true
-              fi
-            done < "$STATE/cpu.txt"
-          fi
-          sort -u "$STATE/cpu.new" > "$STATE/cpu.txt"
         ''}
       '';
     };
