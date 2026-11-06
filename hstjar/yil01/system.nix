@@ -127,6 +127,7 @@
       }; # end of virt
       portal.enable = true; # XDG portal file pickers
       polkit.enable = true; # polkit authentication agent (gnome polkit)
+      networking.mullvad.enable = true; # mullvad vpn ~43Mib
       # =============[software]^^^
 
       # =============[Server]
