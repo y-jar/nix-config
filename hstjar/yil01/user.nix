@@ -12,9 +12,7 @@
   mangoEnable,
   aiEnable,
   ...
-}:
-
-{
+}: {
   usrset = {
     name = "y-jar"; # [CHANGE THIS] for git
     email = "park.7qs@gmail.com"; # [CHANGE THIS] for git
@@ -81,7 +79,7 @@
       halloy.enable = true;
     };
 
-    espanso = import ../../juajar/data/espansoconf.nix { enable = true; }; # espanso text expander
+    espanso = import ../../juajar/data/espansoconf.nix {enable = true;}; # espanso text expander
     flatpak.enable = false;
     nautilus.enable = true;
     yazi.enable = true;
@@ -125,8 +123,8 @@
     dictation.enable = false;
     git.enable = true;
     tuneshon.enable = false; # NixOS update tool (gui + cli)
-    nueon.enable = true; # conlang editor/creation app
-    nueon.binary = true; # use the prebuilt release .deb
+    nueon.enable = false; # conlang editor/creation app
+    nueon.binary = false; # use the prebuilt release .deb
     bluetooth.enable = true;
     fastfetch.enable = true;
     dev = {
