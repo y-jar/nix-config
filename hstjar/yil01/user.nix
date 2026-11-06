@@ -87,9 +87,9 @@
     yazi.enable = true;
     ranger.enable = false;
     media = {
-      enable = false;
+      enable = true;
       mpv.enable = true;
-      downloaders.enable = false;
+      downloaders.enable = true;
       musicApps.enable = false;
       audioEditor.enable = false;
       viewers.enable = false;
