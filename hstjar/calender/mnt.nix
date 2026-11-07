@@ -16,6 +16,7 @@
       "nofail" # prevents boot failure when the drive isn't plugged in
       "noauto" # prevents the drive from being mounted automatically at boot
       "x-systemd.automount" # mounts it automatically the first time something accesses the mountpoint
+      "x-systemd.device-timeout=1s" # fail fast when unplugged: wine's MountMgr stats every mount at startup and otherwise blocks ~90s per stat
     ];
   };
   fileSystems."/mnt/uijar" = {
@@ -25,6 +26,7 @@
       "nofail" # prevents boot failure when the drive isn't plugged in
       "noauto" # prevents the drive from being mounted automatically at boot
       "x-systemd.automount" # mounts it automatically the first time something accesses the mountpoint
+      "x-systemd.device-timeout=1s" # same: unplugged drive must not stall proton games ~90s per access
     ];
   };
 }
