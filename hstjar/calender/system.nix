@@ -5,9 +5,7 @@
 # -=-=-=-=-=-=-=-=-=-=-=
 # goal: Host calender: system-level toggle sheet (sysset).
 # -=-=-=-=-=-=-=-=-=-=-=
-{ ... }:
-
-{
+{...}: {
   config = {
     system.stateVersion = "26.05"; # [first-install marker: do NOT bump]
     #            [system state version from first install]
@@ -16,8 +14,8 @@
     sysset = {
       # =============[users]
       mainUser = "jar";
-      users = [ "jar" ];
-      adminUsers = [ "jar" ];
+      users = ["jar"];
+      adminUsers = ["jar"];
       userDescriptions = {
         jar = "jar";
       };
@@ -95,7 +93,7 @@
           gpu = "rocm"; # llama.cpp backend: rocm (AMD) | cuda (NVIDIA) | cpu
         };
         ollama = {
-          enable = true; # Ollama backend (multi-GPU)
+          enable = false; # Ollama backend (multi-GPU)
           gpu = "rocm"; # Ollama backend: rocm (AMD) | cuda (NVIDIA) | vulkan | cpu
           modelSet = "custom"; # small | medium | large | custom
           # Global default only; each models entry bakes its own num_ctx
@@ -111,7 +109,7 @@
           # Append the 9060 XT UUID here after it is moved into this machine.
           devices = "GPU-6a91c53ed47a63c3"; # exclude Granite Ridge iGPU
           syncModels = false; # one-time prune already done; aliases must survive
-          autoPrune = true; # remove sources/aliases not declared in `models`
+          autoPrune = false; # remove sources/aliases not declared in `models`
 
           # Per-model context wrappers.  The nickname is the Ollama tag and the
           # opencode model id (`<nickname>:latest`); display defaults to it.
@@ -143,7 +141,7 @@
               target = "cpu"; # sidecar; keeps the 26B resident on the GPU
             };
           };
-          mainModel = "qwen3-27b";
+          mainModel = "gem4-26b";
           smallModel = "gem4e2b"; # opencode small_model + explore subagent
 
           vramBudgetMB = 15000; # 16GB card minus compositor/compute headroom
@@ -222,7 +220,7 @@
         mysql = {
           enable = true;
           flavor = "mysql"; # Oracle MySQL 8.x (pkgs.mysql84); switch to "mariadb" anytime
-          databases = [ "bank" ]; # CIT 244 banking project
+          databases = ["bank"]; # CIT 244 banking project
           users = [
             {
               name = "jar"; # unix-socket auth (no password) for the local Python app
@@ -234,7 +232,7 @@
           workbench = true; # mysql-workbench GUI (docs/screenshots)
           backup = {
             enable = true;
-            databases = [ "bank" ];
+            databases = ["bank"];
           }; # end of backup
         }; # end of mysql
       }; # end of server

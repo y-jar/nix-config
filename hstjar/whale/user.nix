@@ -65,7 +65,7 @@
     syncthing.enable = false; # file sync (web UI at localhost:8384)
     editors = {
       enable = true; # sets all editors
-      vscodium.enable = true; # sets vscodium
+      vscodium.enable = false; # sets vscodium
       zed.enable = false; # sets zed
       obsidian.enable = false; # sets obsidian
       nvf.enable = true; # sets nvf config for neovim [~2G]
@@ -75,7 +75,7 @@
     }; # end of editors
     chatApps = {
       enable = false;
-      discord.enable = true;
+      discord.enable = false;
       halloy.enable = false;
     };
     espanso = import ../../juajar/data/espansoconf.nix {enable = false;}; # espanso text expander [headless server, no graphical session]
@@ -94,7 +94,7 @@
       viewers.enable = false; # constrict, anki
       defaultApps.enable = true; # default mime apps + loupe/showtime/file-roller
     };
-    keepass.enable = true; # sets keepassxc
+    keepass.enable = false; # sets keepassxc
     gaming = {
       prism.enable = false; # sets prismlauncher [minecraft]
       heroic.enable = false; # sets heroic [gog, epic.. other]
@@ -114,12 +114,12 @@
     # =========[creative tools]^^^
 
     # =========[management]
-    inputMethods.japanese.enable = true; # sets japanese input
+    inputMethods.japanese.enable = false; # sets japanese input
     inputMethods.korean.enable = false; # sets korean input
     ai = {
       enable = aiEnable; # sets AI tools like opencode, llama.cpp
       opencode.enable = true; # opencode CLI + GUI (keep even if local llama is off)
-      lmstudio.enable = true; # LM Studio (~2.3GiB) set false to save space
+      lmstudio.enable = false; # LM Studio (~2.3GiB) set false to save space
     };
     dictation.enable = false; # voxtype push-to-talk dictation + meeting/VTT transcript (F9)
     git.enable = true; # sets git

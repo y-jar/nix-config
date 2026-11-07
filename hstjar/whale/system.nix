@@ -17,7 +17,7 @@
 # And remember, your configuration is yours to customize.
 # After you're done, head over to ./user.nix to configure your user!
 #*/-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-{ ... }: {
+{...}: {
   config = {
     system.stateVersion = "26.05"; # [first-install marker: do NOT bump]
     #            [system state version from first install]
@@ -26,8 +26,8 @@
     sysset = {
       # =============[users]
       mainUser = "jar";
-      users = [ "jar" ];
-      adminUsers = [ "jar" ];
+      users = ["jar"];
+      adminUsers = ["jar"];
       userDescriptions = {
         jar = "jar";
       };
@@ -74,7 +74,7 @@
       };
       boot.quiet = false; # silence kernel/udev/systemd startup logs
       boot.fastMenu = false; # set boot loader timeout to 1 second
-      plymouth.enable = true; # custom boot splash logo
+      plymouth.enable = false; # custom boot splash logo
       neverSleep.enable = true; # disable system idle sleep
       bluetooth.enable = false; # sets blueman in home packages
       automount.enable = true; # auto-mount removable media (udisks2)
@@ -85,7 +85,7 @@
       tlp.cpuEppOnBattery = "balance_power"; # (default|performance|balance_performance|balance_power|power)
       tlp.platformProfileOnBattery = "balanced"; # (cool|quiet|balanced|performance)
       tlp.pcieAspmOnBattery = "default"; # (default|performance|powersave|powersupersave)
-      powerProfiles.enable = false;
+      powerProfiles.enable = true;
       audio = {
         enable = true; # sets audio and adds some apps
         addon.enable = false; # adds my audio setup
@@ -97,9 +97,9 @@
       nix.storeClean.enable = true; # auto weekly Nix GC (--delete-older-than 14d)
       nix.nixpkgsYoinks.enable = false;
       ai = {
-        enable = false; # sets AI tools (llama.cpp, opencode, etc.)
+        enable = true; # sets AI tools (llama.cpp, opencode, etc.)
         llama = {
-          enable = true; # local llama.cpp (set false to use opencode/non-local only)
+          enable = false; # local llama.cpp (set false to use opencode/non-local only)
           gpu = "rocm"; # llama.cpp backend: rocm (AMD) | cuda (NVIDIA) | cpu
         };
         port = 11434;
