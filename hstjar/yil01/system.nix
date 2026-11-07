@@ -97,9 +97,9 @@
       nix.unfree.enable = true; # allow unfree packages (spotify, chromium, vscodium, steam, ...)
       nix.nixpkgsYoinks.enable = true;
       ai = {
-        enable = false; # ~2gib - llama.cpp + models (auto-downloaded via models-preset)
+        enable = true; # ~2gib - llama.cpp + models (auto-downloaded via models-preset)
         llama = {
-          enable = true; # local llama.cpp (set false to use opencode/non-local only)
+          enable = false; # local llama.cpp (set false to use opencode/non-local only)
           gpu = "rocm"; # llama.cpp backend: rocm (AMD) | cuda (NVIDIA) | cpu
         };
         port = 11434;

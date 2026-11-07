@@ -128,7 +128,7 @@
               num_ctx = 128000;
               weightsMB = 9000;
               kvFixedMB = 0;
-              kvMBPer1k = 46.08; # 9000MB weights + (131 * 46.08)MB KV ≈ 15036MB total VRAM
+              kvMBPer1k = 46.08; # 9000MB weights + (131 * 46.08)MB KV ≈ 15036MB total VRAM... UHG
             };
             qwen35-9b = {
               source = "qwen3.5:9b";
