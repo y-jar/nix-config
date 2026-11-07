@@ -27,13 +27,5 @@
       "x-systemd.automount" # mounts it automatically the first time something accesses the mountpoint
     ];
   };
-  fileSystems."/mnt/xtramda" = {
-    device = "/dev/disk/by-uuid/cb808d57-7f86-40a3-8c1f-624f3c3334f0";
-    fsType = "btrfs";
-    options = [
-      "nofail" # prevents boot failure when the drive isn't plugged in
-      "noauto" # prevents the drive from being mounted automatically at boot
-      "x-systemd.automount" # mounts it automatically the first time something accesses the mountpoint
-    ];
-  };
+
 }
