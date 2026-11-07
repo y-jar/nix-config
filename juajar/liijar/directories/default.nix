@@ -16,7 +16,7 @@
 let
   dirSetup = ''
     # [create jar directories]
-    mkdir -p ~/resjar ~/rotjar ~/pic-jar ~/musicjar ~/kilnjar ~/artjar ~/entjar ~/entjar/mdachapters ~/docjar ~/vidjar ~/Downloads
+    mkdir -p ~/resjar ~/rotjar ~/pic-jar ~/musicjar ~/kilnjar ~/artjar ~/entjar ~/entjar/mdachapters ~/docjar ~/vidjar ~/Downloads ~/Projects ~/picjar/shotbin
   '';
 in
 {

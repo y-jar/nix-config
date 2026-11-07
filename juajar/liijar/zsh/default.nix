@@ -51,7 +51,7 @@ let
     function y() {
       local tmp="$(mktemp -t "yazi-cwdXXXXXX")" cwd
       yazi "$@" --cwd-file="$tmp"
-      if cwd="$(command cat -- "$tmp")"; then
+      if cwd="$(command cat -- "$tmp" 2>/dev/null)" && [[ -n "$cwd" && -d "$cwd" ]]; then
         builtin cd -- "$cwd"
       fi
       rm -f -- "$tmp"

@@ -3,7 +3,7 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: Host calender: imports YilyoSeal drive and others
+# goal: Host yil01: imports YilyoSeal drive and others
 # -=-=-=-=-=-=-=-=-=-=-=
 {
   ...

@@ -70,11 +70,11 @@ let
     [[manager.prepend_keymap]]
     desc = "Go to screenshots"
     on = ["g", "s"]
-    run = "cd ~/Screenshots"
+    run = "cd ~/picjar/shotbin"
 
     [[manager.prepend_keymap]]
     on = ["@"]
-    run = "shell ' \"$@\"' --cursor=0 --interactive"
+    run = "shell \"$@\" --cursor=0 --interactive"
 
     [[manager.prepend_keymap]]
     on = ["<C-h>"]
