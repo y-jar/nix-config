@@ -10,21 +10,18 @@
   pkgs,
   lib,
   ...
-}:
-let
+}: let
   cfg = config.sysset.boot;
   base = config.sysset.base;
 
   # package-group toggle that defaults ON (a minimal host opts out with false)
-  mkOn =
-    description:
-    {
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        inherit description;
-      };
+  mkOn = description: {
+    enable = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      inherit description;
     };
+  };
 
   # Derived flag: does this host run any window manager / desktop environment?
   # Headless/server/VM hosts (no WM/DE) skip WM-dependent session variables.
@@ -36,8 +33,7 @@ let
     || (config.sysset.gnome.enable or false)
     || (config.sysset.cinnamon.enable or false)
     || (config.sysset.cosmic.enable or false);
-in
-{
+in {
   options = {
     sysset = {
       boot = {
@@ -105,7 +101,7 @@ in
       ];
     };
     environment = {
-      shells = [ pkgs.zsh ];
+      shells = [pkgs.zsh];
       # WM/DE-dependent session variables. Skipped on headless/server/VM hosts.
       sessionVariables = lib.optionalAttrs hasDesktop {
         NIXOS_OZONE_WL = "1"; # nudges Electron/Chrome apps to use Wayland
@@ -142,6 +138,7 @@ in
           pkgs.usbutils # lsusb
           pkgs.killall # kill by name
           pkgs.ntfs3g # read/write NTFS
+          pkgs.dysk
         ])
 
         # [image format support]
