@@ -59,7 +59,7 @@
                 ];
                 networking.hostName = "recovery";
                 services.openssh.enable = true;
-                boot.zfs.forceImportRoot = false; # recommended; silence zfs warning
+                boot.zfs.forceImportRoot = false; # recommended; silence zfs warning :)
                 users.users.root.initialHashedPassword = lib.mkForce null; # silence pw warning; "nixos" still wins
                 users.users.root.initialPassword = "nixos";
                 system.stateVersion = "26.05";
