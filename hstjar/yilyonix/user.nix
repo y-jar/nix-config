@@ -103,15 +103,15 @@
     # =========[appstream]^^^
 
     # =========[creative tools]
-    art = {
-      enable = false; # art master toggle
+    creation = {
+      enable = false; # creation master toggle
       imageTools.enable = false; # krita, gimp, inkscape, ...
+      obs.enable = false; # sets up obs studio
+      kdenlive.enable = false; # sets kdenlive
       threeD.enable = false; # blender, blockbench
       astronomy.enable = false; # stellarium, celestia
     };
     office.enable = false; # sets libreoffice and other apps
-    obs.enable = false; # sets up obs studio
-    kdenlive.enable = false; # sets kdenlive
     # =========[creative tools]^^^
 
     # =========[management]

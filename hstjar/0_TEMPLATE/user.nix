@@ -67,6 +67,7 @@
     # then:  tablets.<key>.enable = true;
     tablets.xppen = {
       enable = false; # XP-Pen Artist 13.3 Pro (identity from juajar/data/tabletconf.nix)
+      driver = "opentabletdriver"; # default: otd-gui for buttons/pressure; "libinput" to opt out
       # match = "model:PRODUCT_NAME"; # override the catalogued EDID match for new devices
     };
     # tablets.myTablet = { enable = true; match = "model:PRODUCT_NAME"; }; # uncatalogued
@@ -136,15 +137,16 @@
     # =========[appstream]^^^
 
     # =========[creative tools]
-    art = {
-      enable = false; # art master toggle
+    creation = {
+      enable = false; # creation master toggle
       imageTools.enable = false; # krita, gimp, inkscape, ...
+      kritaXWayland.enable = false; # krita pen-button crash workaround (KDE 524685)
+      obs.enable = false; # ~400mib - OBS Studio + plugins
+      kdenlive.enable = false; # sets kdenlive
       threeD.enable = false; # blender, blockbench
       astronomy.enable = false; # stellarium, celestia
     };
     office.enable = false; # ~800mib - LibreOffice + Pandoc
-    obs.enable = false; # ~400mib - OBS Studio + plugins
-    kdenlive.enable = false; # sets kdenlive
     # =========[creative tools]^^^
 
     # =========[management]

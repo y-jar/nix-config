@@ -40,7 +40,10 @@
       shelljar.enable = true; # my quickshell island shell (binds.conf is all shjctl)
     };
     fuzzel.enable = true; # sets launcher fuzzel
-    tablets.xppen.enable = true; # map XP-Pen Artist 13.3 Pro pen to its display (juajar/data/tabletconf.nix)
+    tablets.xppen = {
+      enable = true; # map XP-Pen Artist 13.3 Pro pen to its display (juajar/data/tabletconf.nix)
+      driver = "opentabletdriver"; # otd-gui for buttons/pressure; use "libinput" to opt out
+    };
     theming = {
       enable = true;
       variant = "dark"; # gruvbox variant (dark|light)
@@ -124,16 +127,16 @@
     # =========[appstream]^^^
 
     # =========[creative tools]
-    art = {
-      enable = true; # art master toggle
+    creation = {
+      enable = true; # creation master toggle
       imageTools.enable = true; # krita, gimp, inkscape, ...
       kritaXWayland.enable = true; # pen button crashes Qt native-wayland (KDE 524685)
+      obs.enable = true; # sets up obs studio
+      kdenlive.enable = false; # sets kdenlive
       threeD.enable = true; # blender, blockbench
       astronomy.enable = true; # stellarium, celestia
     };
     office.enable = true; # sets libreoffice and other apps
-    obs.enable = true; # sets up obs studio
-    kdenlive.enable = false; # sets kdenlive
     # =========[creative tools]^^^
 
     # =========[management]

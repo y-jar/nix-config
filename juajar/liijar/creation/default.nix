@@ -3,7 +3,7 @@
 #    :▓.:   ar <3
 # . ▀▀ : ╃
 # -=-=-=-=-=-=-=-=-=-=-=
-# goal: art: per-sub-toggle image/3D/astronomy packages.
+# goal: creation: per-sub-toggle image/video/3D/astronomy packages.
 # -=-=-=-=-=-=-=-=-=-=-=
 {
   config,
@@ -12,7 +12,7 @@
   ...
 }:
 let
-  cfg = config.usrset.art;
+  cfg = config.usrset.creation;
 
   # Krita 6.0.2.1 (Qt 6.11.2) segfaults in
   # QGuiApplicationPrivate::processTabletLeaveProximityEvent when a pen barrel
@@ -31,8 +31,8 @@ let
     else
       pkgs.krita;
 
-  # per-sub-toggle art package buckets
-  artPackages =
+  # per-sub-toggle creation package buckets
+  creationPackages =
     # [image processing]
     lib.optionals (cfg.enable && cfg.imageTools.enable) [
       pkgs.drawio # Desktop version of draw.io for creating diagrams
@@ -49,6 +49,20 @@ let
       pkgs.drawpile # collaborative drawing
     ]
 
+    # [video]
+    ++ lib.optionals (cfg.enable && cfg.obs.enable) [
+      pkgs.obs-studio
+      pkgs.obs-studio-plugins.wlrobs # wlroots screen capture
+      pkgs.obs-studio-plugins.obs-backgroundremoval # background replacement
+      pkgs.obs-studio-plugins.obs-pipewire-audio-capture # pipewire audio/app capture
+      pkgs.obs-studio-plugins.obs-vaapi # AMD hardware acceleration
+      pkgs.obs-studio-plugins.obs-gstreamer # gstreamer sources/filters
+      pkgs.obs-studio-plugins.obs-vkcapture # vulkan/opengl game capture
+    ]
+    ++ lib.optionals (cfg.enable && cfg.kdenlive.enable) [
+      pkgs.kdePackages.kdenlive # video editor
+    ]
+
     # [3d]
     ++ lib.optionals (cfg.enable && cfg.threeD.enable) [
       pkgs.blender # 3D modeling/animation
@@ -59,10 +73,10 @@ let
     ++ lib.optionals (cfg.enable && cfg.astronomy.enable) [
       pkgs.stellarium # planetarium
       pkgs.celestia # 3D space simulation
-    ]; # end of artPackages
+    ]; # end of creationPackages
 in
 {
   config = {
-    packages = artPackages; # end of packages
+    packages = creationPackages; # end of packages
   }; # end of config
 }

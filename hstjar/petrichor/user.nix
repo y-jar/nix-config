@@ -104,15 +104,15 @@
     # =========[appstream]^^^
 
     # =========[creative tools]
-    art = {
-      enable = true; # art master toggle
+    creation = {
+      enable = true; # creation master toggle
       imageTools.enable = true; # krita, gimp, inkscape, ...
+      obs.enable = true; # ~400mib - OBS Studio + plugins
+      kdenlive.enable = false; # sets kdenlive
       threeD.enable = false; # blender, blockbench
       astronomy.enable = true; # stellarium, celestia
     };
     office.enable = true; # ~800mib - LibreOffice + Pandoc
-    obs.enable = true; # ~400mib - OBS Studio + plugins
-    kdenlive.enable = false; # sets kdenlive
     # =========[creative tools]^^^
 
     # =========[management]

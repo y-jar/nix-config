@@ -101,15 +101,15 @@
     # =========[appstream]^^^
 
     # =========[creative tools]
-    art = {
+    creation = {
       enable = false;
       imageTools.enable = false;
+      obs.enable = false;
+      kdenlive.enable = false;
       threeD.enable = false;
       astronomy.enable = false;
     };
     office.enable = true;
-    obs.enable = false;
-    kdenlive.enable = false;
     # =========[creative tools]^^^
 
     # =========[management]

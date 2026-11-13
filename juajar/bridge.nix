@@ -58,6 +58,10 @@ in
     # [user -> system] nvf: sysjar/nvf. syncthing: sysjar/syncthing (runs as mainUser).
     sysset.nvf.enable = u.usrset.editors.nvf.enable;
     sysset.syncthing.enable = u.usrset.syncthing.enable;
+    # tablet driver: any declared tablet on the OTD driver turns the system half on
+    sysset.opentabletdriver.enable = lib.any (t: t.enable && t.driver == "opentabletdriver") (
+      lib.attrValues u.usrset.tablets
+    );
     # Hermes: the user toggle drives the system-side config seed.
     sysset.ai.hermes.enable = u.usrset.ai.hermes.enable;
     # electron-based editors (vscodium/obsidian) pull an EOL insecure electron;

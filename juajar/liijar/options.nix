@@ -209,6 +209,14 @@ in
                 default = false;
                 description = "Map the '${name}' pen to its own display (mango device_rule: type:tablet -> monitor spec).";
               };
+              driver = lib.mkOption {
+                type = lib.types.enum [
+                  "libinput"
+                  "opentabletdriver"
+                ];
+                default = "opentabletdriver";
+                description = "Tablet driver. opentabletdriver (default) installs OTD + otd-gui for button/pressure config; set libinput to opt out and keep the kernel/libinput path.";
+              };
               match = lib.mkOption {
                 type = lib.types.str;
                 default = knownTablets.${name}.match or "";
@@ -423,16 +431,16 @@ in
     };
 
     # [creative]
-    art = {
-      enable = lib.mkEnableOption "art tools (master toggle)";
+    creation = {
+      enable = lib.mkEnableOption "creative tools (master toggle)";
       imageTools.enable = lib.mkEnableOption "2D/painting tools (krita, gimp, inkscape, ...)";
       kritaXWayland.enable = lib.mkEnableOption "run krita under XWayland (works around Qt tablet leave-proximity SIGSEGV on barrel-button press)";
+      obs.enable = lib.mkEnableOption "obs studio + plugins";
+      kdenlive.enable = lib.mkEnableOption "kdenlive video editor";
       threeD.enable = lib.mkEnableOption "3D tools (blender, blockbench)";
       astronomy.enable = lib.mkEnableOption "astronomy apps (stellarium, celestia)";
     };
     office.enable = lib.mkEnableOption "office (libreoffice + pandoc)";
-    obs.enable = lib.mkEnableOption "obs studio";
-    kdenlive.enable = lib.mkEnableOption "kdenlive video editor";
 
     # [management]
     dictation.enable = lib.mkEnableOption "push-to-talk dictation + transcript (voxtype)";

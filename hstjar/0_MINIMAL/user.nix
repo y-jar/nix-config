@@ -6,7 +6,7 @@
 # goal: Host 0_MINIMAL: lean user toggle sheet (usrset).
 # -=-=-=-=-=-=-=-=-=-=-=
 # Bare essentials: shell + terminal + a browser + opencode (non-local AI).
-# Heavy groups (editors, chat, media, art, office, dev, gaming) default OFF.
+# Heavy groups (editors, chat, media, creation, office, dev, gaming) default OFF.
 # Flip what you need back on. Pair with ./system.nix.
 {
   hyprlandEnable,
@@ -97,15 +97,15 @@
     # =========[appstream]^^^
 
     # =========[creative tools]
-    art = {
+    creation = {
       enable = false; # OFF
       imageTools.enable = false;
+      obs.enable = false;
+      kdenlive.enable = false;
       threeD.enable = false;
       astronomy.enable = false;
     };
     office.enable = false; # OFF
-    obs.enable = false; # OFF
-    kdenlive.enable = false; # OFF
     # =========[creative tools]^^^
 
     # =========[management]
