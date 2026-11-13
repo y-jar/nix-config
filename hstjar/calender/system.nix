@@ -93,7 +93,7 @@
           gpu = "rocm"; # llama.cpp backend: rocm (AMD) | cuda (NVIDIA) | cpu
         };
         ollama = {
-          enable = false; # Ollama backend (multi-GPU)
+          enable = true; # Ollama backend (multi-GPU)
           gpu = "rocm"; # Ollama backend: rocm (AMD) | cuda (NVIDIA) | vulkan | cpu
           modelSet = "custom"; # small | medium | large | custom
           # Global default only; each models entry bakes its own num_ctx
@@ -121,13 +121,13 @@
               kvFixedMB = 56;
               kvMBPer1k = 5.76;
             };
-            qwen3-27b = {
-              source = "hf.co/byteshape/Qwen3.8-27B-GGUF:IQ3_S";
-              num_ctx = 128000;
-              weightsMB = 9000;
-              kvFixedMB = 0;
-              kvMBPer1k = 46.08; # 9000MB weights + (131 * 46.08)MB KV ≈ 15036MB total VRAM... UHG
-            };
+            # qwen3-27b = {
+            #   source = "hf.co/byteshape/Qwen3.8-27B-GGUF:IQ3_S";
+            #   num_ctx = 128000;
+            #   weightsMB = 9000;
+            #   kvFixedMB = 0;
+            #   kvMBPer1k = 46.08; # 9000MB weights + (131 * 46.08)MB KV ≈ 15036MB total VRAM... UHG
+            # };
             qwen35-9b = {
               source = "qwen3.5:9b";
               num_ctx = 32768;
