@@ -66,6 +66,12 @@
         browser = "chromium";
         icon = "/home/jar/resjar/iconbin/excalidraw-dark.png";
       }
+      {
+        name = "komga";
+        url = "http://whale:25600";
+        mode = "pwa";
+        browser = "chromium";
+      }
       # {
       #   name = "discord";
       #   url = "https://discord.com/channels/@me";
