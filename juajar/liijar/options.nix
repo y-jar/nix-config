@@ -426,6 +426,7 @@ in
     art = {
       enable = lib.mkEnableOption "art tools (master toggle)";
       imageTools.enable = lib.mkEnableOption "2D/painting tools (krita, gimp, inkscape, ...)";
+      kritaXWayland.enable = lib.mkEnableOption "run krita under XWayland (works around Qt tablet leave-proximity SIGSEGV on barrel-button press)";
       threeD.enable = lib.mkEnableOption "3D tools (blender, blockbench)";
       astronomy.enable = lib.mkEnableOption "astronomy apps (stellarium, celestia)";
     };

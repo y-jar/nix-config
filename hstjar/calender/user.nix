@@ -127,6 +127,7 @@
     art = {
       enable = true; # art master toggle
       imageTools.enable = true; # krita, gimp, inkscape, ...
+      kritaXWayland.enable = true; # pen button crashes Qt native-wayland (KDE 524685)
       threeD.enable = true; # blender, blockbench
       astronomy.enable = true; # stellarium, celestia
     };

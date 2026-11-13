@@ -14,6 +14,23 @@
 let
   cfg = config.usrset.art;
 
+  # Krita 6.0.2.1 (Qt 6.11.2) segfaults in
+  # QGuiApplicationPrivate::processTabletLeaveProximityEvent when a pen barrel
+  # button is pressed (KDE bugs 503464/524685). XWayland avoids Qt's native
+  # Wayland tablet path; the compositor mapping still sends the pen to its display.
+  krita =
+    if cfg.kritaXWayland.enable then
+      pkgs.symlinkJoin {
+        name = "krita-xwayland";
+        paths = [ pkgs.krita ];
+        nativeBuildInputs = [ pkgs.makeWrapper ];
+        postBuild = ''
+          wrapProgram $out/bin/krita --set QT_QPA_PLATFORM xcb
+        '';
+      }
+    else
+      pkgs.krita;
+
   # per-sub-toggle art package buckets
   artPackages =
     # [image processing]
@@ -25,7 +42,7 @@ let
       pkgs.digikam # photo manager
       pkgs.coulr # color picker
       pkgs.halftone # halftone effect generator
-      pkgs.krita # digital painting
+      krita # digital painting (if i happen to revert, just prepend pkgs.)
       pkgs.gimp # image manipulation
       pkgs.inkscape # vector graphics
       pkgs.mypaint # digital painting
