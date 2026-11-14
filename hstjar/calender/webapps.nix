@@ -71,6 +71,7 @@
         url = "http://whale:25600";
         mode = "pwa";
         browser = "chromium";
+        icon = "/home/jar/resjar/iconbin/komga.ico";
       }
       # {
       #   name = "discord";
